@@ -6,6 +6,7 @@ export default {
   accent: '#e0895f',
   accent2: '#f3b48a',
   seed: 23,
+  time: 14.6,
   bounds: 46,
   minDist: 12,
   maxDist: 180,
@@ -74,29 +75,40 @@ export default {
       const zf = Z - t * 0.62;
       // solid body behind the screen
       block('sandstonePink', w, TIER_H, depth, 0, y, zf - depth / 2 - 0.25);
-      // screen band
+      // carved band at the foot of the tier
+      add('marble', box(w + 0.6, 0.16, 0.62), 0, y + 0.08, zf + 0.28);
+      add('sandstoneRed', box(w + 0.4, 0.1, 0.5), 0, y + 0.2, zf + 0.26);
+
       for (let i = 0; i < n; i++) {
         const x = (i - (n - 1) / 2) * BAY;
-        // niche + lattice
-        add('dark', arch(1.05, 1.5, 0.12), x, y + 0.55, zf + 0.02);
-        add('jali', arch(1.0, 1.46, 0.05), x, y + 0.57, zf + 0.16);
-        add('marble', archFrame(1.45, 1.95, 0.11, 0.16), x, y + 0.55, zf + 0.06);
-        // small dome over the niche
-        add('marble', cyl(0.3, 0.34, 0.1, 8), x, y + 2.52, zf + 0.08);
-        add('marble', dome(0.3, 0.26, 10), x, y + 2.57, zf + 0.08);
-        add('gold', cyl(0.03, 0.03, 0.16, 5), x, y + 2.86, zf + 0.08);
-        // white pilaster between bays
-        if (i > 0) add('marble', box(0.14, TIER_H * 0.92, 0.22), x - BAY / 2, y + TIER_H * 0.48, zf + 0.05);
+        // the jharokha projects: a shallow box, a balcony slab, two niches
+        add('sandstonePink', box(BAY * 0.84, TIER_H * 0.76, 0.46), x, y + TIER_H * 0.4, zf + 0.24);
+        add('marble', box(BAY * 0.94, 0.11, 0.66), x, y + 0.4, zf + 0.3);
+        add('sandstoneRed', box(BAY * 0.94, 0.07, 0.6), x, y + 0.31, zf + 0.3);
+        // lower opening, screened
+        add('dark', arch(0.8, 1.06, 0.16), x, y + 0.52, zf + 0.44);
+        add('jali', arch(0.76, 1.02, 0.05), x, y + 0.54, zf + 0.58);
+        add('marble', archFrame(1.02, 1.28, 0.085, 0.1), x, y + 0.52, zf + 0.42);
+        // upper opening, smaller
+        add('dark', arch(0.58, 0.78, 0.14), x, y + 1.78, zf + 0.44);
+        add('jali', arch(0.54, 0.74, 0.05), x, y + 1.8, zf + 0.57);
+        add('marble', archFrame(0.78, 0.98, 0.075, 0.1), x, y + 1.78, zf + 0.42);
+        // canopy and finial over the bay
+        add('marble', cyl(0.24, 0.28, 0.09, 8), x, y + TIER_H * 0.84, zf + 0.3);
+        add('marble', dome(0.25, 0.22, 10), x, y + TIER_H * 0.88, zf + 0.3);
+        add('gold', cyl(0.022, 0.022, 0.14, 5), x, y + TIER_H * 0.88 + 0.24, zf + 0.3);
+        // pilaster between bays
+        if (i > 0) add('marble', box(0.12, TIER_H * 0.9, 0.26), x - BAY / 2, y + TIER_H * 0.47, zf + 0.2);
       }
       // white cornice band
-      add('marble', box(w + 0.7, 0.2, 0.7), 0, y + TIER_H - 0.05, zf + 0.1);
-      add('marble', box(w + 0.35, 0.12, 0.5), 0, y + TIER_H - 0.42, zf + 0.08);
+      add('marble', box(w + 0.7, 0.2, 0.72), 0, y + TIER_H - 0.05, zf + 0.12);
+      add('marble', box(w + 0.35, 0.12, 0.52), 0, y + TIER_H - 0.42, zf + 0.1);
       // end chhatris
-      [-1, 1].forEach((s) => {
-        const ex = s * (w / 2 - 0.3);
-        add('sandstonePink', cyl(0.42, 0.48, 0.5, 8), ex, y + TIER_H + 0.25, zf - 0.4);
-        add('marble', dome(0.44, 0.5, 12), ex, y + TIER_H + 0.5, zf - 0.4);
-        add('gold', cyl(0.04, 0.04, 0.2, 5), ex, y + TIER_H + 1.02, zf - 0.4);
+      [-1, 1].forEach((s2) => {
+        const ex = s2 * (w / 2 - 0.3);
+        add('sandstonePink', cyl(0.44, 0.5, 0.55, 8), ex, y + TIER_H + 0.27, zf - 0.4);
+        add('marble', dome(0.46, 0.52, 12), ex, y + TIER_H + 0.54, zf - 0.4);
+        add('gold', cyl(0.04, 0.04, 0.2, 5), ex, y + TIER_H + 1.08, zf - 0.4);
       });
     }
 
@@ -139,7 +151,7 @@ export default {
     }
     const people = [[-8, 10], [-3, 8.5], [2, 11], [7, 9], [-13, 12], [12, 12.5], [0, 7.6], [16, 10.5],
       [-17, 8], [5, 6.5], [-5, 13], [9, 7.2]];
-    people.forEach(([x, z], i) => ctx.person(x, z, i * 1.3, ['fabricWhite', 'fabricSaffron', 'fabricRed'][i % 3], 0.95));
+    people.forEach(([x, z], i) => ctx.person(x, z, i * 1.3, ['fabricWhite', 'fabricSaffron', 'fabricRed'][i % 3], 0.82));
     [[-19, 6], [19, 6], [-11, 18], [11, 18], [0, 19], [-24, 14]].forEach(([x, z]) => ctx.lamp(x, z, 3.0, 'black'));
     [[-26, 4], [26, 5], [-30, 16], [30, 15]].forEach(([x, z], i) => ctx.tree(x, z, 1.0 + (i % 2) * 0.2, 'round'));
 

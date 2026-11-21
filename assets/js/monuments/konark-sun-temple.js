@@ -8,13 +8,14 @@ export default {
   accent: '#b8865a',
   accent2: '#dcae82',
   seed: 1250,
+  time: 10.6,
   bounds: 105,
   minDist: 20,
   maxDist: 380,
-  home: { pos: [88, 26, 80], target: [4, 14, 2], fov: 40 },
+  home: { pos: [92, 30, 96], target: [2, 13, 14], fov: 40 },
   ground: { texture: 'grass', size: 1700, color: 0x93a06e },
   views: [
-    { name: 'Full', pos: [88, 26, 80], target: [4, 14, 2] },
+    { name: 'Full', pos: [92, 30, 96], target: [2, 13, 14] },
     { name: 'Wheels', pos: [40, 5.5, 24], target: [26, 2.2, 4] },
     { name: 'Roof', pos: [36, 32, 46], target: [0, 22, 8] },
     { name: 'Horses', pos: [22, 6, 80], target: [0, 5, 46] },
@@ -24,7 +25,7 @@ export default {
     {
       title: 'The Chariot of Surya', deva: 'कोणार्क सूर्य मंदिर',
       text: 'Narasingha Deva I of the Eastern Ganga dynasty built the Sun Temple at Konark around 1250, on the Odisha coast about 35 kilometres from Puri. It was conceived as the chariot of Surya, with twenty-four great stone wheels, seven horses and a vast processional stair.',
-      pos: [88, 26, 80], target: [4, 14, 2], time: 16.6
+      pos: [92, 30, 96], target: [2, 13, 14], time: 16.6
     },
     {
       title: 'Twenty-Four Wheels', deva: 'चौबीस चक्र',
@@ -247,22 +248,25 @@ export default {
         add(k, box(w * s, h * s, d * s), x + px * s, py * s, z + pz * s, o || {});
       // legs and hooves
       [[-0.38, 1.05], [0.38, 1.05], [-0.38, -0.95], [0.38, -0.95]].forEach(([lx, lz]) => {
-        G('grey', 0.26, 1.5, 0.3, lx, 0.75, lz);
-        G('grey', 0.34, 0.2, 0.44, lx, 0.1, lz);
+        G('stone', 0.26, 1.5, 0.3, lx, 0.75, lz);
+        G('stone', 0.34, 0.2, 0.44, lx, 0.1, lz);
       });
-      G('granite', 1.05, 1.3, 2.55, 0, 2.0, 0);                    // barrel
-      G('granite', 0.95, 1.42, 1.15, 0, 2.02, 1.32);               // chest
-      G('granite', 1.0, 1.32, 1.2, 0, 2.08, -1.3);                 // rump
-      G('granite', 0.66, 1.55, 0.7, 0, 3.15, 1.85, { rx: 0.5 });   // neck
-      G('grey', 0.3, 1.3, 0.28, 0, 3.32, 1.6, { rx: 0.5 });        // mane
-      G('granite', 0.5, 0.6, 1.15, 0, 3.95, 2.45, { rx: 0.5 });    // head
-      G('grey', 0.36, 0.36, 0.42, 0, 3.78, 2.95, { rx: 0.5 });     // muzzle
-      G('grey', 0.13, 0.4, 0.16, -0.16, 4.32, 2.2, { rx: 0.2 });   // ears
-      G('grey', 0.13, 0.4, 0.16, 0.16, 4.32, 2.2, { rx: 0.2 });
-      G('grey', 0.22, 1.5, 0.24, 0, 2.35, -2.05, { rx: 1.75 });    // tail
-      G('stone', 1.16, 0.16, 2.2, 0, 2.6, -0.05);                  // saddle cloth
+      G('sandstoneBuff', 1.05, 1.3, 2.55, 0, 2.0, 0);                    // barrel
+      G('sandstoneBuff', 0.95, 1.42, 1.15, 0, 2.02, 1.32);               // chest
+      G('sandstoneBuff', 1.0, 1.32, 1.2, 0, 2.08, -1.3);                 // rump
+      G('sandstoneBuff', 0.66, 1.55, 0.7, 0, 3.15, 1.85, { rx: 0.5 });   // neck
+      G('stone', 0.3, 1.3, 0.28, 0, 3.32, 1.6, { rx: 0.5 });        // mane
+      G('sandstoneBuff', 0.5, 0.6, 1.15, 0, 3.95, 2.45, { rx: 0.5 });    // head
+      G('stone', 0.36, 0.36, 0.42, 0, 3.78, 2.95, { rx: 0.5 });     // muzzle
+      G('stone', 0.13, 0.4, 0.16, -0.16, 4.32, 2.2, { rx: 0.2 });   // ears
+      G('stone', 0.13, 0.4, 0.16, 0.16, 4.32, 2.2, { rx: 0.2 });
+      G('stone', 0.22, 1.5, 0.24, 0, 2.35, -2.05, { rx: 1.75 });    // tail
+      G('granite', 1.16, 0.16, 2.2, 0, 2.6, -0.05);                  // saddle cloth
     }
-    for (let i = 0; i < 7; i++) horse(-12.0 + i * 4.0, 51.0, 1.0);
+    for (let i = 0; i < 7; i++) horse(-10.8 + i * 3.6, 51.0, 1.12);
+    // the beam the team is yoked to
+    add('granite', box(26, 0.5, 0.6), 0, 2.9, 49.2);
+    [-9, 9].forEach((x) => add('granite', box(0.5, 2.4, 0.5), x, 1.4, 49.2));
     add('paving', plane(34, 13), 0, 0.14, 51.0, { rx: -PI / 2 });
 
     /* ---------- subsidiary shrine, ruined, to the south-west ---------- */
