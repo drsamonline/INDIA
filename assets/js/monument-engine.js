@@ -78,6 +78,8 @@ const PALETTE = {
   water:         { color: 0x2f5a6b, rough: 0.14, metal: 0.15 },
   paving:        { color: 0xb6a992, rough: 0.95, tex: 'paving' },
   basalt:        { color: 0xc3b699, rough: 0.9, tex: 'stone' },
+  haze:          { color: 0x6d7a6a, rough: 1.0 },
+  hazeDark:      { color: 0x5b6659, rough: 1.0 },
   basaltDark:    { color: 0xa1937a, rough: 0.92, tex: 'stone' },
   jali:          { color: 0xd8b184, rough: 0.9, jali: true },
   jaliWhite:     { color: 0xf0e6d2, rough: 0.9, jali: true },
@@ -890,6 +892,22 @@ export function boot(mon) {
     groundMesh.position.y = mon.groundY !== undefined ? mon.groundY : -0.02;
     groundMesh.receiveShadow = true;
     scene.add(groundMesh);
+
+    /* ---- distant horizon: a low ridge and a treeline, so the ground
+       meets the sky in haze rather than at a hard edge ---- */
+    if (mon.horizon !== false) {
+      const hb = new Builder(scene, M, T, 91);
+      M.haze.color.copy(new THREE.Color(groundCfg.color)).lerp(new THREE.Color(0x7d8474), 0.72).multiplyScalar(0.96);
+      const hr = mulberry32(17);
+      // soft hills
+      const R1 = groundCfg.size * 0.30;
+      for (let i = 0; i < 30; i++) {
+        const a = (i / 30) * Math.PI * 2 + hr() * 0.08;
+        const r = 55 + hr() * 75, h = 14 + hr() * 26;
+        hb.add('haze', hb.sph(r, 9), Math.cos(a) * R1, -h * 0.25, Math.sin(a) * R1, { sy: h / r });
+      }
+      hb.finalize().forEach((m) => { m.castShadow = false; m.receiveShadow = false; });
+    }
 
     /* water */
     if (mon.water) {
