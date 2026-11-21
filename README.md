@@ -1,0 +1,111 @@
+# INDIA — monuments in code
+
+**Twelve Indian monuments, rebuilt as live 3D miniatures in the browser.** No photographs in the models, no downloaded meshes, no build step: every dome, bracket and lattice screen is generated from code with [three.js](https://threejs.org), lit by a physical sky, and paired with the history behind it.
+
+[![Licence: CC0 1.0](https://img.shields.io/badge/licence-CC0%201.0-2ea44f?style=flat-square)](LICENSE)
+[![Made with three.js](https://img.shields.io/badge/three.js-r169-000000?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org)
+[![Monuments](https://img.shields.io/badge/monuments-12-c1440e?style=flat-square)](#the-monuments)
+[![No build step](https://img.shields.io/badge/build-none%20%C2%B7%20static%20files-f0a868?style=flat-square)](#run-it-locally)
+[![WebGL](https://img.shields.io/badge/WebGL-required-1b2740?style=flat-square)](#browser-support)
+
+**Landing page → [drsamonline.github.io/INDIA](https://drsamonline.github.io/INDIA/)**
+
+![The INDIA landing page](docs/preview.jpg)
+
+---
+
+## The monuments
+
+| # | Monument | Place | Period | Page |
+|---|----------|-------|--------|------|
+| 01 | Taj Mahal | Agra, Uttar Pradesh | 1632–1653 | [open](monuments/taj-mahal.html) |
+| 02 | Qutb Minar | Mehrauli, Delhi | 1199–1220 | [open](monuments/qutub-minar.html) |
+| 03 | Hawa Mahal | Jaipur, Rajasthan | 1799 | [open](monuments/hawa-mahal.html) |
+| 04 | Charminar | Hyderabad, Telangana | 1591 | [open](monuments/charminar.html) |
+| 05 | Gateway of India | Mumbai, Maharashtra | 1913–1924 | [open](monuments/gateway-of-india.html) |
+| 06 | India Gate | New Delhi | 1921–1931 | [open](monuments/india-gate.html) |
+| 07 | Mysore Palace | Mysuru, Karnataka | 1897–1912 | [open](monuments/mysore-palace.html) |
+| 08 | Golden Temple | Amritsar, Punjab | 1577 · gilded 1830 | [open](monuments/golden-temple.html) |
+| 09 | Konark Sun Temple | Konark, Odisha | c. 1250 | [open](monuments/konark-sun-temple.html) |
+| 10 | Sanchi Stupa | Sanchi, Madhya Pradesh | 3rd century BCE | [open](monuments/sanchi-stupa.html) |
+| 11 | Victoria Memorial | Kolkata, West Bengal | 1906–1921 | [open](monuments/victoria-memorial.html) |
+| 12 | Meenakshi Temple | Madurai, Tamil Nadu | 12th–17th century | [open](monuments/meenakshi-temple.html) |
+
+Five of them are UNESCO World Heritage Sites; one more is on the tentative list.
+
+## What is on each page
+
+- **A procedural model** — 8,000–85,000 triangles merged into a dozen draw calls, with MSAA, soft shadows, bloom, a filmic grade and a miniature tilt-shift lens.
+- **A sky that moves** — a physical Rayleigh/Mie sky, sun and moon, stars, clouds, mist and monsoon rain, over a neutral studio environment map that gives marble, gold and stone a believable specular response. Drag the time slider from dawn to night.
+- **Viewpoints** — three to five camera positions per monument, each with its own tour stop.
+- **A guided tour** — a narrated walk through the building's history, its parts and its setting.
+- **The history** — a drawer with the story, quick facts, links to Wikipedia, UNESCO and the ASI, and the credit for the photograph on the landing page.
+- **Controls** — exposure, bloom, blur, wireframe, grid, quality, screenshot, auto-orbit, day–night cycle.
+
+Keyboard: `H` panel · `T` tour · `A` about · `C` cinema mode · `R` reset · `1`–`9` viewpoints · `Esc` close.
+
+## Run it locally
+
+The pages are ES modules, so they need to be served over HTTP (opening `index.html` from the file system will not work in most browsers):
+
+```bash
+git clone https://github.com/drsamonline/INDIA.git
+cd INDIA
+python3 -m http.server 8080
+# open http://localhost:8080
+```
+
+No `npm install`, no bundler, no framework. three.js is vendored in `assets/vendor/three`.
+
+## How it is built
+
+```
+index.html                  landing page (generated)
+credits.html                sources, licences, photographers (generated)
+monuments/<id>.html         one page per monument (generated, thin shell)
+data/monuments.json         the single source of truth for text, facts, images
+assets/js/monument-engine.js  shared engine: sky, light, weather, UI, tour, history
+assets/js/monuments/<id>.js   one geometry module per monument
+assets/css/monument.css     interface for the monument pages
+assets/css/site.css         landing page
+tools/build_site.py         generates the pages from data/monuments.json
+tools/build_taj.py          adapts the original Taj Mahal scene into the site
+tools/qa.py                 headless-Chromium render check
+tools/MONUMENT-CONTRACT.md  how to write a new monument module
+```
+
+A monument module exports an object with its camera, colours and a `build(ctx)` function. `ctx` supplies primitives (box, cylinder, lathe, dome, arch), composite helpers (arcade, chhatri, railing, tree, person), a palette of forty materials — marble, sandstone, basalt, gold, jali screens — and the scene's floodlights. Everything a module adds is merged by material when it returns.
+
+```js
+export default {
+  id: 'qutub-minar',
+  home: { pos: [76, 30, 98], target: [0, 32, 0] },
+  ground: { texture: 'paving', size: 1600 },
+  views: [{ name: 'Full', pos: [76, 30, 98], target: [0, 32, 0] }],
+  tour: [{ title: 'The Victory Tower', text: '…', pos: [76, 30, 98], target: [0, 32, 0], time: 17.4 }],
+  build(ctx) {
+    const { add, cyl, dome, archFrame } = ctx;
+    add('sandstoneRed', ctx.lathe([[7.2, 0], [6.1, 24.4]], 48), 0, 2, 0);
+    // …
+  }
+};
+```
+
+Adding a thirteenth monument: write `assets/js/monuments/<id>.js`, add its entry to `data/monuments.json`, run `python3 tools/build_site.py`. The contract is in [`tools/MONUMENT-CONTRACT.md`](tools/MONUMENT-CONTRACT.md).
+
+## Browser support
+
+Needs WebGL 2 and ES modules: current Chrome, Edge, Firefox and Safari, on desktop and mobile. The interface adapts to phones (the control panel becomes a bottom sheet, the tour card sits above it). `prefers-reduced-motion` is respected. Without JavaScript the page still links to the monument's Wikipedia article.
+
+## Licence
+
+- **Code and 3D models** — [CC0 1.0 Universal](LICENSE) public domain dedication. Copy, remix, publish, sell; no permission needed. Attribution to **Dr Sohil Momin** is appreciated but not required.
+- **Text** — adapted from Wikipedia under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the adapted text is offered under the same licence.
+- **Photographs** — each under its own licence (CC BY, CC BY-SA, FAL, GFDL), credited per file in [credits.html](credits.html).
+- **three.js** — MIT. **Typefaces** (Cormorant Garamond, JetBrains Mono, Noto Sans Devanagari) — SIL Open Font License 1.1.
+
+## Author
+
+**Dr Sohil Momin** — [github.com/drsamonline](https://github.com/drsamonline)
+
+If you build something with these models, a link back to the [landing page](https://drsamonline.github.io/INDIA/) is always welcome.

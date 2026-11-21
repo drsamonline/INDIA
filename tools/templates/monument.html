@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>__NAME__ — 3D miniature · INDIA</title>
+<meta name="description" content="__BLURB__ A procedural three.js miniature of __NAME__, __PLACE__ — with guided tour, history and sources.">
+<meta name="theme-color" content="__THEME__">
+<meta name="author" content="Dr Sohil Momin">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/fonts.css">
+<link rel="stylesheet" href="../assets/css/monument.css">
+<meta property="og:type" content="website">
+<meta property="og:title" content="__NAME__ — 3D miniature · INDIA">
+<meta property="og:description" content="__BLURB__">
+<meta property="og:image" content="https://drsamonline.github.io/INDIA/__OGIMAGE__">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TouristAttraction","name":"__NAME__","description":"__BLURB__","address":{"@type":"PostalAddress","addressLocality":"__PLACE__","addressRegion":"__STATE__","addressCountry":"IN"},"sameAs":"__WIKI__","isAccessibleForFree":true}
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "../assets/vendor/three/build/three.module.js",
+    "three/addons/": "../assets/vendor/three/addons/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="app" aria-label="Interactive 3D model of __NAME__"></div>
+<noscript><div class="noscript">This page renders __NAME__ as a live 3D model and needs JavaScript and WebGL. You can still read about the monument on <a href="__WIKI__">Wikipedia</a>.</div></noscript>
+
+<script src="../assets/js/index-data.js"></script>
+<script>window.MONUMENT_DATA = __DATA__;</script>
+<script type="module">
+  import { boot } from '../assets/js/monument-engine.js';
+  import monument from '../assets/js/monuments/__ID__.js';
+  boot(monument);
+</script>
+</body>
+</html>

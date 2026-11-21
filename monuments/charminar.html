@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Charminar — 3D miniature · INDIA</title>
+<meta name="description" content="Four grand arches and four minarets over the old city, raised in 1591 at the crossing of Hyderabad&#x27;s bazaars. A procedural three.js miniature of Charminar, Hyderabad — with guided tour, history and sources.">
+<meta name="theme-color" content="#c8a26a">
+<meta name="author" content="Dr Sohil Momin">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/fonts.css">
+<link rel="stylesheet" href="../assets/css/monument.css">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Charminar — 3D miniature · INDIA">
+<meta property="og:description" content="Four grand arches and four minarets over the old city, raised in 1591 at the crossing of Hyderabad&#x27;s bazaars.">
+<meta property="og:image" content="https://drsamonline.github.io/INDIA/assets/img/charminar.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TouristAttraction","name":"Charminar","description":"Four grand arches and four minarets over the old city, raised in 1591 at the crossing of Hyderabad&#x27;s bazaars.","address":{"@type":"PostalAddress","addressLocality":"Hyderabad","addressRegion":"Telangana","addressCountry":"IN"},"sameAs":"https://en.wikipedia.org/wiki/Charminar","isAccessibleForFree":true}
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "../assets/vendor/three/build/three.module.js",
+    "three/addons/": "../assets/vendor/three/addons/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="app" aria-label="Interactive 3D model of Charminar"></div>
+<noscript><div class="noscript">This page renders Charminar as a live 3D model and needs JavaScript and WebGL. You can still read about the monument on <a href="https://en.wikipedia.org/wiki/Charminar">Wikipedia</a>.</div></noscript>
+
+<script src="../assets/js/index-data.js"></script>
+<script>window.MONUMENT_DATA = {"name": "Charminar", "deva": "चारमीनार", "place": "Hyderabad", "state": "Telangana", "era": "Qutb Shahi · 1591", "period": "1591", "style": "Indo-Islamic, Persian-influenced", "unesco": "On the UNESCO tentative list", "wikipedia": "https://en.wikipedia.org/wiki/Charminar", "history": ["Muhammad Quli Qutb Shah raised the Charminar in 1591, the year the city of Hyderabad was laid out around it. The name means simply four minarets, and the monument stands at the crossing of the two main bazaars — the Char Kaman axis of the new capital.", "Its four arches face the cardinal directions, each 11 metres wide and 20 metres high, with a small mosque on the top floor that has served the monument for more than four centuries. Spiral staircases of 149 steps climb inside each minaret to galleries above the bazaars.", "The structure is built of granite and lime mortar, dressed with plaster and stucco ornament, and stands on a square plinth with a fountain at its centre. It remained the tallest building in Hyderabad for 396 years. To its west runs the Laad Bazaar of bangles; to the southwest, the Makkah Masjid."], "facts": [{"k": "Built", "v": "1591"}, {"k": "Commissioned by", "v": "Muhammad Quli Qutb Shah"}, {"k": "Height", "v": "56 m to the minaret finials"}, {"k": "Arches", "v": "Four, facing the cardinal directions"}, {"k": "Material", "v": "Granite, lime mortar, stucco"}, {"k": "Around it", "v": "Laad Bazaar, Makkah Masjid"}], "links": [{"label": "Wikipedia", "href": "https://en.wikipedia.org/wiki/Charminar"}, {"label": "Telangana tourism", "href": "https://telanganatourism.gov.in/"}, {"label": "ASI monument", "href": "https://asi.nic.in/"}], "image": {"file": "Charminar_Hyderabad_1.jpg", "artist": "DidierTais", "license": "CC BY-SA 3.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0", "page": "https://commons.wikimedia.org/wiki/File:Charminar_Hyderabad_1.jpg", "src": "assets/img/charminar.jpg"}};</script>
+<script type="module">
+  import { boot } from '../assets/js/monument-engine.js';
+  import monument from '../assets/js/monuments/charminar.js';
+  boot(monument);
+</script>
+</body>
+</html>

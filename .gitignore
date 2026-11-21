@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# editors
+.vscode/
+.idea/
+*.swp
+
+# python
+__pycache__/
+*.pyc
+.venv/
+
+# node (not used by the site, but keep the repo clean)
+node_modules/
+npm-debug.log*
+
+# local QA output
+*.local.png
+/tmp/

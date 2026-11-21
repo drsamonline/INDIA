@@ -1,0 +1,842 @@
+[
+ {
+  "id": "taj-mahal",
+  "name": "Taj Mahal",
+  "deva": "ताज महल",
+  "place": "Agra",
+  "state": "Uttar Pradesh",
+  "region": "North",
+  "era": "Mughal · 1632–1653",
+  "period": "1632–1653",
+  "style": "Mughal, charbagh plan",
+  "unesco": "UNESCO World Heritage Site (1983)",
+  "wikipedia": "https://en.wikipedia.org/wiki/Taj_Mahal",
+  "blurb": "An ivory marble mausoleum on the Yamuna, raised by Shah Jahan for Mumtaz Mahal — the most photographed building in India.",
+  "history": [
+   "Shah Jahan commissioned the Taj Mahal in 1631, the year his wife Mumtaz Mahal died in childbirth at Burhanpur. The tomb stands on the right bank of the Yamuna at Agra, at the centre of a 17-hectare complex with a mosque, a guest house and a formal four-part garden bounded by a crenellated wall.",
+   "Construction of the mausoleum was finished in 1648 and the rest of the complex about five years later. The building is clad in translucent white marble from Makrana in Rajasthan, inlaid with lapis lazuli, carnelian, jade and jasper in floral pietra dura, and framed by black marble calligraphy scaled so that it reads evenly from the ground.",
+   "The dome rises about 35 metres above its drum, crowned by a gilded finial, with four chhatris and four minarets leaning slightly outward. Around the complex the marble shifts colour through the day — pink at dawn, white at noon, gold at dusk and silver under the moon. It became a UNESCO World Heritage Site in 1983."
+  ],
+  "facts": [
+   {
+    "k": "Commissioned by",
+    "v": "Shah Jahan, 1631"
+   },
+   {
+    "k": "In memory of",
+    "v": "Mumtaz Mahal"
+   },
+   {
+    "k": "Completed",
+    "v": "1648 (complex by 1653)"
+   },
+   {
+    "k": "Material",
+    "v": "Makrana marble, pietra dura inlay"
+   },
+   {
+    "k": "Complex",
+    "v": "17 hectares, charbagh garden"
+   },
+   {
+    "k": "UNESCO",
+    "v": "1983 · ref. 252"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Taj_Mahal"
+   },
+   {
+    "label": "UNESCO listing",
+    "href": "https://whc.unesco.org/en/list/252/"
+   },
+   {
+    "label": "ASI monument",
+    "href": "https://asi.nic.in/"
+   }
+  ],
+  "image": {
+   "file": "Taj_Mahal_(Edited).jpeg",
+   "artist": "Yann; edited by Jim Carter",
+   "license": "CC BY-SA 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Taj_Mahal_(Edited).jpeg",
+   "src": "assets/img/taj-mahal.jpg"
+  },
+  "accent": "#d9a441",
+  "accent2": "#f0a868",
+  "year": 1632
+ },
+ {
+  "id": "qutub-minar",
+  "name": "Qutb Minar",
+  "deva": "क़ुतुब मीनार",
+  "place": "Mehrauli, Delhi",
+  "state": "Delhi",
+  "region": "North",
+  "era": "Delhi Sultanate · 1199–1220",
+  "period": "1199–1220",
+  "style": "Ghurid / early Indo-Islamic",
+  "unesco": "UNESCO World Heritage Site (1993)",
+  "wikipedia": "https://en.wikipedia.org/wiki/Qutb_Minar",
+  "blurb": "A 72.5-metre victory tower of fluted red sandstone and marble, begun by Qutb al-Din Aibak and finished by three later sultans.",
+  "history": [
+   "Qutb al-Din Aibak began the tower around 1199 to mark the founding of the Delhi Sultanate, after his defeat of Prithviraj Chauhan. He completed only the first storey; his successor Iltutmish added three more, and in 1368 Firoz Shah Tughlaq rebuilt the damaged upper storeys in white marble and set a cupola on top.",
+   "The shaft tapers from 14.3 metres at the base to 2.75 metres at the crown, and its five storeys alternate angular and round fluting, separated by projecting balconies carried on carved brackets. Bands of white marble cut across the red sandstone, and pierced screens enclose each balcony.",
+   "Around the tower lie the ruins of the Quwwat-ul-Islam mosque, raised in 1193 from the stones of demolished temples, the 7-metre Gupta-era iron pillar that has resisted rust for sixteen centuries, the marble-faced Alai Darwaza gateway and the stump of Alauddin Khalji's unfinished Alai Minar. The Qutb complex became a UNESCO World Heritage Site in 1993."
+  ],
+  "facts": [
+   {
+    "k": "Begun by",
+    "v": "Qutb al-Din Aibak, c. 1199"
+   },
+   {
+    "k": "Height",
+    "v": "72.5 m, five storeys"
+   },
+   {
+    "k": "Base to crown",
+    "v": "14.3 m tapering to 2.75 m"
+   },
+   {
+    "k": "Materials",
+    "v": "Red sandstone and white marble"
+   },
+   {
+    "k": "Nearby",
+    "v": "Iron Pillar, Alai Darwaza, Alai Minar"
+   },
+   {
+    "k": "UNESCO",
+    "v": "1993 · ref. 233"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Qutb_Minar"
+   },
+   {
+    "label": "UNESCO listing",
+    "href": "https://whc.unesco.org/en/list/233/"
+   },
+   {
+    "label": "ASI monument",
+    "href": "https://asi.nic.in/"
+   }
+  ],
+  "image": {
+   "file": "Qutb_Minar_2022.jpg",
+   "artist": "Wasir kasab",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Qutb_Minar_2022.jpg",
+   "src": "assets/img/qutub-minar.jpg"
+  },
+  "accent": "#d9a441",
+  "accent2": "#f0a868",
+  "year": 1199
+ },
+ {
+  "id": "hawa-mahal",
+  "name": "Hawa Mahal",
+  "deva": "हवा महल",
+  "place": "Jaipur",
+  "state": "Rajasthan",
+  "region": "North",
+  "era": "Rajput · 1799",
+  "period": "1799",
+  "style": "Rajput, with Mughal jharokha work",
+  "unesco": "Part of Jaipur City, UNESCO World Heritage Site (2019)",
+  "wikipedia": "https://en.wikipedia.org/wiki/Hawa_Mahal",
+  "blurb": "A honeycomb screen of 953 latticed windows in pink sandstone, built so the women of the palace could watch the street unseen.",
+  "history": [
+   "Maharaja Sawai Pratap Singh built the Hawa Mahal in 1799 as an extension of the City Palace, reaching towards the women's quarters, the zenana. It was designed by Lal Chand Ustad, who shaped it like the crown of Krishna, with five storeys rising like a pyramid.",
+   "Its name means Palace of Winds. The 953 small jharokha windows are set in a honeycomb of carved sandstone, and the lattice draws cool air through the building — a working ventilation system for Jaipur's summers, with fountains once cooling the interior further.",
+   "Only the facade is deep; the palace behind it is a thin, curved screen. Pink and red sandstone, small domes, and the jaali screens give the street-facing wall its lace-like texture. In 2019 the walled city of Jaipur, including the Hawa Mahal, was inscribed as a UNESCO World Heritage Site."
+  ],
+  "facts": [
+   {
+    "k": "Built",
+    "v": "1799"
+   },
+   {
+    "k": "Commissioned by",
+    "v": "Maharaja Sawai Pratap Singh"
+   },
+   {
+    "k": "Architect",
+    "v": "Lal Chand Ustad"
+   },
+   {
+    "k": "Windows",
+    "v": "953 jharokhas in five storeys"
+   },
+   {
+    "k": "Material",
+    "v": "Red and pink sandstone"
+   },
+   {
+    "k": "UNESCO",
+    "v": "Jaipur City, 2019 · ref. 1605"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Hawa_Mahal"
+   },
+   {
+    "label": "UNESCO listing",
+    "href": "https://whc.unesco.org/en/list/1605/"
+   },
+   {
+    "label": "Rajasthan tourism",
+    "href": "https://www.tourism.rajasthan.gov.in/"
+   }
+  ],
+  "image": {
+   "file": "East_facade_Hawa_Mahal_Jaipur_from_ground_level_(July_2022)_-_img_01.jpg",
+   "artist": "Chainwit.",
+   "license": "CC BY-SA 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:East_facade_Hawa_Mahal_Jaipur_from_ground_level_(July_2022)_-_img_01.jpg",
+   "src": "assets/img/hawa-mahal.jpg"
+  },
+  "accent": "#e0895f",
+  "accent2": "#f3b48a",
+  "year": 1799
+ },
+ {
+  "id": "charminar",
+  "name": "Charminar",
+  "deva": "चारमीनार",
+  "place": "Hyderabad",
+  "state": "Telangana",
+  "region": "South",
+  "era": "Qutb Shahi · 1591",
+  "period": "1591",
+  "style": "Indo-Islamic, Persian-influenced",
+  "unesco": "On the UNESCO tentative list",
+  "wikipedia": "https://en.wikipedia.org/wiki/Charminar",
+  "blurb": "Four grand arches and four minarets over the old city, raised in 1591 at the crossing of Hyderabad's bazaars.",
+  "history": [
+   "Muhammad Quli Qutb Shah raised the Charminar in 1591, the year the city of Hyderabad was laid out around it. The name means simply four minarets, and the monument stands at the crossing of the two main bazaars — the Char Kaman axis of the new capital.",
+   "Its four arches face the cardinal directions, each 11 metres wide and 20 metres high, with a small mosque on the top floor that has served the monument for more than four centuries. Spiral staircases of 149 steps climb inside each minaret to galleries above the bazaars.",
+   "The structure is built of granite and lime mortar, dressed with plaster and stucco ornament, and stands on a square plinth with a fountain at its centre. It remained the tallest building in Hyderabad for 396 years. To its west runs the Laad Bazaar of bangles; to the southwest, the Makkah Masjid."
+  ],
+  "facts": [
+   {
+    "k": "Built",
+    "v": "1591"
+   },
+   {
+    "k": "Commissioned by",
+    "v": "Muhammad Quli Qutb Shah"
+   },
+   {
+    "k": "Height",
+    "v": "56 m to the minaret finials"
+   },
+   {
+    "k": "Arches",
+    "v": "Four, facing the cardinal directions"
+   },
+   {
+    "k": "Material",
+    "v": "Granite, lime mortar, stucco"
+   },
+   {
+    "k": "Around it",
+    "v": "Laad Bazaar, Makkah Masjid"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Charminar"
+   },
+   {
+    "label": "Telangana tourism",
+    "href": "https://telanganatourism.gov.in/"
+   },
+   {
+    "label": "ASI monument",
+    "href": "https://asi.nic.in/"
+   }
+  ],
+  "image": {
+   "file": "Charminar_Hyderabad_1.jpg",
+   "artist": "DidierTais",
+   "license": "CC BY-SA 3.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Charminar_Hyderabad_1.jpg",
+   "src": "assets/img/charminar.jpg"
+  },
+  "accent": "#c8a26a",
+  "accent2": "#e8c48a",
+  "year": 1591
+ },
+ {
+  "id": "gateway-of-india",
+  "name": "Gateway of India",
+  "deva": "गेटवे ऑफ़ इंडिया",
+  "place": "Mumbai",
+  "state": "Maharashtra",
+  "region": "West",
+  "era": "British Raj · 1913–1924",
+  "period": "1913–1924",
+  "style": "Indo-Saracenic",
+  "unesco": "—",
+  "wikipedia": "https://en.wikipedia.org/wiki/Gateway_of_India",
+  "blurb": "A basalt triumphal arch on the Mumbai waterfront, built to mark a royal landing and later the last exit of the Raj.",
+  "history": [
+   "The Gateway of India was built to commemorate the landing of King George V at Bombay in December 1911, the first British monarch to visit India. The foundation stone was laid in March 1913; George Wittet's final Indo-Saracenic design was sanctioned in 1914 and the arch completed in 1924.",
+   "It is built of local basalt, 26 metres high, with a great central arch 15 metres across flanked by smaller arches, and two octagonal towers carrying domes of reinforced concrete. The detail draws on sixteenth-century Gujarati architecture, with jaali screens and carved brackets.",
+   "The Gateway faces the harbour at Apollo Bunder, where the last British troops left India in 1948. Today it is the departure point for boats to Elephanta Island, and the plaza in front of it is one of the busiest public spaces in Mumbai."
+  ],
+  "facts": [
+   {
+    "k": "Completed",
+    "v": "1924"
+   },
+   {
+    "k": "Architect",
+    "v": "George Wittet"
+   },
+   {
+    "k": "Height",
+    "v": "26 m"
+   },
+   {
+    "k": "Material",
+    "v": "Yellow basalt, reinforced concrete"
+   },
+   {
+    "k": "Style",
+    "v": "Indo-Saracenic, Gujarati detail"
+   },
+   {
+    "k": "Faces",
+    "v": "Mumbai harbour at Apollo Bunder"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Gateway_of_India"
+   },
+   {
+    "label": "Maharashtra tourism",
+    "href": "https://www.maharashtratourism.gov.in/"
+   },
+   {
+    "label": "ASI monument",
+    "href": "https://asi.nic.in/"
+   }
+  ],
+  "image": {
+   "file": "Mumbai_03-2016_30_Gateway_of_India.jpg",
+   "artist": "A.Savin",
+   "license": "FAL",
+   "licenseUrl": "http://artlibre.org/licence/lal/en",
+   "page": "https://commons.wikimedia.org/wiki/File:Mumbai_03-2016_30_Gateway_of_India.jpg",
+   "src": "assets/img/gateway-of-india.jpg"
+  },
+  "accent": "#9aa8b4",
+  "accent2": "#c8d6e0",
+  "year": 1913
+ },
+ {
+  "id": "india-gate",
+  "name": "India Gate",
+  "deva": "इंडिया गेट",
+  "place": "New Delhi",
+  "state": "Delhi",
+  "region": "North",
+  "era": "British Raj · 1921–1931",
+  "period": "1921–1931",
+  "style": "Classical triumphal arch",
+  "unesco": "—",
+  "wikipedia": "https://en.wikipedia.org/wiki/India_Gate",
+  "blurb": "Lutyens' 42-metre war memorial arch, inscribed with the names of 74,187 soldiers of the First World War.",
+  "history": [
+   "India Gate, originally the All India War Memorial, stands at the eastern end of the ceremonial axis of New Delhi. Designed by Edwin Lutyens, it commemorates the 74,187 soldiers of the British Indian Army who died between 1914 and 1921 in France, Flanders, Mesopotamia, Persia, East Africa, Gallipoli and the Third Anglo-Afghan War.",
+   "The foundation stone was laid in 1921 and the memorial dedicated in 1931. It is built of sandstone and granite on a low plinth, 42 metres high, its form borrowing from Roman triumphal arches; the names of the dead are cut into its walls, with a further 13,300 names of British Empire servicemen.",
+   "Under the arch stood the Amar Jawan Jyoti, lit in 1972 and moved to the National War Memorial in 2022. Behind it, the canopy that once held a statue of George V now stands empty, and the lawns along Kartavya Path are among the most used public spaces in the capital."
+  ],
+  "facts": [
+   {
+    "k": "Dedicated",
+    "v": "1931"
+   },
+   {
+    "k": "Architect",
+    "v": "Sir Edwin Lutyens"
+   },
+   {
+    "k": "Height",
+    "v": "42 m"
+   },
+   {
+    "k": "Names inscribed",
+    "v": "74,187 soldiers, 1914–1921"
+   },
+   {
+    "k": "Materials",
+    "v": "Sandstone and granite"
+   },
+   {
+    "k": "Axis",
+    "v": "Kartavya Path, New Delhi"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/India_Gate"
+   },
+   {
+    "label": "Delhi tourism",
+    "href": "https://www.delhitourism.gov.in/"
+   },
+   {
+    "label": "National War Memorial",
+    "href": "https://nationalwarmemorial.gov.in/"
+   }
+  ],
+  "image": {
+   "file": "India_Gate_front.jpg",
+   "artist": "AKS.9955",
+   "license": "CC BY-SA 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:India_Gate_front.jpg",
+   "src": "assets/img/india-gate.jpg"
+  },
+  "accent": "#c98a5a",
+  "accent2": "#e8b07a",
+  "year": 1921
+ },
+ {
+  "id": "mysore-palace",
+  "name": "Mysore Palace",
+  "deva": "मैसूर पैलेस",
+  "place": "Mysuru",
+  "state": "Karnataka",
+  "region": "South",
+  "era": "Wadiyar dynasty · 1897–1912",
+  "period": "1897–1912",
+  "style": "Indo-Saracenic",
+  "unesco": "—",
+  "wikipedia": "https://en.wikipedia.org/wiki/Mysore_Palace",
+  "blurb": "The Amba Vilas Palace: a royal residence of pink domes, arched colonnades and a gold finial, lit by a hundred thousand lamps on Sundays.",
+  "history": [
+   "The old wooden palace of the Wadiyars burned in 1897, during the wedding of Jayalakshammanni. Krishnaraja Wodeyar IV commissioned a new palace that August; Henry Irwin, architect of the Madras High Court, designed it, and construction ran from 1897 to 1912.",
+   "Irwin combined Indo-Islamic, Rajput, Hoysala and Gothic elements into a single Indo-Saracenic composition: a deep pink facade of arched colonnades, a central dome rising above the durbar hall, and smaller domes and towers at the corners, all capped with gilded finials.",
+   "Inside, the palace holds the Durbar Hall with its carved rosewood ceiling, a golden throne, and murals of the Dasara procession. On Sunday evenings and through the ten days of Dasara, close to a hundred thousand bulbs outline the building and its gardens."
+  ],
+  "facts": [
+   {
+    "k": "Built",
+    "v": "1897–1912"
+   },
+   {
+    "k": "Commissioned by",
+    "v": "Krishnaraja Wodeyar IV"
+   },
+   {
+    "k": "Architect",
+    "v": "Henry Irwin"
+   },
+   {
+    "k": "Style",
+    "v": "Indo-Saracenic — Rajput, Hoysala, Gothic"
+   },
+   {
+    "k": "Also known as",
+    "v": "Amba Vilas Palace"
+   },
+   {
+    "k": "Illumination",
+    "v": "Around 100,000 bulbs on Sundays"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Mysore_Palace"
+   },
+   {
+    "label": "Karnataka tourism",
+    "href": "https://karnatakatourism.org/"
+   },
+   {
+    "label": "Palace website",
+    "href": "https://mysorepalace.karnataka.gov.in/"
+   }
+  ],
+  "image": {
+   "file": "Mysore_Palace_Morning.jpg",
+   "artist": "Muhammad Mahdi Karim",
+   "license": "GFDL 1.2",
+   "licenseUrl": "http://www.gnu.org/licenses/old-licenses/fdl-1.2.html",
+   "page": "https://commons.wikimedia.org/wiki/File:Mysore_Palace_Morning.jpg",
+   "src": "assets/img/mysore-palace.jpg"
+  },
+  "accent": "#d4a24c",
+  "accent2": "#f0c878",
+  "year": 1897
+ },
+ {
+  "id": "golden-temple",
+  "name": "Golden Temple",
+  "deva": "हरमंदिर साहिब",
+  "place": "Amritsar",
+  "state": "Punjab",
+  "region": "North",
+  "era": "Sikh · founded 1577, gilded 1830",
+  "period": "1577 · 1830",
+  "style": "Sikh architecture",
+  "unesco": "On the UNESCO tentative list",
+  "wikipedia": "https://en.wikipedia.org/wiki/Golden_Temple",
+  "blurb": "Harmandir Sahib, the holiest gurdwara of Sikhism, standing in the middle of the Amrit Sarovar and clad in gold leaf.",
+  "history": [
+   "Guru Ram Das founded the town of Amritsar and began the sacred pool, the Amrit Sarovar, in 1577. His son Guru Arjan completed the Harmandir Sahib at its centre in 1604, placing it lower than the surrounding ground so that visitors step down into it, and giving it four doors facing four directions.",
+   "The shrine was destroyed several times in the eighteenth century and rebuilt; in 1830 Maharaja Ranjit Singh had its upper storeys covered in gold leaf, which gave the building its English name. The gurdwara sits on an island reached by a causeway, its reflection held in the tank.",
+   "The complex includes the Akal Takht, the seat of Sikh temporal authority, a clock tower, offices of the Shiromani Gurdwara Parbandhak Committee, a museum and the langar — a community kitchen that feeds every visitor free of charge, regardless of faith. Around 150,000 people come each day. The site is on UNESCO's tentative list."
+  ],
+  "facts": [
+   {
+    "k": "Founded",
+    "v": "1577 by Guru Ram Das"
+   },
+   {
+    "k": "Harmandir Sahib",
+    "v": "Completed 1604 by Guru Arjan"
+   },
+   {
+    "k": "Gilded",
+    "v": "1830, under Maharaja Ranjit Singh"
+   },
+   {
+    "k": "Setting",
+    "v": "Island in the Amrit Sarovar"
+   },
+   {
+    "k": "Also here",
+    "v": "Akal Takht, langar, museum"
+   },
+   {
+    "k": "Visitors",
+    "v": "Around 150,000 a day"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Golden_Temple"
+   },
+   {
+    "label": "UNESCO tentative list",
+    "href": "https://whc.unesco.org/en/tentativelists/"
+   },
+   {
+    "label": "Punjab tourism",
+    "href": "https://punjabtourism.punjab.gov.in/"
+   }
+  ],
+  "image": {
+   "file": "The_Golden_Temple_of_Amrithsar_7.jpg",
+   "artist": "Shagil Kannur",
+   "license": "CC BY-SA 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:The_Golden_Temple_of_Amrithsar_7.jpg",
+   "src": "assets/img/golden-temple.jpg"
+  },
+  "accent": "#e0b64a",
+  "accent2": "#ffe08a",
+  "year": 1577
+ },
+ {
+  "id": "konark-sun-temple",
+  "name": "Konark Sun Temple",
+  "deva": "कोणार्क सूर्य मंदिर",
+  "place": "Konark",
+  "state": "Odisha",
+  "region": "East",
+  "era": "Eastern Ganga · c. 1250",
+  "period": "c. 1250",
+  "style": "Kalinga architecture",
+  "unesco": "UNESCO World Heritage Site (1984)",
+  "wikipedia": "https://en.wikipedia.org/wiki/Konark_Sun_Temple",
+  "blurb": "A stone chariot for the sun god, with 24 carved wheels, seven horses and a tower that once stood 61 metres high.",
+  "history": [
+   "Narasingha Deva I of the Eastern Ganga dynasty built the Sun Temple at Konark around 1250, on the Odisha coast about 35 kilometres from Puri. It was conceived as the chariot of Surya, with twenty-four great stone wheels, seven horses and a vast processional stair.",
+   "The main sanctuary tower, the deul, is thought to have risen over 61 metres; it collapsed long ago, and the surviving jagamohana, the assembly hall, stands about 30 metres high with its pyramidal roof of tiers. The whole structure was once set in a walled compound with subsidiary shrines.",
+   "Its surfaces are carved with dancers, musicians, elephants, mythical beasts, and the kama and mithuna scenes for which the temple is famous, along with bands of geometric ornament. The site was inscribed as a UNESCO World Heritage Site in 1984 and is one of the finest examples of Kalinga architecture."
+  ],
+  "facts": [
+   {
+    "k": "Built",
+    "v": "c. 1250 CE"
+   },
+   {
+    "k": "Commissioned by",
+    "v": "Narasingha Deva I"
+   },
+   {
+    "k": "Form",
+    "v": "Chariot of Surya, 24 wheels"
+   },
+   {
+    "k": "Surviving height",
+    "v": "About 30 m of the assembly hall"
+   },
+   {
+    "k": "Style",
+    "v": "Kalinga, Eastern Ganga"
+   },
+   {
+    "k": "UNESCO",
+    "v": "1984 · ref. 246"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Konark_Sun_Temple"
+   },
+   {
+    "label": "UNESCO listing",
+    "href": "https://whc.unesco.org/en/list/246/"
+   },
+   {
+    "label": "Odisha tourism",
+    "href": "https://odishatourism.gov.in/"
+   }
+  ],
+  "image": {
+   "file": "Konarka_Temple.jpg",
+   "artist": "Subham9423",
+   "license": "CC BY-SA 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Konarka_Temple.jpg",
+   "src": "assets/img/konark-sun-temple.jpg"
+  },
+  "accent": "#b8865a",
+  "accent2": "#dcae82",
+  "year": 1250
+ },
+ {
+  "id": "sanchi-stupa",
+  "name": "Sanchi Stupa",
+  "deva": "साँची का स्तूप",
+  "place": "Sanchi",
+  "state": "Madhya Pradesh",
+  "region": "Central",
+  "era": "Mauryan · 3rd century BCE",
+  "period": "3rd c. BCE onward",
+  "style": "Buddhist stupa architecture",
+  "unesco": "UNESCO World Heritage Site (1989)",
+  "wikipedia": "https://en.wikipedia.org/wiki/Sanchi",
+  "blurb": "Ashoka's hemispherical relic mound, ringed by a stone railing and four carved gateways on a hill above the plain.",
+  "history": [
+   "The Great Stupa at Sanchi was commissioned by the Mauryan emperor Ashoka in the 3rd century BCE. Its core was a simple hemispherical brick dome raised over relics of the Buddha, crowned by a chatra, the parasol that marks a place of honour.",
+   "Under later dynasties the stupa was enlarged to roughly twice its original size and faced in stone. A stone vedika, or railing, was built around the dome and the terrace, and four carved toranas were added at the cardinal points in the 1st century BCE, their lintels crowded with scenes from the life of the Buddha.",
+   "The site grew into a complex of monasteries, temples and smaller stupas that was occupied for more than a thousand years before being abandoned. Rediscovered and conserved in the nineteenth and twentieth centuries, it became a UNESCO World Heritage Site in 1989."
+  ],
+  "facts": [
+   {
+    "k": "Commissioned by",
+    "v": "Ashoka, 3rd century BCE"
+   },
+   {
+    "k": "Dome",
+    "v": "Hemispherical brick, faced in stone"
+   },
+   {
+    "k": "Gateways",
+    "v": "Four carved toranas, 1st c. BCE"
+   },
+   {
+    "k": "Setting",
+    "v": "Hilltop at Sanchi, Raisen district"
+   },
+   {
+    "k": "Complex",
+    "v": "Monasteries, temples, smaller stupas"
+   },
+   {
+    "k": "UNESCO",
+    "v": "1989 · ref. 524"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Sanchi"
+   },
+   {
+    "label": "UNESCO listing",
+    "href": "https://whc.unesco.org/en/list/524/"
+   },
+   {
+    "label": "MP tourism",
+    "href": "https://www.mptourism.com/"
+   }
+  ],
+  "image": {
+   "file": "East_Gateway_-_Stupa_1_-_Sanchi_Hill_2013-02-21_4398.JPG",
+   "artist": "Biswarup Ganguly",
+   "license": "CC BY 3.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+   "page": "https://commons.wikimedia.org/wiki/File:East_Gateway_-_Stupa_1_-_Sanchi_Hill_2013-02-21_4398.JPG",
+   "src": "assets/img/sanchi.jpg"
+  },
+  "accent": "#b8a888",
+  "accent2": "#d8c8a8",
+  "year": -250
+ },
+ {
+  "id": "victoria-memorial",
+  "name": "Victoria Memorial",
+  "deva": "विक्टोरिया मेमोरियल",
+  "place": "Kolkata",
+  "state": "West Bengal",
+  "region": "East",
+  "era": "British Raj · 1906–1921",
+  "period": "1906–1921",
+  "style": "Indo-Saracenic, with Mughal detail",
+  "unesco": "—",
+  "wikipedia": "https://en.wikipedia.org/wiki/Victoria_Memorial,_Kolkata",
+  "blurb": "A white marble domed hall on the Kolkata Maidan, the largest monument to a monarch anywhere in the world.",
+  "history": [
+   "The Victoria Memorial was proposed by Lord Curzon after Queen Victoria's death in 1901 and built between 1906 and 1921, dedicated to the memory of the Empress of India. The superstructure went up from 1910, with Martin & Co. of Calcutta as contractors.",
+   "Its design, by William Emerson with Vincent Esch, blends Indo-Saracenic forms with Mughal detail: a central dome of Makrana marble, corner domes and domed chhatris, high arcades and a long reflecting pool aligned on the Maidan. The bronze Angel of Victory on the central dome is 4.9 metres tall and revolves on its bearings.",
+   "The building covers 26 hectares of gardens and has been a museum under the Ministry of Culture since independence, holding paintings, sculpture, manuscripts and memorabilia of the colonial period. It is the largest monument to a monarch anywhere in the world."
+  ],
+  "facts": [
+   {
+    "k": "Built",
+    "v": "1906–1921"
+   },
+   {
+    "k": "Proposed by",
+    "v": "Lord Curzon"
+   },
+   {
+    "k": "Architects",
+    "v": "William Emerson, Vincent Esch"
+   },
+   {
+    "k": "Material",
+    "v": "Makrana marble"
+   },
+   {
+    "k": "Grounds",
+    "v": "26 hectares on the Maidan"
+   },
+   {
+    "k": "Now",
+    "v": "Museum, Ministry of Culture"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Victoria_Memorial,_Kolkata"
+   },
+   {
+    "label": "Museum website",
+    "href": "https://victoriamemorial-cal.org/"
+   },
+   {
+    "label": "West Bengal tourism",
+    "href": "https://wbtourism.gov.in/"
+   }
+  ],
+  "image": {
+   "file": "Victoria_Memorial_situated_in_Kolkata.jpg",
+   "artist": "Subhrajyoti07",
+   "license": "CC BY-SA 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Victoria_Memorial_situated_in_Kolkata.jpg",
+   "src": "assets/img/victoria-memorial-kolkata.jpg"
+  },
+  "accent": "#d8d2c4",
+  "accent2": "#f0e8d8",
+  "year": 1906
+ },
+ {
+  "id": "meenakshi-temple",
+  "name": "Meenakshi Temple",
+  "deva": "मीनाक्षी मंदिर",
+  "place": "Madurai",
+  "state": "Tamil Nadu",
+  "region": "South",
+  "era": "Pandya and Vijayanagara · 12th–17th c.",
+  "period": "12th–17th century",
+  "style": "Dravidian",
+  "unesco": "—",
+  "wikipedia": "https://en.wikipedia.org/wiki/Meenakshi_Temple",
+  "blurb": "Fourteen painted gopurams over the Vaigai, a temple city dedicated to Meenakshi and Sundareswarar.",
+  "history": [
+   "The Meenakshi Sundareswarar temple stands on the southern bank of the Vaigai at Madurai, dedicated to Meenakshi, a form of Parvati, and her consort Sundareswarar, Shiva. Sangam literature describes the temple city; the earliest structures date from Pandya rule in the 12th and 13th centuries.",
+   "Much of the present complex was rebuilt in the 14th century and enlarged under the Vijayanagara Empire and the Nayaks, who added the great gopurams, the pillared halls and the Golden Lotus tank. Fourteen gopurams rise above the streets, the tallest nearly 52 metres high, covered in thousands of painted stucco figures.",
+   "Inside are the Hall of a Thousand Pillars, the Potramarai tank where pilgrims bathe, and shrines to both deities. The temple remains a working centre of Tamil religious life, with around 33,000 sculptures across the complex and daily processions through the streets of the old city."
+  ],
+  "facts": [
+   {
+    "k": "Dedicated to",
+    "v": "Meenakshi and Sundareswarar"
+   },
+   {
+    "k": "Early structures",
+    "v": "12th–13th century, Pandya"
+   },
+   {
+    "k": "Expanded by",
+    "v": "Vijayanagara and Nayak rulers"
+   },
+   {
+    "k": "Gopurams",
+    "v": "Fourteen, the tallest about 52 m"
+   },
+   {
+    "k": "Inside",
+    "v": "Hall of a Thousand Pillars, Golden Lotus tank"
+   },
+   {
+    "k": "City",
+    "v": "Madurai, on the Vaigai"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Meenakshi_Temple"
+   },
+   {
+    "label": "Tamil Nadu tourism",
+    "href": "https://www.tamilnadutourism.tn.gov.in/"
+   },
+   {
+    "label": "Madurai district",
+    "href": "https://madurai.nic.in/"
+   }
+  ],
+  "image": {
+   "file": "Meenakshi Temple, Gopuram, Madurai, India.jpg",
+   "artist": "Vyacheslav Argenberg",
+   "license": "CC BY 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Meenakshi_Temple,_Gopuram,_Madurai,_India.jpg",
+   "src": "assets/img/meenakshi-temple.jpg"
+  },
+  "accent": "#d4544a",
+  "accent2": "#f08a6a",
+  "year": 1200
+ }
+]

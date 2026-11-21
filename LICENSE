@@ -1,0 +1,41 @@
+CC0 1.0 Universal — Public Domain Dedication
+============================================
+
+INDIA — monuments in code
+Copyright (c) 2026 Dr Sohil Momin
+
+To the extent possible under law, Dr Sohil Momin has waived all copyright
+and related or neighboring rights to this work — the source code, the
+procedural 3D models, the stylesheets, the build scripts and the text written
+for this project — and dedicated them to the public domain worldwide.
+
+This work is distributed without any warranty; without even the implied
+warranty of merchantability or fitness for a particular purpose.
+
+You should have received a copy of the CC0 Public Domain Dedication along with
+this work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
+
+The canonical legal code is at
+<https://creativecommons.org/publicdomain/zero/1.0/legalcode>.
+
+
+WHAT THIS LICENCE COVERS
+------------------------
+Covered by CC0 (public domain):
+  · all HTML, CSS and JavaScript in this repository
+  · every procedural 3D model produced by assets/js/monuments/*.js
+  · data/monuments.json — the descriptions, facts and tour text written for
+    this project
+  · the build and QA scripts in tools/
+
+Not covered by CC0, and licensed as noted:
+  · the historical text on each page is adapted from the English Wikipedia
+    articles listed on credits.html, which are published under CC BY-SA 4.0.
+    The adapted text is offered under CC BY-SA 4.0 as well.
+  · the photographs in assets/img are the work of their photographers and are
+    used under the licence named for each file on credits.html (CC BY,
+    CC BY-SA, Free Art Licence or GFDL). They are not public domain.
+  · assets/vendor/three — three.js r169, MIT Licence, © three.js authors.
+  · assets/fonts — Cormorant Garamond (Christian Thalmann), JetBrains Mono
+    (JetBrains) and Noto Sans Devanagari (Google), all under the SIL Open Font
+    Licence 1.1.

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>India Gate — 3D miniature · INDIA</title>
+<meta name="description" content="Lutyens&#x27; 42-metre war memorial arch, inscribed with the names of 74,187 soldiers of the First World War. A procedural three.js miniature of India Gate, New Delhi — with guided tour, history and sources.">
+<meta name="theme-color" content="#c98a5a">
+<meta name="author" content="Dr Sohil Momin">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/fonts.css">
+<link rel="stylesheet" href="../assets/css/monument.css">
+<meta property="og:type" content="website">
+<meta property="og:title" content="India Gate — 3D miniature · INDIA">
+<meta property="og:description" content="Lutyens&#x27; 42-metre war memorial arch, inscribed with the names of 74,187 soldiers of the First World War.">
+<meta property="og:image" content="https://drsamonline.github.io/INDIA/assets/img/india-gate.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TouristAttraction","name":"India Gate","description":"Lutyens&#x27; 42-metre war memorial arch, inscribed with the names of 74,187 soldiers of the First World War.","address":{"@type":"PostalAddress","addressLocality":"New Delhi","addressRegion":"Delhi","addressCountry":"IN"},"sameAs":"https://en.wikipedia.org/wiki/India_Gate","isAccessibleForFree":true}
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "../assets/vendor/three/build/three.module.js",
+    "three/addons/": "../assets/vendor/three/addons/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="app" aria-label="Interactive 3D model of India Gate"></div>
+<noscript><div class="noscript">This page renders India Gate as a live 3D model and needs JavaScript and WebGL. You can still read about the monument on <a href="https://en.wikipedia.org/wiki/India_Gate">Wikipedia</a>.</div></noscript>
+
+<script src="../assets/js/index-data.js"></script>
+<script>window.MONUMENT_DATA = {"name": "India Gate", "deva": "इंडिया गेट", "place": "New Delhi", "state": "Delhi", "era": "British Raj · 1921–1931", "period": "1921–1931", "style": "Classical triumphal arch", "unesco": "—", "wikipedia": "https://en.wikipedia.org/wiki/India_Gate", "history": ["India Gate, originally the All India War Memorial, stands at the eastern end of the ceremonial axis of New Delhi. Designed by Edwin Lutyens, it commemorates the 74,187 soldiers of the British Indian Army who died between 1914 and 1921 in France, Flanders, Mesopotamia, Persia, East Africa, Gallipoli and the Third Anglo-Afghan War.", "The foundation stone was laid in 1921 and the memorial dedicated in 1931. It is built of sandstone and granite on a low plinth, 42 metres high, its form borrowing from Roman triumphal arches; the names of the dead are cut into its walls, with a further 13,300 names of British Empire servicemen.", "Under the arch stood the Amar Jawan Jyoti, lit in 1972 and moved to the National War Memorial in 2022. Behind it, the canopy that once held a statue of George V now stands empty, and the lawns along Kartavya Path are among the most used public spaces in the capital."], "facts": [{"k": "Dedicated", "v": "1931"}, {"k": "Architect", "v": "Sir Edwin Lutyens"}, {"k": "Height", "v": "42 m"}, {"k": "Names inscribed", "v": "74,187 soldiers, 1914–1921"}, {"k": "Materials", "v": "Sandstone and granite"}, {"k": "Axis", "v": "Kartavya Path, New Delhi"}], "links": [{"label": "Wikipedia", "href": "https://en.wikipedia.org/wiki/India_Gate"}, {"label": "Delhi tourism", "href": "https://www.delhitourism.gov.in/"}, {"label": "National War Memorial", "href": "https://nationalwarmemorial.gov.in/"}], "image": {"file": "India_Gate_front.jpg", "artist": "AKS.9955", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "page": "https://commons.wikimedia.org/wiki/File:India_Gate_front.jpg", "src": "assets/img/india-gate.jpg"}};</script>
+<script type="module">
+  import { boot } from '../assets/js/monument-engine.js';
+  import monument from '../assets/js/monuments/india-gate.js';
+  boot(monument);
+</script>
+</body>
+</html>
