@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+"""Check that every internal href/src in the generated site resolves.
+
+    python3 tools/linkcheck.py
+
+Exits non-zero and lists the offenders if anything is missing. Run it after
+tools/build_site.py; the CI workflow does both.
+"""
+import glob, os, re, sys, urllib.parse
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+def main():
+    bad = []
+    pages = ['index.html', 'credits.html'] + glob.glob('monuments/*.html')
+    for page in pages:
+        path = os.path.join(ROOT, page)
+        if not os.path.exists(path):
+            bad.append((page, '(page missing)'))
+            continue
+        base = os.path.dirname(path)
+        html = open(path, encoding='utf-8').read()
+        refs = []
+        for m in re.finditer(r'(?:href|src)="([^"]+)"', html):
+            refs.append(m.group(1))
+        for m in re.finditer(r'srcset="([^"]+)"', html):
+            refs.extend(part.strip().split(' ')[0] for part in m.group(1).split(','))
+        for url in refs:
+            if not url or url.startswith(('http', 'mailto:', 'data:', '#', '//')):
+                continue
+            url = url.split('#')[0].split('?')[0]
+            if not url:
+                continue
+            target = os.path.normpath(os.path.join(base, urllib.parse.unquote(url)))
+            if not os.path.exists(target):
+                bad.append((page, url))
+    for css in glob.glob(os.path.join(ROOT, 'assets/css/*.css')):
+        for m in re.finditer(r"url\('([^']+)'\)", open(css, encoding='utf-8').read()):
+            u = m.group(1)
+            if u.startswith(('data:', 'http')):
+                continue
+            target = os.path.normpath(os.path.join(os.path.dirname(css), u))
+            if not os.path.exists(target):
+                bad.append((os.path.relpath(css, ROOT), u))
+    if bad:
+        print('broken references:', len(bad))
+        for page, url in bad[:40]:
+            print(f'  {page}  ->  {url}')
+        return 1
+    print(f'ok: {len(pages)} pages, all internal references resolve')
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main())

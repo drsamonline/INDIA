@@ -67,6 +67,7 @@ def build_index(monuments):
     tpl = open(tpl_path).read()
     cards = []
     for i, m in enumerate(monuments, 1):
+        stem = os.path.basename(m['image']['src']).replace('.jpg', '')
         tag = ''
         if m.get('unesco') and m['unesco'] != '—':
             label = 'UNESCO' if 'World Heritage Site' in m['unesco'] else 'UNESCO tentative'
@@ -74,7 +75,10 @@ def build_index(monuments):
         cards.append(f"""
       <a class="card" href="monuments/{m['id']}.html" data-region="{esc(m['region'])}" data-id="{m['id']}">
         <div class="card-media">
-          <img src="assets/img/thumb/{os.path.basename(m['image']['src'])}" alt="{esc(m['name'])}, {esc(m['place'])}" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/{stem}-450.webp 450w, assets/img/thumb/{stem}-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/{stem}-900.jpg" srcset="assets/img/thumb/{stem}-450.jpg 450w, assets/img/thumb/{stem}-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="{esc(m['name'])}, {esc(m['place'])}" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">{i:02d}</span>{tag}
         </div>
         <div class="card-body">
@@ -102,6 +106,7 @@ def build_index(monuments):
     out = out.replace('__FIRSTNAME__', esc(monuments[0]['name']))
     out = out.replace('__FIRSTID__', monuments[0]['id'])
     out = out.replace('__FIRSTIMG__', monuments[0]['image']['src'])
+    out = out.replace('__FIRSTWEBP__', monuments[0]['image']['src'].replace('.jpg', '.webp'))
     out = out.replace('__OLDEST__', f"{years[0][1]} · {abs(years[0][0])} BCE" if years[0][0] < 0 else f"{years[0][1]} · {years[0][0]}")
     out = out.replace('__NEWEST__', f"{years[-1][1]} · {years[-1][0]}")
     open(os.path.join(ROOT, 'index.html'), 'w').write(out)

@@ -9,6 +9,7 @@
 <meta name="theme-color" content="#f7f0e4">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="preload" as="image" href="assets/img/taj-mahal.webp" type="image/webp" fetchpriority="high">
 <link rel="stylesheet" href="assets/css/site.css">
 <script>document.documentElement.classList.add("js");</script>
 <meta property="og:type" content="website">
@@ -73,7 +74,10 @@
         <span class="arch-chip"><i></i>Live 3D · WebGL</span>
         <div class="arch">
           <div class="arch-in">
-            <img src="assets/img/taj-mahal.jpg" alt="The Taj Mahal at Agra, photographed from the garden side" width="1800" height="1183" fetchpriority="high">
+            <picture>
+              <source type="image/webp" srcset="assets/img/taj-mahal.webp">
+              <img src="assets/img/taj-mahal.jpg" alt="The Taj Mahal at Agra, photographed from the garden side" width="1400" height="920" fetchpriority="high">
+            </picture>
           </div>
         </div>
         <span class="arch-badge"><b>1632</b><span>Taj Mahal · Agra</span></span>
@@ -127,7 +131,10 @@
 
       <a class="card" href="monuments/taj-mahal.html" data-region="North" data-id="taj-mahal">
         <div class="card-media">
-          <img src="assets/img/thumb/taj-mahal.jpg" alt="Taj Mahal, Agra" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/taj-mahal-450.webp 450w, assets/img/thumb/taj-mahal-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/taj-mahal-900.jpg" srcset="assets/img/thumb/taj-mahal-450.jpg 450w, assets/img/thumb/taj-mahal-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Taj Mahal, Agra" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">01</span><span class="card-tag">UNESCO</span>
         </div>
         <div class="card-body">
@@ -140,7 +147,10 @@
       </a>
       <a class="card" href="monuments/qutub-minar.html" data-region="North" data-id="qutub-minar">
         <div class="card-media">
-          <img src="assets/img/thumb/qutub-minar.jpg" alt="Qutb Minar, Mehrauli, Delhi" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/qutub-minar-450.webp 450w, assets/img/thumb/qutub-minar-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/qutub-minar-900.jpg" srcset="assets/img/thumb/qutub-minar-450.jpg 450w, assets/img/thumb/qutub-minar-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Qutb Minar, Mehrauli, Delhi" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">02</span><span class="card-tag">UNESCO</span>
         </div>
         <div class="card-body">
@@ -153,7 +163,10 @@
       </a>
       <a class="card" href="monuments/hawa-mahal.html" data-region="North" data-id="hawa-mahal">
         <div class="card-media">
-          <img src="assets/img/thumb/hawa-mahal.jpg" alt="Hawa Mahal, Jaipur" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/hawa-mahal-450.webp 450w, assets/img/thumb/hawa-mahal-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/hawa-mahal-900.jpg" srcset="assets/img/thumb/hawa-mahal-450.jpg 450w, assets/img/thumb/hawa-mahal-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Hawa Mahal, Jaipur" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">03</span><span class="card-tag">UNESCO</span>
         </div>
         <div class="card-body">
@@ -166,7 +179,10 @@
       </a>
       <a class="card" href="monuments/charminar.html" data-region="South" data-id="charminar">
         <div class="card-media">
-          <img src="assets/img/thumb/charminar.jpg" alt="Charminar, Hyderabad" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/charminar-450.webp 450w, assets/img/thumb/charminar-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/charminar-900.jpg" srcset="assets/img/thumb/charminar-450.jpg 450w, assets/img/thumb/charminar-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Charminar, Hyderabad" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">04</span><span class="card-tag">UNESCO tentative</span>
         </div>
         <div class="card-body">
@@ -179,7 +195,10 @@
       </a>
       <a class="card" href="monuments/gateway-of-india.html" data-region="West" data-id="gateway-of-india">
         <div class="card-media">
-          <img src="assets/img/thumb/gateway-of-india.jpg" alt="Gateway of India, Mumbai" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/gateway-of-india-450.webp 450w, assets/img/thumb/gateway-of-india-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/gateway-of-india-900.jpg" srcset="assets/img/thumb/gateway-of-india-450.jpg 450w, assets/img/thumb/gateway-of-india-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Gateway of India, Mumbai" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">05</span>
         </div>
         <div class="card-body">
@@ -192,7 +211,10 @@
       </a>
       <a class="card" href="monuments/india-gate.html" data-region="North" data-id="india-gate">
         <div class="card-media">
-          <img src="assets/img/thumb/india-gate.jpg" alt="India Gate, New Delhi" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/india-gate-450.webp 450w, assets/img/thumb/india-gate-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/india-gate-900.jpg" srcset="assets/img/thumb/india-gate-450.jpg 450w, assets/img/thumb/india-gate-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="India Gate, New Delhi" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">06</span>
         </div>
         <div class="card-body">
@@ -205,7 +227,10 @@
       </a>
       <a class="card" href="monuments/mysore-palace.html" data-region="South" data-id="mysore-palace">
         <div class="card-media">
-          <img src="assets/img/thumb/mysore-palace.jpg" alt="Mysore Palace, Mysuru" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/mysore-palace-450.webp 450w, assets/img/thumb/mysore-palace-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/mysore-palace-900.jpg" srcset="assets/img/thumb/mysore-palace-450.jpg 450w, assets/img/thumb/mysore-palace-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Mysore Palace, Mysuru" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">07</span>
         </div>
         <div class="card-body">
@@ -218,7 +243,10 @@
       </a>
       <a class="card" href="monuments/golden-temple.html" data-region="North" data-id="golden-temple">
         <div class="card-media">
-          <img src="assets/img/thumb/golden-temple.jpg" alt="Golden Temple, Amritsar" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/golden-temple-450.webp 450w, assets/img/thumb/golden-temple-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/golden-temple-900.jpg" srcset="assets/img/thumb/golden-temple-450.jpg 450w, assets/img/thumb/golden-temple-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Golden Temple, Amritsar" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">08</span><span class="card-tag">UNESCO tentative</span>
         </div>
         <div class="card-body">
@@ -231,7 +259,10 @@
       </a>
       <a class="card" href="monuments/konark-sun-temple.html" data-region="East" data-id="konark-sun-temple">
         <div class="card-media">
-          <img src="assets/img/thumb/konark-sun-temple.jpg" alt="Konark Sun Temple, Konark" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/konark-sun-temple-450.webp 450w, assets/img/thumb/konark-sun-temple-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/konark-sun-temple-900.jpg" srcset="assets/img/thumb/konark-sun-temple-450.jpg 450w, assets/img/thumb/konark-sun-temple-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Konark Sun Temple, Konark" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">09</span><span class="card-tag">UNESCO</span>
         </div>
         <div class="card-body">
@@ -244,7 +275,10 @@
       </a>
       <a class="card" href="monuments/sanchi-stupa.html" data-region="Central" data-id="sanchi-stupa">
         <div class="card-media">
-          <img src="assets/img/thumb/sanchi.jpg" alt="Sanchi Stupa, Sanchi" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/sanchi-450.webp 450w, assets/img/thumb/sanchi-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/sanchi-900.jpg" srcset="assets/img/thumb/sanchi-450.jpg 450w, assets/img/thumb/sanchi-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Sanchi Stupa, Sanchi" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">10</span><span class="card-tag">UNESCO</span>
         </div>
         <div class="card-body">
@@ -257,7 +291,10 @@
       </a>
       <a class="card" href="monuments/victoria-memorial.html" data-region="East" data-id="victoria-memorial">
         <div class="card-media">
-          <img src="assets/img/thumb/victoria-memorial-kolkata.jpg" alt="Victoria Memorial, Kolkata" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/victoria-memorial-kolkata-450.webp 450w, assets/img/thumb/victoria-memorial-kolkata-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/victoria-memorial-kolkata-900.jpg" srcset="assets/img/thumb/victoria-memorial-kolkata-450.jpg 450w, assets/img/thumb/victoria-memorial-kolkata-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Victoria Memorial, Kolkata" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">11</span>
         </div>
         <div class="card-body">
@@ -270,7 +307,10 @@
       </a>
       <a class="card" href="monuments/meenakshi-temple.html" data-region="South" data-id="meenakshi-temple">
         <div class="card-media">
-          <img src="assets/img/thumb/meenakshi-temple.jpg" alt="Meenakshi Temple, Madurai" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/meenakshi-temple-450.webp 450w, assets/img/thumb/meenakshi-temple-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/meenakshi-temple-900.jpg" srcset="assets/img/thumb/meenakshi-temple-450.jpg 450w, assets/img/thumb/meenakshi-temple-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Meenakshi Temple, Madurai" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">12</span>
         </div>
         <div class="card-body">
@@ -283,7 +323,10 @@
       </a>
       <a class="card" href="monuments/lotus-temple.html" data-region="North" data-id="lotus-temple">
         <div class="card-media">
-          <img src="assets/img/thumb/lotus-temple.jpg" alt="Lotus Temple, New Delhi" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/lotus-temple-450.webp 450w, assets/img/thumb/lotus-temple-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/lotus-temple-900.jpg" srcset="assets/img/thumb/lotus-temple-450.jpg 450w, assets/img/thumb/lotus-temple-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Lotus Temple, New Delhi" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">13</span>
         </div>
         <div class="card-body">
@@ -296,7 +339,10 @@
       </a>
       <a class="card" href="monuments/shore-temple.html" data-region="South" data-id="shore-temple">
         <div class="card-media">
-          <img src="assets/img/thumb/shore-temple.jpg" alt="Shore Temple, Mahabalipuram" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/shore-temple-450.webp 450w, assets/img/thumb/shore-temple-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/shore-temple-900.jpg" srcset="assets/img/thumb/shore-temple-450.jpg 450w, assets/img/thumb/shore-temple-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Shore Temple, Mahabalipuram" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">14</span><span class="card-tag">UNESCO</span>
         </div>
         <div class="card-body">
@@ -309,7 +355,10 @@
       </a>
       <a class="card" href="monuments/rani-ki-vav.html" data-region="West" data-id="rani-ki-vav">
         <div class="card-media">
-          <img src="assets/img/thumb/rani-ki-vav.jpg" alt="Rani ki Vav, Patan" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/rani-ki-vav-450.webp 450w, assets/img/thumb/rani-ki-vav-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/rani-ki-vav-900.jpg" srcset="assets/img/thumb/rani-ki-vav-450.jpg 450w, assets/img/thumb/rani-ki-vav-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Rani ki Vav, Patan" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">15</span><span class="card-tag">UNESCO</span>
         </div>
         <div class="card-body">
@@ -322,7 +371,10 @@
       </a>
       <a class="card" href="monuments/amber-fort.html" data-region="North" data-id="amber-fort">
         <div class="card-media">
-          <img src="assets/img/thumb/amber-fort.jpg" alt="Amber Fort, Amer, Jaipur" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/amber-fort-450.webp 450w, assets/img/thumb/amber-fort-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/amber-fort-900.jpg" srcset="assets/img/thumb/amber-fort-450.jpg 450w, assets/img/thumb/amber-fort-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Amber Fort, Amer, Jaipur" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">16</span><span class="card-tag">UNESCO tentative</span>
         </div>
         <div class="card-body">
@@ -335,7 +387,10 @@
       </a>
       <a class="card" href="monuments/csmt-mumbai.html" data-region="West" data-id="csmt-mumbai">
         <div class="card-media">
-          <img src="assets/img/thumb/csmt-mumbai.jpg" alt="CSMT, Mumbai, Mumbai" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/csmt-mumbai-450.webp 450w, assets/img/thumb/csmt-mumbai-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/csmt-mumbai-900.jpg" srcset="assets/img/thumb/csmt-mumbai-450.jpg 450w, assets/img/thumb/csmt-mumbai-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="CSMT, Mumbai, Mumbai" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">17</span><span class="card-tag">UNESCO</span>
         </div>
         <div class="card-body">
@@ -348,7 +403,10 @@
       </a>
       <a class="card" href="monuments/mahabodhi-temple.html" data-region="East" data-id="mahabodhi-temple">
         <div class="card-media">
-          <img src="assets/img/thumb/mahabodhi-temple.jpg" alt="Mahabodhi Temple, Bodh Gaya" loading="lazy" width="900" height="600">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/mahabodhi-temple-450.webp 450w, assets/img/thumb/mahabodhi-temple-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/mahabodhi-temple-900.jpg" srcset="assets/img/thumb/mahabodhi-temple-450.jpg 450w, assets/img/thumb/mahabodhi-temple-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Mahabodhi Temple, Bodh Gaya" loading="lazy" width="900" height="600">
+          </picture>
           <span class="card-num">18</span><span class="card-tag">UNESCO</span>
         </div>
         <div class="card-body">

@@ -1,0 +1,55 @@
+name: site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: rebuild pages and check links
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install build dependencies
+        run: pip install --quiet pillow
+      - name: Regenerate pages from data/monuments.json
+        run: python3 tools/build_site.py
+      - name: Regenerate the Taj Mahal page
+        run: python3 tools/build_taj.py
+      - name: Fail if the generated pages are stale
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Generated pages differ from the committed ones. Run tools/build_site.py and commit the result."
+            git --no-pager diff --stat
+            exit 1
+          fi
+      - name: Check internal links and assets
+        run: python3 tools/linkcheck.py
+      - name: Check the data file is valid
+        run: python3 -c "import json;d=json.load(open('data/monuments.json'));assert len(d)==len({m['id'] for m in d});print(len(d),'monuments ok')"
+
+  render:
+    name: render a page in a headless browser
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Playwright and Chromium
+        run: |
+          pip install --quiet pillow playwright
+          python -m playwright install --with-deps chromium
+      - name: Boot two pages and check for console errors
+        run: |
+          CHROME_PATH="$(python -c 'from playwright.sync_api import sync_playwright; \
+            p=sync_playwright().start(); print(p.chromium.executable_path)')" \
+          python3 tools/check_all.py --only qutub-minar golden-temple --out shots

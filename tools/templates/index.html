@@ -9,6 +9,7 @@
 <meta name="theme-color" content="#f7f0e4">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="preload" as="image" href="__FIRSTWEBP__" type="image/webp" fetchpriority="high">
 <link rel="stylesheet" href="assets/css/site.css">
 <script>document.documentElement.classList.add("js");</script>
 <meta property="og:type" content="website">
@@ -73,7 +74,10 @@
         <span class="arch-chip"><i></i>Live 3D · WebGL</span>
         <div class="arch">
           <div class="arch-in">
-            <img src="__FIRSTIMG__" alt="The Taj Mahal at Agra, photographed from the garden side" width="1800" height="1183" fetchpriority="high">
+            <picture>
+              <source type="image/webp" srcset="__FIRSTWEBP__">
+              <img src="__FIRSTIMG__" alt="The Taj Mahal at Agra, photographed from the garden side" width="1400" height="920" fetchpriority="high">
+            </picture>
           </div>
         </div>
         <span class="arch-badge"><b>1632</b><span>Taj Mahal · Agra</span></span>
