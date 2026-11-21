@@ -77,6 +77,8 @@ const PALETTE = {
   pinkPaint:     { color: 0xc8607a, rough: 0.8 },
   water:         { color: 0x2f5a6b, rough: 0.14, metal: 0.15 },
   paving:        { color: 0xb6a992, rough: 0.95, tex: 'paving' },
+  basalt:        { color: 0xaea289, rough: 0.92, tex: 'stone' },
+  basaltDark:    { color: 0x877c66, rough: 0.94, tex: 'stone' },
   jali:          { color: 0xd8b184, rough: 0.9, jali: true },
   jaliWhite:     { color: 0xf0e6d2, rough: 0.9, jali: true },
   glass:         { color: 0x9fc7d4, rough: 0.1, metal: 0.2, transparent: true, opacity: 0.45 },
@@ -431,29 +433,59 @@ class Builder {
   tree(x, z, s = 1, kind = 'round') {
     const y = 0;
     if (kind === 'palm') {
-      this.add('bark', this.cyl(0.16 * s, 0.26 * s, 4.6 * s, 7), x, y + 2.3 * s, z, { rz: 0.05 });
-      for (let i = 0; i < 7; i++) {
-        const a = (i / 7) * Math.PI * 2;
-        this.add('foliage', this.box(0.5 * s, 0.06 * s, 2.5 * s),
-          x + Math.cos(a) * 1.1 * s, y + 4.5 * s, z + Math.sin(a) * 1.1 * s, { ry: -a, rz: 0.5, rx: 0.12 });
+      // a slightly curved trunk built from stacked segments
+      for (let i = 0; i < 6; i++) {
+        const k = i / 5;
+        this.add('bark', this.cyl((0.19 - 0.055 * k) * s, (0.215 - 0.05 * k) * s, 0.95 * s, 7),
+          x + k * k * 0.85 * s, y + (0.45 + i * 0.92) * s, z, { rz: -0.04 - k * 0.05 });
       }
+      const top = 5.5 * s;
+      for (let i = 0; i < 9; i++) {
+        const a = (i / 9) * Math.PI * 2;
+        this.add('foliage', this.box(0.55 * s, 0.06 * s, 2.7 * s),
+          x + 0.85 * s + Math.cos(a) * 1.25 * s, y + top - 0.15 * s, z + Math.sin(a) * 1.25 * s,
+          { ry: -a, rz: 0.52, rx: 0.08 });
+      }
+      this.add('foliage', this.sph(0.5 * s, 8), x + 0.85 * s, y + top, z, { sy: 0.7 });
       return;
     }
     if (kind === 'cypress') {
-      this.add('bark', this.cyl(0.12 * s, 0.2 * s, 1.2 * s, 6), x, y + 0.6 * s, z);
-      this.add('foliage', this.cone(0.75 * s, 5.4 * s, 9), x, y + 3.4 * s, z);
+      this.add('bark', this.cyl(0.11 * s, 0.19 * s, 1.1 * s, 6), x, y + 0.55 * s, z);
+      this.add('foliage', this.cone(0.85 * s, 3.2 * s, 10), x, y + 2.1 * s, z);
+      this.add('foliage', this.cone(0.68 * s, 2.6 * s, 10), x, y + 3.5 * s, z);
+      this.add('foliage', this.cone(0.46 * s, 2.0 * s, 9), x, y + 4.7 * s, z);
       return;
     }
-    this.add('bark', this.cyl(0.16 * s, 0.28 * s, 2.2 * s, 7), x, y + 1.1 * s, z);
-    this.add('foliage', this.sph(1.5 * s, 10), x, y + 3.1 * s, z, { sy: 0.85 });
-    this.add('foliage', this.sph(1.05 * s, 9), x + 0.9 * s, y + 2.6 * s, z + 0.4 * s);
-    this.add('foliage', this.sph(0.95 * s, 9), x - 0.8 * s, y + 2.9 * s, z - 0.5 * s);
+    // broadleaf tree: tapered trunk, two branches, a canopy of six blobs
+    this.add('bark', this.cyl(0.13 * s, 0.27 * s, 2.6 * s, 7), x, y + 1.3 * s, z);
+    [[0.5, 2.35, 0.32, -0.5, 0.35], [-0.45, 2.5, -0.3, 0.5, -0.3]].forEach(([dx, yy, dz, rz, rx]) => {
+      this.add('bark', this.cyl(0.06 * s, 0.1 * s, 1.25 * s, 5), x + dx * s, y + yy * s, z + dz * s, { rz, rx });
+    });
+    [[0, 3.7, 0, 1.5], [0.95, 3.25, 0.45, 1.05], [-0.9, 3.45, -0.5, 1.0],
+     [0.3, 4.45, -0.65, 0.88], [-0.42, 4.2, 0.72, 0.82], [0.1, 2.95, 1.05, 0.78]]
+      .forEach(([dx, yy, dz, r]) => {
+        this.add('foliage', this.sph(r * s, 9), x + dx * s, y + yy * s, z + dz * s, { sy: 0.8 });
+      });
   }
   person(x, z, ry = 0, key = 'fabricWhite', s = 1) {
-    const y = 0;
-    this.add(key, this.cyl(0.19 * s, 0.3 * s, 1.15 * s, 7), x, y + 0.58 * s, z, { ry });
-    this.add('bark', this.sph(0.15 * s, 8), x, y + 1.32 * s, z);
-    this.add(key, this.cyl(0.22 * s, 0.16 * s, 0.2 * s, 7), x, y + 1.18 * s, z);
+    const y = 0, cs = Math.cos(ry), sn = Math.sin(ry);
+    // legs
+    [-1, 1].forEach((d) => {
+      this.add('grey', this.cyl(0.075 * s, 0.09 * s, 0.78 * s, 6), x + cs * d * 0.11 * s, y + 0.39 * s, z - sn * d * 0.11 * s, { ry });
+    });
+    // torso and shoulders
+    this.add(key, this.cyl(0.17 * s, 0.245 * s, 0.62 * s, 8), x, y + 1.06 * s, z, { ry });
+    this.add(key, this.sph(0.19 * s, 8), x, y + 1.35 * s, z, { ry, sy: 0.62 });
+    // arms
+    [-1, 1].forEach((d) => {
+      this.add(key, this.cyl(0.048 * s, 0.058 * s, 0.56 * s, 5),
+        x + cs * d * 0.205 * s, y + 1.06 * s, z - sn * d * 0.205 * s, { ry, rz: d * 0.09 });
+    });
+    // neck and head
+    this.add('bark', this.cyl(0.048 * s, 0.055 * s, 0.09 * s, 5), x, y + 1.45 * s, z);
+    this.add('bark', this.sph(0.115 * s, 9), x, y + 1.56 * s, z, { sy: 1.1 });
+    // a shawl across the shoulders
+    this.add(key, this.cyl(0.2 * s, 0.25 * s, 0.1 * s, 8), x, y + 1.37 * s, z, { ry });
   }
   lamp(x, z, h = 3.2, key = 'black') {
     this.add(key, this.cyl(0.09, 0.13, h, 6), x, h / 2, z);
@@ -799,12 +831,13 @@ export function boot(mon) {
     keyLight.castShadow = true;
     const b = mon.bounds || 55;
     keyLight.shadow.mapSize.set(isMobile() ? 1024 : 2048, isMobile() ? 1024 : 2048);
-    keyLight.shadow.camera.left = -b; keyLight.shadow.camera.right = b;
-    keyLight.shadow.camera.top = b; keyLight.shadow.camera.bottom = -b;
+    const sb = b * 0.78;
+    keyLight.shadow.camera.left = -sb; keyLight.shadow.camera.right = sb;
+    keyLight.shadow.camera.top = sb; keyLight.shadow.camera.bottom = -sb;
     keyLight.shadow.camera.near = 1;
     keyLight.shadow.camera.far = b * 7;
-    keyLight.shadow.bias = -0.0006;
-    keyLight.shadow.normalBias = 0.045;
+    keyLight.shadow.bias = -0.00035;
+    keyLight.shadow.normalBias = 0.13;   // wide frustum needs a generous normal bias
     keyLight.target.position.set((H.target[0]), 0, H.target[2]);
     scene.add(keyLight, keyLight.target);
 

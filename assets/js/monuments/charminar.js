@@ -86,9 +86,13 @@ export default {
     add('plaster', piercedWall(W + T * 2, H, T, AW, AH, SILL), -W / 2 - T, 1.4, 0, { ry: Math.PI / 2 });
 
     // dark lining inside the crossing so the passage reads as deep shade
-    add('grey', box(W - 0.7, H, W - 0.7), 0, 1.4 + H / 2, 0, { s: 1 });
+    add('plaster', box(W - 0.8, 0.6, W - 0.8), 0, 1.4 + H - 0.3, 0);   // dark ceiling of the crossing
+    add('dark', box(W - 1.0, 0.4, W - 1.0), 0, 1.4 + H - 0.75, 0);
     // inner floor + fountain
     add('stone', box(W - 0.4, 0.3, W - 0.4), 0, 1.62, 0);
+    // a lit apron under each arch so the openings read as passages
+    [[0, W / 2 - 1.4, 0], [0, -W / 2 + 1.4, Math.PI], [W / 2 - 1.4, 0, Math.PI / 2], [-W / 2 + 1.4, 0, -Math.PI / 2]]
+      .forEach(([x, z, ry]) => add('stone', box(AW + 1.2, 0.22, 3.2), x, 1.68, z, { ry }));
     add('granite', cyl(2.6, 2.8, 0.9, 16), 0, 1.9, 0);
     add('marble', cyl(2.2, 2.2, 0.3, 16), 0, 2.5, 0);
     add('marble', cyl(0.35, 0.45, 1.4, 10), 0, 3.0, 0);
