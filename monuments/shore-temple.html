@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shore Temple — 3D miniature · INDIA</title>
+<meta name="description" content="A granite shrine of tiered towers standing where the Bay of Bengal runs up the sand at Mamallapuram. A procedural three.js miniature of Shore Temple, Mahabalipuram — with guided tour, history and sources.">
+<meta name="theme-color" content="#b0a48c">
+<meta name="author" content="Dr Sohil Momin">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/fonts.css">
+<link rel="stylesheet" href="../assets/css/monument.css">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Shore Temple — 3D miniature · INDIA">
+<meta property="og:description" content="A granite shrine of tiered towers standing where the Bay of Bengal runs up the sand at Mamallapuram.">
+<meta property="og:image" content="https://drsamonline.github.io/INDIA/assets/img/shore-temple.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TouristAttraction","name":"Shore Temple","description":"A granite shrine of tiered towers standing where the Bay of Bengal runs up the sand at Mamallapuram.","address":{"@type":"PostalAddress","addressLocality":"Mahabalipuram","addressRegion":"Tamil Nadu","addressCountry":"IN"},"sameAs":"https://en.wikipedia.org/wiki/Shore_Temple","isAccessibleForFree":true}
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "../assets/vendor/three/build/three.module.js",
+    "three/addons/": "../assets/vendor/three/addons/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="app" aria-label="Interactive 3D model of Shore Temple"></div>
+<noscript><div class="noscript">This page renders Shore Temple as a live 3D model and needs JavaScript and WebGL. You can still read about the monument on <a href="https://en.wikipedia.org/wiki/Shore_Temple">Wikipedia</a>.</div></noscript>
+
+<script src="../assets/js/index-data.js"></script>
+<script>window.MONUMENT_DATA = {"name": "Shore Temple", "deva": "तटीय मंदिर", "place": "Mahabalipuram", "state": "Tamil Nadu", "era": "Pallava · c. 725 CE", "period": "c. 725 CE", "style": "Pallava, Dravidian", "unesco": "UNESCO World Heritage Site (1984)", "wikipedia": "https://en.wikipedia.org/wiki/Shore_Temple", "history": ["The Shore Temple at Mahabalipuram was built around 725 CE under the Pallava king Narasimhavarman II, called Rajasimha. It is one of the earliest structural stone temples of southern India, raised on the shore of the Bay of Bengal rather than cut into rock like the caves and rathas around it.", "The complex holds two Shiva shrines and a smaller reclining Vishnu, each under a pyramidal tower of five storeys, built of dressed granite blocks and crowned with stupi finials. A wall of Nandi bulls faces the sea, and the waves have worn the stone for thirteen centuries.", "Sand and sea have buried and uncovered the site more than once; the tsunamis of 2004 scoured the shore and revealed further structures offshore. The temples are part of the Group of Monuments at Mahabalipuram, inscribed as a UNESCO World Heritage Site in 1984."], "facts": [{"k": "Built", "v": "c. 725 CE"}, {"k": "Patron", "v": "Narasimhavarman II (Rajasimha)"}, {"k": "Dynasty", "v": "Pallava"}, {"k": "Towers", "v": "Two vimanas of five storeys"}, {"k": "Material", "v": "Dressed granite"}, {"k": "UNESCO", "v": "1984 · ref. 249"}], "links": [{"label": "Wikipedia", "href": "https://en.wikipedia.org/wiki/Shore_Temple"}, {"label": "UNESCO listing", "href": "https://whc.unesco.org/en/list/249/"}, {"label": "Tamil Nadu tourism", "href": "https://www.tamilnadutourism.tn.gov.in/"}], "image": {"file": "Shore_Temple_-Mamallapuram_-Tamil_Nadu_-N-TN-C55.jpg", "artist": "Swarna1311", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "page": "https://commons.wikimedia.org/wiki/File:Shore_Temple_-Mamallapuram_-Tamil_Nadu_-N-TN-C55.jpg", "src": "assets/img/shore-temple.jpg"}};</script>
+<script type="module">
+  import { boot } from '../assets/js/monument-engine.js';
+  import monument from '../assets/js/monuments/shore-temple.js';
+  boot(monument);
+</script>
+</body>
+</html>

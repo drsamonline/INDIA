@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lotus Temple — 3D miniature · INDIA</title>
+<meta name="description" content="Twenty-seven marble petals closed around a silent hall — the Bahá’í House of Worship, open to every faith. A procedural three.js miniature of Lotus Temple, New Delhi — with guided tour, history and sources.">
+<meta name="theme-color" content="#d8d2c4">
+<meta name="author" content="Dr Sohil Momin">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/fonts.css">
+<link rel="stylesheet" href="../assets/css/monument.css">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Lotus Temple — 3D miniature · INDIA">
+<meta property="og:description" content="Twenty-seven marble petals closed around a silent hall — the Bahá’í House of Worship, open to every faith.">
+<meta property="og:image" content="https://drsamonline.github.io/INDIA/assets/img/lotus-temple.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TouristAttraction","name":"Lotus Temple","description":"Twenty-seven marble petals closed around a silent hall — the Bahá’í House of Worship, open to every faith.","address":{"@type":"PostalAddress","addressLocality":"New Delhi","addressRegion":"Delhi","addressCountry":"IN"},"sameAs":"https://en.wikipedia.org/wiki/Lotus_Temple","isAccessibleForFree":true}
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "../assets/vendor/three/build/three.module.js",
+    "three/addons/": "../assets/vendor/three/addons/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="app" aria-label="Interactive 3D model of Lotus Temple"></div>
+<noscript><div class="noscript">This page renders Lotus Temple as a live 3D model and needs JavaScript and WebGL. You can still read about the monument on <a href="https://en.wikipedia.org/wiki/Lotus_Temple">Wikipedia</a>.</div></noscript>
+
+<script src="../assets/js/index-data.js"></script>
+<script>window.MONUMENT_DATA = {"name": "Lotus Temple", "deva": "कमल मंदिर", "place": "New Delhi", "state": "Delhi", "era": "Bahá’í · 1980–1986", "period": "1980–1986", "style": "Expressionist, lotus form", "unesco": "—", "wikipedia": "https://en.wikipedia.org/wiki/Lotus_Temple", "history": ["The Lotus Temple is a Bahá’í House of Worship on the eastern edge of New Delhi, completed in 1986. It was designed by the Iranian-Canadian architect Fariborz Sahba, who shaped the building as a lotus of twenty-seven marble petals — nine in the outer ring, nine in the middle and nine closing over the hall.", "The petals are clad in white marble and rise from a plinth set in 26 acres of gardens, with nine pools and nine paths leading in. The hall beneath them seats about 1,300 people and has no images, no altar and no pulpit: Bahá’í houses of worship are open to every faith and every person, and the only sound inside is the reading of scriptures.", "It is one of the most visited buildings in the world, with millions of visitors a year, and it has won a long list of architectural awards. At dusk the petals are lit from below and the whole building reads as a flower opening over the gardens."], "facts": [{"k": "Completed", "v": "1986"}, {"k": "Architect", "v": "Fariborz Sahba"}, {"k": "Petals", "v": "27, in three rings"}, {"k": "Height", "v": "34.3 m"}, {"k": "Hall capacity", "v": "About 1,300"}, {"k": "Grounds", "v": "26 acres of gardens"}], "links": [{"label": "Wikipedia", "href": "https://en.wikipedia.org/wiki/Lotus_Temple"}, {"label": "Bahá’í Houses of Worship", "href": "https://www.bahai.org/action/devotional-life/houses-worship"}], "image": {"file": "LotusDelhi.jpg", "artist": "Vandelizer", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "page": "https://commons.wikimedia.org/wiki/File:LotusDelhi.jpg", "src": "assets/img/lotus-temple.jpg"}};</script>
+<script type="module">
+  import { boot } from '../assets/js/monument-engine.js';
+  import monument from '../assets/js/monuments/lotus-temple.js';
+  boot(monument);
+</script>
+</body>
+</html>

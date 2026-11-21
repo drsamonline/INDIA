@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mahabodhi Temple — 3D miniature · INDIA</title>
+<meta name="description" content="The brick tower raised where the Buddha woke — the oldest surviving temple in the Buddhist world still in worship. A procedural three.js miniature of Mahabodhi Temple, Bodh Gaya — with guided tour, history and sources.">
+<meta name="theme-color" content="#c8b49a">
+<meta name="author" content="Dr Sohil Momin">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/css/fonts.css">
+<link rel="stylesheet" href="../assets/css/monument.css">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mahabodhi Temple — 3D miniature · INDIA">
+<meta property="og:description" content="The brick tower raised where the Buddha woke — the oldest surviving temple in the Buddhist world still in worship.">
+<meta property="og:image" content="https://drsamonline.github.io/INDIA/assets/img/mahabodhi-temple.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TouristAttraction","name":"Mahabodhi Temple","description":"The brick tower raised where the Buddha woke — the oldest surviving temple in the Buddhist world still in worship.","address":{"@type":"PostalAddress","addressLocality":"Bodh Gaya","addressRegion":"Bihar","addressCountry":"IN"},"sameAs":"https://en.wikipedia.org/wiki/Mahabodhi_Temple","isAccessibleForFree":true}
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "../assets/vendor/three/build/three.module.js",
+    "three/addons/": "../assets/vendor/three/addons/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="app" aria-label="Interactive 3D model of Mahabodhi Temple"></div>
+<noscript><div class="noscript">This page renders Mahabodhi Temple as a live 3D model and needs JavaScript and WebGL. You can still read about the monument on <a href="https://en.wikipedia.org/wiki/Mahabodhi_Temple">Wikipedia</a>.</div></noscript>
+
+<script src="../assets/js/index-data.js"></script>
+<script>window.MONUMENT_DATA = {"name": "Mahabodhi Temple", "deva": "महाबोधि मंदिर", "place": "Bodh Gaya", "state": "Bihar", "era": "Mauryan to Gupta · 3rd c. BCE – 6th c. CE", "period": "3rd c. BCE onward", "style": "Buddhist brick temple", "unesco": "UNESCO World Heritage Site (2002)", "wikipedia": "https://en.wikipedia.org/wiki/Mahabodhi_Temple", "history": ["The Mahabodhi Temple stands at Bodh Gaya, beside the tree under which the Buddha is said to have attained enlightenment. Ashoka built a shrine here in the 3rd century BCE; the present temple is usually dated to the 5th or 6th century CE, in the Gupta period, and it is one of the oldest brick temples surviving in India.", "Its tower rises about 52 metres, straight-sided and tapering, made of brick covered in plaster and crowded with niches holding images of the Buddha. A railing of carved stone, part of it from the Mauryan period, surrounds the site, and the descendant of the original Bodhi tree stands to the west.", "The temple fell into ruin and was restored in the 19th century under Burmese and British patronage, and it has been in continuous worship for well over a thousand years. It became a UNESCO World Heritage Site in 2002."], "facts": [{"k": "Founded", "v": "3rd century BCE, Ashoka"}, {"k": "Present temple", "v": "5th–6th century CE"}, {"k": "Height", "v": "About 52 m"}, {"k": "Material", "v": "Brick, plaster, stone railing"}, {"k": "Beside", "v": "The Bodhi tree"}, {"k": "UNESCO", "v": "2002 · ref. 1056"}], "links": [{"label": "Wikipedia", "href": "https://en.wikipedia.org/wiki/Mahabodhi_Temple"}, {"label": "UNESCO listing", "href": "https://whc.unesco.org/list/1056/"}, {"label": "Bihar tourism", "href": "https://www.bihartourism.gov.in/"}], "image": {"file": "Mahabodhitemple.jpg", "artist": "Bpilgrim", "license": "CC BY-SA 2.5", "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5", "page": "https://commons.wikimedia.org/wiki/File:Mahabodhitemple.jpg", "src": "assets/img/mahabodhi-temple.jpg"}};</script>
+<script type="module">
+  import { boot } from '../assets/js/monument-engine.js';
+  import monument from '../assets/js/monuments/mahabodhi-temple.js';
+  boot(monument);
+</script>
+</body>
+</html>
