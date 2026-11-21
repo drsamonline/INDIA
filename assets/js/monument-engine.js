@@ -547,6 +547,27 @@ export function boot(mon) {
   document.documentElement.style.setProperty('--accent-soft', hexA(mon.accent || '#d9a441', 0.16));
 
   /* ---------------- interface ---------------- */
+  const skip = document.createElement('a');
+  skip.className = 'skip-link';
+  skip.href = '#panel';
+  skip.textContent = 'Skip to the controls';
+  body.appendChild(skip);
+
+  const app = $('app');
+  if (app) {
+    app.setAttribute('role', 'img');
+    app.setAttribute('aria-label', 'Three-dimensional model of ' + (meta.name || 'the monument') +
+      (meta.place ? ', ' + meta.place : ''));
+    const desc = document.createElement('p');
+    desc.className = 'sr-only';
+    desc.id = 'scene-desc';
+    desc.textContent = (meta.blurb ? meta.blurb + ' ' : '') +
+      'This is a live 3D model. Drag to orbit, scroll or pinch to zoom, or use the Viewpoints buttons. ' +
+      'The full history, sources and photograph credits are in the About panel.';
+    body.appendChild(desc);
+    app.setAttribute('aria-describedby', 'scene-desc');
+  }
+
   const home = document.createElement('a');
   home.className = 'home-link';
   home.href = '../index.html';
@@ -558,7 +579,7 @@ export function boot(mon) {
     <div class="titles">
       <h1>${esc(meta.name || '')}</h1>
       <p>${esc(meta.place || '')}${meta.period ? ' · ' + esc(meta.period) : ''}</p>
-      <span class="deva">${esc(meta.deva || '')}</span>
+      <span class="deva" lang="hi">${esc(meta.deva || '')}</span>
     </div>
     <div class="top-actions">
       <button class="icon-btn nav-arrow" id="btn-prev" aria-label="Previous monument" title="Previous monument">
@@ -569,7 +590,7 @@ export function boot(mon) {
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.6v.6"/></svg></button>
       <button class="icon-btn" id="btn-tour" aria-label="Start guided tour" title="Guided tour (T)">
         <svg viewBox="0 0 24 24"><circle cx="5" cy="18" r="1.8"/><circle cx="19" cy="6" r="1.8"/><path d="M7 18h6a4 4 0 0 0 0-8H9a3 3 0 0 1 0-6h8"/></svg></button>
-      <button class="icon-btn on" id="btn-panel" aria-label="Toggle controls" aria-pressed="true" title="Controls (H)">
+      <button class="icon-btn on" id="btn-panel" aria-label="Toggle controls" aria-pressed="true" aria-expanded="true" title="Controls (H)">
         <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 12h4M12 12h8M4 17h13"/><circle cx="16" cy="7" r="1.9"/><circle cx="10" cy="12" r="1.9"/><circle cx="18.5" cy="17" r="1.9"/></svg></button>
       <button class="icon-btn" id="btn-cine" aria-label="Cinematic mode" title="Cinema mode (C)">
         <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
@@ -589,7 +610,7 @@ export function boot(mon) {
           <div class="panel-sub" id="status-text">LIVE</div>
         </div>
       </div>
-      <span class="deva panel-deva">${esc(meta.deva || '')}</span>
+      <span class="deva panel-deva" lang="hi">${esc(meta.deva || '')}</span>
     </div>
     <div class="panel-scroll">
       <section>
@@ -670,7 +691,7 @@ export function boot(mon) {
         <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       <p class="about-kicker">${esc(meta.place || 'India')} · ${esc(meta.era || '')}</p>
       <h2 id="about-title">${esc(meta.name || '')}</h2>
-      <p class="about-deva">${esc(meta.deva || '')}</p>
+      <p class="about-deva" lang="hi">${esc(meta.deva || '')}</p>
       <div id="about-body"></div>
     </div>`;
 
@@ -678,7 +699,7 @@ export function boot(mon) {
   tourcard.id = 'tourcard';
   tourcard.className = 'glass';
   tourcard.innerHTML = `
-    <div class="tour-kicker"><span id="tour-step">Guided tour · 1/1</span><span class="deva" id="tour-deva"></span></div>
+    <div class="tour-kicker"><span id="tour-step">Guided tour · 1/1</span><span class="deva" id="tour-deva" lang="hi"></span></div>
     <h2 class="tour-title" id="tour-title"></h2>
     <p class="tour-text" id="tour-text"></p>
     <div class="tour-foot">
@@ -1107,7 +1128,7 @@ export function boot(mon) {
       fogCol.lerp(overcast, clamp(wx.cover * 0.5 + wx.rain * 0.3, 0, 1));
       fogCol.lerp(mistCol, wx.mist * 0.6);
       scene.fog.color.copy(fogCol);
-      scene.fog.density = 0.00085 + 0.0040 * wx.mist + 0.0020 * wx.rain + 0.0010 * wx.cover;
+      scene.fog.density = (0.00085 + 0.0040 * wx.mist + 0.0020 * wx.rain + 0.0010 * wx.cover) * (mon.fogScale || 1);
       hemi.color.copy(fogCol);
       hemi.intensity = (0.02 + 0.15 * dayFactor) * (1 - 0.35 * wx.cover) + 0.07 * wx.cover;
       scene.environmentIntensity = (0.05 + 0.24 * dayFactor) * (1 - 0.30 * wx.cover) * (1 - 0.2 * wx.rain);
@@ -1261,11 +1282,32 @@ export function boot(mon) {
     $('quality').onchange = (e) => setQuality(e.target.value);
     $('btn-reset').onclick = () => { goView(0, false); toast('View reset'); };
     $('btn-shot').onclick = () => saveImage();
-    const openAbout = () => { body.classList.add('about-open'); };
-    $('btn-about').onclick = openAbout;
-    $('btn-read').onclick = (e) => { e.preventDefault(); openAbout(); };
-    $('about-close').onclick = () => body.classList.remove('about-open');
-    about.addEventListener('click', (e) => { if (e.target === about) body.classList.remove('about-open'); });
+    let aboutOpener = null;
+    const focusables = () => Array.from(about.querySelectorAll('a[href], button:not([disabled])'))
+      .filter((el) => el.offsetParent !== null);
+    const openAbout = (opener) => {
+      aboutOpener = opener || document.activeElement;
+      body.classList.add('about-open');
+      setTimeout(() => { const f = focusables(); (f[0] || about).focus(); }, 40);
+    };
+    const closeAbout = () => {
+      body.classList.remove('about-open');
+      if (aboutOpener && aboutOpener.focus) aboutOpener.focus();
+    };
+    $('btn-about').onclick = (e) => openAbout(e.currentTarget);
+    $('btn-read').onclick = (e) => { e.preventDefault(); openAbout(e.currentTarget); };
+    $('about-close').onclick = closeAbout;
+    about.addEventListener('click', (e) => { if (e.target === about) closeAbout(); });
+    about.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const f = focusables();
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+    const card = about.querySelector('.about-card');
+    if (card) card.setAttribute('tabindex', '-1');
     const INDEX = window.INDIA_INDEX || [];
     const here = INDEX.findIndex((m) => m.id === mon.id);
     if (here >= 0 && INDEX.length > 1) {
@@ -1294,6 +1336,7 @@ export function boot(mon) {
       else body.classList.toggle('panel-hidden');
       const hidden = isMobile() ? !body.classList.contains('panel-open') : body.classList.contains('panel-hidden');
       $('btn-panel').setAttribute('aria-pressed', String(!hidden));
+      $('btn-panel').setAttribute('aria-expanded', String(!hidden));
       $('btn-panel').classList.toggle('on', !hidden);
     };
     if (isMobile()) { body.classList.remove('panel-open'); $('btn-panel').classList.remove('on'); }
@@ -1306,7 +1349,7 @@ export function boot(mon) {
       else if (k === 'c') $('btn-cine').click();
       else if (k === 'a') openAbout();
       else if (k === 'r') $('btn-reset').click();
-      else if (k === 'escape') { body.classList.remove('about-open'); tourStop(); }
+      else if (k === 'escape') { if (body.classList.contains('about-open')) closeAbout(); else { body.classList.remove('about-open'); tourStop(); } }
       else if (/^[1-9]$/.test(k)) goView(parseInt(k, 10) - 1);
     });
 

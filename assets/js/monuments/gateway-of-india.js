@@ -8,6 +8,7 @@ export default {
   seed: 37,
   time: 11.6,
   exposure: 0.88,
+  fogScale: 0.5,
   bounds: 62,
   minDist: 14,
   maxDist: 240,
