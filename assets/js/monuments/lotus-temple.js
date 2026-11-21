@@ -58,7 +58,7 @@ export default {
 
     /* ---- plinth, pools and paths ---------------------------------------- */
     col('marble', 21, 22, 1.1, 0, 0, 0, 48);
-    add('sandstoneRed', cyl(21.4, 21.6, 0.24, 48), 0, 1.1, 0);
+    add('sandstoneRed', torus(21.3, 0.16, 6, 48), 0, 1.14, 0, { rx: Math.PI / 2 });
     // nine radial paths and nine pools
     for (let i = 0; i < 9; i++) {
       const a = (i / 9) * Math.PI * 2;
@@ -80,9 +80,10 @@ export default {
       add(key, g, Math.cos(a) * R, y, Math.sin(a) * R, { ry: -a, rx: -lean });
     }
     const RINGS = [
-      { R: 10.2, y: 1.15, lean: 0.56, w: 3.9, h: 11.0, t: 1.0 },
-      { R: 6.8, y: 1.15, lean: 0.96, w: 3.3, h: 9.6, t: 0.9 },
-      { R: 3.7, y: 1.15, lean: 1.30, w: 2.7, h: 8.0, t: 0.82 }
+      { R: 12.4, y: 1.15, lean: 0.34, w: 4.2, h: 11.6, t: 1.0 },
+      { R: 9.0, y: 1.15, lean: 0.62, w: 3.6, h: 11.8, t: 0.92 },
+      { R: 5.6, y: 1.15, lean: 0.98, w: 3.0, h: 10.2, t: 0.84 },
+      { R: 3.0, y: 1.15, lean: 1.32, w: 2.4, h: 8.2, t: 0.78 }
     ];
     RINGS.forEach((r, ri) => {
       for (let i = 0; i < 9; i++) {
@@ -94,7 +95,7 @@ export default {
     });
 
     /* ---- the hall inside -------------------------------------------------- */
-    add('marble', cyl(8.4, 8.8, 1.4, 36), 0, 1.2, 0);
+    add('marble', cyl(9.0, 9.4, 1.4, 36), 0, 1.2, 0);
     add('glass', cyl(7.6, 7.6, 6.8, 36), 0, 2.6, 0);
     add('marble', cyl(8.2, 7.8, 0.5, 36), 0, 9.4, 0);
     // nine doors

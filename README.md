@@ -1,10 +1,10 @@
 # INDIA — monuments in code
 
-**Twelve Indian monuments, rebuilt as live 3D miniatures in the browser.** No photographs in the models, no downloaded meshes, no build step: every dome, bracket and lattice screen is generated from code with [three.js](https://threejs.org), lit by a physical sky, and paired with the history behind it.
+**Eighteen Indian monuments, rebuilt as live 3D miniatures in the browser.** No photographs in the models, no downloaded meshes, no build step: every dome, bracket and lattice screen is generated from code with [three.js](https://threejs.org), lit by a physical sky, and paired with the history behind it.
 
 [![Licence: CC0 1.0](https://img.shields.io/badge/licence-CC0%201.0-2ea44f?style=flat-square)](LICENSE)
 [![Made with three.js](https://img.shields.io/badge/three.js-r169-000000?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org)
-[![Monuments](https://img.shields.io/badge/monuments-12-c1440e?style=flat-square)](#the-monuments)
+[![Monuments](https://img.shields.io/badge/monuments-18-c1440e?style=flat-square)](#the-monuments)
 [![No build step](https://img.shields.io/badge/build-none%20%C2%B7%20static%20files-f0a868?style=flat-square)](#run-it-locally)
 [![WebGL](https://img.shields.io/badge/WebGL-required-1b2740?style=flat-square)](#browser-support)
 
@@ -30,8 +30,14 @@
 | 10 | Sanchi Stupa | Sanchi, Madhya Pradesh | 3rd century BCE | [open](monuments/sanchi-stupa.html) |
 | 11 | Victoria Memorial | Kolkata, West Bengal | 1906–1921 | [open](monuments/victoria-memorial.html) |
 | 12 | Meenakshi Temple | Madurai, Tamil Nadu | 12th–17th century | [open](monuments/meenakshi-temple.html) |
+| 13 | Lotus Temple | New Delhi | 1980–1986 | [open](monuments/lotus-temple.html) |
+| 14 | Shore Temple | Mahabalipuram, Tamil Nadu | c. 725 CE | [open](monuments/shore-temple.html) |
+| 15 | Rani ki Vav | Patan, Gujarat | 1063 | [open](monuments/rani-ki-vav.html) |
+| 16 | Amber Fort | Amer, Rajasthan | from 1592 | [open](monuments/amber-fort.html) |
+| 17 | CSMT | Mumbai, Maharashtra | 1878–1888 | [open](monuments/csmt-mumbai.html) |
+| 18 | Mahabodhi Temple | Bodh Gaya, Bihar | 3rd c. BCE onward | [open](monuments/mahabodhi-temple.html) |
 
-Five of them are UNESCO World Heritage Sites; one more is on the tentative list.
+Ten of them are UNESCO World Heritage Sites; two more are on the tentative list.
 
 ## What is on each page
 

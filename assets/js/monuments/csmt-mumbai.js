@@ -112,20 +112,26 @@ export default {
       [6, 12, 18].forEach((y) => add(trim, box(9.6, 0.4, 9.6), cx, y, cz));
       // the clock stage
       add(trim, box(10.2, 6.4, 10.2), cx, 25.2, cz);
-      ['+z', '-z', '+x', '-x'].forEach((f, i) => {
-        const d = 5.15;
-        const pos = [[0, 0, d], [0, 0, -d], [d, 0, 0], [-d, 0, 0]][i];
-        const ry = [0, Math.PI, Math.PI / 2, -Math.PI / 2][i];
-        add('plasterWhite', cyl(2.3, 2.3, 0.2, 20), cx + pos[0], 28.4, cz + pos[2], { rx: Math.PI / 2, ry });
-        add('black', box(0.18, 1.6, 0.1), cx + pos[0], 28.9, cz + pos[2] + (i === 0 ? 0.12 : i === 1 ? -0.12 : 0));
-        add('black', box(1.2, 0.18, 0.1), cx + pos[0], 28.4, cz + pos[2] + (i === 0 ? 0.12 : i === 1 ? -0.12 : 0));
+      [[0, 5.2, 0], [0, -5.2, Math.PI], [5.2, 0, Math.PI / 2], [-5.2, 0, -Math.PI / 2]].forEach(([dx, dz, ry]) => {
+        add('plasterWhite', cyl(2.2, 2.2, 0.18, 22), cx + dx, 28.4, cz + dz, { rx: Math.PI / 2, ry });
+        add('grey', cyl(2.35, 2.35, 0.1, 22), cx + dx * 0.995, 28.4, cz + dz * 0.995, { rx: Math.PI / 2, ry });
+        // hands, standing proud of the face
+        add('black', box(0.14, 1.35, 0.12), cx + dx * 1.03, 28.95, cz + dz * 1.03, { ry });
+        add('black', box(1.0, 0.14, 0.12), cx + dx * 1.03 + (ry === 0 ? 0.5 : 0), 28.45, cz + dz * 1.03, { ry });
       });
       add(trim, box(11, 0.5, 11), cx, 31.6, cz);
-      // spire
-      add(stone, cyl(3.4, 4.6, 3.0, 8), cx, 33.3, cz);
-      add(stone, cone(3.2, 9.0, 8), cx, 39.3, cz);
-      add('gold', sph(0.28, 8), cx, 44.2, cz);
-      add('bronze', cone(0.2, 1.2, 6), cx, 45.0, cz);
+      // a stepped stone roof, then a small lantern and finial
+      add(stone, box(8.4, 1.6, 8.4), cx, 32.7, cz);
+      add(trim, box(8.8, 0.3, 8.8), cx, 33.6, cz);
+      add(stone, box(6.6, 1.5, 6.6), cx, 34.4, cz);
+      add(trim, box(7.0, 0.28, 7.0), cx, 35.3, cz);
+      add(stone, box(4.8, 1.4, 4.8), cx, 36.1, cz);
+      add(trim, box(5.2, 0.26, 5.2), cx, 36.9, cz);
+      add(stone, box(3.2, 1.3, 3.2), cx, 37.7, cz);
+      add(trim, cyl(2.4, 2.4, 0.3, 8), cx, 38.5, cz);
+      add('marble', onion(2.2, 3.0, 18), cx, 38.6, cz);
+      add('gold', sph(0.26, 8), cx, 41.7, cz);
+      add('bronze', cone(0.18, 1.1, 6), cx, 42.4, cz);
     })(-22, 4);
 
     /* ---- platform sheds behind -------------------------------------------- */

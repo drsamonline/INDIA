@@ -93,6 +93,11 @@ def build_index(monuments):
         tl.append(f'      <a class="tl-item" href="monuments/{mid}.html"><span class="tl-year">{label}</span>'
                   f'<span class="tl-name">{esc(name)}</span><span class="tl-place">{esc(place)}</span></a>')
     out = out.replace('<!--TIMELINE-->', '\n'.join(tl))
+    words = {12: 'Twelve', 13: 'Thirteen', 14: 'Fourteen', 15: 'Fifteen', 16: 'Sixteen', 17: 'Seventeen',
+             18: 'Eighteen', 19: 'Nineteen', 20: 'Twenty', 21: 'Twenty-one', 22: 'Twenty-two', 23: 'Twenty-three',
+             24: 'Twenty-four'}
+    out = out.replace('__COUNTWORD__', words.get(len(monuments), str(len(monuments))))
+    out = out.replace('__STATES__', str(len({m['state'] for m in monuments})))
     out = out.replace('__COUNT__', str(len(monuments)))
     out = out.replace('__FIRSTNAME__', esc(monuments[0]['name']))
     out = out.replace('__FIRSTID__', monuments[0]['id'])
@@ -119,6 +124,11 @@ def build_credits(monuments):
         <td><a href="{esc(im.get('page', '#'))}" rel="noopener" target="_blank">Commons file</a></td>
       </tr>""")
     out = tpl.replace('<!--ROWS-->', '\n'.join(rows))
+    words = {12: 'Twelve', 13: 'Thirteen', 14: 'Fourteen', 15: 'Fifteen', 16: 'Sixteen', 17: 'Seventeen',
+             18: 'Eighteen', 19: 'Nineteen', 20: 'Twenty', 21: 'Twenty-one', 22: 'Twenty-two', 23: 'Twenty-three',
+             24: 'Twenty-four'}
+    out = out.replace('__COUNTWORD__', words.get(len(monuments), str(len(monuments))))
+    out = out.replace('__STATES__', str(len({m['state'] for m in monuments})))
     out = out.replace('__COUNT__', str(len(monuments)))
     open(os.path.join(ROOT, 'credits.html'), 'w').write(out)
     print('  page: credits.html')
