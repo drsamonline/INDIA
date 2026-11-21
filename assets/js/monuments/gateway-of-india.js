@@ -7,7 +7,7 @@ export default {
   accent2: '#c8d6e0',
   seed: 37,
   time: 11.6,
-  exposure: 0.72,
+  exposure: 0.88,
   bounds: 62,
   minDist: 14,
   maxDist: 240,
