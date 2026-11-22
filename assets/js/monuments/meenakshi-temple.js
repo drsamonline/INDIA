@@ -123,12 +123,19 @@ export default {
         const nL = Math.max(4, Math.round(w / 1.35));
         const nS = Math.max(3, Math.round(d / 1.35));
         const sL = w / nL, sS = d / nS;
+        const figure = (key, px, pz, wFig, hFig, ry2, out) => {
+          // base, body, shoulders, head — a figure in four pieces
+          add(key, box(wFig, hFig * 0.16, 0.17), px, fy - hFig * 0.42, pz + out * 0.06, { ry: ry2 });
+          add(key, box(wFig * 0.86, hFig * 0.50, 0.19), px, fy, pz + out * 0.07, { ry: ry2 });
+          add(key, box(wFig * 1.02, hFig * 0.16, 0.17), px, fy + hFig * 0.33, pz + out * 0.06, { ry: ry2 });
+          add(key, box(wFig * 0.44, hFig * 0.22, 0.16), px, fy + hFig * 0.48, pz + out * 0.05, { ry: ry2 });
+        };
         for (let j = 0; j < nL; j++) {
           const off = (j - (nL - 1) / 2) * sL;
           const k = FIG[(j * 3 + i * 2) % FIG.length];
           for (const side of [1, -1]) {
             const p = P(off, side * (d / 2 + 0.08));
-            add(k, box(sL * 0.40, fh, 0.16), p[0], fy, p[1] + (side > 0 ? 0.06 : -0.06), { ry: ry + (side > 0 ? 0 : PI) });
+            figure(k, p[0], p[1], sL * 0.40, fh, ry + (side > 0 ? 0 : PI), side);
           }
         }
         for (let j = 0; j < nS; j++) {
@@ -136,7 +143,7 @@ export default {
           const k = FIG[(j * 5 + i * 3 + 1) % FIG.length];
           for (const side of [1, -1]) {
             const p = P(side * (w / 2 + 0.08), off);
-            add(k, box(sS * 0.40, fh, 0.16), p[0] + side * 0.06, fy, p[1], { ry: ry + side * PI / 2 });
+            figure(k, p[0], p[1], sS * 0.40, fh, ry + side * PI / 2, side);
           }
         }
         /* moulded base, then the projecting cornice */
