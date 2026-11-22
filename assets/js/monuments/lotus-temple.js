@@ -18,7 +18,7 @@ export default {
   accent: '#d8d2c4',
   accent2: '#f0e8d8',
   seed: 53,
-  hemiScale: 1.5,
+  hemiScale: 1.25,
   hemiGround: 0xcfc8b8,   // the plinth is white marble, not earth
   floodScale: 0.3,
   time: 12.2,

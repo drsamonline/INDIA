@@ -1280,7 +1280,10 @@ export function boot(mon) {
       scene.fog.color.copy(fogCol);
       scene.fog.density = (0.00085 + 0.0040 * wx.mist + 0.0020 * wx.rain + 0.0010 * wx.cover) * (mon.fogScale || 1);
       hemi.color.copy(fogCol);
-      hemi.intensity = (0.02 + 0.15 * dayFactor) * (1 - 0.35 * wx.cover) + 0.07 * wx.cover;
+      // the per-frame sky update overwrites the intensity, so the per-monument
+      // scale has to be applied here or it is lost on the first frame
+      hemi.intensity = ((0.02 + 0.15 * dayFactor) * (1 - 0.35 * wx.cover) + 0.07 * wx.cover)
+        * (mon.hemiScale !== undefined ? mon.hemiScale : 1);
       scene.environmentIntensity = (0.05 + 0.24 * dayFactor) * (1 - 0.30 * wx.cover) * (1 - 0.2 * wx.rain);
       rimLight.intensity = (0.18 + 0.34 * dayFactor) * dim;
       if (elev > 0) {
