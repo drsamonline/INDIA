@@ -40,6 +40,13 @@ src = src.replace('CC0 1.0', 'CC BY-NC 4.0')
 src = src.replace('haze: 0.0016', 'haze: 0.0009')
 src = src.replace('FogExp2(0xe8c39a', 'FogExp2(0xdcd3c2')
 src = src.replace('value="0.0016"', 'value="0.0009"')
+
+# the Taj was the only page loading three.js from a CDN, so it died if the CDN
+# was blocked and could drift from the version the other 23 pages run
+src = src.replace('https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js',
+                  '../assets/vendor/three/build/three.module.js')
+src = src.replace('https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/',
+                  '../assets/vendor/three/addons/')
 src = src.replace('id="haze-val">27%', 'id="haze-val">15%')
 # the page had no query-parameter support at all, which is why ?shot= did
 # nothing and the night floodlights could not be inspected
