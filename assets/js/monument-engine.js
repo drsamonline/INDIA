@@ -380,6 +380,37 @@ class Builder {
     outer.holes.push(new THREE.Path(pts));
     return new THREE.ExtrudeGeometry(outer, { depth, bevelEnabled: false, curveSegments: 7 });
   }
+  /* ---- a garden bed ------------------------------------------------------
+     A parterre: a bordered bed with a clipped hedge round it and a path
+     between, instead of the scattered flower dots that stood in for planting.
+     The hedge is the point — it gives the garden its geometry from above. */
+  parterre(x, z, w, d, o = {}) {
+    const h = o.h ?? 0.55;
+    const t = o.t ?? 0.4;
+    const hedge = o.hedge ?? 'foliage';
+    const bed = o.bed ?? 'grass';
+    const ry = o.ry ?? 0;
+    const c = Math.cos(ry), s2 = Math.sin(ry);
+    const put = (key, bw, bh, bd, lx, ly, lz) =>
+      this.add(key, this.box(bw, bh, bd), x + lx * c - lz * s2, ly, z + lx * s2 + lz * c, { ry });
+    put(bed, w, 0.1, d, 0, 0.05, 0);
+    put(hedge, w, h, t, 0, h / 2, -d / 2 + t / 2);
+    put(hedge, w, h, t, 0, h / 2, d / 2 - t / 2);
+    put(hedge, t, h, d - t * 2, -w / 2 + t / 2, h / 2, 0);
+    put(hedge, t, h, d - t * 2, w / 2 - t / 2, h / 2, 0);
+    if (o.cross) {
+      // the charbagh cross-path, in the lighter paving
+      put(o.path ?? 'paving', w - t * 2, 0.12, 1.1, 0, 0.1, 0);
+      put(o.path ?? 'paving', 1.1, 0.12, d - t * 2, 0, 0.1, 0);
+    }
+    if (o.shrubs) {
+      const n = o.shrubs;
+      for (let i = 0; i < n; i++) {
+        const a = (i / n) * Math.PI * 2;
+        put(hedge, 0.5, 0.5, 0.5, Math.cos(a) * w * 0.3, 0.35, Math.sin(a) * d * 0.3);
+      }
+    }
+  }
   /* ---- inlaid banding ----------------------------------------------------
      Pietra-dura: a field of one stone with a repeating motif set into it in
      another. The motif stands a few centimetres proud so it catches light at a
@@ -1648,7 +1679,7 @@ export function boot(mon) {
       add: b.add.bind(b), box: b.box.bind(b), plane: b.plane.bind(b), cyl: b.cyl.bind(b),
       cone: b.cone.bind(b), sph: b.sph.bind(b), torus: b.torus.bind(b), dome: b.dome.bind(b),
       onion: b.onion.bind(b), lathe: b.lathe.bind(b), arch: b.arch.bind(b), archShape: b.archShape.bind(b),
-      archFrame: b.archFrame.bind(b), jali: b.jali.bind(b), carvedBand: b.carvedBand.bind(b), inlay: b.inlay.bind(b), block: b.block.bind(b), col: b.col.bind(b),
+      archFrame: b.archFrame.bind(b), jali: b.jali.bind(b), carvedBand: b.carvedBand.bind(b), inlay: b.inlay.bind(b), parterre: b.parterre.bind(b), block: b.block.bind(b), col: b.col.bind(b),
       chhatri: b.chhatri.bind(b), arcade: b.arcade.bind(b), stairs: b.stairs.bind(b), railing: b.railing.bind(b),
       tree: b.tree.bind(b), person: b.person.bind(b), lamp: b.lamp.bind(b), flag: b.flag.bind(b), boat: b.boat.bind(b),
       light: b.light.bind(b), animate: b.animate.bind(b),

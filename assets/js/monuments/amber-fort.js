@@ -197,11 +197,16 @@ export default {
     // a charbagh garden between them
     block('stone', 22, 3, 34, 0, 38, -32);
     add(trim, box(23, 0.4, 35), 0, 41, -32);
-    add('grass', box(20, 0.16, 30), 0, 41.1, -32);
-    for (let i = -2; i <= 2; i++) {
-      add('marble', box(0.9, 0.2, 29), i * 4.4, 41.25, -32);
-    }
-    add('water', box(9, 0.1, 6), 0, 41.3, -32);
+    // the charbagh: four quartered beds with clipped hedges and a cross path,
+    // not a green slab with stripes
+    [-1, 1].forEach((sx) => {
+      [-1, 1].forEach((sz) => {
+        ctx.parterre(sx * 5.2, -32 + sz * 7.6, 8.4, 13.0, { h: 0.7, t: 0.42, cross: false, shrubs: 5 });
+      });
+    });
+    add('marble', box(0.9, 0.2, 29), 0, 41.25, -32);
+    add('marble', box(19, 0.2, 0.9), 0, 41.25, -32);
+    add('water', box(5.4, 0.12, 3.6), 0, 41.32, -32);
     // Jai Mandir
     block(stone, 15, 12, 18, -19.5, 42, -30);
     add(trim, box(16, 0.4, 19), -19.5, 54, -30);
