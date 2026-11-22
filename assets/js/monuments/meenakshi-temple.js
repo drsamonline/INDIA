@@ -128,7 +128,7 @@ export default {
           const k = FIG[(j * 3 + i * 2) % FIG.length];
           for (const side of [1, -1]) {
             const p = P(off, side * (d / 2 + 0.08));
-            add(k, plane(sL * 0.46, fh), p[0], fy, p[1], { ry: ry + (side > 0 ? 0 : PI) });
+            add(k, box(sL * 0.40, fh, 0.16), p[0], fy, p[1] + (side > 0 ? 0.06 : -0.06), { ry: ry + (side > 0 ? 0 : PI) });
           }
         }
         for (let j = 0; j < nS; j++) {
@@ -136,7 +136,7 @@ export default {
           const k = FIG[(j * 5 + i * 3 + 1) % FIG.length];
           for (const side of [1, -1]) {
             const p = P(side * (w / 2 + 0.08), off);
-            add(k, plane(sS * 0.46, fh), p[0], fy, p[1], { ry: ry + side * PI / 2 });
+            add(k, box(sS * 0.40, fh, 0.16), p[0] + side * 0.06, fy, p[1], { ry: ry + side * PI / 2 });
           }
         }
         /* moulded base, then the projecting cornice */
