@@ -1,44 +1,54 @@
-CC0 1.0 Universal — Public Domain Dedication
-============================================
-
 INDIA — monuments in code
 Copyright (c) 2026 Dr Sohil Momin
 
-To the extent possible under law, Dr Sohil Momin has waived all copyright
-and related or neighboring rights to this work — the source code, the
-procedural 3D models, the stylesheets, the build scripts and the text written
-for this project — and dedicated them to the public domain worldwide.
+Licensed under the Creative Commons Attribution-NonCommercial 4.0
+International Licence (CC BY-NC 4.0).
 
-This work is distributed without any warranty; without even the implied
-warranty of merchantability or fitness for a particular purpose.
+  Licence deed:  https://creativecommons.org/licenses/by-nc/4.0/
+  Legal code:    https://creativecommons.org/licenses/by-nc/4.0/legalcode
+  SPDX:          CC-BY-NC-4.0
 
-You should have received a copy of the CC0 Public Domain Dedication along with
-this work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
+You are free to:
 
-The canonical legal code is at
-<https://creativecommons.org/publicdomain/zero/1.0/legalcode>.
+  Share — copy and redistribute the material in any medium or format.
+  Adapt — remix, transform, and build upon the material.
 
-Every third-party work bundled with this repository — photographs, text,
-three.js, typefaces — is listed, with its licence, in NOTICE.
+Under the following terms:
 
+  Attribution — You must give appropriate credit to Dr Sohil Momin, provide
+  a link to the licence, and indicate if changes were made. You may do so in
+  any reasonable manner, but not in any way that suggests the licensor
+  endorses you or your use.
 
-WHAT THIS LICENCE COVERS
-------------------------
-Covered by CC0 (public domain):
-  · all HTML, CSS and JavaScript in this repository
-  · every procedural 3D model produced by assets/js/monuments/*.js
-  · data/monuments.json — the descriptions, facts and tour text written for
-    this project
-  · the build and QA scripts in tools/
+  NonCommercial — You may not use the material for commercial purposes.
+  Commercial purpose means one primarily intended for or directed toward
+  commercial advantage or monetary compensation.
 
-Not covered by CC0, and licensed as noted:
-  · the historical text on each page is adapted from the English Wikipedia
-    articles listed on credits.html, which are published under CC BY-SA 4.0.
-    The adapted text is offered under CC BY-SA 4.0 as well.
-  · the photographs in assets/img are the work of their photographers and are
-    used under the licence named for each file on credits.html (CC BY,
-    CC BY-SA, Free Art Licence or GFDL). They are not public domain.
-  · assets/vendor/three — three.js r169, MIT Licence, © three.js authors.
-  · assets/fonts — Cormorant Garamond (Christian Thalmann), JetBrains Mono
-    (JetBrains) and Noto Sans Devanagari (Google), all under the SIL Open Font
-    Licence 1.1.
+  No additional restrictions — You may not apply legal terms or technological
+  measures that legally restrict others from doing anything the licence
+  permits.
+
+No warranties are given. The licence may not give you all of the permissions
+necessary for your intended use.
+
+Suggested attribution
+---------------------
+
+  "INDIA — monuments in code" by Dr Sohil Momin, licensed CC BY-NC 4.0.
+  https://github.com/drsamonline/INDIA
+
+Scope
+-----
+
+This licence covers the source code, the procedural 3D models, the
+stylesheets, the build scripts and the descriptive text written for this
+project.
+
+It does not cover third-party works bundled here. Photographs are used under
+their own Creative Commons licences, the text adapted from Wikipedia is
+CC BY-SA 4.0, three.js is MIT and the typefaces are under the SIL Open Font
+License. Every one of those is listed, with its licence, in NOTICE.
+
+The full legal code of CC BY-NC 4.0 is not reproduced in this file. Read it
+at the URL above. If you redistribute this repository, ship this file, NOTICE
+and a link to that legal code together.

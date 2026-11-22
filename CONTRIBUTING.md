@@ -37,8 +37,8 @@ non-commercial licence.
 ## Licence of contributions
 
 By opening a pull request you agree that your code and models are contributed
-under CC0 1.0, and that any text you add may be adapted and published under
-CC BY-SA 4.0, matching the rest of the atlas.
+under CC BY-NC 4.0 — the licence the rest of the atlas uses — and that any text
+you add may be adapted and published under CC BY-SA 4.0.
 
 ## Reporting a security issue
 

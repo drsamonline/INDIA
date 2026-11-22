@@ -2,7 +2,7 @@
 
 **Eighteen Indian monuments, rebuilt as live 3D miniatures in the browser.** No photographs in the models, no downloaded meshes, no build step: every dome, bracket and lattice screen is generated from code with [three.js](https://threejs.org), lit by a physical sky, and paired with the history behind it.
 
-[![Licence: CC0 1.0](https://img.shields.io/badge/licence-CC0%201.0-2ea44f?style=flat-square)](LICENSE)
+[![Licence: CC BY-NC 4.0](https://img.shields.io/badge/licence-CC%20BY--NC%204.0-e8873a?style=flat-square)](LICENSE)
 [![Made with three.js](https://img.shields.io/badge/three.js-r169-000000?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org)
 [![Monuments](https://img.shields.io/badge/monuments-18-c1440e?style=flat-square)](#the-monuments)
 [![No build step](https://img.shields.io/badge/build-none%20%C2%B7%20static%20files-f0a868?style=flat-square)](#run-it-locally)
@@ -120,7 +120,7 @@ Needs WebGL 2 and ES modules: current Chrome, Edge, Firefox and Safari, on deskt
 
 ## Licence
 
-- **Code and 3D models** — [CC0 1.0 Universal](LICENSE) public domain dedication. Copy, remix, publish, sell; no permission needed. Attribution to **Dr Sohil Momin** is appreciated but not required.
+- **Code and 3D models** — [CC BY-NC 4.0](LICENSE). Copy, remix and publish with credit to **Dr Sohil Momin** and a link to the licence; not for commercial use.
 - **Text** — adapted from Wikipedia under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); the adapted text is offered under the same licence.
 - **Photographs** — each under its own licence (CC BY, CC BY-SA, FAL, GFDL), credited per file in [credits.html](credits.html).
 - **three.js** — MIT. **Typefaces** (Cormorant Garamond, JetBrains Mono, Noto Sans Devanagari) — SIL Open Font License 1.1.

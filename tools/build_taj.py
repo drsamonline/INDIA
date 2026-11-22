@@ -18,6 +18,14 @@ def esc(s):
     return html.escape(str(s), quote=True)
 
 # --- three.js from the vendored copy -------------------------------------
+# licence: the scene was published CC0; the atlas as a whole is CC BY-NC 4.0
+src = src.replace('https://creativecommons.org/publicdomain/zero/1.0/',
+                  'https://creativecommons.org/licenses/by-nc/4.0/')
+src = src.replace('CC0 1.0 Universal', 'CC BY-NC 4.0')
+src = src.replace('Dr Sohil Momin, CC0.', 'Dr Sohil Momin, CC BY-NC 4.0.')
+src = src.replace('CC0 1.0', 'CC BY-NC 4.0')
+src = src.replace('>CC0<', '>CC BY-NC 4.0<')
+
 src = src.replace('https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js',
                   '../assets/vendor/three/build/three.module.js')
 src = src.replace('https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/',

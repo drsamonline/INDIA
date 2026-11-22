@@ -7,7 +7,7 @@
      import monument from '../assets/js/monuments/<id>.js';
      boot(monument);
 
-   Author: Dr Sohil Momin · License: CC0 1.0 Universal
+   Author: Dr Sohil Momin · License: CC BY-NC 4.0
    ========================================================================== */
 
 import * as THREE from 'three';
@@ -1514,6 +1514,8 @@ export function boot(mon) {
         Text adapted from the <a href="${esc(meta.wikipedia || '#')}" target="_blank" rel="noopener">Wikipedia article</a>,
         available under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.
         The 3D miniature is procedural — no photographs were used in the model.
+        <br>Model and code by <b>Dr Sohil Momin</b>, licensed
+        <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>.
       </div>` : '';
     const INDEX = window.INDIA_INDEX || [];
     const i = INDEX.findIndex((x) => x.id === mon.id);

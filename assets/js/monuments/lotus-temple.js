@@ -1,5 +1,5 @@
 /* Lotus Temple — New Delhi · procedural miniature
-   Author: Dr Sohil Momin · CC0 1.0 Universal */
+   Author: Dr Sohil Momin · CC BY-NC 4.0 */
 
 export default {
   id: 'lotus-temple',

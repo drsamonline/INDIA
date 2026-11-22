@@ -1,7 +1,7 @@
 /* Sanchi Stupa — Madhya Pradesh · procedural miniature
    The Great Stupa: hemispherical dome on a drum, square harmika, triple chatra,
    stone vedika railings and four carved toranas on a hilltop terrace.
-   CC0 1.0 Universal */
+   CC BY-NC 4.0 */
 
 export default {
   id: 'sanchi-stupa',

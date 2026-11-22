@@ -1,6 +1,6 @@
 /* Meenakshi Amman Temple — Madurai · procedural miniature
    Dravidian temple city: painted gopurams, Golden Lotus tank, pillared halls.
-   Author: Dr Sohil Momin · CC0 1.0 Universal */
+   Author: Dr Sohil Momin · CC BY-NC 4.0 */
 
 export default {
   id: 'meenakshi-temple',

@@ -1,7 +1,7 @@
 /* Konark Sun Temple — Odisha · procedural miniature
    The chariot of Surya: a high plinth with 24 carved wheels, seven horses,
    the surviving jagamohana under its stepped roof, and the broken deul.
-   CC0 1.0 Universal */
+   CC BY-NC 4.0 */
 
 export default {
   id: 'konark-sun-temple',

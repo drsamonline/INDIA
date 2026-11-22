@@ -1,6 +1,6 @@
 /* Victoria Memorial — Kolkata · procedural miniature
    Indo-Saracenic marble memorial on the Maidan, 1906–1921.
-   Author: Dr Sohil Momin · CC0 1.0 Universal */
+   Author: Dr Sohil Momin · CC BY-NC 4.0 */
 
 export default {
   id: 'victoria-memorial',

@@ -1,5 +1,5 @@
 /* INDIA · landing page interactions — no dependencies
-   Author: Dr Sohil Momin · CC0 1.0 Universal */
+   Author: Dr Sohil Momin · CC BY-NC 4.0 */
 (function () {
   'use strict';
 

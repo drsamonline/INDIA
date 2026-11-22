@@ -3,14 +3,18 @@
 This file lists every work in this repository that is not original to it, the
 terms it is used under, and where to read those terms in full.
 
-Version 1.0 · effective 22 November 2026 · maintained by Dr Sohil Momin.
+Version 1.1 · effective 22 November 2026 · maintained by Dr Sohil Momin.
 Checked against `data/monuments.json` at commit on that date.
 
 ## 1 · Original work
 
 Code, procedural 3D models, stylesheets, build scripts and the descriptive
-text written for this project are dedicated to the public domain under
-**CC0 1.0 Universal** (see `LICENSE`). No attribution is required.
+text written for this project are licensed **CC BY-NC 4.0** — Creative Commons
+Attribution-NonCommercial 4.0 International (see `LICENSE`).
+
+Reuse requires two things: credit to **Dr Sohil Momin** with a link to the
+licence, and a non-commercial purpose. Commercial use needs written
+permission.
 
 ## 2 · Photographs — Wikimedia Commons
 
@@ -54,6 +58,11 @@ file and `credits.html` do both. The licence text is at
 keep this NOTICE with it.
 
 No photograph in this repository is under the GFDL.
+
+Note that the photographs keep their own licences, several of which do permit
+commercial use. The non-commercial term above applies to the code, models and
+text of this project, not to those photographs, which remain available from
+Wikimedia Commons on their original terms.
 
 ## 3 · Text — Wikipedia
 
