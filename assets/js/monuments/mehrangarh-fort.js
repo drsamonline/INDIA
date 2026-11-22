@@ -57,7 +57,7 @@ export default {
     const rng = ctx.rng;
 
     const rock = 'basalt', ledge = 'grey', boulder = 'basaltDark';
-    const wall = 'sandstoneRed', stone2 = 'sandstoneBuff', trim = 'marble', white = 'plasterWhite';
+    const wall = 'brick', stone2 = 'sandstoneBuff', trim = 'marble', white = 'plasterWhite';
 
     /* ==================================================================== *
      *  1. THE ROCK — a truncated cone, stratified, with a bouldered skirt
