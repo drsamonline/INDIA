@@ -48,6 +48,24 @@ src = src.replace('skyU.turbidity.value = 6;', 'skyU.turbidity.value = 2.8;')
 src = src.replace('skyU.rayleigh.value = 2;', 'skyU.rayleigh.value = 2.6;')
 src = src.replace('skyU.mieCoefficient.value = 0.004;', 'skyU.mieCoefficient.value = 0.0022;')
 src = src.replace('skyU.mieDirectionalG.value = 0.85;', 'skyU.mieDirectionalG.value = 0.86;')
+# night floodlighting: the other twenty-three pages light their stone amber
+# after dusk, and the Taj had only moon and lanterns
+src = src.replace("""  scene.add(keyLight);
+  scene.add(keyLight.target);""",
+"""  scene.add(keyLight);
+  scene.add(keyLight.target);
+  const tajFloods = [];
+  [[-40, 14, 52], [40, 14, 52], [0, 12, 74], [-38, 11, -34], [38, 11, -34]].forEach((p) => {
+    const fl = new THREE.SpotLight(0xffc98a, 0, 240, 0.62, 0.55, 1.3);
+    fl.position.set(p[0], p[1], p[2]);
+    fl.target.position.set(0, 17, 0);
+    fl.userData.base = 2600;
+    scene.add(fl, fl.target);
+    tajFloods.push(fl);
+  });""")
+src = src.replace("    starMat.opacity = nightFactor * 0.9 * (1 - weather.cover);",
+"""    starMat.opacity = nightFactor * 0.9 * (1 - weather.cover);
+    tajFloods.forEach((fl) => { fl.intensity = fl.userData.base * nightFactor * (1 - 0.45 * weather.rain); });""")
 # match the site's grade: the engine runs 0.52-0.62 exposure, a 0.9 bloom
 # threshold and a lighter glow, so the Taj sat brighter and hazier than the
 # other twenty-three pages

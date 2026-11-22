@@ -890,6 +890,15 @@ function main() {
   keyLight.target.position.set(0, 0, -6);
   scene.add(keyLight);
   scene.add(keyLight.target);
+  const tajFloods = [];
+  [[-40, 14, 52], [40, 14, 52], [0, 12, 74], [-38, 11, -34], [38, 11, -34]].forEach((p) => {
+    const fl = new THREE.SpotLight(0xffc98a, 0, 240, 0.62, 0.55, 1.3);
+    fl.position.set(p[0], p[1], p[2]);
+    fl.target.position.set(0, 17, 0);
+    fl.userData.base = 2600;
+    scene.add(fl, fl.target);
+    tajFloods.push(fl);
+  });
 
   const hemi = new THREE.HemisphereLight(0xcfe4ec, 0x6f6250, 0.5);
   scene.add(hemi);
@@ -2079,6 +2088,7 @@ function main() {
     moonSprite.position.copy(moonDir).multiplyScalar(3300);
     moonSprite.material.opacity = nightFactor * 0.9 * (1 - 0.8 * weather.cover);
     starMat.opacity = nightFactor * 0.9 * (1 - weather.cover);
+    tajFloods.forEach((fl) => { fl.intensity = fl.userData.base * nightFactor * (1 - 0.45 * weather.rain); });
     birdMat.opacity = 0.2 + 0.8 * dayFactor;
     petalMat.opacity = (0.3 + 0.5 * dayFactor) * (1 - 0.6 * weather.rain);
     fireflyMat.opacity = state.lanterns ? nightFactor * 0.85 * (1 - weather.rain) : 0;
