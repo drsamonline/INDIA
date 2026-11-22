@@ -128,7 +128,7 @@ export default {
      * ==================================================================== */
     const NV = 74, NU = 60;                 // levels, angular segments
     const T0 = 0.385, T1 = 0.872;
-    const K = 1.5;                          // blend radius, metres
+    const K = 0.55;                         // blend radius: 1.5 fused the arm to the torso
 
     const smin = (a, b, k) => {
       const h = Math.max(k - Math.abs(a - b), 0) / k;
