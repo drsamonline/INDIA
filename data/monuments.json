@@ -1254,5 +1254,421 @@
   },
   "accent": "#c8b49a",
   "accent2": "#e8d8c0"
+ },
+ {
+  "id": "statue-of-unity",
+  "name": "Statue of Unity",
+  "deva": "एकता की प्रतिमा",
+  "place": "Kevadia",
+  "state": "Gujarat",
+  "region": "West",
+  "era": "Modern · 2013–2018",
+  "period": "2013–2018",
+  "style": "Contemporary monumental bronze",
+  "unesco": "—",
+  "wikipedia": "https://en.wikipedia.org/wiki/Statue_of_Unity",
+  "year": 2018,
+  "blurb": "At 182 metres, the world’s tallest statue: Sardar Vallabhbhai Patel in bronze, facing the Narmada dam.",
+  "history": [
+   "The Statue of Unity stands on the island of Sadhu Bet in the Narmada near Kevadia, Gujarat, facing the Sardar Sarovar dam. At 182 metres it is the tallest statue in the world, dedicated to Sardar Vallabhbhai Patel, the first deputy prime minister of India and the man who brought the princely states into the Union.",
+   "It was announced in 2010, designed by the sculptor Ram V. Sutar and built by Larsen & Toubro between 2013 and 2018. The figure is a steel frame clad in bronze panels, about 1,700 tonnes of bronze over 25,000 tonnes of steel and concrete, with a viewing gallery at 153 metres that holds 200 people at a time.",
+   "The statue was unveiled on 31 October 2018, Patel’s birthday. Around it the state has built a memorial garden, a museum, a valley of flowers and a memorial to the Sardar’s life, and the whole complex is reached by a road and a boat across the reservoir."
+  ],
+  "facts": [
+   {
+    "k": "Unveiled",
+    "v": "31 October 2018"
+   },
+   {
+    "k": "Height",
+    "v": "182 m — tallest statue in the world"
+   },
+   {
+    "k": "Sculptor",
+    "v": "Ram V. Sutar"
+   },
+   {
+    "k": "Built by",
+    "v": "Larsen & Toubro, 2013–2018"
+   },
+   {
+    "k": "Viewing gallery",
+    "v": "At 153 m"
+   },
+   {
+    "k": "Setting",
+    "v": "Sadhu Bet, Narmada, Gujarat"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Statue_of_Unity"
+   },
+   {
+    "label": "Gujarat tourism",
+    "href": "https://www.gujarattourism.com/"
+   }
+  ],
+  "image": {
+   "file": "Statue_of_Unity.jpg",
+   "artist": "Snehrashmi",
+   "license": "CC BY-SA 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Statue_of_Unity.jpg",
+   "src": "assets/img/statue-of-unity.jpg"
+  },
+  "accent": "#b8b2a4",
+  "accent2": "#d8d2c4"
+ },
+ {
+  "id": "kandariya-mahadeva",
+  "name": "Kandariya Mahadeva",
+  "deva": "कंदारिया महादेव मंदिर",
+  "place": "Khajuraho",
+  "state": "Madhya Pradesh",
+  "region": "Central",
+  "era": "Chandela · c. 1030",
+  "period": "c. 1030",
+  "style": "Nagara, Khajuraho school",
+  "unesco": "UNESCO World Heritage Site (1986)",
+  "wikipedia": "https://en.wikipedia.org/wiki/Kandariya_Mahadeva_Temple",
+  "year": 1030,
+  "blurb": "The tallest of the Khajuraho temples: a 31-metre mountain of sandstone covered in carved figures.",
+  "history": [
+   "The Kandariya Mahadeva is the largest and tallest of the temples at Khajuraho, built by the Chandela kings of central India around 1030 CE, probably under Vidyadhara. It is dedicated to Shiva and stands on a high platform with a five-part plan around a central shrine.",
+   "Its tower rises about 31 metres in a curve of stacked tiers, each with a row of small turrets, so the shikhara reads as a mountain with subsidiary peaks. The walls carry some 870 sculptures of gods, nymphs, musicians, mithuna couples and animals, carved in a soft sandstone that has kept its detail for a thousand years.",
+   "The temples were built in a burst of activity between about 950 and 1050 and then abandoned; the site was remote enough that it escaped destruction, and it was brought to notice again in the nineteenth century. Khajuraho became a UNESCO World Heritage Site in 1986."
+  ],
+  "facts": [
+   {
+    "k": "Built",
+    "v": "c. 1025–1050 CE"
+   },
+   {
+    "k": "Dynasty",
+    "v": "Chandela"
+   },
+   {
+    "k": "Height",
+    "v": "About 31 m"
+   },
+   {
+    "k": "Sculptures",
+    "v": "Around 870 figures"
+   },
+   {
+    "k": "Style",
+    "v": "Nagara, Khajuraho school"
+   },
+   {
+    "k": "UNESCO",
+    "v": "1986 · ref. 240"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Kandariya_Mahadeva_Temple"
+   },
+   {
+    "label": "UNESCO listing",
+    "href": "https://whc.unesco.org/en/list/240/"
+   },
+   {
+    "label": "MP tourism",
+    "href": "https://www.mptourism.com/"
+   }
+  ],
+  "image": {
+   "file": "Khajuraho.KandariyaMahadeva.jpg",
+   "artist": "China Crisis",
+   "license": "CC BY-SA 3.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Khajuraho.KandariyaMahadeva.jpg",
+   "src": "assets/img/kandariya-mahadeva.jpg"
+  },
+  "accent": "#c9a878",
+  "accent2": "#e0c49a"
+ },
+ {
+  "id": "basilica-bom-jesus",
+  "name": "Basilica of Bom Jesus",
+  "deva": "बॉम जीसस बासीलिका",
+  "place": "Old Goa",
+  "state": "Goa",
+  "region": "West",
+  "era": "Portuguese · 1594–1605",
+  "period": "1594–1605",
+  "style": "Baroque",
+  "unesco": "UNESCO World Heritage Site (1986)",
+  "wikipedia": "https://en.wikipedia.org/wiki/Basilica_of_Bom_Jesus",
+  "year": 1605,
+  "blurb": "A baroque basilica of laterite and white plaster in Old Goa, holding the relics of St Francis Xavier.",
+  "history": [
+   "The Basilica of Bom Jesus was begun in 1594 and consecrated in 1605, in the Portuguese capital of Old Goa. It is one of the earliest baroque churches in India, built of laterite faced with lime plaster, its facade rising in tiers of Ionic, Doric and Corinthian columns to a central pediment.",
+   "Inside, gilded altars and a painted ceiling frame the chapel that holds the silver casket of St Francis Xavier, the Jesuit missionary who died off the China coast in 1552. His body was brought here, and it is displayed every ten years at the exposition that draws pilgrims from across Asia.",
+   "The church was raised to the rank of minor basilica in 1946, the first in India. In 1986 it was inscribed, with the other churches and convents of Old Goa, as a UNESCO World Heritage Site."
+  ],
+  "facts": [
+   {
+    "k": "Built",
+    "v": "1594–1605"
+   },
+   {
+    "k": "Style",
+    "v": "Baroque"
+   },
+   {
+    "k": "Material",
+    "v": "Laterite with lime plaster"
+   },
+   {
+    "k": "Holds",
+    "v": "Relics of St Francis Xavier"
+   },
+   {
+    "k": "Basilica since",
+    "v": "1946, the first in India"
+   },
+   {
+    "k": "UNESCO",
+    "v": "1986 · ref. 234"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Basilica_of_Bom_Jesus"
+   },
+   {
+    "label": "UNESCO listing",
+    "href": "https://whc.unesco.org/en/list/234/"
+   },
+   {
+    "label": "Goa tourism",
+    "href": "https://www.goatourism.gov.in/"
+   }
+  ],
+  "image": {
+   "file": "Front_Elevation_of_Basilica_of_Bom_Jesus.jpg",
+   "artist": "iMahesh",
+   "license": "CC BY-SA 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Front_Elevation_of_Basilica_of_Bom_Jesus.jpg",
+   "src": "assets/img/basilica-bom-jesus.jpg"
+  },
+  "accent": "#c0a68c",
+  "accent2": "#e0cdb8"
+ },
+ {
+  "id": "mehrangarh-fort",
+  "name": "Mehrangarh",
+  "deva": "मेहरानगढ़ किला",
+  "place": "Jodhpur",
+  "state": "Rajasthan",
+  "region": "North",
+  "era": "Rathore Rajput · from 1459",
+  "period": "1459 onward",
+  "style": "Rajput fortification",
+  "unesco": "—",
+  "wikipedia": "https://en.wikipedia.org/wiki/Mehrangarh",
+  "year": 1459,
+  "blurb": "A fort on a 120-metre rock above Jodhpur, its walls up to 36 metres high and 21 metres thick.",
+  "history": [
+   "Rao Jodha founded Mehrangarh in 1459, on a rocky hill above the new city of Jodhpur. The name means fort of the sun, and the Rathore rulers held it, with interruptions, until independence; most of what stands today was built between the seventeenth and nineteenth centuries.",
+   "Its walls rise up to 36 metres above the rock and are up to 21 metres thick in places, with seven gates, each named for a battle or a victory. Inside are palaces — the Moti Mahal, the Phool Mahal with its gold ceiling, the Sheesh Mahal and the Takhat Vilas — set around courtyards with pierced screens and coloured glass.",
+   "Below the walls the blue city spreads out, and the fort still carries the marks of its sieges: cannonball scars on the second gate, and the handprints of the widows who immolated themselves at its sati gate. It is now a museum run by a trust, and one of the most visited forts in Rajasthan."
+  ],
+  "facts": [
+   {
+    "k": "Founded",
+    "v": "1459, by Rao Jodha"
+   },
+   {
+    "k": "Above the city",
+    "v": "About 120 m"
+   },
+   {
+    "k": "Walls",
+    "v": "Up to 36 m high, 21 m thick"
+   },
+   {
+    "k": "Gates",
+    "v": "Seven"
+   },
+   {
+    "k": "Palaces",
+    "v": "Moti Mahal, Phool Mahal, Sheesh Mahal"
+   },
+   {
+    "k": "Now",
+    "v": "Museum and heritage trust"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Mehrangarh"
+   },
+   {
+    "label": "Fort website",
+    "href": "https://www.mehrangarh.org/"
+   },
+   {
+    "label": "Rajasthan tourism",
+    "href": "https://www.tourism.rajasthan.gov.in/"
+   }
+  ],
+  "image": {
+   "file": "Mehrangarh_Fort_sanhita.jpg",
+   "artist": "Sanhitasinha",
+   "license": "CC BY-SA 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Mehrangarh_Fort_sanhita.jpg",
+   "src": "assets/img/mehrangarh-fort.jpg"
+  },
+  "accent": "#c08a5a",
+  "accent2": "#e0b088"
+ },
+ {
+  "id": "jantar-mantar",
+  "name": "Jantar Mantar",
+  "deva": "जंतर मंतर",
+  "place": "Jaipur",
+  "state": "Rajasthan",
+  "region": "North",
+  "era": "Rajput · 1728–1734",
+  "period": "1728–1734",
+  "style": "Masonry astronomical instruments",
+  "unesco": "UNESCO World Heritage Site (2010)",
+  "wikipedia": "https://en.wikipedia.org/wiki/Jantar_Mantar,_Jaipur",
+  "year": 1734,
+  "blurb": "Nineteen masonry instruments in lime plaster, built to measure the sky — including a sundial 27 metres high.",
+  "history": [
+   "Sawai Jai Singh II built the Jantar Mantar at Jaipur between 1728 and 1734, the largest of the five observatories he raised across northern India. The name comes from yantra, instrument, and mantrana, consultation.",
+   "Its nineteen instruments are architecture doing astronomy: the Samrat Yantra, a gnomon 27 metres high whose shadow reads the time to about two seconds; the Jai Prakash, a bowl that maps the sky; the Rashivalaya, twelve dials for the zodiac. Each was cut in stone and plaster to a precision the naked eye could use.",
+   "The observatory fell into disrepair and was restored in the twentieth century. In 2010 it was inscribed as a UNESCO World Heritage Site, and it remains a working monument: the Samrat Yantra still keeps local time."
+  ],
+  "facts": [
+   {
+    "k": "Built",
+    "v": "1728–1734"
+   },
+   {
+    "k": "Patron",
+    "v": "Sawai Jai Singh II"
+   },
+   {
+    "k": "Instruments",
+    "v": "Nineteen"
+   },
+   {
+    "k": "Tallest",
+    "v": "Samrat Yantra, about 27 m"
+   },
+   {
+    "k": "Precision",
+    "v": "Time to about two seconds"
+   },
+   {
+    "k": "UNESCO",
+    "v": "2010 · ref. 1338"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Jantar_Mantar,_Jaipur"
+   },
+   {
+    "label": "UNESCO listing",
+    "href": "https://whc.unesco.org/en/list/1338/"
+   },
+   {
+    "label": "Rajasthan tourism",
+    "href": "https://www.tourism.rajasthan.gov.in/"
+   }
+  ],
+  "image": {
+   "file": "Jantar_Mantar_at_Jaipur.jpg",
+   "artist": "Knowledge Seeker",
+   "license": "Public domain",
+   "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+   "page": "https://commons.wikimedia.org/wiki/File:Jantar_Mantar_at_Jaipur.jpg",
+   "src": "assets/img/jantar-mantar.jpg"
+  },
+  "accent": "#d8c8a8",
+  "accent2": "#f0e4c8"
+ },
+ {
+  "id": "somnath-temple",
+  "name": "Somnath Temple",
+  "deva": "सोमनाथ मंदिर",
+  "place": "Prabhas Patan",
+  "state": "Gujarat",
+  "region": "West",
+  "era": "Rebuilt · 1951",
+  "period": "rebuilt 1951",
+  "style": "Kailash Mahameru Prasad, Chalukya revival",
+  "unesco": "—",
+  "wikipedia": "https://en.wikipedia.org/wiki/Somnath_temple",
+  "year": 1951,
+  "blurb": "The first of the twelve Jyotirlingas, on the Gujarat shore — destroyed and rebuilt many times.",
+  "history": [
+   "Somnath, at Prabhas Patan on the Saurashtra coast, is the first of the twelve Jyotirlingas of Shiva. It has been destroyed and rebuilt repeatedly: the temple was sacked by Mahmud of Ghazni in 1026, and again in later centuries, and each time it was raised again on the same shore.",
+   "The present temple was rebuilt between 1950 and 1951 on the initiative of Sardar Vallabhbhai Patel, who died before it was finished; the work was completed under K. M. Munshi. It follows the Kailash Mahameru Prasad style, with a 50-metre shikhara, a pillared hall and a spire carrying a flag that is changed three times a day.",
+   "The site is recorded to have been rebuilt six times. The present building stands within sight of the Arabian Sea, and the granite for it was brought from the other side of the continent."
+  ],
+  "facts": [
+   {
+    "k": "First Jyotirlinga",
+    "v": "Of the twelve"
+   },
+   {
+    "k": "Sacked",
+    "v": "1026, by Mahmud of Ghazni"
+   },
+   {
+    "k": "Present temple",
+    "v": "Rebuilt 1950–1951"
+   },
+   {
+    "k": "Championed by",
+    "v": "Sardar Vallabhbhai Patel"
+   },
+   {
+    "k": "Height",
+    "v": "Shikhara about 50 m"
+   },
+   {
+    "k": "On",
+    "v": "The Arabian Sea, Saurashtra"
+   }
+  ],
+  "links": [
+   {
+    "label": "Wikipedia",
+    "href": "https://en.wikipedia.org/wiki/Somnath_temple"
+   },
+   {
+    "label": "Temple trust",
+    "href": "https://somnath.org/"
+   },
+   {
+    "label": "Gujarat tourism",
+    "href": "https://www.gujarattourism.com/"
+   }
+  ],
+  "image": {
+   "file": "Somanath_mandir_(cropped).jpg",
+   "artist": "B. SurajPatro1997",
+   "license": "CC BY-SA 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "page": "https://commons.wikimedia.org/wiki/File:Somanath_mandir_(cropped).jpg",
+   "src": "assets/img/somnath-temple.jpg"
+  },
+  "accent": "#d0b890",
+  "accent2": "#e8d0b0"
  }
 ]

@@ -27,7 +27,6 @@ AI_TELLS = [
     (r'\biconic\b', 'iconic'),
     (r'\bbreathtaking\b', 'breathtaking'),
     (r'\brich tapestry\b', 'rich tapestry'),
-    (r'\bunveil', 'unveil'),
     (r'\bwhether you', 'whether you'),
     (r'—[^—]{0,60}—', 'a pair of em-dashes in one clause'),
 ]

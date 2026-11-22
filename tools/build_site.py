@@ -107,6 +107,8 @@ def build_index(monuments):
     out = out.replace('__FIRSTID__', monuments[0]['id'])
     out = out.replace('__FIRSTIMG__', monuments[0]['image']['src'])
     out = out.replace('__FIRSTWEBP__', monuments[0]['image']['src'].replace('.jpg', '.webp'))
+    out = out.replace('__OLDESTNAME__', years[0][1])
+    out = out.replace('__NEWESTNAME__', years[-1][1])
     out = out.replace('__OLDEST__', f"{years[0][1]} · {abs(years[0][0])} BCE" if years[0][0] < 0 else f"{years[0][1]} · {years[0][0]}")
     out = out.replace('__NEWEST__', f"{years[-1][1]} · {years[-1][0]}")
     open(os.path.join(ROOT, 'index.html'), 'w').write(out)
