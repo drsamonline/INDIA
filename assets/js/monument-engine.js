@@ -1011,7 +1011,10 @@ export function boot(mon) {
     keyLight.target.position.set((H.target[0]), 0, H.target[2]);
     scene.add(keyLight, keyLight.target);
 
-    hemi = new THREE.HemisphereLight(0xcfe0e6, 0x6b5a44, 0.5 * (mon.hemiScale !== undefined ? mon.hemiScale : 1));
+    // the ground half of the hemisphere light is what every downward-facing
+    // surface sees. It is earth-brown by default, which is right over soil and
+    // wrong over a white marble plinth — hence hemiGround.
+    hemi = new THREE.HemisphereLight(0xcfe0e6, mon.hemiGround !== undefined ? mon.hemiGround : 0x6b5a44, 0.5 * (mon.hemiScale !== undefined ? mon.hemiScale : 1));
     scene.add(hemi);
     rimLight = new THREE.DirectionalLight(0xffd9b0, 0.4);
     rimLight.position.set(-60, 40, -70);
