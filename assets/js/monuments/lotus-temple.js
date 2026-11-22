@@ -6,7 +6,7 @@ export default {
   accent: '#d8d2c4',
   accent2: '#f0e8d8',
   seed: 53,
-  time: 11.4,
+  time: 12.2,
   bounds: 70,
   minDist: 16,
   maxDist: 240,
@@ -150,9 +150,9 @@ export default {
        to a single point. */
     const BASE = 1.1;
     const RINGS = [
-      { R0: 14.2, Rmid: 18.4, Rtip: 10.8, H: 27.2, W: 2.75, cup: 0.38, thick: 0.26, rot: 0, mat: MARBLE },
-      { R0: 10.6, Rmid: 13.4, Rtip: 6.6, H: 29.4, W: 2.45, cup: 0.42, thick: 0.24, rot: Math.PI / 9, mat: MARBLE2 },
-      { R0: 6.8, Rmid: 8.6, Rtip: 1.6, H: 31.4, W: 2.10, cup: 0.46, thick: 0.22, rot: 0, mat: MARBLE }
+      { R0: 15.4, Rmid: 19.2, Rtip: 11.4, H: 29.0, W: 2.75, cup: 0.40, thick: 0.30, rot: 0, mat: MARBLE },
+      { R0: 10.8, Rmid: 14.0, Rtip: 6.4, H: 31.5, W: 2.45, cup: 0.44, thick: 0.28, rot: Math.PI / 9, mat: MARBLE2 },
+      { R0: 6.0, Rmid: 8.2, Rtip: 1.2, H: 34.0, W: 2.10, cup: 0.48, thick: 0.26, rot: 0, mat: MARBLE }
     ];
     RINGS.forEach((r) => {
       for (let i = 0; i < 9; i++) {
@@ -167,7 +167,10 @@ export default {
     col(MARBLE, 12.9, 12.9, 3.4, 0, BASE + 1.0, 0, 40);
     for (let i = 0; i < 9; i++) {
       const a = (i / 9) * Math.PI * 2 + Math.PI / 9;
-      add('dark', box(3.0, 5.6, 0.6), Math.cos(a) * 12.6, BASE + 3.3, Math.sin(a) * 12.6, { ry: -a + Math.PI / 2 });
+      add('dark', box(2.6, 5.0, 0.6), Math.cos(a) * 12.6, BASE + 3.3, Math.sin(a) * 12.6, { ry: -a + Math.PI / 2 });
+      add(MARBLE, box(3.4, 0.4, 0.9), Math.cos(a) * 12.7, BASE + 5.9, Math.sin(a) * 12.7, { ry: -a + Math.PI / 2 });
+      add(MARBLE, box(0.4, 5.2, 0.9), Math.cos(a + 0.13) * 12.7, BASE + 3.3, Math.sin(a + 0.13) * 12.7, { ry: -a + Math.PI / 2 });
+      add(MARBLE, box(0.4, 5.2, 0.9), Math.cos(a - 0.13) * 12.7, BASE + 3.3, Math.sin(a - 0.13) * 12.7, { ry: -a + Math.PI / 2 });
     }
     add('sandstoneRed', cyl(12.95, 12.95, 0.35, 40), 0, BASE + 4.4, 0);
     // hall within, seen through the doors
