@@ -6,7 +6,7 @@ export default {
   accent: '#d0b890',
   accent2: '#e8d0b0',
   seed: 107,
-  time: 17.4,
+  time: 10.6,
   bounds: 70,
   minDist: 18,
   maxDist: 260,
@@ -57,7 +57,7 @@ export default {
     const T3 = ctx.THREE;
     const { add, box, cyl, sph, cone, dome, onion, arch, archFrame, block, col, torus } = ctx;
 
-    const stone = 'sandstoneBuff', trim = 'marble', dark = 'granite';
+    const stone = 'granite', trim = 'plasterWhite', dark = 'basaltDark';
 
     /* ---- the terrace and steps -------------------------------------------- */
     block(dark, 62, 2.2, 54, 0, 0, 0);

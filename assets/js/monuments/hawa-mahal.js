@@ -10,11 +10,11 @@ export default {
   bounds: 46,
   minDist: 12,
   maxDist: 180,
-  home: { pos: [12, 9, 32], target: [0, 8, -2], fov: 46 },
+  home: { pos: [4, 11, 50], target: [0, 9, -2], fov: 46 },
   ground: { texture: 'paving', size: 2400, color: 0xc8b79c },
   views: [
-    { name: 'Full', pos: [12, 9, 32], target: [0, 8, -2] },
-    { name: 'Facade', pos: [0, 8, 30], target: [0, 8, -2] },
+    { name: 'Full', pos: [4, 11, 50], target: [0, 9, -2] },
+    { name: 'Facade', pos: [0, 9, 46], target: [0, 9, -2] },
     { name: 'Jharokhas', pos: [7, 13, 16], target: [2, 12, 2] },
     { name: 'Crown', pos: [6, 21, 18], target: [0, 17, 2] },
     { name: 'Street', pos: [-24, 3.2, 22], target: [0, 8, 2] }
@@ -81,7 +81,8 @@ export default {
 
         // a screened arch below, a smaller one above
         add('dark', arch(0.86, 1.30, 0.18), x, y + 0.34, z + 0.46);
-        add('marble', archFrame(1.02, 1.46, 0.08, 0.10), x, y + 0.34, z + 0.44);
+        add('marble', archFrame(1.24, 1.62, 0.13, 0.14), x, y + 0.34, z + 0.44);
+        add('marble', archFrame(0.90, 1.16, 0.10, 0.12), x, y + 1.72, z + 0.44);
         add('dark', arch(0.60, 0.86, 0.14), x, y + 1.72, z + 0.46);
 
         // canopy and finial over each jharokha

@@ -6,7 +6,7 @@ export default {
   accent: '#d8d2c4',
   accent2: '#f0e8d8',
   seed: 53,
-  time: 16.4,
+  time: 11.4,
   bounds: 70,
   minDist: 16,
   maxDist: 240,
@@ -150,9 +150,9 @@ export default {
        to a single point. */
     const BASE = 1.1;
     const RINGS = [
-      { R0: 14.2, Rmid: 18.4, Rtip: 10.8, H: 27.2, W: 2.10, cup: 0.38, thick: 0.26, rot: 0, mat: MARBLE },
-      { R0: 10.6, Rmid: 13.4, Rtip: 6.6, H: 29.4, W: 1.85, cup: 0.42, thick: 0.24, rot: Math.PI / 9, mat: MARBLE2 },
-      { R0: 6.8, Rmid: 8.6, Rtip: 1.6, H: 31.4, W: 1.60, cup: 0.46, thick: 0.22, rot: 0, mat: MARBLE }
+      { R0: 14.2, Rmid: 18.4, Rtip: 10.8, H: 27.2, W: 2.75, cup: 0.38, thick: 0.26, rot: 0, mat: MARBLE },
+      { R0: 10.6, Rmid: 13.4, Rtip: 6.6, H: 29.4, W: 2.45, cup: 0.42, thick: 0.24, rot: Math.PI / 9, mat: MARBLE2 },
+      { R0: 6.8, Rmid: 8.6, Rtip: 1.6, H: 31.4, W: 2.10, cup: 0.46, thick: 0.22, rot: 0, mat: MARBLE }
     ];
     RINGS.forEach((r) => {
       for (let i = 0; i < 9; i++) {
