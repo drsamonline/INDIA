@@ -1,23 +1,36 @@
 /* Jantar Mantar — Jaipur · procedural miniature
-   Author: Dr Sohil Momin · CC BY-NC 4.0 */
+   Author: Dr Sohil Momin · CC BY-NC 4.0
+
+   Rebuilt to the measured survey (UNESCO nomination dossier 1338, 1:750
+   site plan, and Kaye 1918). 1 unit = 1 metre.
+
+     · site 18,700 m² (1.8652 ha), modelled 118 × 160 m less the cut
+       north-west corner, boundary wall turned 15° to the city grid while
+       every instrument stays on the cardinal axes
+     · Brihat Samrat Yantra: pit 40.3 × 44.15 m, 3.5 m deep; gnomon wall
+       2.85 m thick, 22.62 m from the pit floor, 44.58 m base, 50.09 m
+       hypotenuse; quadrants R 15.15 m, 2.84 m wide; summit 19.1 m
+       above ground, under a chhatri
+     · the other eighteen instruments at their surveyed sizes           */
 
 export default {
   id: 'jantar-mantar',
-  accent: '#e6d8b8',
+  accent: '#d8b8a0',
   accent2: '#b8503a',
   seed: 103,
-  time: 15.4,
-  bounds: 66,
-  minDist: 24,
-  maxDist: 280,
-  home: { pos: [66, 40, 94], target: [2, 8, 0], fov: 40 },
-  ground: { texture: 'paving', size: 2600, color: 0xbcab8e },
+  floodScale: 0.35,
+  time: 9.6,
+  bounds: 110,
+  minDist: 14,
+  maxDist: 460,
+  home: { pos: [88, 40, 124], target: [0, 10, -18], fov: 40 },
+  ground: { texture: 'paving', size: 2400, color: 0xbcab8e },
   views: [
-    { name: 'Full', pos: [66, 40, 94], target: [2, 8, 0] },
-    { name: 'Samrat Yantra', pos: [44, 22, 44], target: [13, 15, 2] },
-    { name: 'Jai Prakash', pos: [-34, 13, 32], target: [-15, 3, 4] },
-    { name: 'Rashivalaya', pos: [26, 14, -42], target: [0, 3, -20] },
-    { name: 'Instruments', pos: [-52, 22, 44], target: [-6, 8, 0] }
+    { name: 'Full', pos: [88, 40, 124], target: [0, 10, -18] },
+    { name: 'Samrat Yantra', pos: [42, 20, 8], target: [0, 8, -44] },
+    { name: 'Jai Prakash', pos: [-16, 9, 62], target: [0, 2, 42] },
+    { name: 'Rashivalaya', pos: [24, 8, 84], target: [0, 3, 64] },
+    { name: 'Instruments', pos: [-46, 26, 30], target: [-30, 4, 22] }
   ],
   tour: [
     {
@@ -55,252 +68,438 @@ export default {
   build(ctx) {
     const T3 = ctx.THREE;
     const { add, box, cyl, sph, torus, dome, arch, archFrame, block, col, chhatri, lathe } = ctx;
+    const rng = ctx.rng;
 
-    const PL = 'plaster', PLW = 'plasterWhite', RED = 'sandstoneRed', MARB = 'marble';
+    const BODY = 'sandstonePink', BODY2 = 'sandstoneRed', SCALE = 'marble';
+    const PL = 'plaster', PLW = 'plasterWhite', LAWN = 'grass', METAL = 'bronze';
 
     /* ---------------------------------------------------------------- utils */
-    // A solid made by extruding a polygon drawn in the (z,y) plane through a
-    // thickness along x.  Points are [z, y] in the monument's local frame.
-    const prism = (pts, thick) => {
-      let a = 0;
-      for (let i = 0; i < pts.length; i++) {
-        const p = pts[i], q = pts[(i + 1) % pts.length];
-        a += p[0] * q[1] - q[0] * p[1];
-      }
-      const P = a < 0 ? pts.slice().reverse() : pts;
+    function prof(pts, thick) {
       const s = new T3.Shape();
-      P.forEach(([z, y], i) => (i ? s.lineTo(z, y) : s.moveTo(z, y)));
+      pts.forEach(([z, y], i) => (i ? s.lineTo(z, y) : s.moveTo(z, y)));
       s.closePath();
-      return new T3.ExtrudeGeometry(s, { depth: thick, bevelEnabled: false, curveSegments: 1 });
-    };
-    // place a (z,y) profile so that it is centred on x = cx, thickness along x
-    const wallZY = (key, pts, thick, cx, cz, y0 = 0) =>
-      add(key, prism(pts, thick), cx + thick / 2, y0, cz, { ry: -Math.PI / 2 });
-
-    const FX = 38, FZ = 29;                       // half-extents of the paving
-
-    /* ============================== the paving, kerb and compound wall ==== */
-    block(PL, FX * 2, 0.5, FZ * 2, 0, -0.5, 0);                 // plaster floor, top at y = 0
-    for (let x = -32; x <= 32; x += 8) add('stone', box(0.10, 0.05, FZ * 2 - 1.6), x, 0.02, 0);
-    for (let z = -24; z <= 24; z += 8) add('stone', box(FX * 2 - 1.6, 0.05, 0.10), 0, 0.02, z);
-
-    // red kerb inside the wall
-    [1, -1].forEach((s) => {
-      add(RED, box(FX * 2, 0.34, 0.9), 0, 0.17, s * (FZ - 0.45));
-      add(RED, box(0.9, 0.34, FZ * 2), s * (FX - 0.45), 0.17, 0);
-    });
-
-    // plastered wall with red coping
-    const WH = 3.0, WT = 0.9;
-    const wallRun = (w, d, x, z) => {
-      block(PL, w, WH, d, x, 0, z);
-      block(RED, w + 0.3, 0.3, d + 0.3, x, WH, z);
-      add(PL, box(w * 0.5, 0.18, d + 0.5), x, WH * 0.62, z);      // simple moulding
-    };
-    wallRun(WT, FZ * 2 + 1.8, FX + WT / 2, 0);
-    wallRun(WT, FZ * 2 + 1.8, -(FX + WT / 2), 0);
-    wallRun(FX * 2 + 1.8, WT, 0, -(FZ + WT / 2));
-    // south wall, broken by the gate
-    const GX = -4, GW = 9;
-    wallRun(FX - (GX + GW / 2), WT, (-FX + GX + GW / 2) / 2, FZ + WT / 2);
-    wallRun(FX - (GW / 2 - GX), WT, (FX + GX - GW / 2) / 2, FZ + WT / 2);
-    // gate
-    block(RED, 1.1, 4.9, 1.3, GX - GW / 2 - 0.55, 0, FZ + WT / 2);
-    block(RED, 1.1, 4.9, 1.3, GX + GW / 2 + 0.55, 0, FZ + WT / 2);
-    add('dark', arch(GW - 1.4, 4.1, 0.4), GX, 0, FZ + WT / 2);
-    add(RED, archFrame(GW - 0.9, 4.4, 0.3, 0.55), GX, 0, FZ + WT / 2);
-    block(RED, GW + 2.4, 0.45, 1.7, GX, 4.9, FZ + WT / 2);
-    chhatri(GX - GW / 2 - 0.55, 5.35, FZ + WT / 2, 0.85, PL, MARB);
-    chhatri(GX + GW / 2 + 0.55, 5.35, FZ + WT / 2, 0.85, PL, MARB);
-
-    /* ============================== the Samrat Yantra ===================== */
-    // A true extruded right-triangle prism: 42 m base, 27 m high, 3.4 m thick.
-    const SX = 13, SZ = 3, HB = 42, HH = 27, HT = 3.4;
-    const zA = -HB / 2, zB = HB / 2;                 // summit end (north), foot (south)
-    const slope = HB / HH;                            // dz per dy along the hypotenuse
-    const hypZ = (y) => zA + slope * (HH - y);        // hypotenuse z at height y
-
-    wallZY(PL, [[zB, 0], [zA, HH], [zA, 0]], HT, SX, SZ);
-
-    // stone stair up the hypotenuse
-    const STEPS = 48, rise = HH / STEPS, run = HB / STEPS;
-    for (let i = 0; i < STEPS; i++) {
-      const yTop = HH - i * rise;
-      add(PLW, box(2.3, rise + 0.5, run * 1.02), SX, yTop - (rise + 0.5) / 2, SZ + zA + (i + 0.5) * run);
+      const g = new T3.ExtrudeGeometry(s, { depth: thick, bevelEnabled: false, curveSegments: 1 });
+      g.rotateY(-Math.PI / 2);
+      g.translate(thick / 2, 0, 0);
+      return g;
     }
-    // marble cheeks either side of the stair
-    const sl = Math.atan(1 / slope);
-    [1, -1].forEach((s) => {
-      add(MARB, box(0.6, 0.26, HB / Math.cos(sl)), SX + s * 1.45, HH * 0.5 + 0.12, SZ, { rx: sl });
-    });
-
-    // rows of blind niches on both great faces (skipped where a quadrant hides them)
-    const wingTop = (z) => {
-      const d = z - zA;
-      return d >= 0 && d <= 15 ? Math.sqrt(Math.max(0, 225 - d * d)) : 0;
-    };
-    for (let row = 0; row < 4; row++) {
-      const yb = 3.2 + row * 4.6, ah = 2.8, aw = 1.9;
-      const zEnd = hypZ(yb + ah) - 1.1;
-      for (let z = zA + 2.4; z + aw / 2 < zEnd; z += 3.3) {
-        if (yb + ah < wingTop(z) + 0.5) continue;
-        [1, -1].forEach((s) => {
-          const px = SX + s * (HT / 2 - 0.05);
-          add('dark', arch(aw, ah, 0.13), px, yb, SZ + z, { ry: s * Math.PI / 2 });
-          add(RED, archFrame(aw + 0.46, ah + 0.24, 0.2, 0.11), px, yb, SZ + z, { ry: s * Math.PI / 2 });
-        });
-      }
-      // red string-course under each row
-      add(RED, box(HT + 0.14, 0.14, Math.max(1, zEnd - zA - 1.6)), SX, yb - 0.24, SZ + (zA + 1.2 + zEnd) / 2);
+    // profile in the (x, y) plane, extruded along z
+    function profX(pts, thick) {
+      const s = new T3.Shape();
+      pts.forEach(([x, y], i) => (i ? s.lineTo(x, y) : s.moveTo(x, y)));
+      s.closePath();
+      const g = new T3.ExtrudeGeometry(s, { depth: thick, bevelEnabled: false, curveSegments: 1 });
+      g.translate(0, 0, -thick / 2);
+      return g;
     }
 
-    // small domed pavilion on the summit
-    chhatri(SX, HH, SZ + zA, 1.3, PL, MARB);
+    /* ================================================================ *
+     *  1. THE PLOT — 118 × 160 m, wall turned 15° to the instruments   *
+     * ================================================================ */
+    const EX = 59, EZ = 80;                      // half-extents, 18,880 m² gross
+    const CUT = 26;                              // the north-west corner is cut off
 
-    // the two quadrant walls.  Their top edge is a quarter circle of radius
-    // 15 m (the radius the survey gives the quadrants) struck from the summit's
-    // foot, so it falls from the top of the gnomon to the plinth exactly as the
-    // marble scales do on the real instrument.
-    const QR = 15.0, QT = 2.2;
-    const qpts = [[zA, 0], [zA + QR, 0]];
-    for (let i = 1; i <= 26; i++) {
-      const a = Math.PI / 2 - (i / 26) * (Math.PI / 2 - 0.02);
-      qpts.push([zA + QR * Math.sin(a), QR * Math.cos(a)]);
-    }
-    [1, -1].forEach((s) => {
-      const cxw = SX + s * (HT / 2 + 0.05 + QT / 2);
-      wallZY(PL, qpts, QT, cxw, SZ);
-      // marble face band + red graduations on the outer face
-      for (let i = 0; i <= 30; i++) {
-        const a = 0.03 + (i / 30) * (Math.PI / 2 - 0.07);
-        const r = QR - 0.16;
-        add(RED, box(QT + 0.1, 0.26, 0.62), cxw, r * Math.cos(a), SZ + zA + r * Math.sin(a), { rx: a });
-      }
-      for (let k = 1; k <= 5; k++) {
-        const a = 0.04 + (k / 6) * (Math.PI / 2 - 0.1);
-        const r = QR - 0.5;
-        add(RED, box(QT + 0.2, 1.0, 0.18), cxw, r * Math.cos(a), SZ + zA + r * Math.sin(a), { rx: a });
-      }
+    // the plot is a rectangle with its NW corner taken off at right angles
+    const plot = [
+      [-EX + CUT, -EZ], [EX, -EZ], [EX, EZ], [-EX, EZ], [-EX, -EZ + CUT]
+    ];
+
+    // paving: four slabs round the Samrat pit, which is left open
+    const PZ0 = -70, PZ1 = -24, PX0 = -21, PX1 = 21;
+    block('paving', EX * 2, 0.5, PZ0 + EZ, 0, -0.5, (PZ0 - EZ) / 2);
+    block('paving', EX * 2, 0.5, EZ - PZ1, 0, -0.5, (EZ + PZ1) / 2);
+    block('paving', PX0 + EX, 0.5, PZ1 - PZ0, (-EX + PX0) / 2, -0.5, (PZ0 + PZ1) / 2);
+    block('paving', EX - PX1, 0.5, PZ1 - PZ0, (EX + PX1) / 2, -0.5, (PZ0 + PZ1) / 2);
+    // lawns between the instruments
+    [[-38, 22, 26, 30], [38, 40, 26, 34], [0, 20, 20, 10], [-34, 62, 22, 16],
+     [34, 66, 20, 14], [-40, -12, 18, 20], [40, -14, 18, 20]].forEach(([x, z, w, d]) => {
+      block(LAWN, w, 0.22, d, x, 0.05, z);
+      add(BODY, box(w + 0.8, 0.16, d + 0.8), x, 0.04, z);
     });
 
-    /* ============================== the Jai Prakash ======================= */
-    (function jaiPrakash(cx, cz) {
-      const RI = 6.2, WT2 = 0.6, yBot = 0.75, yRim = 3.3;
-      const d = yRim - yBot;
-      const rho = (RI * RI + d * d) / (2 * d);
-      const surf = (r) => yBot + rho - Math.sqrt(Math.max(0, rho * rho - r * r));
-
-      // thick-walled bowl: outside up, across the rim, down the inside
-      const p = [[0.02, -0.25], [RI + WT2, -0.25], [RI + WT2, yRim], [RI, yRim]];
-      for (let i = 13; i >= 0; i--) {
-        const r = 0.06 + (i / 13) * (RI - 0.06);
-        p.push([r, surf(r)]);
-      }
-      add(PL, lathe(p, 48), cx, 0, cz);
-
-      // marble rim
-      add(MARB, torus(RI + 0.3, 0.17, 6, 48), cx, yRim, cz, { rx: Math.PI / 2 });
-      // marble grid: rings
-      for (const r of [1.2, 2.4, 3.6, 4.8, 6.0]) {
-        add(MARB, torus(r, 0.045, 4, 44), cx, surf(r) + 0.02, cz, { rx: Math.PI / 2 });
-      }
-      // marble grid: radial rules
-      for (let k = 0; k < 12; k++) {
-        const a = (k / 12) * Math.PI * 2;
-        for (let j = 0; j < 5; j++) {
-          const r = 0.6 + j * 1.1;
-          const t = Math.atan(r / Math.sqrt(Math.max(0.01, rho * rho - r * r)));
-          add(MARB, box(1.14, 0.06, 0.08), cx + Math.cos(a) * r, surf(r) + 0.02, cz + Math.sin(a) * r,
-            { ry: -a, rz: t });
+    // the boundary wall, on the city grid: fifteen degrees off the instruments
+    (function boundary() {
+      const W = 0.85, H = 3.4;
+      const ring = plot.map(([x, z]) => {
+        const a = 15 * Math.PI / 180;
+        return [x * Math.cos(a) - z * Math.sin(a), x * Math.sin(a) + z * Math.cos(a)];
+      });
+      for (let i = 0; i < ring.length; i++) {
+        const a = ring[i], b = ring[(i + 1) % ring.length];
+        const dx = b[0] - a[0], dz = b[1] - a[1], len = Math.hypot(dx, dz);
+        const mx = (a[0] + b[0]) / 2, mz = (a[1] + b[1]) / 2;
+        const ry = Math.atan2(-dz, dx);
+        block(PL, len + W, H, W, mx, 0, mz, { ry });
+        block(BODY2, len + W + 0.3, 0.34, W + 0.3, mx, H, mz, { ry });
+        // pilasters
+        const n = Math.max(2, Math.round(len / 7));
+        for (let k = 0; k < n; k++) {
+          const t = (k + 0.5) / n - 0.5;
+          block(PL, 1.2, H + 0.5, W + 0.5, mx + Math.cos(ry) * t * len, 0,
+            mz - Math.sin(ry) * t * len, { ry });
         }
       }
-      // four pillars and cross-wires above
-      const PR = RI + 1.3;
-      for (let k = 0; k < 4; k++) {
-        const a = Math.PI / 4 + k * Math.PI / 2;
-        const px = cx + Math.cos(a) * PR, pz = cz + Math.sin(a) * PR;
-        add(PL, cyl(0.42, 0.5, 0.4, 10), px, 0.2, pz);
-        add(PL, cyl(0.24, 0.3, 5.0, 10), px, 2.7, pz);
-        add(MARB, cyl(0.34, 0.28, 0.24, 10), px, 5.2, pz);
-      }
-      const span = PR * Math.SQRT2;
-      add(PL, box(span, 0.18, 0.22), cx, 5.45, cz - span / 2);
-      add(PL, box(span, 0.18, 0.22), cx, 5.45, cz + span / 2);
-      add(PL, box(0.22, 0.18, span), cx - span / 2, 5.45, cz);
-      add(PL, box(0.22, 0.18, span), cx + span / 2, 5.45, cz);
-      add('grey', box(span, 0.07, 0.07), cx, 5.4, cz);
-      add('grey', box(0.07, 0.07, span), cx, 5.4, cz);
-      add('grey', box(span, 0.05, 0.05), cx, 5.33, cz, { ry: Math.PI / 4 });
-      add('grey', box(span, 0.05, 0.05), cx, 5.33, cz, { ry: -Math.PI / 4 });
-    })(-15, 4);
-
-    /* ============================== the twelve zodiac dials =============== */
-    (function rashivalaya() {
-      const spots = [
-        [-30, -21], [-24, -23], [-18, -24], [-12, -24], [-4, -24], [4, -24], [12, -24], [20, -24],
-        [32, -12], [33, 4], [24, 22], [-28, 20]
-      ];
-      spots.forEach(([x, z], i) => {
-        const yaw = Math.atan2(-x, -z);
-        block(PL, 3.1, 1.0, 3.1, x, 0, z);
-        add(RED, cyl(1.72, 1.72, 0.16, 16), x, 1.08, z);
-        add(MARB, cyl(1.5, 1.5, 0.14, 16), x, 1.16, z);
-        add(MARB, box(2.5, 0.22, 2.5), x, 1.72, z, { rx: -0.47, ry: yaw });
-        add(RED, box(2.56, 0.1, 2.56), x, 1.62, z, { rx: -0.47, ry: yaw });
-        add(PLW, box(0.14, 1.15, 1.5), x, 2.35, z, { ry: yaw });
-        add(RED, cyl(0.06, 0.06, 0.5, 6), x, 1.95, z);
-      });
     })();
 
-    /* ============================== smaller instruments =================== */
-    // Ram Yantra: two open cylinders with a central pillar
-    (function ramYantra(cx, cz) {
-      add(PL, cyl(5.0, 5.4, 0.9, 24), cx, 0.45, cz);
-      add(RED, cyl(5.05, 5.05, 0.14, 24), cx, 0.96, cz);
-      const ringWall = (r, h, t) => {
-        const n = Math.round((2 * Math.PI * r) / 1.5);
-        for (let i = 0; i < n; i++) {
-          const a = (i / n) * Math.PI * 2;
-          add(PLW, box(t, h, (2 * Math.PI * r) / n * 1.05), cx + Math.cos(a) * r, 0.9 + h / 2, cz + Math.sin(a) * r, { ry: -a });
-        }
-      };
-      ringWall(4.4, 4.2, 0.45);
-      ringWall(2.5, 3.4, 0.4);
-      for (let k = 0; k < 8; k++) {
-        const a = (k / 8) * Math.PI * 2;
-        add(PLW, box(1.9, 2.4, 0.34), cx + Math.cos(a) * 3.45, 0.9 + 1.2, cz + Math.sin(a) * 3.45, { ry: -a });
+    /* ================================================================ *
+     *  2. THE BRIHAT SAMRAT YANTRA                                     *
+     * ================================================================ */
+    const LAT = 26.9 * Math.PI / 180;
+    const SB = 44.58, SH = 22.62, ST = 2.85;     // base, height, thickness
+    const PIT = 3.5;                              // the pit floor sits 3.5 m down
+    const CZ = (PZ0 + PZ1) / 2;                   // -47
+    const zApex = CZ - SB / 2, zFoot = CZ + SB / 2;
+
+    // the pit
+    add(BODY2, box(40.3, 0.4, 45.5), 0, -PIT, CZ);
+    [[0, -22.6, 40.3, 1.2], [0, 22.6, 40.3, 1.2]].forEach(([x, dz, w, d]) =>
+      block(BODY, w, PIT, d, x, -PIT, CZ + dz));
+    [[-19.6, 0, 1.2, 45.5], [19.6, 0, 1.2, 45.5]].forEach(([dx, z, w, d]) =>
+      block(BODY, w, PIT, d, dx, -PIT, CZ + z));
+    // marble kerb round the pit lip
+    [[0, -22.9], [0, 22.9]].forEach(([x, dz]) => add(SCALE, box(41.6, 0.35, 1.5), x, 0.1, CZ + dz));
+    [[-19.9], [19.9]].forEach(([dx]) => add(SCALE, box(1.5, 0.35, 45.9), dx, 0.1, CZ));
+
+    // the gnomon: a right triangle, apex at the north end
+    add(BODY, prof([[zFoot, -PIT], [zApex, SH - PIT], [zApex, -PIT]], ST), 0, 0, 0);
+    // marble edges down the hypotenuse and up the vertical
+    add(SCALE, prof([[zFoot, -PIT], [zApex, SH - PIT], [zApex, SH - PIT - 0.5],
+      [zFoot + 0.6, -PIT + 0.3]], ST + 0.16), 0, 0, 0);
+
+    // stair up the hypotenuse, 2.39 m wide, between two marble cheeks
+    const STEPS = 60;
+    for (let i = 0; i < STEPS; i++) {
+      const t = (i + 0.5) / STEPS;
+      const z = zFoot + (zApex - zFoot) * t;
+      const y = -PIT + (SH - PIT) * t;
+      add(PLW, box(2.39, 0.34, (SB / STEPS) * 1.25), 0, y - 0.17, z);
+    }
+    [-1, 1].forEach((s) => {
+      add(SCALE, prof([[zFoot, -PIT], [zApex, SH - PIT], [zApex, SH - PIT - 1.5],
+        [zFoot, -PIT - 0.2]], 0.5), s * 1.62, 0, 0);
+    });
+
+    // blind pointed arches on both great faces
+    for (let row = 0; row < 4; row++) {
+      const yb = -PIT + 2.6 + row * 4.8, ah = 3.0, aw = 1.9;
+      const zEnd = zFoot - ((yb + ah + PIT) / (SH - PIT)) * SB - 1.6;
+      for (let z = zApex + 3.4; z + aw / 2 < zEnd; z += 3.6) {
+        [-1, 1].forEach((s) => {
+          add(BODY2, arch(aw, ah, 0.16), s * (ST / 2 + 0.02), yb, z, { ry: s * Math.PI / 2 });
+          add(SCALE, archFrame(aw + 0.5, ah + 0.26, 0.18, 0.12), s * (ST / 2 + 0.03), yb, z, { ry: s * Math.PI / 2 });
+        });
       }
-      add(PLW, cyl(0.55, 0.7, 4.6, 10), cx, 0.9 + 2.3, cz);
-      add(MARB, cyl(0.85, 0.85, 0.2, 10), cx, 5.6, cz);
-    })(-6, -14);
+    }
 
-    // Chakra Yantra: a graduated ring on a pillar
-    (function chakra(cx, cz) {
-      add(PL, cyl(2.4, 2.7, 0.7, 16), cx, 0.35, cz);
-      add(RED, cyl(2.45, 2.45, 0.12, 16), cx, 0.76, cz);
-      add(PLW, cyl(0.4, 0.5, 4.2, 10), cx, 0.8 + 2.1, cz);
-      add(MARB, torus(2.1, 0.16, 6, 32), cx, 5.3, cz, { rx: 0.46 });
-      add(MARB, torus(1.5, 0.13, 6, 28), cx, 5.3, cz, { rx: 0.46 });
-      add(RED, cyl(0.9, 0.9, 0.14, 12), cx, 5.3, cz, { rx: 0.46 });
-    })(-32, -6);
+    // the two quadrants: radius 15.15 m, 2.84 wide, tops falling from the
+    // gnomon to the pit floor on a quarter of a circle
+    const QR = 15.15, QW = 2.84, QH = QR * Math.cos(LAT);   // 13.5 m of rise
+    [-1, 1].forEach((s) => {
+      const pts = [[s * (ST / 2 + 0.02), -PIT + QH]];
+      for (let i = 1; i <= 28; i++) {
+        const a = (i / 28) * Math.PI / 2;
+        pts.push([s * (ST / 2 + 0.02 + (QR - ST / 2) * Math.sin(a)), -PIT + QH * Math.cos(a)]);
+      }
+      pts.push([s * QR, -PIT]);
+      pts.push([s * QR, -PIT - 0.4]);
+      pts.push([s * (ST / 2 + 0.02), -PIT - 0.4]);
+      add(BODY, profX(pts, QW), 0, 0, CZ + SB / 2 - QW / 2);
+      // a narrow marble band along the graduated edge
+      for (let i = 0; i < 28; i++) {
+        const p0 = pts[i], p1 = pts[i + 1];
+        const dxx = p1[0] - p0[0], dyy = p1[1] - p0[1];
+        const l = Math.hypot(dxx, dyy);
+        add(SCALE, box(l * 1.15, 0.16, QW + 0.14), (p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2 + 0.08,
+          CZ + SB / 2 - QW / 2, { rz: Math.atan2(dyy, dxx) });
+      }
+      for (let i = 1; i < 24; i++) {
+        const a = (i / 24) * Math.PI / 2;
+        const x = s * (ST / 2 + (QR - ST / 2) * Math.sin(a));
+        const y = -PIT + QH * Math.cos(a);
+        add(SCALE, box(0.26, 0.1, QW + 0.24), x, y + 0.08, CZ + SB / 2 - QW / 2);
+      }
+    });
 
-    // Digamsha Yantra: a small domed pillar
-    (function digamsha(cx, cz) {
-      add(PL, cyl(3.2, 3.6, 0.9, 16), cx, 0.45, cz);
-      add(RED, cyl(3.25, 3.25, 0.14, 16), cx, 0.96, cz);
-      add(PLW, cyl(0.85, 1.1, 5.2, 10), cx, 0.9 + 2.6, cz);
-      add(RED, cyl(1.35, 1.35, 0.24, 12), cx, 6.15, cz);
-      add(MARB, dome(1.25, 1.15, 16), cx, 6.25, cz);
-      add('gold', sph(0.14, 8), cx, 7.6, cz);
-    })(-4, 16);
+    // the chhatri at the summit
+    add(PL, cyl(2.2, 2.4, 0.5, 10), 0, SH - PIT, zApex);
+    for (let i = 0; i < 4; i++) {
+      const a = Math.PI / 4 + i * Math.PI / 2;
+      add(PL, cyl(0.16, 0.19, 2.0, 6), Math.cos(a) * 1.6, SH - PIT + 1.4, zApex + Math.sin(a) * 1.6);
+    }
+    add(PL, cyl(2.3, 2.3, 0.24, 10), 0, SH - PIT + 2.5, zApex);
+    add(SCALE, dome(2.0, 1.7, 14), 0, SH - PIT + 2.6, zApex);
+    add('gold', sph(0.16, 8), 0, SH - PIT + 4.4, zApex);
 
-    /* ============================== life ================================= */
-    const people = [[-2, 20], [8, 21], [-12, 16], [16, 18], [2, 24], [-22, 14], [24, 12], [-5, 9], [10, 8], [-26, -2], [30, 6], [6, -6]];
-    people.forEach(([x, z], i) => ctx.person(x, z, i * 1.1, ['fabricWhite', 'fabricSaffron', 'fabricRed'][i % 3], 0.95));
-    [[-30, 16], [30, 16], [-30, -14], [30, -14], [0, 26], [-24, 24], [22, 26]].forEach(([x, z]) => ctx.lamp(x, z, 3.2, 'black'));
-    [[-34, 26], [34, 26], [-34, -26], [34, -26], [-34, 8], [34, 8], [12, 26]].forEach(([x, z], i) => ctx.tree(x, z, 0.82, i % 2 ? 'round' : 'cypress'));
+    /* ================================================================ *
+     *  3. THE JAI PRAKASH — two bowls, 5.44 m across                   *
+     * ================================================================ */
+    function bowl(cx, cz, R, yRim, yBot) {
+      const d = yRim - yBot;
+      const rho = (R * R + d * d) / (2 * d);
+      const surf = (r) => yBot + rho - Math.sqrt(Math.max(0, rho * rho - r * r));
+      const p = [[0.02, yBot - 0.5], [R + 0.7, yBot - 0.5], [R + 0.7, yRim], [R, yRim]];
+      for (let i = 12; i >= 0; i--) {
+        const r = 0.06 + (i / 12) * (R - 0.06);
+        p.push([r, surf(r)]);
+      }
+      add(PL, lathe(p, 44), cx, 0, cz);
+      add(SCALE, torus(R + 0.2, 0.13, 5, 40), cx, yRim, cz, { rx: Math.PI / 2 });
+      for (const r of [1.0, 2.0, 3.0, 4.0, R - 0.2]) {
+        add(SCALE, torus(r, 0.035, 3, 36), cx, surf(r) + 0.02, cz, { rx: Math.PI / 2 });
+      }
+      for (let k = 0; k < 12; k++) {
+        const a = (k / 12) * Math.PI * 2;
+        for (let j = 0; j < 4; j++) {
+          const r = 0.5 + j * 0.85;
+          add(SCALE, box(0.9, 0.05, 0.06), cx + Math.cos(a) * r, surf(r) + 0.02, cz + Math.sin(a) * r, { ry: -a });
+        }
+      }
+      // four posts and the cross-wires over the rim
+      const PR = R + 0.9;
+      for (let k = 0; k < 4; k++) {
+        const a = Math.PI / 4 + k * Math.PI / 2;
+        add(PL, cyl(0.2, 0.26, yRim + 2.4, 8), cx + Math.cos(a) * PR, (yRim + 2.4) / 2, cz + Math.sin(a) * PR);
+      }
+      const span = PR * Math.SQRT2;
+      add(PL, box(span, 0.14, 0.16), cx, yRim + 2.4, cz - PR);
+      add(PL, box(span, 0.14, 0.16), cx, yRim + 2.4, cz + PR);
+      add('grey', box(span, 0.05, 0.05), cx, yRim + 2.2, cz);
+      add('grey', box(0.05, 0.05, span), cx, yRim + 2.2, cz);
+      add(METAL, cyl(0.3, 0.3, 0.06, 10), cx, yRim + 2.0, cz);
+    }
+    block(PL, 11.22, 1.6, 20.5, 0, -1.6, 40);
+    add(BODY, box(11.6, 0.22, 20.9), 0, 0.1, 40);
+    bowl(-2.7, 34.4, 2.72, 0.9, -1.5);
+    bowl(2.7, 45.6, 2.72, 0.9, -1.5);
 
-    ctx.light({ pos: [-24, 18, 30], target: [0, 12, 0], color: 0xffd0a0, intensity: 2600, distance: 170 });
-    ctx.light({ pos: [26, 16, 26], target: [10, 12, 0], color: 0xffc890, intensity: 2200, distance: 170 });
+    /* ================================================================ *
+     *  4. THE TWELVE RASHIVALAYA — on a floor 39 × 41 m                *
+     * ================================================================ */
+    block(PL, 39, 1.1, 41, 0, -1.1, 66);
+    add(BODY, box(39.6, 0.18, 41.6), 0, 0.06, 66);
+    for (let i = 0; i < 12; i++) {
+      const col = i % 6, row = Math.floor(i / 6);
+      const cx = -16.2 + col * 6.5, cz = 57 + row * 17.5;
+      const gh = 4.22 + (i % 5) * 0.5;                    // 4.22 to 6.21 m
+      const qr = i % 2 ? 1.68 : 1.24;
+      const yaw = (i / 12) * Math.PI * 2 + 0.3;           // each dial differently turned
+      const gb = gh / Math.tan(LAT);
+      // the gnomon wall
+      add(BODY, profX([[-gb / 2, 0], [gb / 2, 0], [gb / 2, gh]], 0.62), cx, 0, cz, { ry: yaw });
+      add(SCALE, box(gb * 0.9, 0.14, 0.72), cx, 0.07, cz, { ry: yaw });
+      // the quadrant, a quarter of a circle beside it
+      const qpts = [[0.36, gh * 0.62]];
+      for (let k = 1; k <= 12; k++) {
+        const a = (k / 12) * Math.PI / 2;
+        qpts.push([0.36 + qr * Math.sin(a), gh * 0.62 * Math.cos(a)]);
+      }
+      qpts.push([0.36 + qr, 0]);
+      qpts.push([0.36, 0]);
+      add(BODY, profX(qpts, 0.42), cx, 0, cz, { ry: yaw });
+      
+      add(BODY2, box(1.5, 0.2, 1.5), cx, 0.05, cz, { ry: yaw });
+    }
+
+    /* ================================================================ *
+     *  5. THE RAM YANTRAS — drums 4.48 m tall, 6.95 m across           *
+     * ================================================================ */
+    function ramYantra(cx, cz, R, H, yFloor) {
+      const seg = 26;
+      // the drum wall, open at the top, with sectors cut out of it
+      for (let k = 0; k < seg; k++) {
+        const a0 = (k / seg) * Math.PI * 2, a1 = ((k + 1) / seg) * Math.PI * 2;
+        const am = (a0 + a1) / 2;
+        const w = (2 * Math.PI * R) / seg * 1.06;
+        const hh = (k % 3 === 0) ? H * 0.45 : H;
+        add(PL, box(w, hh, 0.5), cx + Math.cos(am) * R, yFloor + hh / 2, cz + Math.sin(am) * R, { ry: -am });
+      }
+      add(SCALE, torus(R, 0.09, 4, 40), cx, yFloor + H, cz, { rx: Math.PI / 2 });
+      add(PL, cyl(R + 0.3, R + 0.5, yFloor, seg), cx, yFloor / 2, cz);
+      add(SCALE, torus(R - 0.4, 0.07, 3, 40), cx, yFloor + 0.04, cz, { rx: Math.PI / 2 });
+      // the central pillar, as tall as the wall
+      add(PLW, cyl(0.42, 0.5, H + yFloor, 10), cx, (H + yFloor) / 2, cz);
+      add(SCALE, cyl(0.6, 0.6, 0.16, 10), cx, H + yFloor + 0.08, cz);
+    }
+    ramYantra(-33, 30, 3.47, 4.48, 1.12);        // great Ram Yantra, pair
+    ramYantra(-33, 40, 3.47, 4.48, 1.12);
+    ramYantra(33, 20, 1.95, 2.5, 0.8);           // small Ram Yantra
+
+    /* ================================================================ *
+     *  6. THE REST OF THE NINETEEN                                     *
+     * ================================================================ */
+    // Kapala Yantra: two bowls about 3.5 m across on a shared east-west base
+    block(PL, 9.5, 1.3, 4.6, 34, -1.3, 44);
+    add(BODY, box(9.9, 0.18, 5.0), 34, 0.06, 44);
+    bowl(31.6, 44, 1.75, 0.5, -1.1);
+    bowl(36.4, 44, 1.75, 0.5, -1.1);
+
+    // Chakra Yantra: two brass rings, about 1.8 m across, on three posts
+    for (let i = 0; i < 3; i++) {
+      add(PL, cyl(0.22, 0.28, 4.4, 8), 34 + (i - 1) * 1.6, 2.2, 33.4);
+    }
+    [-0.7, 0.7].forEach((dz) => {
+      add(METAL, torus(0.92, 0.1, 6, 26), 34, 4.5, 33.4 + dz, { rx: 0.47 });
+      add(METAL, cyl(0.26, 0.26, 0.08, 12), 34, 4.5, 33.4 + dz, { rx: 0.47 });
+    });
+
+    // Digamsa Yantra: a pillar 0.96 m high inside two coaxial walls
+    (function digamsa(cx, cz) {
+      add(PL, cyl(3.6, 3.9, 0.5, 20), cx, 0.25, cz);
+      add(SCALE, torus(3.5, 0.09, 4, 32), cx, 0.55, cz, { rx: Math.PI / 2 });
+      for (let k = 0; k < 20; k++) {
+        const a = (k / 20) * Math.PI * 2;
+        add(PL, box(1.15, 1.95, 0.24), cx + Math.cos(a) * 3.3, 0.5 + 0.97, cz + Math.sin(a) * 3.3, { ry: -a });
+      }
+      for (let k = 0; k < 12; k++) {
+        const a = (k / 12) * Math.PI * 2;
+        add(PL, box(1.1, 0.96, 0.22), cx + Math.cos(a) * 1.9, 0.5 + 0.48, cz + Math.sin(a) * 1.9, { ry: -a });
+      }
+      add(PL, cyl(0.52, 0.56, 0.96, 12), cx, 0.5 + 0.48, cz);
+      add(SCALE, cyl(0.6, 0.6, 0.12, 12), cx, 1.5, cz);
+    })(33, -2);
+
+    // Yantra Raj: three pillars 3.3 m high carrying the great astrolabe
+    (function yantraRaj(cx, cz) {
+      for (let i = 0; i < 3; i++) {
+        const a = (i / 3) * Math.PI * 2;
+        add(PL, cyl(0.34, 0.42, 3.3, 8), cx + Math.cos(a) * 1.7, 1.65, cz + Math.sin(a) * 1.7);
+      }
+      add(PL, box(4.6, 0.34, 0.34), cx, 3.45, cz, { ry: 0.4 });
+      add(PL, box(0.34, 0.34, 4.6), cx, 3.45, cz, { ry: 0.4 });
+      add(METAL, cyl(1.06, 1.06, 0.1, 24), cx, 3.9, cz, { rx: Math.PI / 2, ry: 0.4 });
+      add(METAL, torus(1.21, 0.07, 4, 26), cx, 3.9, cz, { rx: 0.35, ry: 0.4 });
+      add(METAL, cyl(1.05, 1.05, 0.07, 22), cx + 0.4, 3.55, cz - 0.5, { rx: 1.2, ry: 0.4 });
+    })(-33, -4);
+
+    // Nadivalaya: two discs, 3.70 m and 3.74 m across, facing north and south
+    (function nadivalaya(cx, cz) {
+      block(PL, 5.0, 3.4, 3.0, cx, 0, cz);
+      add(BODY2, box(5.3, 0.3, 3.3), cx, 3.4, cz);
+      add(SCALE, cyl(1.85, 1.85, 0.16, 26), cx, 1.9, cz - 1.5, { rx: Math.PI / 2 - LAT });
+      add(SCALE, cyl(1.87, 1.87, 0.16, 26), cx, 1.9, cz + 1.5, { rx: Math.PI / 2 + LAT });
+      for (const r of [1.2, 1.6]) {
+        add(BODY2, torus(r, 0.04, 3, 26), cx, 1.9, cz - 1.62, { rx: Math.PI / 2 - LAT });
+      }
+    })(0, 22);
+
+    // Nadivalaya II: the small horizontal dial
+    (function nadi2(cx, cz) {
+      block(PL, 3.2, 1.0, 3.2, cx, 0, cz);
+      add(SCALE, cyl(1.35, 1.35, 0.12, 20), cx, 1.06, cz);
+      add(PLW, cyl(0.1, 0.14, 1.5, 8), cx, 1.8, cz);
+    })(46, 74);
+
+    // Krantivritta: the circular plate 3.4 m across, its superstructure lost
+    (function kranti(cx, cz) {
+      block(PL, 6.0, 1.2, 6.0, cx, 0, cz);
+      add(SCALE, cyl(1.7, 1.7, 0.2, 26), cx, 1.3, cz, { rx: LAT });
+      for (let i = 0; i < 6; i++) {
+        const a = (i / 6) * Math.PI * 2;
+        add(PL, cyl(0.26, 0.3, 1.6, 7), cx + Math.cos(a) * 2.5, 0.8, cz + Math.sin(a) * 2.5);
+      }
+    })(-36, 60);
+
+    // Krantivritta II: the metal instrument
+    (function kranti2(cx, cz) {
+      block(PL, 5.0, 1.0, 5.0, cx, 0, cz);
+      for (let i = 0; i < 4; i++) {
+        const a = Math.PI / 4 + (i / 4) * Math.PI * 2;
+        add(PL, cyl(0.2, 0.24, 2.4, 7), cx + Math.cos(a) * 1.7, 1.2, cz + Math.sin(a) * 1.7);
+      }
+      add(METAL, torus(1.5, 0.09, 5, 26), cx, 2.7, cz, { rx: LAT });
+      add(METAL, box(2.9, 0.06, 0.06), cx, 2.7, cz, { rx: LAT });
+    })(-18, 74);
+
+    // Laghu Samrat Yantra: 6.9 m tall, 19.75 m base, quadrants of 2.78 m
+    (function laghu(cx, cz) {
+      const b = 19.75, h = 6.9, t = 1.29;
+      add(BODY, prof([[cz + b / 2, 0], [cz - b / 2, h], [cz - b / 2, 0]], t), cx, 0, 0);
+      
+      for (let i = 0; i < 16; i++) {
+        const tt = (i + 0.5) / 16;
+        add(PLW, box(1.0, 0.22, (b / 16) * 1.2), cx, h * tt - 0.11, cz + b / 2 - b * tt);
+      }
+      [-1, 1].forEach((s) => {
+        const pts = [[s * (t / 2 + 0.02), h * 0.62]];
+        for (let i = 1; i <= 14; i++) {
+          const a = (i / 14) * Math.PI / 2;
+          pts.push([s * (t / 2 + 0.02 + 2.78 * Math.sin(a)), h * 0.62 * Math.cos(a)]);
+        }
+        pts.push([s * 2.78, 0]);
+        pts.push([s * (t / 2 + 0.02), 0]);
+        add(BODY, profX(pts, 0.98), cx, 0, cz);
+        
+      });
+    })(-36, -34);
+
+    // Sasthamsa Yantra: four meridian dials in two chambers
+    (function sasthamsa(cx, cz) {
+      block(PL, 12, 7.0, 14, cx, 0, cz);
+      add(BODY2, box(12.6, 0.5, 14.6), cx, 7.0, cz);
+      [-1, 1].forEach((s) => {
+        add('dark', arch(2.6, 3.6, 0.5), cx, 0.1, cz + s * 7.0, { ry: s > 0 ? 0 : Math.PI });
+        add(SCALE, archFrame(3.0, 4.0, 0.3, 0.6), cx, 0.1, cz + s * 7.02, { ry: s > 0 ? 0 : Math.PI });
+      });
+      for (let i = 0; i < 4; i++) {
+        add(SCALE, box(0.1, 5.0, 9.0), cx - 4.2 + i * 2.8, 3.0, cz, { rx: LAT * (i % 2 ? 1 : -1) });
+      }
+      chhatri(cx, 7.5, cz, 1.2, PL, SCALE);
+    })(36, -34);
+
+    // Unnatamsa Yantra: a brass ring 5.35 m across on pillars
+    (function unnatamsa(cx, cz) {
+      block(PL, 6.4, 0.9, 6.4, cx, 0, cz);
+      for (let i = 0; i < 4; i++) {
+        const a = Math.PI / 4 + (i / 4) * Math.PI * 2;
+        add(PL, cyl(0.22, 0.28, 3.2, 8), cx + Math.cos(a) * 2.4, 1.7, cz + Math.sin(a) * 2.4);
+      }
+      add(METAL, torus(2.67, 0.13, 6, 34), cx, 4.6, cz, { rx: 1.0 });
+      add(METAL, box(5.4, 0.1, 0.1), cx, 4.6, cz, { rz: 0.2 });
+      add(METAL, box(0.1, 0.1, 5.4), cx, 4.6, cz, { rx: 0.2 });
+    })(36, 58);
+
+    // Dhruva Darsaka Yantra: the little trapezoid aimed at the pole star
+    (function dhruva(cx, cz) {
+      block(PL, 3.0, 0.9, 3.0, cx, 0, cz);
+      add(BODY, profX([[-1.4, 0], [1.4, 0], [0.9, 1.5], [-0.9, 1.5]], 1.4), cx, 0.9, cz, { rx: LAT });
+      add(SCALE, box(2.0, 0.06, 1.5), cx, 2.4, cz, { rx: LAT });
+    })(20, -66);
+
+    // Disha Yantra: the square platform of uncertain purpose
+    (function disha(cx, cz) {
+      block(PL, 7.0, 0.7, 7.0, cx, 0, cz);
+      add(BODY, box(7.3, 0.14, 7.3), cx, 0.72, cz);
+      add(BODY2, box(7.4, 0.2, 0.4), cx, 0.8, cz - 3.5);
+      add(BODY2, box(0.4, 0.2, 7.4), cx + 3.5, 0.8, cz);
+    })(-46, -58);
+
+    // the Astronomer's House, by the Nadivalaya
+    (function house(cx, cz) {
+      block(PL, 12, 5.4, 9, cx, 0, cz);
+      add(BODY2, box(12.6, 0.5, 9.6), cx, 5.4, cz);
+      add('dark', arch(2.2, 3.0, 0.4), cx, 0.1, cz + 4.5);
+      add(SCALE, archFrame(2.6, 3.4, 0.24, 0.5), cx, 0.1, cz + 4.55);
+      for (let i = -1; i <= 1; i += 2) {
+        add('dark', arch(1.2, 1.8, 0.3), cx + i * 3.6, 0.1, cz + 4.5);
+      }
+      chhatri(cx + 3.6, 5.9, cz - 2.2, 1.0, PL, SCALE);
+    })(46, -56);
+
+    /* ================================================================ *
+     *  7. LIFE                                                         *
+     * ================================================================ */
+    const people = [[-6, 14], [6, 16], [-2, 26], [10, 34], [-14, 30], [18, 20],
+      [-24, 46], [24, 48], [-8, 52], [12, 60], [-30, 20], [30, 30],
+      [4, 72], [-16, 78], [38, 40], [-40, 8]];
+    people.forEach(([x, z], i) => ctx.person(x, z, i * 1.1,
+      ['fabricWhite', 'fabricSaffron', 'fabricRed'][i % 3], 0.95));
+
+    [[-50, 30], [50, 30], [-50, -30], [50, -30], [-20, 12], [20, 12], [-48, 70]].forEach(([x, z], i) =>
+      ctx.tree(x, z, 0.7, i % 2 ? 'round' : 'cypress'));
+    [[-44, 44], [44, 12], [-12, 30], [12, 44], [-44, -44], [44, -44]].forEach(([x, z]) =>
+      ctx.lamp(x, z, 3.0, 'black'));
+
+    ctx.light({ pos: [-30, 26, 40], target: [0, 10, -20], color: 0xffd0a0, intensity: 3200, distance: 200 });
+    ctx.light({ pos: [34, 22, 30], target: [10, 10, 0], color: 0xffc890, intensity: 2600, distance: 200 });
   }
 };

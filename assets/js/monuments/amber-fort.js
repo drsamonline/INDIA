@@ -65,7 +65,16 @@ export default {
     const T3 = ctx.THREE;
     const { add, box, cyl, sph, cone, dome, onion, arch, archFrame, block, col, chhatri } = ctx;
 
-    const stone = 'sandstoneBuff', stone2 = 'plasterWhite', trim = 'marble', cream = 'cream';
+    // Amber is pale yellow sandstone, not terracotta. sandstoneBuff under the
+    // warm key pushed to orange, so the stone is tinted toward pale yellow.
+    const STONE = (() => {
+      const m = ctx.mat('sandstoneBuff');
+      if (!m || !m.clone) return 'sandstoneBuff';
+      const c = m.clone();
+      c.color.setHex(0xe3d9b6);
+      return c;
+    })();
+    const stone = STONE, stone2 = 'plasterWhite', trim = 'marble', cream = 'cream';
 
     /* ---- a light cupola: drum, four posts, dome, finial ---------------- */
     function cupola(x, y, z, sc, key, dk) {

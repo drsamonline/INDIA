@@ -1,25 +1,36 @@
 /* Konark Sun Temple — Odisha · procedural miniature
-   The chariot of Surya: a high plinth with 24 carved wheels, seven horses,
-   the surviving jagamohana under its stepped roof, and the broken deul.
-   CC BY-NC 4.0 */
+   The chariot of Surya: a high plinth with 24 carved wheels, seven rearing
+   horses, the surviving jagamohana under its stepped roof, and the broken deul.
+   CC BY-NC 4.0
+
+   Built to measured dimensions (1 unit = 1 metre):
+     chariot plinth            36 x 70 m, 4.1 m high (13 ft 6 in)
+     jagamohana                30 m square (ASI)
+     jagamohana height         34.3 m above the platform to the amala,
+                               38.4 m above ground (112 ft 5 in, Swarup 1910)
+     wheels                    24, 2.97 m diameter, 8 spokes, 12 a flank
+     horses                    seven, four to one hand and three to the other
+     deul                      ruined; originally over 61 m
+*/
 
 export default {
   id: 'konark-sun-temple',
   accent: '#b8865a',
   accent2: '#dcae82',
   seed: 1250,
-  time: 10.6,
-  bounds: 105,
+  floodScale: 0.35,
+  time: 15.6,
+  bounds: 115,
   minDist: 20,
-  maxDist: 380,
-  home: { pos: [90, 29, 100], target: [0, 13, 18], fov: 40 },
+  maxDist: 400,
+  home: { pos: [88, 30, 110], target: [0, 17, 6], fov: 40 },
   ground: { texture: 'grass', size: 1700, color: 0x93a06e },
   views: [
-    { name: 'Full', pos: [90, 29, 100], target: [0, 13, 18] },
-    { name: 'Wheels', pos: [40, 5.5, 24], target: [26, 2.2, 4] },
-    { name: 'Roof', pos: [36, 32, 46], target: [0, 22, 8] },
-    { name: 'Horses', pos: [31, 11, 84], target: [-2, 4, 52] },
-    { name: 'Deul', pos: [-50, 22, -54], target: [-2, 13, -20] }
+    { name: 'Full', pos: [88, 30, 110], target: [0, 17, 6] },
+    { name: 'Wheels', pos: [40, 5.5, 30], target: [20, 2.6, 6] },
+    { name: 'Roof', pos: [40, 36, 54], target: [0, 27, 8] },
+    { name: 'Horses', pos: [30, 11, 86], target: [-2, 4, 44] },
+    { name: 'Deul', pos: [-46, 24, -62], target: [-2, 14, -22] }
   ],
   tour: [
     {
@@ -64,195 +75,234 @@ export default {
     const PI = Math.PI;
     const arch = ctx.arch, archFrame = ctx.archFrame;
 
-    /* ---------- plinth dimensions ---------- */
-    const PX = 26;            // half width of the chariot platform
-    const PZ = 39;            // half depth
-    const TOP = 4.2;          // plinth top
+    /* ---------- measured plan ------------------------------------------ */
+    const PX = 18;             // half of 36 m
+    const PZ = 35;             // half of 70 m
+    const TOP = 4.1;           // plinth, 13 ft 6 in
+    const JW = 30;             // jagamohana, 30 m square
+    const JZ = 9;              // its centre along the axis
+    const PITH = 5.3;          // top of the pitha mouldings
+    const BADA = 18.8;         // top of the bada
+    const AMALA = 38.35;       // top of the crown stone, 34.3 m over the platform
+    const KAL = 40.4;          // tip of the kalasha
 
-    /* ---------- compound ground ---------- */
-    add('paving', plane(116, 152), 0, 0.04, 4, { rx: -PI / 2 });
-    add('sand', plane(240, 96), -156, 0.07, 26, { rx: -PI / 2 });
-    add('sand', plane(150, 80), 96, 0.07, 104, { rx: -PI / 2 });
-    add('foliage', plane(320, 240), 0, 0.05, -180, { rx: -PI / 2 });
-    add('foliage', plane(170, 170), -140, 0.05, -50, { rx: -PI / 2 });
+    /* ---------- compound ground ---------------------------------------- */
+    add('paving', plane(120, 160), 0, 0.04, 8, { rx: -PI / 2 });
+    add('sand', plane(260, 110), -170, 0.07, 30, { rx: -PI / 2 });
+    add('sand', plane(170, 90), 110, 0.07, 110, { rx: -PI / 2 });
+    add('foliage', plane(340, 260), 0, 0.05, -190, { rx: -PI / 2 });
+    add('foliage', plane(180, 180), -150, 0.05, -60, { rx: -PI / 2 });
 
-    /* ---------- the chariot platform ---------- */
-    block('grey', 53.4, 0.9, 79.4, 0, 0, 0);              // socle
-    block('granite', 52.0, 2.4, 78.0, 0, 0.9, 0);         // wall carrying the wheels
-    block('grey', 52.6, 0.5, 78.6, 0, 1.5, 0);            // carved band
-    block('granite', 52.4, 0.8, 78.4, 0, 2.8, 0);
-    block('stone', 53.6, 0.6, 79.6, 0, 3.6, 0);            // projecting cornice
-    add('stone', plane(51.2, 77.2), 0, TOP + 0.02, 0, { rx: -PI / 2 });
-    block('granite', 52.4, 0.24, 78.4, 0, TOP, 0);
+    /* ---------- the chariot platform ----------------------------------- */
+    block('grey', PX * 2 + 1.4, 0.9, PZ * 2 + 1.4, 0, 0, 0);            // socle
+    block('granite', PX * 2, 2.3, PZ * 2, 0, 0.9, 0);                   // wall with the wheels
+    block('grey', PX * 2 + 0.5, 0.45, PZ * 2 + 0.5, 0, 1.5, 0);         // carved band
+    block('granite', PX * 2 + 0.3, 0.8, PZ * 2 + 0.3, 0, 2.8, 0);
+    block('stone', PX * 2 + 1.2, 0.5, PZ * 2 + 1.2, 0, 3.6, 0);         // projecting cornice
+    add('stone', plane(PX * 2 - 1.0, PZ * 2 - 1.0), 0, TOP + 0.02, 0, { rx: -PI / 2 });
+    block('granite', PX * 2 + 0.4, 0.2, PZ * 2 + 0.4, 0, TOP, 0);
 
-    /* ---------- 24 wheels, twelve to a flank ---------- */
+    /* ---------- 24 wheels, twelve to a flank --------------------------- */
+    const WR = 1.485;                 // 2.97 m diameter
     function wheel(cx, cy, cz, side) {
       const x = cx * side;
-      const R = 1.72;
-      add('cream', torus(R, 0.21, 6, 22), x, cy, cz, { ry: PI / 2 });
-      add('granite', torus(R * 0.80, 0.10, 5, 18), x, cy, cz, { ry: PI / 2 });
-      add('cream', cyl(0.44, 0.44, 0.62, 10), x, cy, cz, { rz: PI / 2 });
-      add('grey', cyl(0.23, 0.23, 0.76, 8), x, cy, cz, { rz: PI / 2 });
+      add('sandstoneBuff', torus(WR, 0.17, 6, 24), x, cy, cz, { ry: PI / 2 });
+      add('granite', torus(WR * 0.79, 0.09, 5, 20), x, cy, cz, { ry: PI / 2 });
+      add('sandstoneBuff', cyl(0.40, 0.40, 0.55, 10), x, cy, cz, { rz: PI / 2 });
+      add('grey', cyl(0.20, 0.20, 0.68, 8), x, cy, cz, { rz: PI / 2 });
       for (let i = 0; i < 8; i++) {
-        add('cream', box(0.20, R * 1.52, 0.14), x, cy, cz, { rx: (i * PI) / 8 });
+        add('sandstoneBuff', box(0.17, WR * 1.5, 0.13), x, cy, cz, { rx: (i * PI) / 8 });
       }
+      // beaded rim, sixteen blocks
       for (let i = 0; i < 16; i++) {
         const a = (i / 16) * PI * 2;
-        add('grey', box(0.32, 0.30, 0.44),
-          x, cy + Math.cos(a) * R, cz + Math.sin(a) * R, { rx: a });
+        add('grey', box(0.26, 0.24, 0.38), x, cy + Math.cos(a) * WR, cz + Math.sin(a) * WR, { rx: a });
       }
     }
     for (let side = -1; side <= 1; side += 2) {
-      for (let i = 0; i < 12; i++) wheel(26.3, 2.05, -33 + i * 6, side);
+      for (let i = 0; i < 12; i++) wheel(PX + 0.18, 2.05, -30.5 + i * 5.55, side);
       // pilasters between the wheels
-      for (let i = 0; i < 13; i++) block('grey', 0.4, 2.6, 0.9, 26.05 * side, 0.7, -36 + i * 6);
+      for (let i = 0; i < 13; i++) block('grey', 0.38, 2.5, 0.85, (PX + 0.1) * side, 0.85, -33.3 + i * 5.55);
     }
     // carved panels on the front and back faces of the plinth
     for (let side = -1; side <= 1; side += 2) {
-      for (let i = 0; i < 9; i++) {
-        add('grey', box(1.5, 1.5, 0.24), -22 + i * 5.5, 2.3, 39.1 * side);
-        add('sandstoneBuff', box(1.9, 0.28, 0.3), -22 + i * 5.5, 3.15, 39.15 * side);
+      for (let i = 0; i < 7; i++) {
+        add('grey', box(1.6, 1.5, 0.22), -14.4 + i * 4.8, 2.3, (PZ - 0.15) * side);
+        add('sandstoneBuff', box(2.0, 0.26, 0.28), -14.4 + i * 4.8, 3.15, (PZ - 0.1) * side);
       }
     }
 
-    /* ---------- processional stair on the east (+Z) ---------- */
-    ctx.stairs(0, 0, 41.0, 19, TOP, 9, 0.95, 'granite');
+    /* ---------- processional stair on the east (+Z) -------------------- */
+    ctx.stairs(0, 0, 38.4, 17, TOP, 9, 0.9, 'granite');
     for (const s of [-1, 1]) {
-      // battered flank walls
-      block('granite', 3.0, 0.55, 10.4, s * 10.6, 0, 42.4, { rx: -0.42 });
-      block('granite', 3.0, TOP, 1.3, s * 10.6, 0, 37.9);
-      block('sandstoneBuff', 3.3, 0.5, 1.6, s * 10.6, TOP, 37.9);
-      for (let i = 0; i < 4; i++) {
-        block('grey', 2.4, 0.55, 0.55, s * 10.6, 1.0 + i * 0.8, 38.6);
-      }
-      // stone post at the foot of the stair
-      block('granite', 1.1, 2.6, 1.1, s * 13.6, 0, 48.0);
-      block('grey', 1.4, 0.3, 1.4, s * 13.6, 2.6, 48.0);
-      add('granite', sph(0.45, 8), s * 13.6, 3.1, 48.0);
+      block('granite', 2.8, 0.5, 9.0, s * 9.6, 0, 38.6, { rx: -0.4 });
+      block('granite', 2.8, TOP, 1.2, s * 9.6, 0, 34.4);
+      block('sandstoneBuff', 3.1, 0.45, 1.5, s * 9.6, TOP, 34.4);
+      for (let i = 0; i < 4; i++) block('grey', 2.2, 0.5, 0.5, s * 9.6, 1.0 + i * 0.75, 35.0);
+      block('granite', 1.0, 2.4, 1.0, s * 12.4, 0, 43.4);
+      block('grey', 1.3, 0.28, 1.3, s * 12.4, 2.4, 43.4);
+      add('granite', sph(0.4, 8), s * 12.4, 2.85, 43.4);
     }
-    add('paving', plane(24, 12), 0, 0.12, 46.5, { rx: -PI / 2 });
+    add('paving', plane(22, 11), 0, 0.12, 42.0, { rx: -PI / 2 });
 
-    /* ---------- jagamohana: the assembly hall ---------- */
-    const JZ = 8, JW = 26;
-    block('sandstoneBuff', 28.6, 0.7, 28.6, 0, TOP, JZ);
-    block('granite', 28.0, 0.6, 28.0, 0, TOP + 0.7, JZ);
-    const BY = TOP + 1.3;                       // 5.5
-    const BH = 9.6;                             // bada height
-    block('granite', JW, BH, JW, 0, BY, JZ);
-    // horizontal mouldings
-    [[0.9, 'grey'], [1.5, 'stone'], [2.4, 'grey'], [7.0, 'stone'],
-      [7.9, 'grey'], [8.9, 'stone']].forEach(([h, k]) => {
-      block(k, JW + 0.55, 0.34, JW + 0.55, 0, BY + h, JZ);
+    /* ---------- jagamohana: pitha and bada ----------------------------- */
+    block('sandstoneBuff', JW + 1.2, 0.7, JW + 1.2, 0, TOP, JZ);
+    block('granite', JW + 0.6, 0.5, JW + 0.6, 0, TOP + 0.7, JZ);
+    block('grey', JW, PITH - TOP - 1.2, JW, 0, TOP + 1.2, JZ);
+
+    block('sandstoneBuff', JW, BADA - PITH, JW, 0, PITH, JZ);
+    // horizontal mouldings, the bands of a Kalinga bada
+    [[1.0, 'grey'], [1.7, 'stone'], [2.6, 'grey'], [11.4, 'stone'],
+      [12.2, 'grey'], [13.0, 'stone']].forEach(([h, k]) => {
+      block(k, JW + 0.6, 0.36, JW + 0.6, 0, PITH + h, JZ);
     });
     // vertical relief panels on all four faces
     for (let f = 0; f < 4; f++) {
       const a = (f * PI) / 2;
       const cs = Math.cos(a), sn = Math.sin(a);
       for (let i = 0; i < 9; i++) {
-        const t = -11 + i * 2.75;
+        const t = -11.5 + i * 2.9;
         const px = t * cs + (JW / 2 + 0.22) * sn, pz = JZ - t * sn + (JW / 2 + 0.22) * cs;
-        if (f === 0 && Math.abs(t) < 3.4) continue;        // doorway
-        add('grey', box(1.6, 5.2, 0.34), px, BY + 4.9, pz, { ry: a });
-        add('stone', box(1.85, 0.45, 0.42), px, BY + 7.6, pz, { ry: a });
-        add('stone', box(1.85, 0.35, 0.42), px, BY + 2.2, pz, { ry: a });
+        if (f === 0 && Math.abs(t) < 3.6) continue;          // doorway
+        add('grey', box(1.7, 7.6, 0.32), px, PITH + 5.6, pz, { ry: a });
+        add('stone', box(1.95, 0.4, 0.4), px, PITH + 9.6, pz, { ry: a });
+        add('stone', box(1.95, 0.32, 0.4), px, PITH + 1.9, pz, { ry: a });
       }
     }
-    // the great doorway
-    add('dark', arch(5.0, 6.6, 0.6), 0, BY, JZ + JW / 2 - 0.1);
-    add('sandstoneBuff', archFrame(6.0, 7.4, 0.45, 0.5), 0, BY, JZ + JW / 2 + 0.05);
-    add('grey', archFrame(7.0, 8.2, 0.32, 0.35), 0, BY, JZ + JW / 2 + 0.02);
+    // the great eastern doorway
+    add('dark', arch(5.2, 7.0, 0.6), 0, PITH, JZ + JW / 2 - 0.1);
+    add('sandstoneBuff', archFrame(6.2, 7.8, 0.45, 0.5), 0, PITH, JZ + JW / 2 + 0.05);
+    add('grey', archFrame(7.2, 8.6, 0.3, 0.35), 0, PITH, JZ + JW / 2 + 0.02);
     for (const s of [-1, 1]) {
-      add('dark', arch(2.3, 3.8, 0.4), s * 8.8, BY + 0.9, JZ + JW / 2 - 0.1);
-      add('sandstoneBuff', archFrame(3.0, 4.4, 0.26, 0.3), s * 8.8, BY + 0.9, JZ + JW / 2 + 0.05);
+      add('dark', arch(2.3, 4.0, 0.4), s * 9.4, PITH + 0.9, JZ + JW / 2 - 0.1);
+      add('sandstoneBuff', archFrame(3.0, 4.6, 0.26, 0.3), s * 9.4, PITH + 0.9, JZ + JW / 2 + 0.05);
     }
 
-    /* ---------- roof: stepped pidha tiers ----------
+    /* ---------- roof: nine pidha tiers in three stages ------------------
        Each tier is a recessed drum closed by a projecting potika cornice, so
        the pyramid reads as a stack of ledges rather than a smooth cone. */
-    let ry = BY + BH;                            // 15.1
-    const tiers = 7;
-    for (let i = 0; i < tiers; i++) {
-      const w = 29.0 - i * 2.95;
-      const h = 1.6;
-      block('granite', w, h - 0.44, w, 0, ry, JZ);                       // drum
-      block('grey', w + 0.16, 0.12, w + 0.16, 0, ry + 0.02, JZ);         // shadow line
-      block('stone', w + 1.05, 0.44, w + 1.05, 0, ry + h - 0.44, JZ);    // potika cornice
-      block('grey', w + 1.12, 0.1, w + 1.12, 0, ry + h - 0.52, JZ);      // under-cut
-      // small carved blocks around each tier face
-      const n = 3 + i;
+    let ry = BADA;
+    const TIERS = 9;
+    const tierH = (AMALA - BADA - 2.0) / TIERS;      // 1.95
+    for (let i = 0; i < TIERS; i++) {
+      const w = 30.6 - i * 2.45;
+      const dh = tierH - 0.5;
+      block('sandstoneBuff', w, dh, w, 0, ry, JZ);                    // drum
+      block('grey', w + 0.14, 0.12, w + 0.14, 0, ry + 0.02, JZ);      // shadow line
+      block('stone', w + 1.15, 0.5, w + 1.15, 0, ry + dh, JZ);        // potika cornice
+      block('grey', w + 1.22, 0.1, w + 1.22, 0, ry + dh - 0.06, JZ);  // under-cut
+      // carved blocks round each tier face
+      const n = 3 + Math.round(i * 0.7);
       for (let k = 0; k < n; k++) {
-        const t2 = -w / 2 + 1.0 + k * ((w - 2.0) / Math.max(1, n - 1));
-        const yy = ry + (h - 0.44) * 0.5;
-        add('grey', box(0.5, (h - 0.44) * 0.5, 0.2), t2, yy, JZ + w / 2 + 0.14);
-        add('grey', box(0.5, (h - 0.44) * 0.5, 0.2), t2, yy, JZ - w / 2 - 0.14);
-        add('grey', box(0.2, (h - 0.44) * 0.5, 0.5), JZ + w / 2 + 0.14, yy, t2);
-        add('grey', box(0.2, (h - 0.44) * 0.5, 0.5), JZ - w / 2 - 0.14, yy, t2);
+        const t2 = -w / 2 + 1.1 + k * ((w - 2.2) / Math.max(1, n - 1));
+        const yy = ry + dh * 0.5;
+        add('grey', box(0.5, dh * 0.55, 0.2), t2, yy, JZ + w / 2 + 0.12);
+        add('grey', box(0.5, dh * 0.55, 0.2), t2, yy, JZ - w / 2 - 0.12);
+        add('grey', box(0.2, dh * 0.55, 0.5), JZ + w / 2 + 0.12, yy, t2);
+        add('grey', box(0.2, dh * 0.55, 0.5), JZ - w / 2 - 0.12, yy, t2);
       }
-      ry += h;
+      ry += tierH;
+      // a recessed terrace with musicians between the stages
+      if (i === 3 || i === 6) {
+        const tw = 30.6 - (i + 1) * 2.45;
+        block('grey', tw - 0.2, 0.55, tw - 0.2, 0, ry - 0.1, JZ);
+        for (let k = 0; k < 8; k++) {
+          const t3 = -tw / 2 + 1.6 + k * ((tw - 3.2) / 7);
+          add('sandstoneBuff', box(0.5, 0.9, 0.5), t3, ry + 0.3, JZ + tw / 2 - 0.5);
+          add('sandstoneBuff', box(0.5, 0.9, 0.5), t3, ry + 0.3, JZ - tw / 2 + 0.5);
+        }
+      }
     }
-    // amalaka, beki and kalasha
-    add('granite', cyl(4.5, 5.2, 0.6, 16), 0, ry + 0.3, JZ);
-    add('sandstoneBuff', cyl(4.25, 4.5, 1.35, 20), 0, ry + 1.3, JZ);
-    for (let i = 0; i < 20; i++) {
-      const a = (i / 20) * PI * 2;
-      add('grey', box(0.42, 1.25, 0.28), Math.cos(a) * 4.4, ry + 1.3, JZ + Math.sin(a) * 4.4, { ry: -a });
+
+    /* ---------- amalaka, beki and kalasha ------------------------------ */
+    add('granite', cyl(5.8, 6.4, 0.5, 24), 0, AMALA - 1.75, JZ);
+    add('sandstoneBuff', cyl(5.0, 5.3, 1.3, 28), 0, AMALA - 0.85, JZ);
+    // the fluted rim of the crown stone
+    for (let i = 0; i < 28; i++) {
+      const a = (i / 28) * PI * 2;
+      add('grey', box(0.44, 1.28, 0.36), Math.cos(a) * 5.1, AMALA - 0.85, JZ + Math.sin(a) * 5.1, { ry: -a });
     }
-    add('sandstoneBuff', cyl(3.0, 3.4, 0.45, 16), 0, ry + 2.2, JZ);
-    add('granite', cyl(2.0, 2.4, 0.7, 14), 0, ry + 2.75, JZ);
+    add('sandstoneBuff', cyl(3.4, 4.4, 0.42, 20), 0, AMALA - 0.1, JZ);   // beki
+    add('granite', cyl(2.2, 2.6, 0.7, 16), 0, AMALA + 0.28, JZ);
     // the kalasha: a pot, a flared mouth and a spike
     add('sandstoneBuff', ctx.lathe([[0.06, 0], [0.55, 0.12], [1.15, 0.55], [1.4, 1.05],
       [1.22, 1.65], [0.78, 2.05], [0.58, 2.3], [0.74, 2.6], [0.46, 2.95], [0.16, 3.35],
-      [0.06, 3.7]], 16), 0, ry + 3.45, JZ);
-    add('gold', cone(0.26, 0.9, 8), 0, ry + 7.4, JZ);
+      [0.06, 3.7]], 16), 0, AMALA + 0.6, JZ);
+    add('gold', cone(0.24, 0.85, 8), 0, KAL + 0.3, JZ);
 
-    /* ---------- the broken deul behind: a rough, collapsed mass ---------- */
-    const DZ = -21;
-    block('grey', 27.2, 1.0, 27.2, 0, TOP, DZ);
-    block('granite', 26.0, 5.6, 26.0, 0, TOP + 1.0, DZ);
-    block('grey', 26.4, 0.35, 26.4, 0, TOP + 4.0, DZ);
-    block('grey', 26.4, 0.35, 26.4, 0, TOP + 5.6, DZ);
+    /* ---------- the broken deul behind: a rough, collapsed mass -------- */
+    const DZ = -22;
+    block('grey', 30.4, 1.0, 30.4, 0, TOP, DZ);
+    block('sandstoneBuff', 30.0, 5.4, 30.0, 0, TOP + 1.0, DZ);
+    block('grey', 30.4, 0.4, 30.4, 0, TOP + 4.2, DZ);
+    block('grey', 30.4, 0.4, 30.4, 0, TOP + 6.4, DZ);
+    block('sandstoneBuff', 29.6, 6.4, 29.6, 0, TOP + 6.8, DZ);
     // offset upper masses, each smaller and shifted, as if fallen in on itself
-    block('granite', 22.0, 4.6, 21.0, -0.8, TOP + 6.6, DZ + 0.6);
-    block('granite', 15.5, 4.0, 14.5, 1.4, TOP + 11.2, DZ - 1.2);
-    block('granite', 9.5, 2.6, 8.5, -1.2, TOP + 15.2, DZ + 1.0);
+    block('sandstoneBuff', 24.0, 4.4, 23.0, -0.8, TOP + 13.2, DZ + 0.6);
+    block('sandstoneBuff', 16.5, 3.8, 15.5, 1.4, TOP + 17.6, DZ - 1.2);
+    block('granite', 10.0, 2.6, 9.0, -1.2, TOP + 21.4, DZ + 1.0);
     // masonry courses, shallow and irregular
-    for (let i = 0; i < 9; i++) {
-      const y = TOP + 1.6 + i * 1.9;
-      const w = y < TOP + 7 ? 26.3 : (y < TOP + 12 ? 22.2 : 15.7);
-      const cz = y < TOP + 7 ? DZ : (y < TOP + 12 ? DZ + 0.6 : DZ - 1.2);
-      block('grey', w, 0.22, w * 0.96, 0, y, cz);
+    for (let i = 0; i < 10; i++) {
+      const y = TOP + 1.8 + i * 2.0;
+      const w = y < TOP + 7 ? 30.2 : (y < TOP + 13 ? 24.2 : 16.7);
+      const cz = y < TOP + 7 ? DZ : (y < TOP + 13 ? DZ + 0.6 : DZ - 1.2);
+      block('grey', w, 0.2, w * 0.96, 0, y, cz);
     }
     // carved reliefs on the lower courses
-    for (let i = 0; i < 6; i++) {
-      const t2 = -10 + i * 4;
-      add('grey', box(1.6, 2.2, 0.3), t2, TOP + 3.2, DZ + 13.1);
-      add('grey', box(1.6, 2.2, 0.3), t2, TOP + 3.2, DZ - 13.1);
+    for (let i = 0; i < 7; i++) {
+      const t2 = -12 + i * 4;
+      add('grey', box(1.7, 2.4, 0.28), t2, TOP + 3.4, DZ + 15.1);
+      add('grey', box(1.7, 2.4, 0.28), t2, TOP + 3.4, DZ - 15.1);
     }
     // jagged broken crown
     const jag = [[-4.6, 3.6, 1.8], [-1.8, 2.2, 2.6], [1.0, 4.6, 1.3], [3.2, 2.8, 2.2],
       [5.0, 1.6, 3.0], [-3.2, 2.4, 2.8], [2.4, 1.4, 3.4], [0.2, 5.4, 1.1]];
+    block('sandstoneBuff', 10.4, 1.6, 9.4, -0.6, TOP + 23.4, DZ + 0.4);
     jag.forEach(([x, h, d], i) => {
-      const zz = DZ + ((i % 2) ? 1.6 : -1.8);
-      block('granite', 3.2 + (i % 3) * 0.8, h, d + 2.0, x, TOP + 17.6, zz);
-      block('grey', 3.4 + (i % 3) * 0.8, 0.18, d + 2.2, x, TOP + 17.6 + h, zz);
+      const zz = DZ + ((i % 2) ? 1.2 : -1.4);
+      block('sandstoneBuff', 3.2 + (i % 3) * 0.8, h, d + 1.4, x, TOP + 24.8, zz);
+      block('grey', 3.4 + (i % 3) * 0.8, 0.18, d + 1.6, x, TOP + 24.8 + h, zz);
     });
-    // a slumped shoulder of masonry on the north-west
-    block('granite', 7.0, 8.0, 9.0, -12.0, TOP + 1.0, DZ - 8.0, { rx: 0.22, rz: -0.18 });
-    block('granite', 6.0, 5.0, 7.0, 12.5, TOP + 1.0, DZ + 6.0, { rz: 0.16 });
+    // slumped shoulders of masonry
+    block('granite', 7.0, 8.0, 9.0, -13.5, TOP + 1.0, DZ - 9.0, { rx: 0.22, rz: -0.18 });
+    block('granite', 6.0, 5.0, 7.0, 13.5, TOP + 1.0, DZ + 6.0, { rz: 0.16 });
     // fallen blocks heaped around its foot
-    for (let i = 0; i < 30; i++) {
-      const a = (i / 30) * PI * 2;
-      const r = 15.0 + (i % 5) * 2.0;
+    for (let i = 0; i < 34; i++) {
+      const a = (i / 34) * PI * 2;
+      const r = 16.5 + (i % 5) * 2.0;
       block(i % 3 ? 'granite' : 'grey', 1.7 + (i % 3) * 0.9, 0.55 + (i % 4) * 0.5, 1.6,
         Math.cos(a) * r, TOP, DZ + Math.sin(a) * r * 0.85, { ry: a });
     }
     // dark recess between the two halls
-    block('dark', 20, 8, 3.4, 0, TOP, -6.4);
+    block('dark', 20, 8, 3.2, 0, TOP, -6.2);
 
-    /* ---------- seven horses ----------
-       Built from tapered cylinders and ellipsoids rather than boxes, so the
-       barrel, the arched neck, the head, four jointed legs and the tail each
-       read in profile even from the far end of the enclosure. */
+    /* ---------- the natamandira: unroofed dance hall to the east ------- */
+    (function nata(cz) {
+      block('grey', 19, 0.8, 16, 0, 0, cz);
+      block('granite', 17.5, 2.8, 14.5, 0, 0.8, cz);
+      block('stone', 18.5, 0.45, 15.5, 0, 3.6, cz);
+      for (let i = -3; i <= 3; i++) {
+        for (const s of [-1, 1]) {
+          block('granite', 1.3, 4.0, 1.3, i * 2.7, 4.05, cz + s * 5.6);
+          block('sandstoneBuff', 1.6, 0.36, 1.6, i * 2.7, 8.05, cz + s * 5.6);
+        }
+      }
+      for (let i = -2; i <= 2; i++) {
+        for (const s of [-1, 1]) {
+          block('granite', 1.3, 4.0, 1.3, s * 6.0, 4.05, cz + i * 2.8);
+          block('sandstoneBuff', 1.6, 0.36, 1.6, s * 6.0, 8.05, cz + i * 2.8);
+        }
+      }
+      // stumps of the fallen roof
+      [[-4.2, -2.4], [3.6, 1.8], [0.4, -3.8]].forEach(([x, z]) => {
+        block('grey', 2.0, 1.2, 1.8, x, 8.4, cz + z, { ry: 0.3 });
+      });
+    })(60);
+
+    /* ---------- seven rearing horses ----------------------------------
+       Four to one hand and three to the other, as the ASI describes them.
+       Built from ellipsoids and tapered cylinders so the barrel, the arched
+       neck, the head, the jointed legs and the tail each read in profile. */
     function horse(x, z, s, ry) {
       const c = Math.cos(ry), n = Math.sin(ry);
       const P = (dx, dz) => [x + (dx * c + dz * n) * s, z + (-dx * n + dz * c) * s];
@@ -262,48 +312,52 @@ export default {
       };
       const ell = (k, dx, dy, dz, a, b, cc, o) => {
         const [px, pz] = P(dx, dz);
-        add(k, sph(1, 14), px, dy * s, pz, Object.assign({ ry, sx: a * s, sy: b * s, sz: cc * s }, o || {}));
+        add(k, sph(1, 12), px, dy * s, pz, Object.assign({ ry, sx: a * s, sy: b * s, sz: cc * s }, o || {}));
       };
-      const BODY = 'sandstoneBuff';
-      // barrel, chest and rump
-      ell(BODY, 0, 2.02, 0, 0.60, 0.66, 1.20);
-      ell(BODY, 0, 1.94, 0.94, 0.56, 0.60, 0.50);
-      ell(BODY, 0, 2.06, -0.92, 0.58, 0.62, 0.56);
-      // neck: a tapered shaft from the withers up and forward, thin at the head
-      put(BODY, cyl(0.23, 0.47, 1.55, 10), 0, 2.88, 1.06, { rx: -0.74 });
-      // mane along the crest
-      put('grey', box(0.12, 1.4, 0.2), 0, 2.98, 0.86, { rx: -0.74 });
-      // cheek, then a head long and narrow, carried forward and down
-      ell(BODY, 0, 3.42, 1.62, 0.23, 0.24, 0.22, { rx: -0.4 });
-      ell(BODY, 0, 3.5, 1.9, 0.165, 0.215, 0.46, { rx: -0.78 });
-      ell(BODY, 0, 3.28, 2.2, 0.135, 0.17, 0.24, { rx: -0.78 });
-      ell('grey', 0, 3.22, 2.32, 0.13, 0.14, 0.10, { rx: -0.78 });   // muzzle
-      // ears
-      put('grey', cone(0.09, 0.32, 6), -0.14, 3.78, 1.6, { rx: -0.45, rz: -0.14 });
-      put('grey', cone(0.09, 0.32, 6), 0.14, 3.78, 1.6, { rx: -0.45, rz: 0.14 });
-      // four jointed legs: upper, lower, hoof
-      const legs = [[-0.38, 0.80, 0], [0.38, 0.80, 0], [-0.38, -0.88, 0.16], [0.38, -0.88, 0.16]];
-      legs.forEach(([lx, lz, tilt]) => {
-        put(BODY, cyl(0.14, 0.22, 0.92, 8), lx, 1.56, lz, { rx: tilt });
-        put(BODY, cyl(0.08, 0.13, 0.92, 8), lx, 0.6, lz - tilt * 0.35);
-        put('grey', box(0.24, 0.16, 0.32), lx, 0.08, lz - tilt * 0.5);
-      });
-      // tail, falling from the dock
-      put('grey', cyl(0.09, 0.19, 0.85, 8), 0, 2.4, -1.34, { rx: 0.5 });
-      put('grey', cyl(0.05, 0.10, 0.8, 8), 0, 1.7, -1.62, { rx: 0.28 });
-      put('grey', cone(0.15, 0.5, 7), 0, 1.22, -1.74, { rx: Math.PI });
-      // a cloth over the back, kept flat so it does not read as a box
-      put('granite', box(0.86, 0.07, 1.7), 0, 2.62, -0.05);
-      // breast band
-      put('grey', box(0.9, 0.12, 0.18), 0, 2.28, 1.14);
+      const B = 'sandstoneBuff', G = 'granite';
+      /* barrel, chest and rump: the body is carried at a slight angle, the
+         horse rearing, so the chest rides higher than the quarters */
+      ell(B, 0, 2.12, 0.05, 0.42, 0.50, 1.00, { rx: -0.20 });
+      ell(B, 0, 2.34, 0.96, 0.40, 0.46, 0.44, { rx: -0.20 });
+      ell(B, 0, 1.90, -0.84, 0.42, 0.48, 0.44);
+      /* neck: a long slim shaft rising steeply from the withers */
+      put(B, cyl(0.15, 0.34, 1.25, 10), 0, 2.98, 1.10, { rx: -0.50 });
+      // mane: a thin ridge along the crest of the neck
+      put(G, box(0.08, 0.09, 1.25), 0, 3.12, 0.94, { rx: -0.50 });
+      /* head: a small wedge carried high, muzzle reaching forward */
+      ell(B, 0, 3.62, 1.52, 0.14, 0.17, 0.34, { rx: -0.80 });
+      ell(B, 0, 3.44, 1.78, 0.12, 0.13, 0.20, { rx: -0.80 });
+      ell(G, 0, 3.36, 1.90, 0.10, 0.10, 0.09, { rx: -0.80 });   // muzzle
+      put(G, cone(0.05, 0.17, 6), -0.09, 3.78, 1.40, { rx: -0.3, rz: -0.18 });
+      put(G, cone(0.05, 0.17, 6), 0.09, 3.78, 1.40, { rx: -0.3, rz: 0.18 });
+      /* hind legs, planted and jointed */
+      for (const lx of [-0.33, 0.33]) {
+        put(B, cyl(0.17, 0.22, 0.95, 8), lx, 1.42, -0.78, { rx: 0.12 });
+        put(B, cyl(0.09, 0.14, 0.98, 8), lx, 0.50, -0.90);
+        put(G, box(0.21, 0.16, 0.30), lx, 0.08, -0.94);
+      }
+      /* fore legs, raised and bent: the rearing attitude */
+      for (const lx of [-0.30, 0.30]) {
+        put(B, cyl(0.12, 0.17, 0.80, 8), lx, 2.02, 1.24, { rx: -1.15 });
+        put(B, cyl(0.07, 0.10, 0.66, 8), lx, 1.68, 1.66, { rx: -0.30 });
+        put(G, box(0.16, 0.13, 0.24), lx, 1.44, 1.82);
+      }
+      /* tail, streaming down from the dock */
+      put(G, cyl(0.09, 0.19, 0.95, 8), 0, 1.55, -1.32, { rx: 0.55 });
+      put(G, cyl(0.05, 0.10, 0.80, 8), 0, 0.78, -1.62, { rx: 0.25 });
+      put(G, cone(0.13, 0.42, 7), 0, 0.34, -1.72, { rx: Math.PI });
+      /* a saddle cloth over the back and a breast band */
+      put('granite', box(0.70, 0.05, 1.30), 0, 2.56, 0.0, { rx: -0.20 });
+      put('grey', box(0.72, 0.09, 0.14), 0, 2.62, 1.14, { rx: -0.20 });
     }
-    for (let i = 0; i < 7; i++) horse(-11.4 + i * 3.8, 52.4, 1.08, (i % 2 ? 0.04 : -0.04));
+    [[1.9, 0], [5.3, 1], [8.7, 0], [12.1, 1], [-2.1, 1], [-5.5, 0], [-8.9, 1]]
+      .forEach(([x, k]) => horse(x, 44.5, 1.12, k ? 0.05 : -0.05));
     // the beam the team is yoked to
-    add('granite', box(27, 0.5, 0.6), 0, 3.0, 48.9);
-    [-9.5, 9.5].forEach((x) => add('granite', box(0.5, 2.6, 0.5), x, 1.4, 48.9));
-    add('paving', plane(34, 15), 0, 0.14, 52.0, { rx: -PI / 2 });
+    add('granite', box(27, 0.5, 0.55), 0, 3.1, 41.2);
+    [-9.5, 9.5].forEach((x) => add('granite', box(0.5, 2.6, 0.5), x, 1.4, 41.2));
+    add('paving', plane(32, 12), 0, 0.14, 45.0, { rx: -PI / 2 });
 
-    /* ---------- subsidiary shrine, ruined, to the south-west ---------- */
+    /* ---------- subsidiary shrine, ruined, to the south-west ----------- */
     (function shrine(cx, cz) {
       block('grey', 13, 0.8, 11, cx, 0, cz);
       block('granite', 11.4, 5.2, 9.4, cx, 0.8, cz);
@@ -314,53 +368,53 @@ export default {
       block('grey', 7.0, 1.3, 5.6, cx, 8.3, cz);
       block('granite', 4.6, 1.1, 3.8, cx, 9.6, cz);
       block('grey', 2.6, 0.8, 2.4, cx + 0.4, 10.7, cz - 0.3);
-    })(-46, 22);
+    })(-52, 20);
 
-    /* ---------- boundary wall ---------- */
+    /* ---------- boundary wall ------------------------------------------ */
     (function wall() {
-      const W = 62, D = 74, H = 1.5;
+      const W = 64, D = 78, H = 1.5;
       for (let i = -6; i <= 6; i++) {
-        const z = i * 10;
+        const z = i * 11;
         for (const s of [-1, 1]) {
-          block('grey', 0.7, H, 9.4, s * W, 0, z);
-          block('sand', 1.3, 0.18, 9.8, s * W, H, z);
+          block('grey', 0.7, H, 10.4, s * W, 0, z);
+          block('sand', 1.3, 0.18, 10.8, s * W, H, z);
         }
       }
       for (let i = -6; i <= 6; i++) {
-        const x = i * 10;
+        const x = i * 10.5;
         if (Math.abs(x) > W) continue;
         for (const s of [-1, 1]) {
-          if (s === 1 && Math.abs(x) < 12) continue;      // gate opening east
-          block('grey', 9.4, H, 0.7, x, 0, s * D);
-          block('sand', 9.8, 0.18, 1.3, x, H, s * D);
+          if (s === 1 && Math.abs(x) < 14) continue;          // gate opening east
+          block('grey', 9.9, H, 0.7, x, 0, s * D);
+          block('sand', 10.3, 0.18, 1.3, x, H, s * D);
         }
       }
       for (const s of [-1, 1]) {
-        block('sandstoneBuff', 1.6, 3.2, 1.6, s * 13, 0, D);
-        add('grey', sph(0.85, 8), s * 13, 3.4, D);
+        block('sandstoneBuff', 1.6, 3.2, 1.6, s * 15, 0, D);
+        add('grey', sph(0.85, 8), s * 15, 3.4, D);
       }
     })();
 
-    /* ---------- palms, trees, lamps, visitors ---------- */
-    const palms = [[-58, 44], [-64, 30], [-56, 14], [-66, -8], [-60, -30], [-52, -52],
-      [58, 42], [66, 26], [60, 8], [68, -14], [56, -40], [72, -46], [-30, -58], [34, -58]];
+    /* ---------- palms, trees, lamps, visitors --------------------------- */
+    const palms = [[-58, 46], [-64, 32], [-56, 16], [-66, -8], [-60, -32], [-52, -54],
+      [58, 44], [66, 28], [60, 10], [68, -14], [56, -42], [72, -48], [-30, -60], [34, -60]];
     palms.forEach(([x, z], i) => ctx.tree(x, z, 1.15 + (i % 3) * 0.18, 'palm'));
-    [[-40, 58], [40, 58], [-72, 62], [46, -22], [-44, -46], [28, 64]]
+    [[-40, 60], [40, 60], [-74, 64], [46, -24], [-44, -48], [28, 66]]
       .forEach(([x, z]) => ctx.tree(x, z, 1.0, 'round'));
 
-    [[-15, 36], [15, 36], [-15, 60], [15, 60], [-32, 48], [32, 48], [-48, 62], [48, 62]]
+    [[-15, 34], [15, 34], [-15, 52], [15, 52], [-34, 48], [34, 48], [-50, 64], [50, 64]]
       .forEach(([x, z]) => ctx.lamp(x, z, 3.6, 'black'));
 
-    const people = [[-6, 45, 'fabricSaffron'], [7, 44, 'fabricWhite'], [-11, 52, 'fabricRed'],
-      [4, 57, 'fabricWhite'], [12, 50, 'fabricRed'], [-17, 56, 'fabricSaffron'],
-      [19, 46, 'fabricWhite'], [-23, 44, 'fabricRed'], [0, 32, 'fabricWhite'],
-      [-34, 38, 'fabricSaffron'], [34, 36, 'fabricWhite'], [25, 58, 'fabricRed'],
-      [-3, 62, 'fabricWhite'], [15, 66, 'fabricSaffron']];
+    const people = [[-6, 40, 'fabricSaffron'], [7, 39, 'fabricWhite'], [-11, 47, 'fabricRed'],
+      [4, 50, 'fabricWhite'], [12, 45, 'fabricRed'], [-17, 50, 'fabricSaffron'],
+      [19, 41, 'fabricWhite'], [-23, 40, 'fabricRed'], [0, 30, 'fabricWhite'],
+      [-34, 38, 'fabricSaffron'], [34, 36, 'fabricWhite'], [25, 52, 'fabricRed'],
+      [-3, 56, 'fabricWhite'], [15, 60, 'fabricSaffron'], [-26, 62, 'fabricWhite']];
     people.forEach(([x, z, k], i) => ctx.person(x, z, i * 0.7, k, 1.0 + (i % 3) * 0.05));
 
-    /* ---------- floodlights ---------- */
-    ctx.light({ pos: [-46, 26, 54], target: [0, 20, 4], color: 0xffcf9a, intensity: 2600, distance: 330 });
-    ctx.light({ pos: [52, 26, 46], target: [0, 20, 4], color: 0xffd9b0, intensity: 2200, distance: 330 });
-    ctx.light({ pos: [0, 14, 88], target: [0, 12, 30], color: 0xffc48a, intensity: 1600, distance: 210 });
+    /* ---------- floodlights -------------------------------------------- */
+    ctx.light({ pos: [-46, 26, 56], target: [0, 22, 4], color: 0xffcf9a, intensity: 1700, distance: 340 });
+    ctx.light({ pos: [52, 26, 48], target: [0, 22, 4], color: 0xffd9b0, intensity: 1400, distance: 340 });
+    ctx.light({ pos: [0, 14, 88], target: [0, 12, 30], color: 0xffc48a, intensity: 900, distance: 210 });
   }
 };
