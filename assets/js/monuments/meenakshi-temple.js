@@ -81,9 +81,8 @@ export default {
     const PI = Math.PI;
 
     /* the painted stucco palette — figures, not stripes */
-    const FIG = ['sandstoneBuff', 'terracotta', 'teal', 'cream', 'pinkPaint',
-      'sandstoneBuff', 'blue', 'yellow', 'terracotta'];
-    const CREAM = 'sandstoneBuff';   // the ochre stucco of the storey walls
+    const FIG = ['sandstoneBuff', 'terracotta', 'stone', 'sandstonePink', 'basaltDark'];
+    const CREAM = (() => { const mm = ctx.mat('sandstoneBuff'); if (!mm || !mm.clone) return 'sandstoneBuff'; const c = mm.clone(); c.color.setHex(0xd8b98e); return c; })();   // the ochre stucco of the storey walls
     const CORN = 'cream';            // the pale moulded cornices between them
 
     /* ---------------------------------------------------------- gopuram
@@ -141,10 +140,10 @@ export default {
           }
         }
         /* moulded base, then the projecting cornice */
-        add('cream', box(w * 1.012, bodyH * 0.08, d * 1.012), cx, y + bodyH * 0.04, cz, { ry });
-        block(CORN, w * 1.026, cornH * 0.58, d * 1.026, cx, y + bodyH, cz, { ry });
-        add('terracotta', box(w * 1.032, cornH * 0.1, d * 1.032), cx, y + bodyH + cornH * 0.58, cz, { ry });
-        add(CORN, box(w * 1.018, cornH * 0.2, d * 1.018), cx, y + bodyH + cornH * 0.68, cz, { ry });
+        add('cream', box(w * 1.03, bodyH * 0.08, d * 1.03), cx, y + bodyH * 0.04, cz, { ry });
+        block(CORN, w * 1.095, cornH * 0.58, d * 1.095, cx, y + bodyH, cz, { ry });
+        add('terracotta', box(w * 1.105, cornH * 0.1, d * 1.105), cx, y + bodyH + cornH * 0.58, cz, { ry });
+        add(CORN, box(w * 1.075, cornH * 0.2, d * 1.075), cx, y + bodyH + cornH * 0.68, cz, { ry });
         /* corner pilasters give the storey a vertical as well as a horizontal rhythm */
         for (const [ux, uz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
           block('cream', 1.4, tierH * 0.98, 1.4, cx + ux * (w / 2 - 0.55), y, cz + uz * (d / 2 - 0.55), { ry });
