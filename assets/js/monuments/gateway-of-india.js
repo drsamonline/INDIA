@@ -32,6 +32,7 @@ export default {
   accent: '#9aa8b4',
   accent2: '#c8d6e0',
   seed: 37,
+  floodScale: 0.26,
   time: 11.4,
   exposure: 0.9,
   fogScale: 0.32,

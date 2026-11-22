@@ -1,23 +1,36 @@
 /* Lotus Temple — New Delhi · procedural miniature
-   Author: Dr Sohil Momin · CC BY-NC 4.0 */
+   Author: Dr Sohil Momin · CC BY-NC 4.0
+
+   Built to measured dimensions, 1 unit = 1 metre.
+   ----------------------------------------------------------------
+   height                34.27 m
+   diameter across the entrance petals   70 m
+   diameter across the lotus pools      130 m
+   central hall diameter  34 m, seating 1,300
+   27 petals in three rings of nine:
+     entrance leaves   7.8 m high, opening outwards
+     outer leaves     22.5 m high, pointing inwards
+     inner leaves     33.6 m high, closing over the hall
+   ---------------------------------------------------------------- */
 
 export default {
   id: 'lotus-temple',
   accent: '#d8d2c4',
   accent2: '#f0e8d8',
   seed: 53,
+  floodScale: 0.3,
   time: 12.2,
-  bounds: 70,
-  minDist: 16,
-  maxDist: 240,
-  home: { pos: [46, 22, 62], target: [0, 13, 0], fov: 40 },
-  ground: { texture: 'grass', size: 2400, color: 0x8d9a63 },
+  bounds: 90,
+  minDist: 20,
+  maxDist: 300,
+  home: { pos: [56, 25, 80], target: [0, 13, 0], fov: 40 },
+  ground: { texture: 'grass', size: 2600, color: 0x8d9a63 },
   views: [
-    { name: 'Full', pos: [46, 22, 62], target: [0, 13, 0] },
-    { name: 'Petals', pos: [20, 26, 34], target: [0, 17, 0] },
-    { name: 'Approach', pos: [0, 10, 70], target: [0, 12, 0] },
-    { name: 'Aerial', pos: [44, 52, 46], target: [0, 6, 0] },
-    { name: 'Pools', pos: [-28, 6, 30], target: [-7, 6, 11] }
+    { name: 'Full', pos: [56, 25, 80], target: [0, 13, 0] },
+    { name: 'Petals', pos: [22, 26, 38], target: [0, 18, 0] },
+    { name: 'Approach', pos: [0, 9, 88], target: [0, 12, 0] },
+    { name: 'Aerial', pos: [56, 62, 58], target: [0, 6, 0] },
+    { name: 'Pools', pos: [-34, 7, 36], target: [-8, 5, 14] }
   ],
   tour: [
     {
@@ -54,7 +67,7 @@ export default {
 
   build(ctx) {
     const T3 = ctx.THREE;
-    const { add, box, cyl, sph, cone, dome, block, col, torus, plane } = ctx;
+    const { add, box, cyl, sph, cone, dome, block, col, torus, plane, arch, archFrame } = ctx;
 
     /* white marble, shaded from both sides so the thin petal shells read as
        solid carved stone from any angle */
@@ -65,23 +78,40 @@ export default {
     MARBLE2.side = T3.DoubleSide;
     MARBLE2.needsUpdate = true;
 
-    const BASE = 1.15;   // top of the plinth, where the petals spring
+    const BASE = 0.7;   // top of the podium, where the petals spring
 
-    /* ---- plinth, pools and paths ---------------------------------------- */
-    col(MARBLE, 22.5, 23.5, 1.1, 0, 0, 0, 48);
-    add('sandstoneRed', torus(22.7, 0.17, 6, 48), 0, 1.14, 0, { rx: Math.PI / 2 });
-    add('sandstoneRed', torus(12.6, 0.14, 5, 40), 0, 1.16, 0, { rx: Math.PI / 2 });
-    // nine radial paths and nine pools
+    /* ---- nonagonal podium, pools and paths ----------------------------- */
+    add('marble', cyl(23.5, 24.6, BASE, 9), 0, 0, 0);
+    add('marbleWarm', cyl(24.7, 24.7, 0.16, 9), 0, BASE - 0.16, 0);
+    add('sandstoneRed', cyl(24.9, 24.9, 0.1, 9), 0, BASE - 0.42, 0);
+    // three steps down all round
+    for (let i = 0; i < 3; i++) {
+      add('marble', cyl(24.9 + i * 1.5, 25.4 + i * 1.5, 0.24, 9), 0, BASE - 0.24 - i * 0.24, 0);
+    }
+
+    // nine radial paths and nine pools (the pools span 130 m across)
     for (let i = 0; i < 9; i++) {
       const a = (i / 9) * Math.PI * 2;
-      add('sandstoneRed', box(3.2, 0.14, 24), Math.cos(a) * 35, 0.08, Math.sin(a) * 35, { ry: -a });
-      add(MARBLE, cyl(4.3, 4.5, 0.5, 20), Math.cos(a + 0.35) * 30, 0.25, Math.sin(a + 0.35) * 30);
-      add('water', cyl(3.8, 3.8, 0.16, 20), Math.cos(a + 0.35) * 30, 0.5, Math.sin(a + 0.35) * 30);
+      add('sandstoneRed', box(4.6, 0.12, 26), Math.cos(a) * 36, 0.07, Math.sin(a) * 36, { ry: -a });
+      const px = Math.cos(a + Math.PI / 9) * 52, pz = Math.sin(a + Math.PI / 9) * 52;
+      const ry2 = -(a + Math.PI / 9) + Math.PI / 2;
+      const PW = 24, PD = 15.5, PT = 1.6;
+      const L = (lx, lz) => [px + lx * Math.cos(ry2) + lz * Math.sin(ry2),
+        pz - lx * Math.sin(ry2) + lz * Math.cos(ry2)];
+      for (const sg of [-1, 1]) {
+        let q = L(0, sg * (PD / 2 - PT / 2));
+        add('marble', box(PW, 0.5, PT), q[0], 0.25, q[1], { ry: ry2 });
+        add('marbleWarm', box(PW + 0.5, 0.12, PT + 0.5), q[0], 0.5, q[1], { ry: ry2 });
+        q = L(sg * (PW / 2 - PT / 2), 0);
+        add('marble', box(PT, 0.5, PD - 2 * PT), q[0], 0.25, q[1], { ry: ry2 });
+        add('marbleWarm', box(PT + 0.5, 0.12, PD - 2 * PT), q[0], 0.5, q[1], { ry: ry2 });
+      }
+      add('water', box(PW - 2 * PT, 0.1, PD - 2 * PT), px, 0.31, pz, { ry: ry2 });
     }
     // garden beds between the paths
     for (let i = 0; i < 9; i++) {
       const a = (i / 9) * Math.PI * 2 + Math.PI / 9;
-      add('grass', box(11, 0.12, 9), Math.cos(a) * 33, 0.07, Math.sin(a) * 33, { ry: -a });
+      add('grass', box(16, 0.12, 12), Math.cos(a) * 36, 0.06, Math.sin(a) * 36, { ry: -a });
     }
 
     /* ---- one petal -------------------------------------------------------
@@ -128,11 +158,14 @@ export default {
       return g;
     }
 
-    /* ---- three rings of nine --------------------------------------------- */
+    /* ---- three rings of nine ---------------------------------------------
+       entrance leaves 7.8 m, opening outwards to a 70 m span;
+       outer leaves 22.5 m, turning back in;
+       inner leaves 33.6 m, closing over the hall. */
     const RINGS = [
-      { H: 24.0, R0: 14.6, Rc: 19.6, Rtip: 12.0, W: 6.4, cup: 0.9, thick: 0.5, rot: 0, mat: MARBLE },
-      { H: 28.4, R0: 10.4, Rc: 14.2, Rtip: 5.4, W: 5.4, cup: 0.8, thick: 0.45, rot: Math.PI / 9, mat: MARBLE2 },
-      { H: 32.4, R0: 6.2, Rc: 8.4, Rtip: 0.9, W: 4.4, cup: 0.7, thick: 0.4, rot: 0, mat: MARBLE }
+      { H: 7.8, R0: 10.4, Rc: 23.0, Rtip: 33.9, W: 6.6, cup: 1.3, thick: 0.42, yPow: 2.25, rot: 0, mat: MARBLE },
+      { H: 22.5, R0: 12.0, Rc: 19.2, Rtip: 13.6, W: 5.7, cup: 0.8, thick: 0.42, yPow: 1.45, rot: Math.PI / 9, mat: MARBLE2 },
+      { H: 33.6, R0: 10.2, Rc: 15.2, Rtip: 3.2, W: 5.5, cup: 0.7, thick: 0.38, yPow: 1.55, rot: 0, mat: MARBLE }
     ];
     RINGS.forEach((r) => {
       for (let i = 0; i < 9; i++) {
@@ -141,40 +174,58 @@ export default {
       }
     });
 
-    /* ---- the base drum, the nine doors and the hall ----------------------- */
-    col(MARBLE, 12.6, 13.6, 1.0, 0, BASE, 0, 40);
-    col(MARBLE, 12.9, 12.9, 3.4, 0, BASE + 1.0, 0, 40);
+    /* ---- the hall: floor, nine doors, the latticed inner dome ------------ */
+    add('marble', cyl(17.4, 18.0, 0.35, 40), 0, BASE, 0);          // floor
+    add('marbleWarm', cyl(17.2, 17.2, 0.14, 40), 0, BASE + 0.35, 0);
+    add('marble', cyl(16.0, 16.5, 6.9, 40), 0, BASE, 0);            // the hall wall
     for (let i = 0; i < 9; i++) {
       const a = (i / 9) * Math.PI * 2 + Math.PI / 9;
-      add('dark', box(2.6, 5.0, 0.6), Math.cos(a) * 12.6, BASE + 3.3, Math.sin(a) * 12.6, { ry: -a + Math.PI / 2 });
-      add(MARBLE, box(3.4, 0.4, 0.9), Math.cos(a) * 12.7, BASE + 5.9, Math.sin(a) * 12.7, { ry: -a + Math.PI / 2 });
-      add(MARBLE, box(0.4, 5.2, 0.9), Math.cos(a + 0.13) * 12.7, BASE + 3.3, Math.sin(a + 0.13) * 12.7, { ry: -a + Math.PI / 2 });
-      add(MARBLE, box(0.4, 5.2, 0.9), Math.cos(a - 0.13) * 12.7, BASE + 3.3, Math.sin(a - 0.13) * 12.7, { ry: -a + Math.PI / 2 });
+      const dx = Math.cos(a) * 16.2, dz = Math.sin(a) * 16.2;
+      add('dark', arch(4.4, 6.4, 0.3), dx, BASE + 0.4, dz, { ry: -a + Math.PI / 2 });
+      add('marbleWarm', archFrame(5.3, 7.0, 0.4, 0.45), dx * 1.03, BASE + 0.4, dz * 1.03, { ry: -a + Math.PI / 2 });
     }
-    add('sandstoneRed', cyl(12.95, 12.95, 0.35, 40), 0, BASE + 4.4, 0);
-    // hall within, seen through the doors
-    add('glass', cyl(9.2, 9.2, 9.0, 32), 0, BASE + 3.0, 0);
-    add(MARBLE, cyl(9.6, 9.2, 0.6, 32), 0, BASE + 7.6, 0);
-    add(MARBLE, cyl(2.4, 3.2, 2.2, 24), 0, BASE + 7.9, 0);
-    // the bud closes: a cap where the inner ring meets at the apex
-    add(MARBLE, dome(1.9, 3.0, 22), 0, BASE + 29.2, 0);
-    add('gold', sph(0.17, 10), 0, BASE + 32.2, 0);
+    // interior: three shallow tiers of seating, then the latticed dome
+    for (let k = 0; k < 3; k++) {
+      add('marbleWarm', cyl(12.6 - k * 2.1, 12.9 - k * 2.1, 0.5, 36), 0, BASE + 0.5 + k * 0.5, 0);
+    }
+    (function lattice() {
+      const ribs = 36, y0 = BASE + 1.6, h = 22.0;
+      for (let i = 0; i < ribs; i++) {
+        const a = (i / ribs) * Math.PI * 2;
+        const steps = 5;
+        for (let j = 0; j < steps; j++) {
+          const t0 = j / steps, t1 = (j + 1) / steps;
+          const r0 = Math.cos(t0 * Math.PI / 2) * 8.4, yA = y0 + Math.sin(t0 * Math.PI / 2) * h;
+          const r1 = Math.cos(t1 * Math.PI / 2) * 8.4, yB = y0 + Math.sin(t1 * Math.PI / 2) * h;
+          const len = Math.hypot(r1 - r0, yB - yA);
+          add('ivory', box(0.22, len, 0.22),
+            Math.cos(a) * (r0 + r1) / 2, (yA + yB) / 2, Math.sin(a) * (r0 + r1) / 2,
+            { ry: -a, rz: Math.atan2(r1 - r0, yB - yA) });
+        }
+      }
+      add('glass', cyl(1.2, 1.2, 0.2, 16), 0, y0 + h, 0);
+      add('glass', cyl(2.6, 2.6, 0.16, 16), 0, y0 + h * 0.955, 0);
+    })();
+    // the bud closes: the tips of the inner leaves nearly meet at the top
+    add('gold', sph(0.2, 10), 0, BASE + 34.1, 0);
 
-    /* ---- the gardens ------------------------------------------------------- */
-    for (let i = 0; i < 22; i++) {
-      const a = (i / 22) * Math.PI * 2 + 0.15;
-      const r = 46 + (i % 3) * 7;
-      ctx.tree(Math.cos(a) * r, Math.sin(a) * r, 1.05 + (i % 4) * 0.12, i % 5 === 0 ? 'palm' : 'round');
+    /* ---- the gardens ------------------------------------------------------ */
+    for (let i = 0; i < 26; i++) {
+      const a = (i / 26) * Math.PI * 2 + 0.15;
+      const r = 76 + (i % 3) * 9;
+      ctx.tree(Math.cos(a) * r, Math.sin(a) * r, 1.15 + (i % 4) * 0.14, i % 5 === 0 ? 'palm' : 'round');
     }
     for (let i = 0; i < 9; i++) {
       const a = (i / 9) * Math.PI * 2 + 0.35;
-      ctx.lamp(Math.cos(a) * 32, Math.sin(a) * 32, 3.4, 'black');
+      ctx.lamp(Math.cos(a) * 32, Math.sin(a) * 32, 3.6, 'black');
+      ctx.lamp(Math.cos(a + Math.PI / 9) * 68, Math.sin(a + Math.PI / 9) * 68, 3.6, 'black');
     }
-    const people = [[-6, 24], [7, 25], [-14, 18], [14, 19], [0, 27], [-20, 12], [20, 13], [-3, 18],
-      [4, 17], [-11, 26], [12, 27], [17, 22]];
+    const people = [[-8, 26], [9, 27], [-16, 20], [16, 21], [0, 29], [-24, 14], [24, 15], [-4, 20],
+      [5, 19], [-13, 28], [14, 29], [19, 24], [-19, 26], [2, 34], [-2, 36], [11, 33]];
     people.forEach(([x, z], i) => ctx.person(x, z, i * 1.1, ['fabricWhite', 'fabricSaffron', 'fabricRed'][i % 3], 0.95));
 
-    ctx.light({ pos: [-22, 12, 26], target: [0, 14, 0], color: 0xfff0d8, intensity: 2600, distance: 150 });
-    ctx.light({ pos: [22, 12, 24], target: [0, 14, 0], color: 0xffe8c8, intensity: 2200, distance: 150 });
+    ctx.light({ pos: [-30, 6, 34], target: [0, 16, 0], color: 0xfff0d8, intensity: 620, distance: 150 });
+    ctx.light({ pos: [30, 6, 32], target: [0, 16, 0], color: 0xffe8c8, intensity: 520, distance: 150 });
+    ctx.light({ pos: [0, 6, -38], target: [0, 16, 0], color: 0xfff4e2, intensity: 480, distance: 150 });
   }
 };

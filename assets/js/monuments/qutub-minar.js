@@ -13,6 +13,7 @@ export default {
   accent: '#d9a441',
   accent2: '#f0a868',
   seed: 11,
+  floodScale: 0.26,
   bounds: 95,
   minDist: 18,
   maxDist: 340,

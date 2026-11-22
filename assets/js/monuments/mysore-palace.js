@@ -36,6 +36,7 @@ export default {
   accent: '#d4a24c',
   accent2: '#f0c878',
   seed: 43,
+  floodScale: 0.26,
   bounds: 118,
   minDist: 22,
   maxDist: 360,

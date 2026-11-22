@@ -1088,7 +1088,7 @@ export function boot(mon) {
       const light = new THREE.SpotLight(f.color !== undefined ? f.color : 0xffc98a, 0, f.distance || 160, f.angle || 0.7, 0.55, 1.4);
       light.position.set(f.pos[0], f.pos[1], f.pos[2]);
       light.target.position.set(f.target[0], f.target[1], f.target[2]);
-      light.userData.base = f.intensity !== undefined ? f.intensity : 1600;
+      light.userData.base = (f.intensity !== undefined ? f.intensity : 1600) * (mon.floodScale !== undefined ? mon.floodScale : 1);
       light.intensity = 0;
       scene.add(light, light.target);
       return light;

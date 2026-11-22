@@ -1,28 +1,42 @@
 /* Meenakshi Amman Temple — Madurai · procedural miniature
    Dravidian temple city: painted gopurams, Golden Lotus tank, pillared halls.
-   Author: Dr Sohil Momin · CC BY-NC 4.0 */
+   Author: Dr Sohil Momin · CC BY-NC 4.0
+
+   Built to measured dimensions, 1 unit = 1 metre.
+   ----------------------------------------------------------------
+   outer enclosure        254 x 238 m  (847 x 792 ft)
+   fourteen towers: 4 nine-tier, 1 seven-tier, 5 five-tier,
+                    2 three-tier, 2 golden vimanas
+   east rajagopuram       46.7 m high, base 33.9 x 20.0 m
+   south rajagopuram      51.9 m high, base 32.9 x 20.4 m  (the tallest)
+   west  rajagopuram      47.1 m high, base 30.8 x 19.4 m
+   north rajagopuram      46.3 m high, base 34.0 x 20.3 m
+   Potramarai tank        50 x 37 m  (165 x 120 ft)
+   ---------------------------------------------------------------- */
 
 export default {
   id: 'meenakshi-temple',
   accent: '#d4544a',
   accent2: '#f08a6a',
   seed: 41,
-  bounds: 120,
-  minDist: 30,
-  maxDist: 460,
-  home: { pos: [74, 68, 262], target: [6, 20, 0], fov: 38 },
-  ground: { texture: 'paving', size: 1800, color: 0xc0ae8c },
+  floodScale: 0.3,
+  time: 14.6,
+  bounds: 210,
+  minDist: 40,
+  maxDist: 720,
+  home: { pos: [116, 88, 196], target: [0, 26, 84], fov: 36 },
+  ground: { texture: 'paving', size: 2600, color: 0xc0ae8c },
   floods: [
-    { pos: [-96, 40, 104], target: [0, 26, 0], color: 0xffd9ae, intensity: 3200, distance: 420 },
-    { pos: [92, 34, 96], target: [0, 28, 0], color: 0xffe2bc, intensity: 2400, distance: 420 },
-    { pos: [10, 14, 132], target: [0, 30, 40], color: 0xffd2a0, intensity: 1600, distance: 320 }
+    { pos: [-120, 46, 150], target: [0, 26, 90], color: 0xffd9ae, intensity: 3800, distance: 520 },
+    { pos: [110, 40, 140], target: [0, 30, 90], color: 0xffe2bc, intensity: 2800, distance: 520 },
+    { pos: [0, 14, 190], target: [0, 30, 110], color: 0xffd2a0, intensity: 1900, distance: 380 }
   ],
   views: [
-    { name: 'Full', pos: [74, 68, 262], target: [6, 20, 0] },
-    { name: 'Gopuram', pos: [26, 40, 104], target: [0, 34, 72] },
-    { name: 'Tank', pos: [-16, 24, 92], target: [-44, 6, 50] },
-    { name: 'Inner court', pos: [58, 46, 44], target: [0, 14, -6] },
-    { name: 'Crest', pos: [16, 56, 60], target: [0, 48, 72] }
+    { name: 'Full', pos: [116, 88, 196], target: [0, 26, 84] },
+    { name: 'Gopuram', pos: [34, 24, 172], target: [0, 28, 119] },
+    { name: 'Tank', pos: [-40, 26, 112], target: [-2, 2, 74] },
+    { name: 'Inner court', pos: [46, 44, 96], target: [0, 16, 0] },
+    { name: 'Crest', pos: [14, 44, 152], target: [0, 42, 119] }
   ],
   tour: [
     {
@@ -63,228 +77,291 @@ export default {
   ],
 
   build(ctx) {
-    const { add, box, cyl, cone, sph, plane, arch, archFrame, block, col, dome, onion, THREE } = ctx;
+    const { add, box, cyl, cone, sph, plane, arch, archFrame, block, col, THREE } = ctx;
     const PI = Math.PI;
 
-    /* palette used for the painted tiers */
-    const PAL = ['red', 'teal', 'blue', 'pinkPaint', 'terracotta'];
-    const FIG = ['yellow', 'teal', 'red', 'pinkPaint', 'blue'];
+    /* the painted stucco palette — figures, not stripes */
+    const FIG = ['sandstoneBuff', 'terracotta', 'teal', 'cream', 'pinkPaint',
+      'sandstoneBuff', 'blue', 'yellow', 'terracotta'];
+    const CREAM = 'sandstoneBuff';   // the ochre stucco of the storey walls
+    const CORN = 'cream';            // the pale moulded cornices between them
 
-    /* ---------------------------------------------------------- gopuram */
-    function gopuram(cx, cz, baseW, totalH, nTiers, ry, opts = {}) {
+    /* ---------------------------------------------------------- gopuram
+       A gopuram is a granite base pierced by the gateway, then nine (or
+       fewer) storeys, each a sculpted wall carrying a projecting cornice.
+       Every storey is set in from the one below, so the sides lean in by
+       about a third over the full height. A barrel-vaulted crest with gold
+       kalashas closes the top. */
+    function gopuram(cx, cz, W, D, H, nT, ry, o = {}) {
       const cs = Math.cos(ry), sn = Math.sin(ry);
       const P = (lx, lz) => [cx + lx * cs + lz * sn, cz - lx * sn + lz * cs];
-      const baseD = baseW * 0.64;
-      const plinthH = 2.0;
-      const crestH = Math.max(4.5, totalH * 0.12);
-      const tierH = (totalH - plinthH - crestH) / nTiers;
+      const BASEH = o.baseH ?? H * 0.18;
+      const crestH = o.crestH ?? Math.max(3.2, H * 0.088);
+      const tierH = (H - BASEH - crestH) / nT;
+      const taper = o.taper ?? 0.955;
 
-      // stone plinth
-      block('granite', baseW * 1.1, plinthH, baseD * 1.1, cx, 0, cz, { ry });
-      block('plasterWhite', baseW * 1.04, 0.5, baseD * 1.04, cx, plinthH - 0.5, cz, { ry });
-
-      let w = baseW, d = baseD, y = plinthH;
-      for (let i = 0; i < nTiers; i++) {
-        const bodyH = tierH * 0.66;
-        const colKey = (i < 2 || i % 3 !== 1) ? 'yellow' : PAL[(i + (opts.shift || 0)) % PAL.length];
-        block(colKey, w, bodyH, d, cx, y, cz, { ry });
-
-        // rows of stucco figures on all four faces
-        const fh = bodyH * 0.58, fy = y + bodyH * 0.2;
-        const nLong = Math.max(4, Math.round(w / 1.35));
-        const nShort = Math.max(3, Math.round(d / 1.35));
-        const spL = w / nLong, spS = d / nShort;
-        const main1 = FIG[(i * 2) % FIG.length];
-        const main2 = FIG[(i * 2 + 3) % FIG.length];
-        for (let j = 0; j < nLong; j++) {
-          const off = (j - (nLong - 1) / 2) * spL;
-          const k1 = j % 3 === 2 ? main2 : main1;
-          let p = P(off, d / 2);
-          add(k1, box(spL * 0.46, fh, 0.3), p[0], fy + fh / 2, p[1], { ry });
-          p = P(off, -d / 2);
-          add(k1, box(spL * 0.46, fh, 0.3), p[0], fy + fh / 2, p[1], { ry });
-        }
-        for (let j = 0; j < nShort; j++) {
-          const off = (j - (nShort - 1) / 2) * spS;
-          const k1 = j % 3 === 2 ? main2 : main1;
-          let p = P(w / 2, off);
-          add(k1, box(0.3, fh, spS * 0.46), p[0], fy + fh / 2, p[1], { ry });
-          p = P(-w / 2, off);
-          add(k1, box(0.3, fh, spS * 0.46), p[0], fy + fh / 2, p[1], { ry });
-        }
-
-        // moulded cornice between storeys
-        block('yellow', w * 1.05, tierH * 0.34, d * 1.05, cx, y + bodyH, cz, { ry });
-        add('terracotta', box(w * 1.06, tierH * 0.07, d * 1.06), cx, y + bodyH + tierH * 0.05, cz, { ry });
-
-        y += tierH;
-        w *= 0.905; d *= 0.905;
+      /* granite base with the tall gateway passage */
+      block('granite', W, BASEH, D, cx, 0, cz, { ry });
+      block('plasterWhite', W * 1.015, 0.7, D * 1.015, cx, BASEH - 0.7, cz, { ry });
+      block('granite', W * 1.03, 0.5, D * 1.03, cx, 0, cz, { ry });
+      const gw = Math.min(W * 0.3, 9.5);
+      const p0 = P(0, D / 2 + 0.06);
+      add('dark', arch(gw, BASEH * 0.78, 0.4), p0[0], 0.05, p0[1], { ry });
+      add('granite', archFrame(gw + 1.5, BASEH * 0.84, 0.55, 0.5), p0[0], 0.05, p0[1], { ry });
+      for (const s of [-1, 1]) {
+        const q = P(s * (gw / 2 + 1.9), D / 2 + 0.06);
+        add('dark', box(1.5, BASEH * 0.5, 0.4), q[0], BASEH * 0.27, q[1], { ry });
       }
 
-      // gateway opening on the principal face
-      const gw = Math.min(9, baseW * 0.42);
-      const pp = P(0, baseD / 2 + 0.08);
-      add('dark', arch(gw, plinthH + tierH * 1.5, 0.3), pp[0], 0.05, pp[1], { ry });
-      add('granite', archFrame(gw + 1.0, plinthH + tierH * 1.6, 0.42, 0.4), pp[0], 0.05, pp[1], { ry });
+      let w = W, d = D, y = BASEH;
+      for (let i = 0; i < nT; i++) {
+        const bodyH = tierH * 0.78, cornH = tierH * 0.22;
+        /* sculpted wall */
+        block(CREAM, w, bodyH, d, cx, y, cz, { ry });
+        /* dense rows of stucco figures on all four faces */
+        const fh = bodyH * 0.68;
+        const fy = y + bodyH * 0.26 + fh / 2;
+        const nL = Math.max(4, Math.round(w / 1.35));
+        const nS = Math.max(3, Math.round(d / 1.35));
+        const sL = w / nL, sS = d / nS;
+        for (let j = 0; j < nL; j++) {
+          const off = (j - (nL - 1) / 2) * sL;
+          const k = FIG[(j * 3 + i * 2) % FIG.length];
+          for (const side of [1, -1]) {
+            const p = P(off, side * (d / 2 + 0.08));
+            add(k, plane(sL * 0.46, fh), p[0], fy, p[1], { ry: ry + (side > 0 ? 0 : PI) });
+          }
+        }
+        for (let j = 0; j < nS; j++) {
+          const off = (j - (nS - 1) / 2) * sS;
+          const k = FIG[(j * 5 + i * 3 + 1) % FIG.length];
+          for (const side of [1, -1]) {
+            const p = P(side * (w / 2 + 0.08), off);
+            add(k, plane(sS * 0.46, fh), p[0], fy, p[1], { ry: ry + side * PI / 2 });
+          }
+        }
+        /* moulded base, then the projecting cornice */
+        add('cream', box(w * 1.012, bodyH * 0.08, d * 1.012), cx, y + bodyH * 0.04, cz, { ry });
+        block(CORN, w * 1.026, cornH * 0.58, d * 1.026, cx, y + bodyH, cz, { ry });
+        add('terracotta', box(w * 1.032, cornH * 0.1, d * 1.032), cx, y + bodyH + cornH * 0.58, cz, { ry });
+        add(CORN, box(w * 1.018, cornH * 0.2, d * 1.018), cx, y + bodyH + cornH * 0.68, cz, { ry });
+        /* corner pilasters give the storey a vertical as well as a horizontal rhythm */
+        for (const [ux, uz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+          block('cream', 1.4, tierH * 0.98, 1.4, cx + ux * (w / 2 - 0.55), y, cz + uz * (d / 2 - 0.55), { ry });
+        }
+        /* kudu niches along the cornice of the long faces */
+        for (let j = 0; j < nL; j++) {
+          const off = (j - (nL - 1) / 2) * sL;
+          for (const side of [1, -1]) {
+            const p = P(off, side * (d / 2 + 0.1));
+            add('dark', plane(sL * 0.3, cornH * 0.26), p[0], y + bodyH + cornH * 0.28, p[1], { ry: ry + (side > 0 ? 0 : PI) });
+          }
+        }
+        y += tierH;
+        w *= taper; d *= taper;
+      }
 
-      /* ---- barrel-vaulted crest with finials ---- */
-      add('yellow', box(w * 1.14, crestH * 0.22, d * 1.14), cx, y + crestH * 0.11, cz, { ry });
-      const vr = d * 0.62;
-      add('yellow', cyl(vr * 0.72, vr * 0.72, w * 1.06, 16), cx, y + crestH * 0.22 + vr * 0.10, cz, { ry, rz: PI / 2 });
-      add('gold', cyl(vr * 0.34, vr * 0.34, w * 1.10, 12), cx, y + crestH * 0.22 + vr * 0.10, cz, { ry, rz: PI / 2 });
-      add('yellow', box(w * 1.06, crestH * 0.16, d * 0.34), cx, y + crestH * 0.22 + vr * 0.95, cz, { ry });
-      // row of kalasha finials along the ridge
-      const nf = 7;
+      /* ---- barrel-vaulted crest with gold finials ---- */
+      const vr = Math.min(d * 0.30, 3.4);
+      block(CORN, w * 1.05, crestH * 0.16, d * 1.05, cx, y, cz, { ry });
+      add('cream', cyl(vr, vr, w * 1.0, 14), cx, y + crestH * 0.16, cz, { ry, rz: PI / 2 });
+      add('gold', cyl(vr * 0.2, vr * 0.2, w * 1.01, 8), cx, y + crestH * 0.16 + vr * 0.95, cz, { ry, rz: PI / 2 });
+      add('plasterWhite', box(w * 1.02, crestH * 0.1, d * 0.44), cx, y + crestH * 0.16 + vr * 0.58, cz, { ry });
+      /* decorated semicircular ends to the vault */
+      for (const sgn of [-1, 1]) {
+        const q = P(sgn * w * 0.5, 0);
+        add('cream', cyl(vr * 1.06, vr * 1.06, 0.45, 14), q[0], y + crestH * 0.16, q[1], { ry, rz: PI / 2 });
+        add('terracotta', cyl(vr * 0.62, vr * 0.62, 0.6, 12), q[0], y + crestH * 0.16, q[1], { ry, rz: PI / 2 });
+        add('gold', cyl(vr * 0.26, vr * 0.26, 0.7, 10), q[0], y + crestH * 0.16, q[1], { ry, rz: PI / 2 });
+      }
+      const nf = o.finials ?? 7;
       for (let j = 0; j < nf; j++) {
-        const off = (j - (nf - 1) / 2) * (w * 0.92 / (nf - 1));
+        const off = (j - (nf - 1) / 2) * (w * 0.94 / Math.max(1, nf - 1));
         const q = P(off, 0);
         const big = j === (nf - 1) / 2;
-        const s = big ? 1.55 : 1.0;
-        add('gold', cyl(0.16 * s, 0.22 * s, 1.0 * s, 6), q[0], y + crestH * 0.22 + vr * 1.12, q[1], { ry });
-        add('gold', sph(0.34 * s, 8), q[0], y + crestH * 0.22 + vr * 1.12 + 0.62 * s, q[1], { ry });
-        add('goldLeaf', cone(0.2 * s, 0.7 * s, 6), q[0], y + crestH * 0.22 + vr * 1.12 + 1.1 * s, q[1], { ry });
+        const s = big ? 1.5 : 0.95;
+        const yb = y + crestH * 0.16 + vr * 1.0;
+        add('gold', cyl(0.15 * s, 0.22 * s, 1.0 * s, 6), q[0], yb, q[1], { ry });
+        add('gold', sph(0.32 * s, 8), q[0], yb + 0.62 * s, q[1], { ry });
+        add('goldLeaf', cone(0.19 * s, 0.7 * s, 6), q[0], yb + 1.1 * s, q[1], { ry });
       }
     }
 
     /* ------------------------------------------------------------ walls */
     function wallRun(x1, z1, x2, z2, h, key) {
       const len = Math.hypot(x2 - x1, z2 - z1);
-      const n = Math.max(1, Math.round(len / 6));
-      const ang = Math.atan2(z2 - z1, x2 - x1);
-      for (let i = 0; i < n; i++) {
-        const t0 = i / n, t1 = (i + 1) / n;
-        const mx = x1 + (x2 - x1) * (t0 + t1) / 2, mz = z1 + (z2 - z1) * (t0 + t1) / 2;
-        const seg = len / n;
-        block(key, seg + 0.1, h, 1.6, mx, 0, mz, { ry: -ang });
-        block('plasterWhite', seg + 0.1, 0.5, 1.9, mx, h - 0.5, mz, { ry: -ang });
-        if (i % 2 === 0) add('terracotta', box(seg * 0.55, 0.7, 1.7), mx, h + 0.35, mz, { ry: -ang });
-      }
-    }
-
-    /* ================= ground inside the complex ================= */
-    add('paving', plane(146, 146), 0, 0.06, 0, { rx: -PI / 2 });
-
-    /* ================= outer wall (square, ±72) ================= */
-    const OW = 72, WALLH = 9;
-    wallRun(-OW, OW, OW, OW, WALLH, 'plaster');
-    wallRun(OW, OW, OW, -OW, WALLH, 'plaster');
-    wallRun(OW, -OW, -OW, -OW, WALLH, 'plaster');
-    wallRun(-OW, -OW, -OW, OW, WALLH, 'plaster');
-    // corner bastions
-    for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-      block('plaster', 9, WALLH + 2.5, 9, sx * OW, 0, sz * OW);
-      add('terracotta', box(10, 0.8, 10), sx * OW, WALLH + 2.9, sz * OW);
-      add('gold', cyl(0.5, 0.6, 2.4, 8), sx * OW, WALLH + 3.3, sz * OW);
-    }
-
-    /* ================= four great gopurams ================= */
-    gopuram(0, OW, 27, 46, 9, 0, { shift: 0 });            // east (front)
-    gopuram(-OW, 0, 29, 52, 9, PI / 2, { shift: 2 });      // south — the tallest
-    gopuram(OW, 0, 26, 44, 9, PI / 2, { shift: 4 });       // north
-    gopuram(0, -OW, 25, 42, 9, 0, { shift: 1 });           // west
-
-    /* ================= inner enclosure ================= */
-    const IW = 34, IZH = 42, IZF = 30, IH = 7;
-    for (const [x1, z1, x2, z2] of [[-IW, IZF, IW, IZF], [-IW, -IZH, IW, -IZH], [-IW, IZF, -IW, -IZH], [IW, IZF, IW, -IZH]]) {
-      const len = Math.hypot(x2 - x1, z2 - z1), n = Math.max(1, Math.round(len / 6));
+      const n = Math.max(1, Math.round(len / 7));
       const ang = Math.atan2(z2 - z1, x2 - x1);
       for (let i = 0; i < n; i++) {
         const t = (i + 0.5) / n;
-        add('terracotta', box(len / n, 1.1, 1.75), x1 + (x2 - x1) * t, 0.55, z1 + (z2 - z1) * t, { ry: -ang });
+        const mx = x1 + (x2 - x1) * t, mz = z1 + (z2 - z1) * t;
+        const seg = len / n;
+        block(key, seg + 0.1, h, 1.8, mx, 0, mz, { ry: -ang });
+        block('plasterWhite', seg + 0.1, 0.6, 2.1, mx, h - 0.6, mz, { ry: -ang });
+        add('terracotta', box(seg * 0.5, 0.75, 1.9), mx, h + 0.35, mz, { ry: -ang });
       }
     }
-    wallRun(-IW, IZF, IW, IZF, IH, 'plasterWhite');
-    wallRun(-IW, -IZH, IW, -IZH, IH, 'plasterWhite');
-    wallRun(-IW, IZF, -IW, -IZH, IH, 'plasterWhite');
-    wallRun(IW, IZF, IW, -IZH, IH, 'plasterWhite');
 
-    /* four inner gopurams */
-    gopuram(0, IZF, 15, 31, 7, 0, { shift: 3 });
-    gopuram(0, -IZH, 14, 28, 7, 0, { shift: 5 });
-    gopuram(-IW, -4, 15, 33, 7, PI / 2, { shift: 1 });
-    gopuram(IW, -4, 14, 29, 7, PI / 2, { shift: 2 });
+    /* ================= ground and the outer enclosure ================= */
+    add('paving', plane(300, 290), 0, 0.06, 0, { rx: -PI / 2 });
 
-    /* ================= golden lotus tank ================= */
+    const OW = 127, OZ = 119, WALLH = 10;
+    wallRun(-OW, OZ, OW, OZ, WALLH, 'plaster');
+    wallRun(OW, OZ, OW, -OZ, WALLH, 'plaster');
+    wallRun(OW, -OZ, -OW, -OZ, WALLH, 'plaster');
+    wallRun(-OW, -OZ, -OW, OZ, WALLH, 'plaster');
+    for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+      block('plaster', 11, WALLH + 3, 11, sx * OW, 0, sz * OZ);
+      add('terracotta', box(12, 0.9, 12), sx * OW, WALLH + 3.4, sz * OZ);
+      add('gold', cyl(0.5, 0.6, 2.6, 8), sx * OW, WALLH + 3.9, sz * OZ);
+    }
+
+    /* ================= the four nine-tier rajagopurams ================= */
+    gopuram(0, OZ, 33.9, 20.0, 46.7, 9, 0, { finials: 7 });        // east, 153.3 ft
+    gopuram(OW, 0, 32.9, 20.4, 51.9, 9, PI / 2, { finials: 9 });   // south, the tallest
+    gopuram(0, -OZ, 30.8, 19.4, 47.1, 9, 0, { finials: 7 });       // west, 154.6 ft
+    gopuram(-OW, 0, 34.0, 20.3, 46.3, 9, PI / 2, { finials: 7 });  // north, 152 ft
+
+    /* ================= second prakara ================= */
+    const X2 = 88, Z2 = 82, H2 = 8;
+    wallRun(-X2, Z2, X2, Z2, H2, 'plaster');
+    wallRun(X2, Z2, X2, -Z2, H2, 'plaster');
+    wallRun(X2, -Z2, -X2, -Z2, H2, 'plaster');
+    wallRun(-X2, -Z2, -X2, Z2, H2, 'plaster');
+
+    /* five-tier gopurams at the second prakara gates */
+    gopuram(0, Z2, 19.5, 12.5, 30.0, 5, 0, { finials: 5 });
+    gopuram(X2, 0, 19.0, 12.5, 31.5, 5, PI / 2, { finials: 5 });
+    gopuram(0, -Z2, 18.5, 12.0, 29.0, 5, 0, { finials: 5 });
+    gopuram(-X2, 0, 19.0, 12.0, 29.5, 5, PI / 2, { finials: 5 });
+
+    /* ================= third prakara ================= */
+    const X3 = 52, Z3 = 46, H3 = 7;
+    wallRun(-X3, Z3, X3, Z3, H3, 'plasterWhite');
+    wallRun(X3, Z3, X3, -Z3, H3, 'plasterWhite');
+    wallRun(X3, -Z3, -X3, -Z3, H3, 'plasterWhite');
+    wallRun(-X3, -Z3, -X3, Z3, H3, 'plasterWhite');
+
+    /* the seven-tier Chittirai gopuram, and the small three-tier gates */
+    gopuram(0, Z3, 17.0, 11.0, 34.0, 7, 0, { finials: 5 });
+    gopuram(0, -Z3, 14.0, 9.5, 20.5, 3, 0, { finials: 5, taper: 0.93 });
+    gopuram(-X3, 0, 13.5, 9.5, 19.5, 3, PI / 2, { finials: 5, taper: 0.93 });
+    /* the fifth five-tier tower, on the north-east corner of the third prakara */
+    gopuram(X3, -18, 13.0, 9.0, 24.0, 5, PI / 2, { finials: 5 });
+
+    /* ================= the Potramarai tank ================= */
     (function tank() {
-      const TX = -44, TZ = 50, TW = 34, TD = 24, levels = 4, th = 1.15, t = 3.2;
+      const TX = -2, TZ = 72, TW = 50, TD = 37, levels = 5, th = 1.0, t = 2.6;
       for (let k = 0; k < levels; k++) {
         const a = (TW - k * t * 2) / 2, b = (TD - k * t * 2) / 2;
         const y = k * th;
-        block('plaster', 2 * a, th, t, TX, y, TZ + b - t / 2);
-        block('plaster', 2 * a, th, t, TX, y, TZ - b + t / 2);
-        block('plaster', t, th, 2 * b - 2 * t, TX - a + t / 2, y, TZ);
-        block('plaster', t, th, 2 * b - 2 * t, TX + a - t / 2, y, TZ);
-        // painted band along the top step
-        if (k === 0) {
-          block('terracotta', 2 * a + 0.4, 0.35, t + 0.4, TX, th - 0.35, TZ + b - t / 2);
-          block('terracotta', 2 * a + 0.4, 0.35, t + 0.4, TX, th - 0.35, TZ - b + t / 2);
+        const runs = [
+          [2 * a, t, 0, b - t / 2], [2 * a, t, 0, -b + t / 2],
+          [t, 2 * b - 2 * t, -a + t / 2, 0], [t, 2 * b - 2 * t, a - t / 2, 0]
+        ];
+        for (const [bw, bd, ox, oz] of runs) {
+          block('plasterWhite', bw, th, bd, TX + ox, y, TZ + oz);
+          // the red and white banding painted on every riser
+          const horiz = bw > bd;
+          const L = horiz ? bw : bd, W = horiz ? bd : bw;
+          const n = Math.round(L / 2.4);
+          for (let i = 0; i < n; i++) {
+            const off = (i - (n - 1) / 2) * (L / n);
+            const k2 = i % 2 ? 'terracotta' : 'plasterWhite';
+            block(k2, horiz ? L / n : W, th * 0.62, horiz ? W : L / n,
+              TX + ox + (horiz ? off : 0), y, TZ + oz + (horiz ? 0 : off));
+          }
         }
       }
       const wy = levels * th;
-      add('water', plane(TW - levels * t * 2 + 1.5, TD - levels * t * 2 + 1.5), TX, wy - 0.15, TZ, { rx: -PI / 2 });
-      // gold-roofed shrine on the island
-      block('granite', 7.5, 1.2, 7.5, TX, wy - 0.3, TZ);
-      block('plasterWhite', 5.4, 3.4, 5.4, TX, wy + 0.9, TZ);
-      add('gold', cyl(3.4, 3.9, 1.0, 8), TX, wy + 5.0, TZ);
-      add('goldLeaf', dome(3.1, 2.6, 12), TX, wy + 5.6, TZ);
-      add('gold', cyl(0.18, 0.18, 1.6, 6), TX, wy + 8.6, TZ);
-      add('gold', sph(0.5, 8), TX, wy + 9.5, TZ);
-      // four small lamps on the corners of the top step
-      for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-        add('stone', cyl(0.5, 0.6, 1.6, 8), TX + sx * (TW / 2 - 1.2), 1.15, TZ + sz * (TD / 2 - 1.2));
-        add('goldLeaf', sph(0.45, 8), TX + sx * (TW / 2 - 1.2), 2.9, TZ + sz * (TD / 2 - 1.2));
+      add('water', plane(TW - levels * t * 2 + 2.0, TD - levels * t * 2 + 2.0), TX, wy - 0.2, TZ, { rx: -PI / 2 });
+
+      /* pillared corridor round the tank */
+      for (const [len, ry, ox, oz] of [[TW + 9, 0, 0, (TD / 2 + 5)], [TW + 9, 0, 0, -(TD / 2 + 5)],
+        [TD + 10, PI / 2, TW / 2 + 5, 0], [TD + 10, PI / 2, -(TW / 2 + 5), 0]]) {
+        const n = Math.round(len / 4.2);
+        for (let i = 0; i <= n; i++) {
+          const off = (i / n - 0.5) * len;
+          const px = TX + ox + Math.cos(ry) * off, pz = TZ + oz - Math.sin(ry) * off;
+          col('plasterWhite', 0.42, 0.5, 4.2, px, wy, pz, 7);
+          block('terracotta', 1.1, 0.4, 1.1, px, wy + 4.2, pz);
+        }
+        const cx = TX + ox, cz = TZ + oz;
+        block('plaster', len + 1.4, 0.9, 3.4, cx, wy + 4.6, cz, { ry });
+        block('terracotta', len + 1.6, 0.5, 3.8, cx, wy + 5.5, cz, { ry });
       }
+
+      /* octagonal island platform, its shrine and the golden lotus */
+      const IX = TX + 3, IZ = TZ - 2;
+      for (let k = 0; k < 2; k++) {
+        add('plasterWhite', cyl(7.6 - k * 1.1, 8.0 - k * 1.1, 0.85, 8), IX, wy - 0.85 + k * 0.85, IZ);
+        add('terracotta', cyl(7.7 - k * 1.1, 7.7 - k * 1.1, 0.22, 8), IX, wy - 0.85 + k * 0.85 + 0.85, IZ);
+      }
+      block('granite', 5.0, 0.9, 5.0, IX, wy + 0.85, IZ);
+      block('plasterWhite', 3.4, 2.6, 3.4, IX, wy + 1.75, IZ);
+      add('gold', cyl(2.3, 2.7, 0.7, 8), IX, wy + 4.35, IZ);
+      add('goldLeaf', ctx.dome(2.1, 1.9, 12), IX, wy + 5.05, IZ);
+      add('gold', cyl(0.16, 0.16, 1.4, 6), IX, wy + 6.9, IZ);
+      add('gold', sph(0.42, 8), IX, wy + 8.3, IZ);
+      // the tall gold lotus standard
+      const LX = IX + 5.6, LZ = IZ + 1.2;
+      add('gold', cyl(0.42, 0.55, 9.0, 10), LX, wy + 0.2, LZ);
+      add('gold', sph(0.75, 10), LX, wy + 9.4, LZ);
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * PI * 2;
+        add('goldLeaf', box(1.5, 0.16, 0.75), LX + Math.cos(a) * 1.1, wy + 9.9, LZ + Math.sin(a) * 1.1, { ry: -a, rz: 0.3 });
+      }
+      add('goldLeaf', sph(0.55, 8), LX, wy + 10.3, LZ);
     })();
 
-    /* ================= sanctums with gold roofs ================= */
+    /* ================= sanctums with gold vimanas ================= */
     function sanctum(cx, cz, w, d, wallH, roofKey) {
-      block('granite', w + 2, 1.2, d + 2, cx, 0, cz);
-      block('plasterWhite', w, wallH, d, cx, 1.2, cz);
-      // pilaster rhythm
+      block('granite', w + 2.4, 1.3, d + 2.4, cx, 0, cz);
+      block('plasterWhite', w, wallH, d, cx, 1.3, cz);
       for (let i = 0; i < 5; i++) {
         const t = (i / 4 - 0.5) * w * 0.86;
         for (const s of [-1, 1]) {
-          add('plaster', box(1.1, wallH, 0.5), cx + t, 1.2 + wallH / 2, cz + s * (d / 2 + 0.2));
-          add('plaster', box(0.5, wallH, 1.1), cx + s * (w / 2 + 0.2), 1.2 + wallH / 2, cz + t * (d / w));
+          add('plaster', box(1.1, wallH, 0.55), cx + t, 1.3 + wallH / 2, cz + s * (d / 2 + 0.22));
+          add('plaster', box(0.55, wallH, 1.1), cx + s * (w / 2 + 0.22), 1.3 + wallH / 2, cz + t * (d / w));
         }
       }
-      add('dark', arch(w * 0.3, wallH * 0.72, 0.2), cx, 1.3, cz + d / 2 + 0.1);
-      add('granite', archFrame(w * 0.34, wallH * 0.78, 0.3, 0.34), cx, 1.3, cz + d / 2 + 0.15);
-      block('plaster', w + 2.4, 0.9, d + 2.4, cx, 1.2 + wallH, cz);
-      // stepped gold-plated vimana roof
-      let rw = w * 0.88, ry = 1.2 + wallH + 0.9;
-      for (let i = 0; i < 4; i++) {
-        block(roofKey, rw, 1.4, rw * (d / w), cx, ry, cz);
-        add('gold', box(rw * 1.04, 0.22, rw * (d / w) * 1.04), cx, ry + 1.4, cz);
-        ry += 1.62; rw *= 0.76;
+      add('dark', arch(w * 0.3, wallH * 0.72, 0.2), cx, 1.4, cz + d / 2 + 0.1);
+      add('granite', archFrame(w * 0.34, wallH * 0.78, 0.32, 0.36), cx, 1.4, cz + d / 2 + 0.15);
+      block('plaster', w + 2.6, 1.0, d + 2.6, cx, 1.3 + wallH, cz);
+      /* stepped gold-plated vimana, eight-sided */
+      let rw = w * 0.44, ry = 1.3 + wallH + 1.0;
+      for (let i = 0; i < 5; i++) {
+        add(roofKey, cyl(rw * 0.86, rw, 1.3, 8), cx, ry, cz);
+        add('gold', cyl(rw * 0.88, rw * 0.88, 0.2, 8), cx, ry + 1.3, cz);
+        ry += 1.5; rw *= 0.8;
       }
-      add('gold', cyl(rw * 0.55, rw * 0.72, 1.2, 8), cx, ry + 0.6, cz);
-      add('goldLeaf', dome(rw * 0.5, rw * 0.55, 12), cx, ry + 1.2, cz);
-      add('gold', cyl(0.22, 0.22, 2.0, 6), cx, ry + 2.2, cz);
-      add('gold', sph(0.5, 8), cx, ry + 3.4, cz);
-      add('goldLeaf', cone(0.28, 0.9, 6), cx, ry + 4.1, cz);
+      add('gold', cyl(rw * 0.8, rw * 1.0, 1.1, 8), cx, ry, cz);
+      add('goldLeaf', ctx.dome(rw * 0.85, rw * 0.95, 12), cx, ry + 1.1, cz);
+      add('gold', cyl(0.22, 0.22, 2.2, 6), cx, ry + 1.8, cz);
+      add('gold', sph(0.5, 8), cx, ry + 4.1, cz);
+      add('goldLeaf', cone(0.3, 1.0, 6), cx, ry + 4.7, cz);
     }
-    sanctum(-14, 0, 18, 18, 8.5, 'goldLeaf');    // Meenakshi
-    sanctum(12, -14, 17, 17, 8.0, 'gold');       // Sundareswarar
+    sanctum(-14, -6, 19, 19, 9.0, 'goldLeaf');   // Meenakshi
+    sanctum(13, -20, 18, 18, 8.5, 'gold');       // Sundareswarar
 
     /* ================= thousand pillar hall ================= */
     (function hall(cx, cz, w, d) {
-      block('granite', w + 3, 1.4, d + 3, cx, 0, cz);
-      for (let i = 0; i < 7; i++) {
-        for (let j = 0; j < 5; j++) {
-          const x = cx + (i - 3) * (w / 7), z = cz + (j - 2) * (d / 5);
-          col('granite', 0.55, 0.68, 5.2, x, 1.4, z, 8);
-          add('granite', box(1.5, 0.55, 1.5), x, 6.9, z);
+      block('granite', w + 3, 1.5, d + 3, cx, 0, cz);
+      for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 6; j++) {
+          const x = cx + (i - 4) * (w / 9), z = cz + (j - 2.5) * (d / 6);
+          col('granite', 0.5, 0.62, 5.4, x, 1.5, z, 8);
+          add('granite', box(1.4, 0.5, 1.4), x, 7.15, z);
         }
       }
-      block('plasterWhite', w + 3, 1.2, d + 3, cx, 7.2, cz);
-      block('plaster', w + 1, 1.6, d + 1, cx, 8.4, cz);
-      for (let i = 0; i < 6; i++) {
-        add('terracotta', box(2.6, 0.9, 0.5), cx + (i - 2.5) * (w / 6), 10.0, cz + d / 2 + 0.3);
+      block('plasterWhite', w + 3, 1.3, d + 3, cx, 7.4, cz);
+      block('plaster', w + 1, 1.7, d + 1, cx, 8.7, cz);
+      for (let i = 0; i < 7; i++) {
+        add('terracotta', box(2.8, 0.9, 0.5), cx + (i - 3) * (w / 7), 10.4, cz + d / 2 + 0.35);
       }
-      add('gold', cyl(0.4, 0.5, 1.8, 8), cx, 10.0, cz);
-      add('gold', sph(0.6, 8), cx, 11.4, cz);
-    })(16, 16, 30, 18);
+      add('gold', cyl(0.4, 0.5, 1.8, 8), cx, 10.4, cz);
+      add('gold', sph(0.6, 8), cx, 11.8, cz);
+    })(34, 12, 32, 20);
 
     /* ================= smaller shrines in the courts ================= */
     function shrine(cx, cz, w, d, h, key) {
@@ -295,49 +372,55 @@ export default {
       add('gold', sph(0.42, 8), cx, 1.6 + h + 1.5, cz);
       add('dark', arch(w * 0.42, h * 0.68, 0.16), cx, 1.0, cz + d / 2 + 0.06);
     }
-    shrine(-24, -22, 10, 9, 5.5, 'plasterWhite');
-    shrine(24, -30, 9, 9, 5.0, 'plaster');
-    shrine(-24, 14, 8, 8, 4.6, 'plasterWhite');
-    shrine(6, 24, 8, 7, 4.4, 'plaster');
-    shrine(-2, -30, 7, 7, 4.2, 'plasterWhite');
-    shrine(28, 2, 7, 9, 4.8, 'plaster');
+    shrine(-34, -32, 10, 9, 5.5, 'plasterWhite');
+    shrine(34, -34, 9, 9, 5.0, 'plaster');
+    shrine(-36, 18, 8, 8, 4.6, 'plasterWhite');
+    shrine(8, 30, 8, 7, 4.4, 'plaster');
+    shrine(-4, -34, 7, 7, 4.2, 'plasterWhite');
+    shrine(38, 2, 7, 9, 4.8, 'plaster');
+    shrine(-20, 30, 7, 7, 4.2, 'plasterWhite');
 
-    /* ================= streets, people, lamps, trees ================= */
-    // flagstaff in front of the inner east gate
-    add('gold', cyl(0.55, 0.8, 15, 8), 0, 7.5, 36);
-    add('gold', sph(1.0, 10), 0, 15.4, 36);
-    add('fabricSaffron', plane(3.2, 2.0), 1.7, 13.4, 36, { ry: PI / 2 });
+    /* ================= flagstaff, people, lamps, trees ================= */
+    add('gold', cyl(0.6, 0.9, 16, 8), 0, 8, 56);
+    add('gold', sph(1.1, 10), 0, 16.4, 56);
+    add('fabricSaffron', plane(3.4, 2.2), 1.8, 14.2, 56, { ry: PI / 2 });
 
     const people = [
-      [-8, 44, 'fabricRed'], [-6, 47, 'fabricSaffron'], [-11, 51, 'fabricWhite'], [-13, 56, 'fabricRed'],
-      [-5, 58, 'fabricSaffron'], [-16, 44, 'fabricWhite'], [-2, 52, 'fabricRed'], [-9, 62, 'fabricSaffron'],
-      [4, 46, 'fabricWhite'], [7, 52, 'fabricRed'], [10, 58, 'fabricSaffron'], [2, 64, 'fabricWhite'],
-      [-24, 38, 'fabricSaffron'], [-18, 34, 'fabricRed'], [12, 38, 'fabricWhite'], [16, 44, 'fabricRed'],
-      [-30, 56, 'fabricWhite'], [20, 62, 'fabricSaffron'], [-34, 20, 'fabricRed'], [26, 30, 'fabricWhite']
+      [-14, 62, 'fabricRed'], [-10, 66, 'fabricSaffron'], [-18, 70, 'fabricWhite'], [-22, 76, 'fabricRed'],
+      [-8, 80, 'fabricSaffron'], [-26, 62, 'fabricWhite'], [-4, 72, 'fabricRed'], [-16, 86, 'fabricSaffron'],
+      [8, 64, 'fabricWhite'], [13, 72, 'fabricRed'], [18, 80, 'fabricSaffron'], [4, 90, 'fabricWhite'],
+      [-40, 56, 'fabricSaffron'], [-30, 48, 'fabricRed'], [24, 56, 'fabricWhite'], [30, 66, 'fabricRed'],
+      [-46, 84, 'fabricWhite'], [34, 88, 'fabricSaffron'], [-50, 30, 'fabricRed'], [44, 40, 'fabricWhite'],
+      [2, 100, 'fabricRed'], [-2, 104, 'fabricSaffron'], [6, 108, 'fabricWhite'], [-6, 112, 'fabricRed']
     ];
     people.forEach(([x, z, k], i) => ctx.person(x, z, i * 1.3, k, 0.95 + (i % 3) * 0.07));
 
-    [[-6, 40], [6, 40], [-32, 40], [8, 30], [-32, 62], [14, 66], [-8, 66], [24, 40], [-40, 8], [40, 22]]
-      .forEach(([x, z]) => ctx.lamp(x, z, 3.4, 'black'));
+    [[-10, 58], [10, 58], [-38, 54], [12, 44], [-38, 92], [22, 96], [-12, 96], [36, 56],
+      [-58, 16], [58, 30], [0, 46], [0, -46]]
+      .forEach(([x, z]) => ctx.lamp(x, z, 3.6, 'black'));
 
-    [[-52, 60], [-56, 40], [46, 56], [56, 44], [-46, 12], [50, -10], [-58, -40], [44, -52],
-      [-30, 66], [30, 66], [-64, 30], [64, 28], [-84, 78], [84, 80], [-80, -70], [78, -74]]
-      .forEach(([x, z], i) => ctx.tree(x, z, 0.85 + (i % 4) * 0.09, i % 5 === 2 ? 'palm' : 'round'));
+    [[-70, 96], [-84, 74], [66, 96], [86, 74], [-66, 24], [70, 8], [-88, -50], [64, -70],
+      [-44, 100], [44, 100], [-96, 44], [96, 40], [-104, 104], [104, 108], [-100, -92], [98, -96],
+      [-120, 30], [120, 34], [-30, 106], [34, 106]]
+      .forEach(([x, z], i) => ctx.tree(x, z, 0.95 + (i % 4) * 0.1, i % 5 === 2 ? 'palm' : 'round'));
 
     /* low houses of the old city outside the walls */
-    const houses = [[-96, 40, 14, 10], [-96, 62, 12, 9], [-98, 12, 16, 11], [98, 46, 15, 10],
-      [96, 68, 12, 9], [100, 16, 13, 10], [-40, 96, 16, 10], [8, 98, 14, 10], [56, 94, 12, 9],
-      [-96, -18, 13, 10], [-98, -46, 15, 9], [98, -24, 14, 10], [96, -54, 12, 10],
-      [-64, 100, 13, 9], [30, 100, 12, 10], [-14, 100, 11, 9], [80, 96, 12, 9],
-      [-98, 88, 12, 9], [98, 90, 13, 9], [-24, -96, 14, 10], [40, -98, 13, 10]];
+    const houses = [
+      [-150, 60, 16, 11], [-150, 92, 13, 10], [-152, 22, 18, 12], [150, 66, 17, 11],
+      [148, 100, 13, 10], [152, 26, 15, 11], [-60, 148, 18, 11], [12, 150, 16, 11],
+      [82, 146, 14, 10], [-148, -34, 15, 11], [-150, -72, 17, 10], [150, -40, 16, 11],
+      [148, -84, 13, 11], [-96, 152, 15, 10], [46, 152, 14, 11], [-22, 152, 13, 10],
+      [116, 148, 14, 10], [-150, 126, 13, 10], [150, 130, 14, 10], [-34, -150, 16, 11],
+      [56, -152, 15, 11], [-104, -150, 14, 11], [112, -150, 15, 10]
+    ];
     houses.forEach(([x, z, w, d], i) => {
-      block(i % 2 ? 'cream' : 'plaster', w, 7 + (i % 3) * 2, d, x, 0, z);
-      block('terracotta', w + 1, 0.6, d + 1, x, 7 + (i % 3) * 2, z);
-      add('dark', box(1.6, 2.4, 0.2), x, 1.2, z + d / 2 + 0.05);
+      block(i % 2 ? 'cream' : 'plaster', w, 8 + (i % 3) * 2, d, x, 0, z);
+      block('terracotta', w + 1, 0.7, d + 1, x, 8 + (i % 3) * 2, z);
+      add('dark', box(1.7, 2.6, 0.2), x, 1.3, z + d / 2 + 0.05);
     });
 
-    /* the four processional streets */
-    add('paving', plane(26, 200), 0, 0.04, 0, { rx: -PI / 2 });
-    add('paving', plane(200, 26), 0, 0.04, 0, { rx: -PI / 2 });
+    /* the four processional streets running out from the gates */
+    add('paving', plane(28, 300), 0, 0.04, 0, { rx: -PI / 2 });
+    add('paving', plane(300, 28), 0, 0.04, 0, { rx: -PI / 2 });
   }
 };

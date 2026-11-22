@@ -16,6 +16,7 @@ export default {
   accent: '#c8b49a',
   accent2: '#e8d8c0',
   seed: 73,
+  floodScale: 0.26,
   time: 15.4,
   bounds: 60,
   minDist: 14,
