@@ -6,13 +6,25 @@ three.js scene. This script keeps it intact and only:
   * points three.js at the vendored copy instead of a CDN,
   * swaps the CDN fonts for the site's self-hosted faces,
   * adds a link back to the landing page,
-  * adds a history drawer built from data/monuments.json.
+  * adds a history drawer built from data/monuments.json,
+  * adds the same previous/next monument arrows the other 23 pages get from
+    assets/js/monument-engine.js (order taken from data/monuments.json),
+  * adds the shared "licensed CC BY-NC 4.0" line plus a credits link to the
+    history drawer.
+The 3D scene itself is never touched: every change below is a string
+replacement on the source markup, CSS or <head>.
 """
 import json, os, html
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 src = open(os.path.join(ROOT, 'tools', 'source', 'taj-mahal.original.html')).read()
-data = {m['id']: m for m in json.load(open(os.path.join(ROOT, 'data', 'monuments.json')))}['taj-mahal']
+MONUMENTS = json.load(open(os.path.join(ROOT, 'data', 'monuments.json')))
+data = {m['id']: m for m in MONUMENTS}['taj-mahal']
+
+# --- previous / next monument, in the order the rest of the site uses ----
+idx = [m['id'] for m in MONUMENTS].index('taj-mahal')
+prev_mon = MONUMENTS[(idx - 1) % len(MONUMENTS)]   # wraps to the last monument
+next_mon = MONUMENTS[(idx + 1) % len(MONUMENTS)]
 
 def esc(s):
     return html.escape(str(s), quote=True)
@@ -25,6 +37,10 @@ src = src.replace('CC0 1.0 Universal', 'CC BY-NC 4.0')
 src = src.replace('Dr Sohil Momin, CC0.', 'Dr Sohil Momin, CC BY-NC 4.0.')
 src = src.replace('CC0 1.0', 'CC BY-NC 4.0')
 src = src.replace('>CC0<', '>CC BY-NC 4.0<')
+# the source called the licence a public-domain dedication; it is not one
+src = src.replace('public domain dedication', 'attribution, non-commercial use')
+# and its badge class still carried the old CC0 name
+src = src.replace('cc0-badge', 'lic-badge')
 
 src = src.replace('https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js',
                   '../assets/vendor/three/build/three.module.js')
@@ -48,6 +64,11 @@ paras = ''.join('<p>%s</p>' % esc(p) for p in data['history'])
 facts = ''.join('<div class="tj-fact"><dt>%s</dt><dd>%s</dd></div>' % (esc(f['k']), esc(f['v'])) for f in data['facts'])
 links = ''.join('<a href="%s" target="_blank" rel="noopener">%s<svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></a>' % (esc(l['href']), esc(l['label'])) for l in data['links'])
 im = data['image']
+# the shared licence line every other page renders in its history drawer
+licence_line = ('Model and code by <b>Dr Sohil Momin</b>, licensed '
+                '<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>'
+                ' · <a href="../credits.html">Credits &amp; licences</a>.')
+
 credit = ('Photograph: <a href="%s" target="_blank" rel="noopener">%s</a> by %s · %s. '
           'Text adapted from the <a href="%s" target="_blank" rel="noopener">Wikipedia article</a>, '
           'CC BY-SA 4.0. The 3D model is procedural.') % (
@@ -85,14 +106,31 @@ extra_css = """
 .tj-links svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:1.8}
 .tj-credit{font-size:9.5px;line-height:1.7;color:var(--muted);border-top:1px solid rgba(255,255,255,.08);
   margin-top:18px;padding-top:12px}
+.tj-licence{margin:2px 0 0;font-size:9.5px;letter-spacing:.02em;color:#cfc6b2}
+.tj-licence b{color:#e6dfd0;font-weight:600}
+.tj-licence a{color:#ffe9bd;text-decoration:none;border-bottom:1px solid rgba(217,164,65,.35)}
+.tj-licence a:hover{border-color:var(--gold)}
 .tj-credit a{color:#cfc6b2}
 .tj-close{float:right;margin:-6px -8px 0 12px;width:34px;height:34px;border-radius:9px;cursor:pointer;
   border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:var(--text);display:grid;place-items:center}
 .tj-close svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8}
+/* prev / next arrows: same .cluster-btn look, as links rather than buttons */
+a.cluster-btn{text-decoration:none;color:#e9e0cd;box-sizing:border-box}
+/* keep the centred title clear of the wider six-button cluster */
+@media (min-width:721px){
+  /* the cluster is now seven buttons (328px) wide */
+  #info{padding-left:24px;padding-right:352px}
+}
 @media (max-width:720px){
   #taj-home{top:auto;bottom:54px;left:10px;font-size:8px;padding:6px 9px}
   .tj-card{padding:20px 18px}
   .tj-card p{font-size:15px}
+  .tj-card .tj-licence{font-size:9.5px;line-height:1.6}
+  #cluster{gap:6px}
+  .cluster-btn{width:34px;height:34px}
+}
+@media (max-width:720px) and (orientation:landscape){
+  #info{padding-right:300px}
 }
 """
 
@@ -107,6 +145,7 @@ extra_html = """
     __PARAS__
     <dl class="tj-facts">__FACTS__</dl>
     <div class="tj-links">__LINKS__</div>
+    <p class="tj-licence">__LICENCE__</p>
     <p class="tj-credit">__CREDIT__</p>
   </div>
 </div>
@@ -132,7 +171,24 @@ extra_html = """
 """
 extra_html = (extra_html.replace('__KICKER__', esc('%s · %s' % (data['place'], data['era'])))
               .replace('__PARAS__', paras).replace('__FACTS__', facts)
-              .replace('__LINKS__', links).replace('__CREDIT__', credit))
+              .replace('__LINKS__', links).replace('__LICENCE__', licence_line)
+              .replace('__CREDIT__', credit))
+
+# --- previous / next arrows, first in the existing top-right cluster -----
+# same markup, icons and .cluster-btn styling the engine uses on the other
+# 23 pages; the Taj is first in the atlas, so prev wraps to the last monument.
+nav_arrows = (
+    '<a class="cluster-btn nav-btn" href="%s.html" aria-label="Previous monument" '
+    'title="Previous · %s"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>'
+    '<span class="tag">PREV · %s</span></a>\n  '
+    '<a class="cluster-btn nav-btn" href="%s.html" aria-label="Next monument" '
+    'title="Next · %s"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>'
+    '<span class="tag">NEXT · %s</span></a>\n  ') % (
+    esc(prev_mon['id']), esc(prev_mon['name']), esc(prev_mon['name'].upper()),
+    esc(next_mon['id']), esc(next_mon['name']), esc(next_mon['name'].upper()))
+
+src = src.replace('<div id="cluster">\n  <button id="btn-tour"',
+                  '<div id="cluster">\n  ' + nav_arrows + '<button id="btn-tour"', 1)
 
 # an About button in the existing control cluster
 src = src.replace('<button id="btn-cine"', '''<button id="btn-about-taj" class="cluster-btn" aria-label="History and sources" title="History &amp; sources">
@@ -147,10 +203,20 @@ src = src.replace('</body>', extra_html + '\n</body>', 1)
 # title + description for the site
 src = src.replace('<title>three.js webgl — procedural — taj mahal · Dr Sohil Momin</title>',
                   '<title>Taj Mahal — 3D miniature · INDIA</title>')
-src = src.replace('content="three.js webgl — procedural — taj mahal by Dr Sohil Momin, CC0.',
-                  'content="Taj Mahal, Agra — a procedural three.js miniature by Dr Sohil Momin, CC0.')
+# (the licence in this string was already rewritten to CC BY-NC 4.0 above)
+src = src.replace('content="three.js webgl — procedural — taj mahal by Dr Sohil Momin, CC BY-NC 4.0.',
+                  'content="Taj Mahal, Agra — a procedural three.js miniature by Dr Sohil Momin, CC BY-NC 4.0.')
+
+# --- licence guard: the page must not still claim CC0 / public domain -----
+for bad in ('CC0', 'publicdomain/zero', 'public domain'):
+    assert bad not in src, 'licence string survived the rewrite: %r' % bad
+assert 'CC BY-NC 4.0' in src, 'CC BY-NC 4.0 missing from the output'
+for href in ('%s.html' % prev_mon['id'], '%s.html' % next_mon['id'], '../credits.html'):
+    assert 'href="%s"' % href in src, 'missing link: %s' % href
 
 out = os.path.join(ROOT, 'monuments', 'taj-mahal.html')
 os.makedirs(os.path.dirname(out), exist_ok=True)
 open(out, 'w').write(src)
-print('wrote', os.path.relpath(out, ROOT), len(src) // 1024, 'KB')
+print('wrote', os.path.relpath(out, ROOT), len(src) // 1024, 'KB',
+      '· CC BY-NC 4.0 x%d' % src.count('CC BY-NC 4.0'),
+      '· prev=%s next=%s' % (prev_mon['id'], next_mon['id']))

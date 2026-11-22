@@ -10,10 +10,10 @@ export default {
   bounds: 55,
   minDist: 12,
   maxDist: 200,
-  home: { pos: [-38, 21, 58], target: [0, 22, 0], fov: 40 },
-  ground: { texture: 'grass', size: 2400, color: 0x8f9a66 },
+  home: { pos: [-54, 31, 86], target: [0, 27, 0], fov: 40 },
+  ground: { texture: 'grass', size: 2400, color: 0x8f9a66, tile: 16 },
   views: [
-    { name: 'Full', pos: [-38, 21, 58], target: [0, 22, 0] },
+    { name: 'Full', pos: [-54, 31, 86], target: [0, 27, 0] },
     { name: 'Tower', pos: [-8, 22, 22], target: [0, 26, 0] },
     { name: 'From the east', pos: [26, 12, 30], target: [0, 18, 0] },
     { name: 'Bodhi tree', pos: [-14, 8, 6], target: [-12, 10, -8] },
@@ -23,7 +23,7 @@ export default {
     {
       title: 'Where the Buddha Woke', deva: 'महाबोधि मंदिर',
       text: 'The Mahabodhi Temple stands at Bodh Gaya, beside the tree under which the Buddha is said to have attained enlightenment. Ashoka built a shrine here in the 3rd century BCE; the present temple is usually dated to the 5th or 6th century CE.',
-      pos: [-38, 21, 58], target: [0, 22, 0], time: 16.8
+      pos: [-54, 31, 86], target: [0, 27, 0], time: 16.8
     },
     {
       title: 'Brick and Plaster', deva: 'ईंट',
@@ -82,30 +82,41 @@ export default {
     // the great entrance arch on the east face
     add('dark', arch(5.0, 8.0, 0.4), bx, 1.6, bz + 9.1);
     add('plaster', archFrame(5.8, 8.7, 0.42, 0.5), bx, 1.6, bz + 9.2);
-    // the tower: straight-sided and tapering, in bands
+    // the tower: a smooth-sided tapering brick spire, banded, not stepped
     let y = 5.9, w = 15.0;
-    for (let i = 0; i < 12; i++) {
-      const h = 3.3;
+    const TIERS = 22;
+    for (let i = 0; i < TIERS; i++) {
+      const t = i / (TIERS - 1);
+      const h = 1.95;
+      // the profile curves inward: width follows (1 - t)^0.62
+      const wNext = 15.0 * Math.pow(1 - (i + 1) / TIERS, 0.62) * 0.92 + 2.2;
       block('plaster', w, h, w, bx, y, bz);
-      add('sandstoneBuff', box(w + 0.16, 0.3, w + 0.16), bx, y + h, bz);
-      // niches on each face
-      const n = Math.max(2, Math.round(w / 2.6));
-      for (let k = 0; k < n; k++) {
-        const off = (k - (n - 1) / 2) * (w / n);
-        add('dark', box(0.7, 1.5, 0.18), bx + off, y + 1.5, bz + w / 2 + 0.02);
-        add('dark', box(0.7, 1.5, 0.18), bx + off, y + 1.5, bz - w / 2 - 0.02);
-        add('dark', box(0.18, 1.5, 0.7), bx + w / 2 + 0.02, y + 1.5, bz + off);
-        add('dark', box(0.18, 1.5, 0.7), bx - w / 2 - 0.02, y + 1.5, bz + off);
+      // a thin moulding at each band, in the darker brick tone
+      add('sandstoneBuff', box(w + 0.10, 0.11, w + 0.10), bx, y + h, bz);
+      // small niches, in staggered rows — not a window grid
+      const rows = 2;
+      for (let r = 0; r < rows; r++) {
+        const n = Math.max(3, Math.round(w / 2.2));
+        for (let k = 0; k < n; k++) {
+          const off = (k - (n - 1) / 2) * (w / n) + (r % 2 ? w / n / 2 : 0);
+          const ny = y + 0.55 + r * 1.45;
+          if (Math.abs(off) > w / 2 - 0.35) continue;
+          add('dark', box(0.34, 0.9, 0.14), bx + off, ny, bz + w / 2 + 0.02);
+          add('dark', box(0.34, 0.9, 0.14), bx + off, ny, bz - w / 2 - 0.02);
+          add('dark', box(0.14, 0.9, 0.34), bx + w / 2 + 0.02, ny, bz + off);
+          add('dark', box(0.14, 0.9, 0.34), bx - w / 2 - 0.02, ny, bz + off);
+        }
       }
-      y += h + 0.3;
-      w *= 0.955;
+      y += h + 0.11;
+      w = wNext;
     }
-    // the rounded crown and finial
-    add('sandstoneBuff', cyl(w * 0.62, w * 0.78, 1.2, 12), bx, y + 0.6, bz);
-    add('plasterWhite', dome(w * 0.6, w * 0.72, 18), bx, y + 1.2, bz);
-    add('sandstoneBuff', cyl(0.5, 0.7, 1.6, 8), bx, y + 1.2 + w * 0.72, bz);
-    add('gold', sph(0.42, 10), bx, y + 3.0 + w * 0.72, bz);
-    add('gold', cone(0.24, 1.2, 6), bx, y + 3.8 + w * 0.72, bz);
+    // the rounded crown: an amalaka-like drum and a small dome
+    add('sandstoneBuff', cyl(w * 0.78, w * 0.92, 0.8, 16), bx, y + 0.4, bz);
+    add('plaster', cyl(w * 0.62, w * 0.76, 1.6, 16), bx, y + 1.6, bz);
+    add('plasterWhite', dome(w * 0.62, w * 0.9, 18), bx, y + 2.4, bz);
+    add('sandstoneBuff', cyl(0.42, 0.6, 1.2, 8), bx, y + 3.4 + w * 0.5, bz);
+    add('gold', sph(0.36, 10), bx, y + 4.3 + w * 0.5, bz);
+    add('gold', cone(0.22, 1.0, 6), bx, y + 4.9 + w * 0.5, bz);
 
     /* ---- the Bodhi tree and its platform ------------------------------------ */
     (function bodhi(tx, tz) {

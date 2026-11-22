@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#e8c39a">
-<meta name="description" content="three.js webgl — procedural — taj mahal by Dr Sohil Momin, CC BY-NC 4.0. A hand-crafted miniature with living riverfront, dynamic weather, tilt-shift lens and a narrated guided tour. Built entirely in code.">
+<meta name="description" content="Taj Mahal, Agra — a procedural three.js miniature by Dr Sohil Momin, CC BY-NC 4.0. A hand-crafted miniature with living riverfront, dynamic weather, tilt-shift lens and a narrated guided tour. Built entirely in code.">
 <title>Taj Mahal — 3D miniature · INDIA</title>
 <link rel="stylesheet" href="../assets/css/fonts.css">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
@@ -50,9 +50,9 @@ body.is-ready #info{opacity:1;transform:none}
 #info a{color:var(--gold-2);text-decoration:none;pointer-events:auto}
 #info a:hover{color:#ffe9a8;text-decoration:underline}
 #author-name{color:var(--gold-2);font-weight:700;padding:0 2px}
-.cc0-badge{display:inline-block;border:1px solid rgba(255,215,94,.55);border-radius:5px;padding:0 5px;
+.lic-badge{display:inline-block;border:1px solid rgba(255,215,94,.55);border-radius:5px;padding:0 5px;
   font-size:10px;letter-spacing:.08em;color:var(--gold-2);pointer-events:auto;text-decoration:none}
-.cc0-badge:hover{background:rgba(255,215,94,.15)}
+.lic-badge:hover{background:rgba(255,215,94,.15)}
 .glass{background:linear-gradient(160deg,rgba(23,24,33,.9),rgba(14,15,23,.88));
   -webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);
   border:1px solid var(--line);box-shadow:0 10px 34px rgba(15,8,4,.45)}
@@ -298,14 +298,31 @@ body.cinematic #cine-exit{display:block}
 .tj-links svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:1.8}
 .tj-credit{font-size:9.5px;line-height:1.7;color:var(--muted);border-top:1px solid rgba(255,255,255,.08);
   margin-top:18px;padding-top:12px}
+.tj-licence{margin:2px 0 0;font-size:9.5px;letter-spacing:.02em;color:#cfc6b2}
+.tj-licence b{color:#e6dfd0;font-weight:600}
+.tj-licence a{color:#ffe9bd;text-decoration:none;border-bottom:1px solid rgba(217,164,65,.35)}
+.tj-licence a:hover{border-color:var(--gold)}
 .tj-credit a{color:#cfc6b2}
 .tj-close{float:right;margin:-6px -8px 0 12px;width:34px;height:34px;border-radius:9px;cursor:pointer;
   border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:var(--text);display:grid;place-items:center}
 .tj-close svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8}
+/* prev / next arrows: same .cluster-btn look, as links rather than buttons */
+a.cluster-btn{text-decoration:none;color:#e9e0cd;box-sizing:border-box}
+/* keep the centred title clear of the wider six-button cluster */
+@media (min-width:721px){
+  /* the cluster is now seven buttons (328px) wide */
+  #info{padding-left:24px;padding-right:352px}
+}
 @media (max-width:720px){
   #taj-home{top:auto;bottom:54px;left:10px;font-size:8px;padding:6px 9px}
   .tj-card{padding:20px 18px}
   .tj-card p{font-size:15px}
+  .tj-card .tj-licence{font-size:9.5px;line-height:1.6}
+  #cluster{gap:6px}
+  .cluster-btn{width:34px;height:34px}
+}
+@media (max-width:720px) and (orientation:landscape){
+  #info{padding-right:300px}
 }
 
 </style>
@@ -318,11 +335,13 @@ body.cinematic #cine-exit{display:block}
 <header id="info">
   <h1><a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> webgl — procedural — taj mahal</h1>
   <p>Model: Taj Mahal · built entirely in code by <span id="author-name">Dr Sohil Momin</span>
-  · <a class="cc0-badge" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener" title="CC BY-NC 4.0 — public domain dedication">CC BY-NC 4.0</a>
+  · <a class="lic-badge" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener" title="CC BY-NC 4.0 — attribution, non-commercial use">CC BY-NC 4.0</a>
   · Agra, India · 1632–1653</p>
 </header>
 
 <div id="cluster">
+  <a class="cluster-btn nav-btn" href="somnath-temple.html" aria-label="Previous monument" title="Previous · Somnath Temple"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg><span class="tag">PREV · SOMNATH TEMPLE</span></a>
+  <a class="cluster-btn nav-btn" href="qutub-minar.html" aria-label="Next monument" title="Next · Qutb Minar"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg><span class="tag">NEXT · QUTB MINAR</span></a>
   <button id="btn-tour" class="cluster-btn" aria-label="Start guided tour" aria-pressed="false" title="Guided tour with narration (T)">
     <svg viewBox="0 0 24 24"><circle cx="5" cy="18" r="2"/><circle cx="19" cy="6" r="2"/><path d="M7 18h6a4 4 0 0 0 0-8H9a3 3 0 0 1 0-6h8"/></svg>
     <span class="tag">GUIDED TOUR · T</span>
@@ -549,7 +568,7 @@ body.cinematic #cine-exit{display:block}
       </button>
     </div>
     <p class="foot-note">Zero model files · every stone &amp; visitor placed in code<br>
-    © <b id="author-foot">Dr Sohil Momin</b> · <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a> — public domain dedication</p>
+    © <b id="author-foot">Dr Sohil Momin</b> · <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a> — attribution, non-commercial use</p>
   </div>
 </aside>
 
@@ -2905,6 +2924,7 @@ try {
     <p>Shah Jahan commissioned the Taj Mahal in 1631, the year his wife Mumtaz Mahal died in childbirth at Burhanpur. The tomb stands on the right bank of the Yamuna at Agra, at the centre of a 17-hectare complex with a mosque, a guest house and a formal four-part garden bounded by a crenellated wall.</p><p>Construction of the mausoleum was finished in 1648 and the rest of the complex about five years later. The building is clad in translucent white marble from Makrana in Rajasthan, inlaid with lapis lazuli, carnelian, jade and jasper in floral pietra dura, and framed by black marble calligraphy scaled so that it reads evenly from the ground.</p><p>The dome rises about 35 metres above its drum, crowned by a gilded finial, with four chhatris and four minarets leaning slightly outward. Around the complex the marble shifts colour through the day — pink at dawn, white at noon, gold at dusk and silver under the moon. It became a UNESCO World Heritage Site in 1983.</p>
     <dl class="tj-facts"><div class="tj-fact"><dt>Commissioned by</dt><dd>Shah Jahan, 1631</dd></div><div class="tj-fact"><dt>In memory of</dt><dd>Mumtaz Mahal</dd></div><div class="tj-fact"><dt>Completed</dt><dd>1648 (complex by 1653)</dd></div><div class="tj-fact"><dt>Material</dt><dd>Makrana marble, pietra dura inlay</dd></div><div class="tj-fact"><dt>Complex</dt><dd>17 hectares, charbagh garden</dd></div><div class="tj-fact"><dt>UNESCO</dt><dd>1983 · ref. 252</dd></div></dl>
     <div class="tj-links"><a href="https://en.wikipedia.org/wiki/Taj_Mahal" target="_blank" rel="noopener">Wikipedia<svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></a><a href="https://whc.unesco.org/en/list/252/" target="_blank" rel="noopener">UNESCO listing<svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></a><a href="https://asi.nic.in/" target="_blank" rel="noopener">ASI monument<svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg></a></div>
+    <p class="tj-licence">Model and code by <b>Dr Sohil Momin</b>, licensed <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a> · <a href="../credits.html">Credits &amp; licences</a>.</p>
     <p class="tj-credit">Photograph: <a href="https://commons.wikimedia.org/wiki/File:Taj_Mahal_(Edited).jpeg" target="_blank" rel="noopener">Taj_Mahal_(Edited).jpeg</a> by Yann; edited by Jim Carter · CC BY-SA 4.0. Text adapted from the <a href="https://en.wikipedia.org/wiki/Taj_Mahal" target="_blank" rel="noopener">Wikipedia article</a>, CC BY-SA 4.0. The 3D model is procedural.</p>
   </div>
 </div>

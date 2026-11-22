@@ -2,7 +2,7 @@ import asyncio, sys, json, os
 from playwright.async_api import async_playwright
 
 CHROME = os.environ.get('CHROME_PATH', '/usr/local/bin/chromium')
-async def shot(url, out, w=1440, h=900, wait=90000, scroll=None):
+async def shot(url, out, w=1440, h=900, wait=240000, scroll=None):
     errors=[]
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path=CHROME, args=[
