@@ -65,6 +65,8 @@ export default {
     MARBLE2.side = T3.DoubleSide;
     MARBLE2.needsUpdate = true;
 
+    const BASE = 1.15;   // top of the plinth, where the petals spring
+
     /* ---- plinth, pools and paths ---------------------------------------- */
     col(MARBLE, 22.5, 23.5, 1.1, 0, 0, 0, 48);
     add('sandstoneRed', torus(22.7, 0.17, 6, 48), 0, 1.14, 0, { rx: Math.PI / 2 });
@@ -83,82 +85,59 @@ export default {
     }
 
     /* ---- one petal -------------------------------------------------------
-       A shell, not a scaled hemisphere: a spine that springs from the base
-       ring, swells outward and turns in again at the tip; a half-width that
-       starts at nothing, is widest at about 40% of the height and closes to
-       a point; and a section that cups so the edges curl inward. Built as a
-       closed double-skinned surface with a rim. */
-    const WPROF = (u) => Math.pow(Math.sin(Math.PI * Math.pow(u, 0.8)), 0.9);
-
+       The petal is traced as a curve in elevation, not as a taper: it springs
+       from the base ring, bulges outward past its mid-radius, then turns back
+       in and closes to a rounded tip. The width swells and dies away along the
+       same parameter, and the section is a shallow arc, so the petal is a
+       folded sheet rather than a cone. */
     function petalGeometry(o) {
-      const { H, R0, Rmid, Rtip, W, cup, thick, bulgeY = 0.35 } = o;
-      const NU = 15, NV = 10, U0 = 0.02, U1 = 0.988;
-      const pt = (u, v) => {
-        const b0 = (1 - u) * (1 - u), b1 = 2 * u * (1 - u), b2 = u * u;
-        const y = b1 * bulgeY * H + b2 * H;
-        const z = b0 * R0 + b1 * Rmid + b2 * Rtip;
-        const w = W * WPROF(u);
-        const k = cup * w * v * v;
-        return new T3.Vector3(v * w, y + 0.3 * k, z - k);
-      };
-      const verts = [], idx = [];
-      const go = [], gi = [];
-      const du = 0.005, dv = 0.03;
-      for (let i = 0; i <= NU; i++) {
-        const u = U0 + (U1 - U0) * (i / NU);
-        go.push([]); gi.push([]);
-        for (let j = 0; j <= NV; j++) {
-          const v = -1 + 2 * (j / NV);
-          const p = pt(u, v);
-          const pu = pt(Math.min(u + du, 1), v).sub(pt(Math.max(u - du, 0), v));
-          const pv = pt(u, Math.min(v + dv, 1)).sub(pt(u, Math.max(v - dv, -1)));
-          const n = new T3.Vector3().crossVectors(pu, pv).normalize();
-          if (n.z < 0) n.negate();
-          go[i].push(verts.push(p.clone()) - 1);
-          gi[i].push(verts.push(p.clone().addScaledVector(n, -thick)) - 1);
+      const { H, R0, Rc, Rtip, W, cup, thick, yPow = 1.55 } = o;
+      const NU = 22, NV = 9;
+      const pos = [], uv = [], idx = [];
+      // quadratic Bezier in the (radius, height) plane
+      const spineR = (u) => (1 - u) * (1 - u) * R0 + 2 * u * (1 - u) * Rc + u * u * Rtip;
+      const spineY = (u) => H * Math.pow(u, yPow);
+      // width: nothing at the root, widest at about a third, rounding to a point
+      const halfW = (u) => W * Math.sin(Math.PI * Math.pow(u, 0.62));
+      const bow = (u, v) => cup * (1 - v * v) * Math.sin(Math.PI * Math.pow(u, 0.5));
+      for (let side = 0; side < 2; side++) {
+        const off = side ? -thick : 0;
+        const base = pos.length / 3;
+        for (let i = 0; i <= NU; i++) {
+          const u = i / NU;
+          const hw = halfW(u), r = spineR(u), y = spineY(u);
+          for (let j = 0; j <= NV; j++) {
+            const v = (j / NV) * 2 - 1;
+            pos.push(v * hw, y, r + bow(u, v) + off);
+            uv.push((v + 1) / 2, u);
+          }
         }
-      }
-      const quad = (a, b, c, d) => { idx.push(a, b, c, a, c, d); };
-      for (let i = 0; i < NU; i++) {
-        for (let j = 0; j < NV; j++) {
-          quad(go[i][j], go[i + 1][j], go[i + 1][j + 1], go[i][j + 1]);
-          quad(gi[i][j], gi[i][j + 1], gi[i + 1][j + 1], gi[i + 1][j]);
+        for (let i = 0; i < NU; i++) {
+          for (let j = 0; j < NV; j++) {
+            const a = base + i * (NV + 1) + j, b = a + NV + 1;
+            if (side === 0) idx.push(a, b, a + 1, a + 1, b, b + 1);
+            else idx.push(a, a + 1, b, a + 1, b + 1, b);
+          }
         }
-      }
-      // rims: both long edges and both ends, so the shell closes
-      for (let i = 0; i < NU; i++) {
-        quad(go[i][0], gi[i][0], gi[i + 1][0], go[i + 1][0]);
-        quad(go[i][NV], go[i + 1][NV], gi[i + 1][NV], gi[i][NV]);
-      }
-      for (let j = 0; j < NV; j++) {
-        quad(go[0][j], go[0][j + 1], gi[0][j + 1], gi[0][j]);
-        quad(go[NU][j], gi[NU][j], gi[NU][j + 1], go[NU][j + 1]);
       }
       const g = new T3.BufferGeometry();
-      const arr = new Float32Array(verts.length * 3);
-      verts.forEach((p, k) => { arr[k * 3] = p.x; arr[k * 3 + 1] = p.y; arr[k * 3 + 2] = p.z; });
-      g.setAttribute('position', new T3.BufferAttribute(arr, 3));
+      g.setAttribute('position', new T3.Float32BufferAttribute(pos, 3));
+      g.setAttribute('uv', new T3.Float32BufferAttribute(uv, 2));
       g.setIndex(idx);
       g.computeVertexNormals();
       return g;
     }
 
-    /* ---- the three rings of nine -----------------------------------------
-       Outer ring leans out and stands almost upright at the tip; the middle
-       ring draws in; the inner ring closes over the top. Read from the side
-       the three together make a bud — widest a third of the way up, closing
-       to a single point. */
-    const BASE = 1.1;
+    /* ---- three rings of nine --------------------------------------------- */
     const RINGS = [
-      { R0: 15.4, Rmid: 19.2, Rtip: 11.4, H: 29.0, W: 2.75, cup: 0.40, thick: 0.30, rot: 0, mat: MARBLE },
-      { R0: 10.8, Rmid: 14.0, Rtip: 6.4, H: 31.5, W: 2.45, cup: 0.44, thick: 0.28, rot: Math.PI / 9, mat: MARBLE2 },
-      { R0: 6.0, Rmid: 8.2, Rtip: 1.2, H: 34.0, W: 2.10, cup: 0.48, thick: 0.26, rot: 0, mat: MARBLE }
+      { H: 24.0, R0: 14.6, Rc: 19.6, Rtip: 12.0, W: 6.4, cup: 0.9, thick: 0.5, rot: 0, mat: MARBLE },
+      { H: 28.4, R0: 10.4, Rc: 14.2, Rtip: 5.4, W: 5.4, cup: 0.8, thick: 0.45, rot: Math.PI / 9, mat: MARBLE2 },
+      { H: 32.4, R0: 6.2, Rc: 8.4, Rtip: 0.9, W: 4.4, cup: 0.7, thick: 0.4, rot: 0, mat: MARBLE }
     ];
     RINGS.forEach((r) => {
       for (let i = 0; i < 9; i++) {
         const a = (i / 9) * Math.PI * 2 + r.rot;
-        const g = petalGeometry(r);
-        add(r.mat, g, 0, BASE, 0, { ry: Math.PI / 2 - a });
+        add(r.mat, petalGeometry(r), 0, BASE, 0, { ry: Math.PI / 2 - a });
       }
     });
 
