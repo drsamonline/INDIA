@@ -9,11 +9,11 @@ export default {
   bounds: 70,
   minDist: 14,
   maxDist: 260,
-  time: 16.4,
-  home: { pos: [46, 20, 96], target: [0, 20, 0], fov: 40 },
-  ground: { texture: 'grass', size: 2400, color: 0x8d9463 },
+  time: 15.2,
+  home: { pos: [62, 27, 120], target: [0, 19, 0], fov: 40 },
+  ground: { texture: 'grass', size: 2400, color: 0x9dab74, tile: 16 },
   views: [
-    { name: 'Full', pos: [46, 20, 96], target: [0, 20, 0] },
+    { name: 'Full', pos: [62, 27, 120], target: [0, 19, 0] },
     { name: 'Axis', pos: [0, 12, 96], target: [0, 20, 0] },
     { name: 'Arch', pos: [6, 8, 32], target: [0, 14, 0] },
     { name: 'Crown', pos: [14, 34, 30], target: [0, 32, 0] },
@@ -23,7 +23,7 @@ export default {
     {
       title: 'All India War Memorial', deva: 'इंडिया गेट',
       text: 'India Gate stands at the eastern end of the ceremonial axis of New Delhi. Designed by Edwin Lutyens, it commemorates the 74,187 soldiers of the British Indian Army who died between 1914 and 1921, in France, Flanders, Mesopotamia, Persia, East Africa, Gallipoli and the Third Anglo-Afghan War.',
-      pos: [46, 20, 96], target: [0, 20, 0], time: 16.4
+      pos: [62, 27, 120], target: [0, 19, 0], time: 15.2
     },
     {
       title: 'Forty-Two Metres', deva: 'मेहराब',
@@ -53,7 +53,7 @@ export default {
     {
       title: 'The Gate at Night', deva: 'रात्रि',
       text: 'After dark the sandstone is floodlit from below and the arch becomes a bright frame against the sky.',
-      pos: [40, 17, 88], target: [0, 20, 0], time: 21.2
+      pos: [54, 23, 108], target: [0, 20, 0], time: 21.2
     }
   ],
 
@@ -85,6 +85,7 @@ export default {
     // the barrel of the passage
     add('dark', box(AX - 0.2, AY, D - 5.0), 0, base + SILL + AY / 2, 0);
     add('stone', box(AX + 1.6, 0.2, D - 1.0), 0, base + 0.1, 0);
+    add('plaster', box(AX - 0.6, 0.3, D - 5.2), 0, base + 0.25, -1.4);
     // mouldings at the springing
     [-1, 1].forEach((s) => {
       add('stone', box(2.2, 0.5, D + 0.4), s * (AX / 2 + 1.1), base + SILL + AY * 0.62, 0);
@@ -105,6 +106,39 @@ export default {
     add('stone', box(W - 1.4, 0.4, D - 0.4), 0, base + H + 4.7, 0);
     add('stone', cyl(1.7, 1.2, 1.0, 20), 0, base + H + 5.6, 0);
     add('stone', cyl(2.1, 2.1, 0.22, 20), 0, base + H + 6.2, 0);
+
+    /* ---- carved detail: archivolt, keystone, friezes, dentils ------------ */
+    add('stone', archFrame(AX + 1.2, AY + 0.9, 0.36, 0.42), 0, base + SILL, D / 2 + 0.04);
+    add('stone', archFrame(AX + 2.2, AY + 1.5, 0.3, 0.34), 0, base + SILL, D / 2 + 0.02);
+    add('stone', archFrame(AX + 1.2, AY + 0.9, 0.36, 0.42), 0, base + SILL, -D / 2 - 0.06, { ry: Math.PI });
+    add('stone', box(1.05, 1.6, 1.3), 0, base + SILL + AY - 0.55, D / 2 - 0.45);
+    // impost blocks at the springing
+    [-1, 1].forEach((sd) => {
+      add('stone', box(1.5, 0.5, D + 0.7), sd * (AX / 2 + 1.05), base + SILL + AY * 0.55, 0);
+    });
+    // sunburst frieze above the arch
+    for (let i = -6; i <= 6; i++) {
+      add('stone', box(0.5, 0.95, 0.2), i * 1.35, base + H - 3.1, D / 2 + 0.1, { rz: i % 2 ? 0.32 : -0.32 });
+    }
+    // dentil course under the cornice, all four faces
+    for (let i = -9; i <= 9; i++) {
+      add('stone', box(0.55, 0.42, 0.42), i * 1.55, base + H - 1.95, D / 2 + 0.32);
+      add('stone', box(0.55, 0.42, 0.42), i * 1.55, base + H - 1.95, -D / 2 - 0.32);
+    }
+    for (let i = -3; i <= 3; i++) {
+      add('stone', box(0.42, 0.42, 0.55), W / 2 + 0.32, base + H - 1.95, i * 1.55);
+      add('stone', box(0.42, 0.42, 0.55), -W / 2 - 0.32, base + H - 1.95, i * 1.55);
+    }
+    // steps up to the plinth
+    for (let i = 0; i < 4; i++) {
+      add('stone', box(22 - i * 1.5, 0.22, 1.0), 0, 0.46 - i * 0.2, D / 2 + 3.4 + i * 0.95);
+    }
+    // bollards along the axis
+    for (let i = -4; i <= 4; i++) {
+      if (Math.abs(i) < 2) continue;
+      add('black', cyl(0.16, 0.2, 0.9, 8), i * 4.6, 0.45, 20);
+      add('black', sph(0.18, 8), i * 4.6, 0.95, 20);
+    }
 
     /* ---- Amar Jawan Jyoti under the arch -------------------------------- */
     add('black', box(4.4, 0.5, 4.4), 0, base + 0.25, 0);
@@ -144,11 +178,13 @@ export default {
 
     /* ---- crowds, lamps, trees ------------------------------------------ */
     const people = [[-6, 12], [6, 13], [-11, 8], [11, 9], [0, 16], [-16, 20], [16, 21], [-3, 6],
-      [3, 5], [-9, 24], [9, 25], [14, 4], [-14, 4], [0, 30]];
+      [3, 5], [-9, 24], [9, 25], [14, 4], [-14, 4], [0, 30], [-19, 16], [19, 17], [7, 8],
+      [-7, 9], [12, 28], [-12, 29], [4, 34], [-4, 34]];
     people.forEach(([x, z], i) => ctx.person(x, z, i * 1.1, ['fabricWhite', 'fabricSaffron', 'fabricRed'][i % 3], 0.95));
     [[-12, 14], [12, 14], [-20, 30], [20, 30], [0, 44]].forEach(([x, z]) => ctx.lamp(x, z, 3.6, 'black'));
-    [[-30, 20], [30, 20], [-34, 44], [34, 44], [-26, -16], [26, -16], [-40, 60], [40, 60]]
-      .forEach(([x, z], i) => ctx.tree(x, z, 1.2 + (i % 3) * 0.2, 'round'));
+    [[-30, 20], [30, 20], [-34, 44], [34, 44], [-26, -16], [26, -16], [-40, 60], [40, 60],
+     [-24, 66], [24, 66], [-44, 30], [44, 30], [-18, -22], [18, -22]]
+      .forEach(([x, z], i) => ctx.tree(x, z, 1.2 + (i % 3) * 0.2, i % 4 === 0 ? 'cypress' : 'round'));
 
     ctx.light({ pos: [-24, 14, 34], target: [0, 18, 0], color: 0xffd0a0, intensity: 2600, distance: 180 });
     ctx.light({ pos: [24, 16, 30], target: [0, 18, 0], color: 0xffc890, intensity: 2200, distance: 180 });

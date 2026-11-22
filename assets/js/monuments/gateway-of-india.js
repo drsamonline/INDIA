@@ -13,9 +13,9 @@ export default {
   minDist: 14,
   maxDist: 240,
   home: { pos: [54, 23, 80], target: [0, 14, 0], fov: 40 },
-  ground: { texture: 'paving', size: 2400, color: 0xa89c86 },
+  ground: { texture: 'paving', size: 2400, color: 0xa89c86, tile: 6 },
   groundY: -0.35,
-  water: { y: -0.28, size: 520, z: 300, color: 0x24424f, distortion: 2.2 },
+  water: { y: -0.28, size: 460, z: 372, color: 0x24424f, distortion: 2.2 },
   views: [
     { name: 'Full', pos: [54, 23, 80], target: [0, 14, 0] },
     { name: 'Arch', pos: [11, 10, 30], target: [0, 12, 0] },
@@ -71,6 +71,8 @@ export default {
 
     /* ---- quay, steps, plinth -------------------------------------------- */
     block('paving', 64, 0.9, 48, 0, -0.3, -6);
+    // the shore between the quay and the water, so the sea starts beyond it
+    block('stone', 110, 0.8, 300, 0, -0.32, 176);
     block('basaltDark', 46, 1.2, 34, 0, 0.5, -2);
     for (let i = 0; i < 3; i++) block('basalt', 30 - i * 1.4, 0.28, 18 - i * 1.0, 0, 0.6 + i * 0.28, 0);
     // sea wall and mooring steps on the harbour side

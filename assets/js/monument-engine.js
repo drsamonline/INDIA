@@ -899,7 +899,7 @@ export function boot(mon) {
     const groundCfg = Object.assign({ texture: 'sand', size: 2400, color: 0xcdb88f }, mon.ground || {});
     groundCfg.size = Math.max(groundCfg.size, 2400);
     const gTex = T[groundCfg.texture] || T.sandGround;
-    const perTile = { paving: 8, grass: 22, sandGround: 26, stone: 14 }[groundCfg.texture] || 24;
+    const perTile = groundCfg.tile || { paving: 8, grass: 22, sandGround: 26, stone: 14 }[groundCfg.texture] || 24;
     const gRepeat = groundCfg.size / perTile;
     const gc = gTex.clone();
     gc.needsUpdate = true;
