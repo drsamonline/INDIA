@@ -127,12 +127,12 @@ export default {
       // pilasters between the wheels
       for (let i = 0; i < 13; i++) block('grey', 0.38, 2.5, 0.85, (PX + 0.1) * side, 0.85, -33.3 + i * 5.55);
     }
-    // carved panels on the front and back faces of the plinth
+    // the friezes along the front and back faces of the plinth: the real temple
+    // carries bands of elephants, horses and processions here
     for (let side = -1; side <= 1; side += 2) {
-      for (let i = 0; i < 7; i++) {
-        add('grey', box(1.6, 1.5, 0.22), -14.4 + i * 4.8, 2.3, (PZ - 0.15) * side);
-        add(PALE, box(2.0, 0.26, 0.28), -14.4 + i * 4.8, 3.15, (PZ - 0.1) * side);
-      }
+      ctx.carvedBand('grey', 33.6, 1.9, 0, 2.35, (PZ - 0.15) * side, { n: 14, pitch: 2.4, depth: 0.26, motif: 'arch', ry: side > 0 ? 0 : Math.PI });
+      add(PALE, box(34.2, 0.26, 0.30), 0, 3.25, (PZ - 0.10) * side);
+      add(PALE, box(34.2, 0.22, 0.30), 0, 1.42, (PZ - 0.10) * side);
     }
 
     /* ---------- processional stair on the east (+Z) -------------------- */

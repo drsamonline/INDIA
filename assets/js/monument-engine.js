@@ -380,6 +380,33 @@ class Builder {
     outer.holes.push(new THREE.Path(pts));
     return new THREE.ExtrudeGeometry(outer, { depth, bevelEnabled: false, curveSegments: 7 });
   }
+  /* ---- a carved band -----------------------------------------------------
+     A recessed course carrying repeated relief — the Kufic bands of the Qutb
+     Minar, the friezes of Konark, the sculpture registers of Khajuraho. The
+     relief is instanced blocks standing proud of a sunk backing, so it catches
+     raking light and reads as carving rather than as a painted stripe. */
+  carvedBand(key, w, h, x, y, z, o = {}) {
+    const n = o.n ?? Math.max(4, Math.round(w / (o.pitch ?? 0.9)));
+    const depth = o.depth ?? 0.14;
+    const ry = o.ry ?? 0;
+    const back = o.back ?? key;
+    // the sunk field the relief stands on
+    this.add(back, this.box(w, h, depth * 0.5), x, y, z, { ry });
+    const c = Math.cos(ry), s2 = Math.sin(ry);
+    const step = w / n;
+    for (let i = 0; i < n; i++) {
+      const off = (i - (n - 1) / 2) * step;
+      const px = x + off * c, pz = z - off * s2;
+      if (o.motif === 'arch') {
+        // a row of small blind arches, the commonest frieze in Indian stone
+        this.add(key, this.arch(step * 0.56, h * 0.74, depth), px, y - h * 0.36, pz + depth * 0.35, { ry });
+      } else {
+        // a vertical relief block, standing for a line of inscription
+        this.add(key, this.box(step * 0.42, h * 0.62, depth), px, y, pz + depth * 0.35, { ry });
+        this.add(key, this.box(step * 0.30, h * 0.16, depth * 0.8), px, y + h * 0.38, pz + depth * 0.3, { ry });
+      }
+    }
+  }
   /* ---- a pierced screen -------------------------------------------------
      A real lattice, cut as geometry: a rectangular panel with a grid of holes
      extruded through it, so light and sky pass between the bars. Every jali on
@@ -1596,7 +1623,7 @@ export function boot(mon) {
       add: b.add.bind(b), box: b.box.bind(b), plane: b.plane.bind(b), cyl: b.cyl.bind(b),
       cone: b.cone.bind(b), sph: b.sph.bind(b), torus: b.torus.bind(b), dome: b.dome.bind(b),
       onion: b.onion.bind(b), lathe: b.lathe.bind(b), arch: b.arch.bind(b), archShape: b.archShape.bind(b),
-      archFrame: b.archFrame.bind(b), jali: b.jali.bind(b), block: b.block.bind(b), col: b.col.bind(b),
+      archFrame: b.archFrame.bind(b), jali: b.jali.bind(b), carvedBand: b.carvedBand.bind(b), block: b.block.bind(b), col: b.col.bind(b),
       chhatri: b.chhatri.bind(b), arcade: b.arcade.bind(b), stairs: b.stairs.bind(b), railing: b.railing.bind(b),
       tree: b.tree.bind(b), person: b.person.bind(b), lamp: b.lamp.bind(b), flag: b.flag.bind(b), boat: b.boat.bind(b),
       light: b.light.bind(b), animate: b.animate.bind(b),
