@@ -3,7 +3,7 @@
 This file lists every work in this repository that is not original to it, the
 terms it is used under, and where to read those terms in full.
 
-Version 1.1 · effective 22 November 2026 · maintained by Dr Sohil Momin.
+Version 1.2 · effective 22 November 2026 · maintained by Dr Sohil Momin.
 Checked against `data/monuments.json` at commit on that date.
 
 ## 1 · Original work
@@ -18,7 +18,7 @@ permission.
 
 ## 2 · Photographs — Wikimedia Commons
 
-18 photographs, one per monument, are used under the licence named
+24 photographs, one per monument, are used under the licence named
 for each file. All are hosted on Wikimedia Commons; the "Source" link on
 `credits.html` opens the original file page, where the licence text and the
 machine-readable attribution live.
@@ -43,6 +43,12 @@ machine-readable attribution live.
 | Amber Fort | 20191219_Fort_Amber,_Amer,_Jaipur_0955_9481.jpg | Jakub Hałun | CC BY-SA 4.0 | https://creativecommons.org/licenses/by-sa/4.0 |
 | CSMT, Mumbai | Chhatrapati_shivaji_terminus,_esterno_01.jpg | Sailko | CC BY 3.0 | https://creativecommons.org/licenses/by/3.0 |
 | Mahabodhi Temple | Mahabodhitemple.jpg | Bpilgrim | CC BY-SA 2.5 | https://creativecommons.org/licenses/by-sa/2.5 |
+| Statue of Unity | Statue_of_Unity.jpg | Snehrashmi | CC BY-SA 4.0 | https://creativecommons.org/licenses/by-sa/4.0 |
+| Kandariya Mahadeva | Khajuraho.KandariyaMahadeva.jpg | China Crisis | CC BY-SA 3.0 | https://creativecommons.org/licenses/by-sa/3.0 |
+| Basilica of Bom Jesus | Front_Elevation_of_Basilica_of_Bom_Jesus.jpg | iMahesh | CC BY-SA 4.0 | https://creativecommons.org/licenses/by-sa/4.0 |
+| Mehrangarh | Mehrangarh_Fort_sanhita.jpg | Sanhitasinha | CC BY-SA 4.0 | https://creativecommons.org/licenses/by-sa/4.0 |
+| Jantar Mantar | Jantar_Mantar_at_Jaipur.jpg | Knowledge Seeker | Public domain | https://creativecommons.org/publicdomain/mark/1.0/ |
+| Somnath Temple | Somanath_mandir_(cropped).jpg | B. SurajPatro1997 | CC BY-SA 4.0 | https://creativecommons.org/licenses/by-sa/4.0 |
 
 Photographs have been resized and re-encoded for the web (JPEG, WebP). No
 other alteration was made. Where a licence requires share-alike, the resized

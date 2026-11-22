@@ -43,7 +43,7 @@
 | 23 | Jantar Mantar | Jaipur, Rajasthan | Rajput · 1728–1734 | [open](monuments/jantar-mantar.html) |
 | 24 | Somnath Temple | Prabhas Patan, Gujarat | Rebuilt · 1951 | [open](monuments/somnath-temple.html) |
 
-Ten of them are UNESCO World Heritage Sites; two more are on the tentative list.
+Thirteen of them are UNESCO World Heritage Sites; two more are on the tentative list.
 
 ## What is on each page
 

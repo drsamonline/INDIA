@@ -100,6 +100,7 @@ def build_index(monuments):
     words = {12: 'Twelve', 13: 'Thirteen', 14: 'Fourteen', 15: 'Fifteen', 16: 'Sixteen', 17: 'Seventeen',
              18: 'Eighteen', 19: 'Nineteen', 20: 'Twenty', 21: 'Twenty-one', 22: 'Twenty-two', 23: 'Twenty-three',
              24: 'Twenty-four'}
+    out = out.replace('__COUNTWORDL__', words.get(len(monuments), str(len(monuments))).lower())
     out = out.replace('__COUNTWORD__', words.get(len(monuments), str(len(monuments))))
     out = out.replace('__STATES__', str(len({m['state'] for m in monuments})))
     out = out.replace('__COUNT__', str(len(monuments)))
@@ -134,6 +135,7 @@ def build_credits(monuments):
     words = {12: 'Twelve', 13: 'Thirteen', 14: 'Fourteen', 15: 'Fifteen', 16: 'Sixteen', 17: 'Seventeen',
              18: 'Eighteen', 19: 'Nineteen', 20: 'Twenty', 21: 'Twenty-one', 22: 'Twenty-two', 23: 'Twenty-three',
              24: 'Twenty-four'}
+    out = out.replace('__COUNTWORDL__', words.get(len(monuments), str(len(monuments))).lower())
     out = out.replace('__COUNTWORD__', words.get(len(monuments), str(len(monuments))))
     out = out.replace('__STATES__', str(len({m['state'] for m in monuments})))
     out = out.replace('__COUNT__', str(len(monuments)))
