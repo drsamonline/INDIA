@@ -407,7 +407,7 @@ a.cluster-btn{text-decoration:none;color:#e9e0cd;box-sizing:border-box}
         <span class="switch"><input type="checkbox" id="cycle"><span class="knob"></span></span>
       </label>
       <div class="ctl">
-        <div class="ctl-top"><label for="exposure">Exposure</label><span class="val" id="exposure-val">0.72</span></div>
+        <div class="ctl-top"><label for="exposure">Exposure</label><span class="val" id="exposure-val">0.62</span></div>
         <input type="range" id="exposure" min="0.3" max="1.4" step="0.02" value="0.72">
       </div>
       <div class="ctl">
@@ -415,7 +415,7 @@ a.cluster-btn{text-decoration:none;color:#e9e0cd;box-sizing:border-box}
         <input type="range" id="haze" min="0" max="0.006" step="0.0002" value="0.0009">
       </div>
       <div class="ctl">
-        <div class="ctl-top"><label for="glow">Glow · bloom</label><span class="val" id="glow-val">0.32</span></div>
+        <div class="ctl-top"><label for="glow">Glow · bloom</label><span class="val" id="glow-val">0.24</span></div>
         <input type="range" id="glow" min="0" max="1.2" step="0.02" value="0.32">
       </div>
     </section>
@@ -805,7 +805,7 @@ function showLoadError(msg) {
 }
 
 const DEFAULTS = {
-  time: 17.35, cycle: false, exposure: 0.72, haze: 0.0009, glow: 0.32,
+  time: 17.35, cycle: false, exposure: 0.62, haze: 0.0009, glow: 0.24,
   motion: !reducedMotion, speed: 1, visitors: 14, riverLife: true, petals: 160, ripple: 1.2, birds: true, lanterns: true,
   autoOrbit: !reducedMotion, orbitSpeed: 0.4, fov: 40,
   tilt: 0.55, focus: 0.52, warm: 0.35,
@@ -910,7 +910,7 @@ function main() {
   /* ---------- post: bloom + miniature tilt-shift + output ---------- */
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), state.glow, 0.5, 0.85);
+  const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), state.glow, 0.5, 0.90);
   composer.addPass(bloomPass);
   const TiltShiftShader = {
     uniforms: {

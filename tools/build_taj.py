@@ -41,6 +41,14 @@ src = src.replace('haze: 0.0016', 'haze: 0.0009')
 src = src.replace('FogExp2(0xe8c39a', 'FogExp2(0xdcd3c2')
 src = src.replace('value="0.0016"', 'value="0.0009"')
 src = src.replace('id="haze-val">27%', 'id="haze-val">15%')
+# match the site's grade: the engine runs 0.52-0.62 exposure, a 0.9 bloom
+# threshold and a lighter glow, so the Taj sat brighter and hazier than the
+# other twenty-three pages
+src = src.replace('exposure: 0.72', 'exposure: 0.62')
+src = src.replace('glow: 0.32', 'glow: 0.24')
+src = src.replace('state.glow, 0.5, 0.85', 'state.glow, 0.5, 0.90')
+src = src.replace('id="exposure-val">0.72', 'id="exposure-val">0.62')
+src = src.replace('id="glow-val">0.32', 'id="glow-val">0.24')
 src = src.replace('>CC0<', '>CC BY-NC 4.0<')
 # the source called the licence a public-domain dedication; it is not one
 src = src.replace('public domain dedication', 'attribution, non-commercial use')
