@@ -36,6 +36,11 @@ src = src.replace('https://creativecommons.org/publicdomain/zero/1.0/',
 src = src.replace('CC0 1.0 Universal', 'CC BY-NC 4.0')
 src = src.replace('Dr Sohil Momin, CC0.', 'Dr Sohil Momin, CC BY-NC 4.0.')
 src = src.replace('CC0 1.0', 'CC BY-NC 4.0')
+# the fog was a warm tan at 0.0016 density, which washed the whole scene brown
+src = src.replace('haze: 0.0016', 'haze: 0.0009')
+src = src.replace('FogExp2(0xe8c39a', 'FogExp2(0xdcd3c2')
+src = src.replace('value="0.0016"', 'value="0.0009"')
+src = src.replace('id="haze-val">27%', 'id="haze-val">15%')
 src = src.replace('>CC0<', '>CC BY-NC 4.0<')
 # the source called the licence a public-domain dedication; it is not one
 src = src.replace('public domain dedication', 'attribution, non-commercial use')

@@ -411,8 +411,8 @@ a.cluster-btn{text-decoration:none;color:#e9e0cd;box-sizing:border-box}
         <input type="range" id="exposure" min="0.3" max="1.4" step="0.02" value="0.72">
       </div>
       <div class="ctl">
-        <div class="ctl-top"><label for="haze">Atmospheric haze</label><span class="val" id="haze-val">27%</span></div>
-        <input type="range" id="haze" min="0" max="0.006" step="0.0002" value="0.0016">
+        <div class="ctl-top"><label for="haze">Atmospheric haze</label><span class="val" id="haze-val">15%</span></div>
+        <input type="range" id="haze" min="0" max="0.006" step="0.0002" value="0.0009">
       </div>
       <div class="ctl">
         <div class="ctl-top"><label for="glow">Glow · bloom</label><span class="val" id="glow-val">0.32</span></div>
@@ -805,7 +805,7 @@ function showLoadError(msg) {
 }
 
 const DEFAULTS = {
-  time: 17.35, cycle: false, exposure: 0.72, haze: 0.0016, glow: 0.32,
+  time: 17.35, cycle: false, exposure: 0.72, haze: 0.0009, glow: 0.32,
   motion: !reducedMotion, speed: 1, visitors: 14, riverLife: true, petals: 160, ripple: 1.2, birds: true, lanterns: true,
   autoOrbit: !reducedMotion, orbitSpeed: 0.4, fov: 40,
   tilt: 0.55, focus: 0.52, warm: 0.35,
@@ -856,7 +856,7 @@ function main() {
   container.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0xe8c39a, state.haze);
+  scene.fog = new THREE.FogExp2(0xdcd3c2, state.haze);
 
   const camera = new THREE.PerspectiveCamera(state.fov, window.innerWidth / window.innerHeight, 0.5, 6000);
   const HOME_POS = new THREE.Vector3(15, 14, 27);
