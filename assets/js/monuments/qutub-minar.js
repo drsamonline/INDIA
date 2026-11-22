@@ -195,6 +195,22 @@ export default {
           dB + (dT - dB) * a, dB + (dT - dB) * b,
           s.flutes, s.kind, key, s.amp, 0, 0, si === 0 ? 'sandstonePink' : null);
       }
+      // the Kufic bands: a ring of relief blocks at the marble courses, which
+      // in the real tower carry an inscription band running round the shaft
+      if (si < 4) {
+        const courses = si === 0 ? 3 : 2;
+        for (let c = 0; c < courses; c++) {
+          const t = 0.30 + c * 0.16;
+          const yy = y + h * t;
+          const rr = (dB + (dT - dB) * t) / 2 + 0.05;
+          const nb = Math.max(20, Math.round(TAU * rr / 0.62));
+          for (let q = 0; q < nb; q++) {
+            const a = (q / nb) * TAU;
+            add(si < 2 ? mar : red, box(0.30, h * 0.075, 0.10),
+              Math.cos(a) * rr, yy, Math.sin(a) * rr, { ry: -a + Math.PI / 2 });
+          }
+        }
+      }
       // plain keel moulding at the foot of each storey
       add(buf, cyl(dB / 2 + 0.14, dB / 2 + 0.14, 0.22, 48), 0, y + 0.11, 0);
       y += h;
