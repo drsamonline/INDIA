@@ -147,16 +147,62 @@ export default {
     add('copper', box(9.0, 15.0, 2.2), -13.0, BASE + 126.0, 11.6, { rz: 0.16 });   // the fall of the shawl
     add('copper', box(8.0, 12.0, 2.0), 12.0, BASE + 124.0, -10.4, { rz: -0.14 });
 
+    /* ---- the head, lofted ------------------------------------------------
+       A sphere cannot be a head. This is a stack of elliptical rings whose
+       half-width and half-depth follow a profile from chin to crown, with the
+       face flattened and pushed forward, so the skull narrows at the temples
+       and the jaw tapers to the chin. */
+    function headGeometry() {
+      const LEVELS = [
+        // t, halfWidth, halfDepth, forward
+        [0.00, 3.2, 4.4, 0.6],
+        [0.12, 5.6, 7.0, 0.9],
+        [0.28, 6.9, 8.4, 1.0],
+        [0.46, 7.3, 8.7, 0.7],
+        [0.62, 7.2, 8.4, 0.3],
+        [0.76, 6.6, 7.6, 0.0],
+        [0.88, 5.2, 5.9, -0.2],
+        [1.00, 2.6, 3.0, -0.4]
+      ];
+      const SEG = 20, H = 21.0;
+      const pos = [], uv = [], idx = [];
+      for (let i = 0; i < LEVELS.length; i++) {
+        const [t, hw, hd, fw] = LEVELS[i];
+        for (let j = 0; j <= SEG; j++) {
+          const a = (j / SEG) * Math.PI * 2;
+          const cx = Math.cos(a), cz = Math.sin(a);
+          // flatten the face: pull the front arc toward a plane
+          const front = Math.max(0, cz);
+          const x = cx * hw;
+          const z = cz * hd * (1 - 0.28 * front * front) + fw * front;
+          pos.push(x, t * H, z);
+          uv.push(j / SEG, t);
+        }
+      }
+      for (let i = 0; i < LEVELS.length - 1; i++) {
+        for (let j = 0; j < SEG; j++) {
+          const a = i * (SEG + 1) + j, b = a + SEG + 1;
+          idx.push(a, b, a + 1, a + 1, b, b + 1);
+        }
+      }
+      const g = new T3.BufferGeometry();
+      g.setAttribute('position', new T3.Float32BufferAttribute(pos, 3));
+      g.setAttribute('uv', new T3.Float32BufferAttribute(uv, 2));
+      g.setIndex(idx);
+      g.computeVertexNormals();
+      return g;
+    }
+
     // neck, head, jaw
     add(B, cyl(6.6, 7.2, 12, 14), 0, BASE + 156, 0, { sz: 0.92 });
-    add(B, sph(10.4, 20), 0, BASE + 171.4, 0, { sy: 1.08, sz: 0.95 });     // skull
-    add(B, sph(2.4, 8), -9.6, BASE + 170.0, -0.4, { sx: 0.55, sy: 1.3 });  // ears
-    add(B, sph(2.4, 8), 9.6, BASE + 170.0, -0.4, { sx: 0.55, sy: 1.3 });
-    add('dark', sph(1.7, 8), -3.4, BASE + 172.0, 8.1, { sy: 0.7 });        // eye sockets
-    add('dark', sph(1.7, 8), 3.4, BASE + 172.0, 8.1, { sy: 0.7 });
-    add(B, sph(7.6, 16), 0, BASE + 165.0, 1.6, { sy: 0.8, sz: 1.0 });      // jaw
+    add(B, headGeometry(), 0, BASE + 160.6, 0);                            // head, lofted
+    add(B, sph(2.4, 8), -7.6, BASE + 171.0, -1.0, { sx: 0.5, sy: 1.25 });  // ears
+    add(B, sph(2.4, 8), 7.6, BASE + 171.0, -1.0, { sx: 0.5, sy: 1.25 });
+    add('dark', sph(1.6, 8), -3.3, BASE + 173.4, 7.6, { sy: 0.62 });       // eye sockets
+    add('dark', sph(1.6, 8), 3.3, BASE + 173.4, 7.6, { sy: 0.62 });
+    add(B, sph(6.4, 16), 0, BASE + 166.6, 2.4, { sy: 0.62, sz: 0.95 });    // jaw line
     add(B, sph(3.6, 12), 0, BASE + 162.4, 5.4, { sy: 0.72, sz: 1.0 });     // chin
-    add(B, box(11.8, 1.7, 2.4), 0, BASE + 172.4, 7.2);                     // brow
+    add(B, box(11.0, 1.5, 2.2), 0, BASE + 174.4, 6.9);                     // brow
     // the moustache, the one feature that makes the face his
     add(B, box(9.6, 1.5, 1.9), 0, BASE + 165.4, 7.9, { rx: 0.12 });
     add(B, sph(1.5, 8), -4.6, BASE + 166.2, 7.4, { sx: 1.3, sy: 0.7 });
@@ -167,7 +213,7 @@ export default {
     add(B, sph(3.4, 10), 0, BASE + 164.4, 6.6, { sy: 0.7 });
     add(B, cone(1.7, 4.8, 8), 0, BASE + 169.2, 8.8, { rx: Math.PI / 2 });  // nose
     [-1, 1].forEach((sd) => add(B, sph(2.4, 8), sd * 9.2, BASE + 169.0, -0.6, { sy: 1.3 })); // ears
-    add(B, sph(9.7, 18), 0, BASE + 175.2, -0.6, { sy: 0.85, sz: 0.95 });   // hair, no cap
+    add(B, sph(7.6, 18), 0, BASE + 178.4, -0.8, { sy: 0.5, sz: 0.9 });     // hair, no cap
     add(B, sph(2.4, 8), 0, BASE + 178.4, 3.4, { sy: 0.5 });                 // the widow's peak
 
     // feet, just showing under the hem
