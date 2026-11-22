@@ -385,6 +385,9 @@ class Builder {
      between, instead of the scattered flower dots that stood in for planting.
      The hedge is the point — it gives the garden its geometry from above. */
   parterre(x, z, w, d, o = {}) {
+    // y matters: without it every bed sits at ground level, which on a
+    // terraced site means buried inside the building above
+    const y0 = o.y ?? 0;
     const h = o.h ?? 0.55;
     const t = o.t ?? 0.4;
     const hedge = o.hedge ?? 'foliage';
@@ -392,7 +395,7 @@ class Builder {
     const ry = o.ry ?? 0;
     const c = Math.cos(ry), s2 = Math.sin(ry);
     const put = (key, bw, bh, bd, lx, ly, lz) =>
-      this.add(key, this.box(bw, bh, bd), x + lx * c - lz * s2, ly, z + lx * s2 + lz * c, { ry });
+      this.add(key, this.box(bw, bh, bd), x + lx * c - lz * s2, y0 + ly, z + lx * s2 + lz * c, { ry });
     put(bed, w, 0.1, d, 0, 0.05, 0);
     put(hedge, w, h, t, 0, h / 2, -d / 2 + t / 2);
     put(hedge, w, h, t, 0, h / 2, d / 2 - t / 2);
@@ -1639,6 +1642,24 @@ export function boot(mon) {
         const v = views[parseInt(vw, 10)] || views[0];
         camera.position.set(v.pos[0], v.pos[1], v.pos[2]);
         controls.target.set(v.target[0], v.target[1], v.target[2]);
+      }
+      // ?look=x,y,z&dist=&az=&el= points the camera at any coordinate, so a
+      // feature can be inspected without first inventing a named viewpoint —
+      // which is how I ended up three times inside a wall at Amber.
+      const look = new URLSearchParams(location.search).get('look');
+      if (look) {
+        const t = look.split(',').map(Number);
+        if (t.length === 3 && t.every((n) => Number.isFinite(n))) {
+          const dist = parseFloat(new URLSearchParams(location.search).get('dist')) || 40;
+          const az = (parseFloat(new URLSearchParams(location.search).get('az')) || 35) * Math.PI / 180;
+          const el = (parseFloat(new URLSearchParams(location.search).get('el')) || 22) * Math.PI / 180;
+          camera.position.set(
+            t[0] + dist * Math.cos(el) * Math.sin(az),
+            t[1] + dist * Math.sin(el),
+            t[2] + dist * Math.cos(el) * Math.cos(az)
+          );
+          controls.target.set(t[0], t[1], t[2]);
+        }
       }
       document.documentElement.dataset.qa = 'shot';
     }
