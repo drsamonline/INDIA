@@ -72,6 +72,8 @@ export default {
 
   build(ctx) {
     const { add, box, cyl, sph, cone, torus, block, col, plane } = ctx;
+    // khondalite is a grey-brown stone, not terracotta
+    const PALE = (() => { const mm = ctx.mat('sandstoneBuff'); if (!mm || !mm.clone) return 'sandstoneBuff'; const c = mm.clone(); c.color.setHex(0xbfae92); return c; })();
     const PI = Math.PI;
     const arch = ctx.arch, archFrame = ctx.archFrame;
 
@@ -106,12 +108,12 @@ export default {
     const WR = 1.485;                 // 2.97 m diameter
     function wheel(cx, cy, cz, side) {
       const x = cx * side;
-      add('sandstoneBuff', torus(WR, 0.17, 6, 24), x, cy, cz, { ry: PI / 2 });
+      add(PALE, torus(WR, 0.17, 6, 24), x, cy, cz, { ry: PI / 2 });
       add('granite', torus(WR * 0.79, 0.09, 5, 20), x, cy, cz, { ry: PI / 2 });
-      add('sandstoneBuff', cyl(0.40, 0.40, 0.55, 10), x, cy, cz, { rz: PI / 2 });
+      add(PALE, cyl(0.40, 0.40, 0.55, 10), x, cy, cz, { rz: PI / 2 });
       add('grey', cyl(0.20, 0.20, 0.68, 8), x, cy, cz, { rz: PI / 2 });
       for (let i = 0; i < 8; i++) {
-        add('sandstoneBuff', box(0.17, WR * 1.5, 0.13), x, cy, cz, { rx: (i * PI) / 8 });
+        add(PALE, box(0.17, WR * 1.5, 0.13), x, cy, cz, { rx: (i * PI) / 8 });
       }
       // beaded rim, sixteen blocks
       for (let i = 0; i < 16; i++) {
@@ -128,7 +130,7 @@ export default {
     for (let side = -1; side <= 1; side += 2) {
       for (let i = 0; i < 7; i++) {
         add('grey', box(1.6, 1.5, 0.22), -14.4 + i * 4.8, 2.3, (PZ - 0.15) * side);
-        add('sandstoneBuff', box(2.0, 0.26, 0.28), -14.4 + i * 4.8, 3.15, (PZ - 0.1) * side);
+        add(PALE, box(2.0, 0.26, 0.28), -14.4 + i * 4.8, 3.15, (PZ - 0.1) * side);
       }
     }
 
@@ -137,7 +139,7 @@ export default {
     for (const s of [-1, 1]) {
       block('granite', 2.8, 0.5, 9.0, s * 9.6, 0, 38.6, { rx: -0.4 });
       block('granite', 2.8, TOP, 1.2, s * 9.6, 0, 34.4);
-      block('sandstoneBuff', 3.1, 0.45, 1.5, s * 9.6, TOP, 34.4);
+      block(PALE, 3.1, 0.45, 1.5, s * 9.6, TOP, 34.4);
       for (let i = 0; i < 4; i++) block('grey', 2.2, 0.5, 0.5, s * 9.6, 1.0 + i * 0.75, 35.0);
       block('granite', 1.0, 2.4, 1.0, s * 12.4, 0, 43.4);
       block('grey', 1.3, 0.28, 1.3, s * 12.4, 2.4, 43.4);
@@ -146,11 +148,11 @@ export default {
     add('paving', plane(22, 11), 0, 0.12, 42.0, { rx: -PI / 2 });
 
     /* ---------- jagamohana: pitha and bada ----------------------------- */
-    block('sandstoneBuff', JW + 1.2, 0.7, JW + 1.2, 0, TOP, JZ);
+    block(PALE, JW + 1.2, 0.7, JW + 1.2, 0, TOP, JZ);
     block('granite', JW + 0.6, 0.5, JW + 0.6, 0, TOP + 0.7, JZ);
     block('grey', JW, PITH - TOP - 1.2, JW, 0, TOP + 1.2, JZ);
 
-    block('sandstoneBuff', JW, BADA - PITH, JW, 0, PITH, JZ);
+    block(PALE, JW, BADA - PITH, JW, 0, PITH, JZ);
     // horizontal mouldings, the bands of a Kalinga bada
     [[1.0, 'grey'], [1.7, 'stone'], [2.6, 'grey'], [11.4, 'stone'],
       [12.2, 'grey'], [13.0, 'stone']].forEach(([h, k]) => {
@@ -171,11 +173,11 @@ export default {
     }
     // the great eastern doorway
     add('dark', arch(5.2, 7.0, 0.6), 0, PITH, JZ + JW / 2 - 0.1);
-    add('sandstoneBuff', archFrame(6.2, 7.8, 0.45, 0.5), 0, PITH, JZ + JW / 2 + 0.05);
+    add(PALE, archFrame(6.2, 7.8, 0.45, 0.5), 0, PITH, JZ + JW / 2 + 0.05);
     add('grey', archFrame(7.2, 8.6, 0.3, 0.35), 0, PITH, JZ + JW / 2 + 0.02);
     for (const s of [-1, 1]) {
       add('dark', arch(2.3, 4.0, 0.4), s * 9.4, PITH + 0.9, JZ + JW / 2 - 0.1);
-      add('sandstoneBuff', archFrame(3.0, 4.6, 0.26, 0.3), s * 9.4, PITH + 0.9, JZ + JW / 2 + 0.05);
+      add(PALE, archFrame(3.0, 4.6, 0.26, 0.3), s * 9.4, PITH + 0.9, JZ + JW / 2 + 0.05);
     }
 
     /* ---------- roof: nine pidha tiers in three stages ------------------
@@ -187,7 +189,7 @@ export default {
     for (let i = 0; i < TIERS; i++) {
       const w = 30.6 - i * 2.45;
       const dh = tierH - 0.5;
-      block('sandstoneBuff', w, dh, w, 0, ry, JZ);                    // drum
+      block(PALE, w, dh, w, 0, ry, JZ);                    // drum
       block('grey', w + 0.14, 0.12, w + 0.14, 0, ry + 0.02, JZ);      // shadow line
       block('stone', w + 1.15, 0.5, w + 1.15, 0, ry + dh, JZ);        // potika cornice
       block('grey', w + 1.22, 0.1, w + 1.22, 0, ry + dh - 0.06, JZ);  // under-cut
@@ -208,24 +210,24 @@ export default {
         block('grey', tw - 0.2, 0.55, tw - 0.2, 0, ry - 0.1, JZ);
         for (let k = 0; k < 8; k++) {
           const t3 = -tw / 2 + 1.6 + k * ((tw - 3.2) / 7);
-          add('sandstoneBuff', box(0.5, 0.9, 0.5), t3, ry + 0.3, JZ + tw / 2 - 0.5);
-          add('sandstoneBuff', box(0.5, 0.9, 0.5), t3, ry + 0.3, JZ - tw / 2 + 0.5);
+          add(PALE, box(0.5, 0.9, 0.5), t3, ry + 0.3, JZ + tw / 2 - 0.5);
+          add(PALE, box(0.5, 0.9, 0.5), t3, ry + 0.3, JZ - tw / 2 + 0.5);
         }
       }
     }
 
     /* ---------- amalaka, beki and kalasha ------------------------------ */
     add('granite', cyl(5.8, 6.4, 0.5, 24), 0, AMALA - 1.75, JZ);
-    add('sandstoneBuff', cyl(5.0, 5.3, 1.3, 28), 0, AMALA - 0.85, JZ);
+    add(PALE, cyl(5.0, 5.3, 1.3, 28), 0, AMALA - 0.85, JZ);
     // the fluted rim of the crown stone
     for (let i = 0; i < 28; i++) {
       const a = (i / 28) * PI * 2;
       add('grey', box(0.44, 1.28, 0.36), Math.cos(a) * 5.1, AMALA - 0.85, JZ + Math.sin(a) * 5.1, { ry: -a });
     }
-    add('sandstoneBuff', cyl(3.4, 4.4, 0.42, 20), 0, AMALA - 0.1, JZ);   // beki
+    add(PALE, cyl(3.4, 4.4, 0.42, 20), 0, AMALA - 0.1, JZ);   // beki
     add('granite', cyl(2.2, 2.6, 0.7, 16), 0, AMALA + 0.28, JZ);
     // the kalasha: a pot, a flared mouth and a spike
-    add('sandstoneBuff', ctx.lathe([[0.06, 0], [0.55, 0.12], [1.15, 0.55], [1.4, 1.05],
+    add(PALE, ctx.lathe([[0.06, 0], [0.55, 0.12], [1.15, 0.55], [1.4, 1.05],
       [1.22, 1.65], [0.78, 2.05], [0.58, 2.3], [0.74, 2.6], [0.46, 2.95], [0.16, 3.35],
       [0.06, 3.7]], 16), 0, AMALA + 0.6, JZ);
     add('gold', cone(0.24, 0.85, 8), 0, KAL + 0.3, JZ);
@@ -233,13 +235,13 @@ export default {
     /* ---------- the broken deul behind: a rough, collapsed mass -------- */
     const DZ = -22;
     block('grey', 30.4, 1.0, 30.4, 0, TOP, DZ);
-    block('sandstoneBuff', 30.0, 5.4, 30.0, 0, TOP + 1.0, DZ);
+    block(PALE, 30.0, 5.4, 30.0, 0, TOP + 1.0, DZ);
     block('grey', 30.4, 0.4, 30.4, 0, TOP + 4.2, DZ);
     block('grey', 30.4, 0.4, 30.4, 0, TOP + 6.4, DZ);
-    block('sandstoneBuff', 29.6, 6.4, 29.6, 0, TOP + 6.8, DZ);
+    block(PALE, 29.6, 6.4, 29.6, 0, TOP + 6.8, DZ);
     // offset upper masses, each smaller and shifted, as if fallen in on itself
-    block('sandstoneBuff', 24.0, 4.4, 23.0, -0.8, TOP + 13.2, DZ + 0.6);
-    block('sandstoneBuff', 16.5, 3.8, 15.5, 1.4, TOP + 17.6, DZ - 1.2);
+    block(PALE, 24.0, 4.4, 23.0, -0.8, TOP + 13.2, DZ + 0.6);
+    block(PALE, 16.5, 3.8, 15.5, 1.4, TOP + 17.6, DZ - 1.2);
     block('granite', 10.0, 2.6, 9.0, -1.2, TOP + 21.4, DZ + 1.0);
     // masonry courses, shallow and irregular
     for (let i = 0; i < 10; i++) {
@@ -257,10 +259,10 @@ export default {
     // jagged broken crown
     const jag = [[-4.6, 3.6, 1.8], [-1.8, 2.2, 2.6], [1.0, 4.6, 1.3], [3.2, 2.8, 2.2],
       [5.0, 1.6, 3.0], [-3.2, 2.4, 2.8], [2.4, 1.4, 3.4], [0.2, 5.4, 1.1]];
-    block('sandstoneBuff', 10.4, 1.6, 9.4, -0.6, TOP + 23.4, DZ + 0.4);
+    block(PALE, 10.4, 1.6, 9.4, -0.6, TOP + 23.4, DZ + 0.4);
     jag.forEach(([x, h, d], i) => {
       const zz = DZ + ((i % 2) ? 1.2 : -1.4);
-      block('sandstoneBuff', 3.2 + (i % 3) * 0.8, h, d + 1.4, x, TOP + 24.8, zz);
+      block(PALE, 3.2 + (i % 3) * 0.8, h, d + 1.4, x, TOP + 24.8, zz);
       block('grey', 3.4 + (i % 3) * 0.8, 0.18, d + 1.6, x, TOP + 24.8 + h, zz);
     });
     // slumped shoulders of masonry
@@ -284,13 +286,13 @@ export default {
       for (let i = -3; i <= 3; i++) {
         for (const s of [-1, 1]) {
           block('granite', 1.3, 4.0, 1.3, i * 2.7, 4.05, cz + s * 5.6);
-          block('sandstoneBuff', 1.6, 0.36, 1.6, i * 2.7, 8.05, cz + s * 5.6);
+          block(PALE, 1.6, 0.36, 1.6, i * 2.7, 8.05, cz + s * 5.6);
         }
       }
       for (let i = -2; i <= 2; i++) {
         for (const s of [-1, 1]) {
           block('granite', 1.3, 4.0, 1.3, s * 6.0, 4.05, cz + i * 2.8);
-          block('sandstoneBuff', 1.6, 0.36, 1.6, s * 6.0, 8.05, cz + i * 2.8);
+          block(PALE, 1.6, 0.36, 1.6, s * 6.0, 8.05, cz + i * 2.8);
         }
       }
       // stumps of the fallen roof
@@ -314,7 +316,7 @@ export default {
         const [px, pz] = P(dx, dz);
         add(k, sph(1, 12), px, dy * s, pz, Object.assign({ ry, sx: a * s, sy: b * s, sz: cc * s }, o || {}));
       };
-      const B = 'sandstoneBuff', G = 'granite';
+      const B = PALE, G = 'granite';
       /* barrel, chest and rump: the body is carried at a slight angle, the
          horse rearing, so the chest rides higher than the quarters */
       ell(B, 0, 2.12, 0.05, 0.42, 0.50, 1.00, { rx: -0.20 });
@@ -361,9 +363,9 @@ export default {
     (function shrine(cx, cz) {
       block('grey', 13, 0.8, 11, cx, 0, cz);
       block('granite', 11.4, 5.2, 9.4, cx, 0.8, cz);
-      block('sandstoneBuff', 11.8, 0.4, 9.8, cx, 6.0, cz);
+      block(PALE, 11.8, 0.4, 9.8, cx, 6.0, cz);
       add('dark', arch(2.6, 4.0, 0.4), cx, 0.8, cz + 4.8);
-      add('sandstoneBuff', archFrame(3.3, 4.6, 0.26, 0.3), cx, 0.8, cz + 4.9);
+      add(PALE, archFrame(3.3, 4.6, 0.26, 0.3), cx, 0.8, cz + 4.9);
       block('granite', 9.0, 1.9, 7.4, cx, 6.4, cz);
       block('grey', 7.0, 1.3, 5.6, cx, 8.3, cz);
       block('granite', 4.6, 1.1, 3.8, cx, 9.6, cz);
@@ -390,7 +392,7 @@ export default {
         }
       }
       for (const s of [-1, 1]) {
-        block('sandstoneBuff', 1.6, 3.2, 1.6, s * 15, 0, D);
+        block(PALE, 1.6, 3.2, 1.6, s * 15, 0, D);
         add('grey', sph(0.85, 8), s * 15, 3.4, D);
       }
     })();

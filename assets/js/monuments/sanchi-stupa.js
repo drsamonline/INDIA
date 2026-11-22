@@ -74,6 +74,8 @@ export default {
 
   build(ctx) {
     const { add, box, cyl, sph, cone, torus, block, col, plane, dome } = ctx;
+    // the site is pale sandstone, not orange
+    const PALE = (() => { const mm = ctx.mat('sandstoneBuff'); if (!mm || !mm.clone) return 'sandstoneBuff'; const c = mm.clone(); c.color.setHex(0xdfd3b4); return c; })();
     const PI = Math.PI;
     const arch = ctx.arch;
 
@@ -185,14 +187,14 @@ export default {
       for (const s of [-1, 1]) {
         const px = s * 1.5;
         blk('granite', 1.35, 0.45, 1.35, px, 0, 0);                  // footing
-        blk('sandstoneBuff', 0.8, 4.17, 0.8, px, 0.45, 0);           // shaft
+        blk(PALE, 0.8, 4.17, 0.8, px, 0.45, 0);           // shaft
         // carved panels on both faces
         for (let i = 0; i < 5; i++) {
           blk('granite', 0.86, 0.42, 0.16, px, 1.15 + i * 0.72, 0.44);
           blk('granite', 0.86, 0.42, 0.16, px, 1.15 + i * 0.72, -0.44);
         }
         blk('stone', 0.95, 0.24, 0.95, px, 2.05, 0);                 // mid band
-        blk('sandstoneBuff', 1.05, 1.37, 1.05, px, 4.62, 0);         // capital
+        blk(PALE, 1.05, 1.37, 1.05, px, 4.62, 0);         // capital
         blk('granite', 1.2, 0.2, 1.2, px, 5.99, 0);
         // the lion / elephant / dwarf group on the abacus
         blk('stone', 0.62, 0.5, 0.62, px, 6.19, 0);
@@ -201,10 +203,10 @@ export default {
       const beams = [[6.0, 0.84, 0], [5.4, 0.72, 1.42], [4.8, 0.58, 2.72]];
       beams.forEach(([len, hgt, dy], bi) => {
         const y = 6.69 + dy;
-        blk('sandstoneBuff', len, hgt, 1.05, 0, y, 0);
+        blk(PALE, len, hgt, 1.05, 0, y, 0);
         blk('stone', len - 0.4, 0.16, 1.15, 0, y + hgt, 0);
         for (const s of [-1, 1]) {
-          put('sandstoneBuff', torus(hgt * 0.62, 0.2, 6, 14), s * (len / 2 + 0.22), y + hgt * 0.5, 0);
+          put(PALE, torus(hgt * 0.62, 0.2, 6, 14), s * (len / 2 + 0.22), y + hgt * 0.5, 0);
           put('granite', cyl(0.26, 0.26, 1.1, 10), s * (len / 2 + 0.22), y + hgt * 0.5, 0, { rx: PI / 2 });
           for (let i = 0; i < 5; i++) {
             blk('stone', 0.5, 0.26, 0.2, -len / 2 + 1.1 + i * ((len - 2.2) / 4), y + 0.06, 0.56);
@@ -273,7 +275,7 @@ export default {
       }
       block('stone', 5.0, 0.5, 5.0, cx, 0.6, cz - 2);
       block('granite', 4.2, 3.0, 4.2, cx, 1.1, cz - 2);
-      block('sandstoneBuff', 4.8, 0.45, 4.8, cx, 4.1, cz - 2);
+      block(PALE, 4.8, 0.45, 4.8, cx, 4.1, cz - 2);
       add('dark', plane(1.3, 1.9), cx, 2.2, cz + 0.15);
     })(-50, 4);
 
@@ -282,7 +284,7 @@ export default {
       block('stone', 4.4 * s, 0.6 * s, 4.4 * s, x, 0, z);
       col('granite', 3.2 * s, 3.4 * s, 0.7 * s, x, 0.6 * s, z, 20);
       add('granite', dome(3.2 * s, 2.4 * s, 20), x, 1.3 * s, z);
-      block('sandstoneBuff', 1.4 * s, 0.9 * s, 1.4 * s, x, 3.7 * s, z);
+      block(PALE, 1.4 * s, 0.9 * s, 1.4 * s, x, 3.7 * s, z);
       add('stone', cyl(1.2 * s, 1.2 * s, 0.16 * s, 12), x, 4.7 * s, z);
       add('stone', cyl(0.85 * s, 0.85 * s, 0.14 * s, 12), x, 5.2 * s, z);
       add('stone', cyl(0.12 * s, 0.14 * s, 1.2 * s, 6), x, 5.9 * s, z);
