@@ -1191,7 +1191,11 @@ export function boot(mon) {
     }
     const dolly = () => {
       const a = camera.aspect;
-      return a >= 1 ? 1 : clamp(Math.pow(1 / a, 0.55), 1, 1.5);
+      // A portrait viewport loses horizontal field, so a wide subject needs
+      // the camera back by roughly 1/aspect to keep the same width in frame.
+      // The old 0.55 exponent capped at 1.5, which left 100 m buildings
+      // cropped at 390 px.
+      return a >= 1 ? 1 : clamp(Math.pow(1 / a, 0.85), 1, 2.4);
     };
     const fit = (pos, target) => {
       const k = dolly();
