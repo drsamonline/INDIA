@@ -1682,6 +1682,30 @@ export function boot(mon) {
       archFrame: b.archFrame.bind(b), jali: b.jali.bind(b), carvedBand: b.carvedBand.bind(b), inlay: b.inlay.bind(b), parterre: b.parterre.bind(b), block: b.block.bind(b), col: b.col.bind(b),
       chhatri: b.chhatri.bind(b), arcade: b.arcade.bind(b), stairs: b.stairs.bind(b), railing: b.railing.bind(b),
       tree: b.tree.bind(b), person: b.person.bind(b), lamp: b.lamp.bind(b), flag: b.flag.bind(b), boat: b.boat.bind(b),
+      /* a water surface anywhere on the site, with the engine's shader */
+      waterBody: (x, z, w, d, o = {}) => {
+        const geo = new THREE.PlaneGeometry(w, d, 1, 1);
+        const mesh = new Water(geo, {
+          textureWidth: 512, textureHeight: 512,
+          waterNormals: T.waterNormal,
+          sunDirection: new THREE.Vector3(0.5, 0.7, 0.4).normalize(),
+          sunColor: 0xffffff,
+          waterColor: o.color !== undefined ? o.color : 0x2f5a6b,
+          distortionScale: o.distortion !== undefined ? o.distortion : 1.1,
+          fog: true
+        });
+        mesh.rotation.x = -Math.PI / 2;
+        mesh.position.set(x, o.y !== undefined ? o.y : 0.06, z);
+        scene.add(mesh);
+        // the kerb: a stone lip round the basin
+        if (o.kerb) {
+          b.add(o.kerb, b.box(w + 1.2, 0.34, 0.6), x, mesh.position.y + 0.1, z - d / 2 - 0.3);
+          b.add(o.kerb, b.box(w + 1.2, 0.34, 0.6), x, mesh.position.y + 0.1, z + d / 2 + 0.3);
+          b.add(o.kerb, b.box(0.6, 0.34, d + 1.2), x - w / 2 - 0.3, mesh.position.y + 0.1, z);
+          b.add(o.kerb, b.box(0.6, 0.34, d + 1.2), x + w / 2 + 0.3, mesh.position.y + 0.1, z);
+        }
+        return mesh;
+      },
       light: b.light.bind(b), animate: b.animate.bind(b),
       rng: b.rng, mat: (k) => M[k], tex: (k) => T[k],
       color: (hex) => new THREE.Color(hex),

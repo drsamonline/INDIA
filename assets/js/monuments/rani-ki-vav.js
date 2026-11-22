@@ -160,7 +160,7 @@ export default {
     block(key, 2 * (W0 - 5.25), 0.5, 16.5, 0, FLOOR - 0.5, -24.2);
     add(carve, box(2 * (W0 - 5.25) - 0.2, 0.1, 16.3), 0, FLOOR - 0.02, -24.2);
     // the tank itself: 9.5 x 9.4 m
-    add('water', box(9.5, 0.12, 9.4), 0, FLOOR + 0.18, -21.6);
+    ctx.waterBody(0, -21.6, 9.5, 9.4, { y: FLOOR + 0.22, color: 0x2a4f5c, distortion: 0.7, kerb: carve });
     add(carve, box(9.9, 0.34, 9.8), 0, FLOOR + 0.02, -21.6);
 
     /* ---------------- the draw-well, 10 m across ------------------------ */
