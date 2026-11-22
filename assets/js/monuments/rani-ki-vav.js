@@ -65,6 +65,11 @@ export default {
     block('sandstoneBuff', 9, H, L + 16, -(W / 2 + 4.5), 0, 0);
     block('sandstoneBuff', 9, H, L + 16, (W / 2 + 4.5), 0, 0);
     block('sandstoneBuff', W + 18, H, 8, 0, 0, -(L / 2 + 4));
+    // merlons along the rim
+    for (let i = 0; i < 18; i++) {
+      const z = (i - 8.5) * 2.6;
+      [-1, 1].forEach((s2) => add('sandstoneRed', box(0.7, 0.75, 0.7), s2 * (W / 2 + 0.4), H + 1.1, z));
+    }
     // parapet around the rim
     [[-(W / 2 + 0.4), 0, Math.PI / 2, L + 2], [(W / 2 + 0.4), 0, Math.PI / 2, L + 2],
      [0, -(L / 2 + 0.4), 0, W + 2]].forEach(([x, z, ry, len]) => {
@@ -90,6 +95,25 @@ export default {
           add('dark', box(0.14, 1.3, 0.9), x - s * 1.32, y - 1.6, z);
           add('sandstoneBuff', box(0.22, 1.7, 0.55), x - s * 1.42, y - 1.6, z - 1.05);
           add('marble', box(0.16, 1.5, 0.5), x - s * 1.44, y - 1.6, z + 1.05);
+        }
+      });
+      // carved brackets under each ledge
+      [-1, 1].forEach((s2) => {
+        const x = s2 * (W / 2 - inset - 1.2);
+        const nb = Math.max(3, Math.round(len / 2.6));
+        for (let k = 0; k < nb; k++) {
+          const z = (k - (nb - 1) / 2) * 2.6;
+          add('sandstoneBuff', box(0.5, 0.7, 0.35), x - s2 * 1.1, y - 1.05, z, { rz: s2 * 0.4 });
+        }
+      });
+      // a row of small figures on the outer wall above the ledge
+      [-1, 1].forEach((s2) => {
+        const x = s2 * (W / 2 + 0.55);
+        const nf = Math.max(3, Math.round(len / 2.2));
+        for (let k = 0; k < nf; k++) {
+          const z = (k - (nf - 1) / 2) * 2.2;
+          add('marble', box(0.16, 1.1, 0.55), x, y + 0.5, z);
+          add('sandstoneBuff', sph(0.2, 6), x, y + 1.2, z);
         }
       });
       // the transverse steps at the far end

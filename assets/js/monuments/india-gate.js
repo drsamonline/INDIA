@@ -83,9 +83,8 @@ export default {
     add('plaster', box(2.4, H, D - 4.0), -AX / 2 - 1.2, base + H / 2, 0);
     add('plaster', box(2.4, H, D - 4.0), AX / 2 + 1.2, base + H / 2, 0);
     // the barrel of the passage
-    add('dark', box(AX - 0.2, AY, D - 5.0), 0, base + SILL + AY / 2, 0);
     add('stone', box(AX + 1.6, 0.2, D - 1.0), 0, base + 0.1, 0);
-    add('plaster', box(AX - 0.6, 0.3, D - 5.2), 0, base + 0.25, -1.4);
+    add('stone', box(AX + 0.4, 0.22, D), 0, base + 0.2, 0);
     // mouldings at the springing
     [-1, 1].forEach((s) => {
       add('stone', box(2.2, 0.5, D + 0.4), s * (AX / 2 + 1.1), base + SILL + AY * 0.62, 0);
