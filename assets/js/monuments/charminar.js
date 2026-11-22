@@ -140,11 +140,11 @@ export default {
       add(wall, arch(2.7, 2.7, 0.30), ax, ARCH_H + 0.10, az, { ry });
       add(trim, sph(0.22, 8), ax, ARCH_H + 3.30, az);
 
-      // medallions in the spandrels
+      // medallions in the spandrels: a roundel set into a ring of the trim stone
       [-1, 1].forEach((sgn) => {
         const [mx, mz] = at(sgn * (ARCH_W / 2 + 1.45), 0.20);
         add(trim, cyl(0.85, 0.85, 0.16, 16), mx, 12.4, mz, { rx: Math.PI / 2, ry });
-        add(wall, cyl(0.62, 0.62, 0.20, 16), mx, 12.4, mz, { rx: Math.PI / 2, ry });
+        ctx.inlay(wall, trim, 1.30, 1.30, mx, 12.4, mz + 0.06, { n: 1, motif: 'roundel', depth: 0.05, ry });
       });
 
       // pilaster strips flanking the arch

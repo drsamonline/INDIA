@@ -380,6 +380,31 @@ class Builder {
     outer.holes.push(new THREE.Path(pts));
     return new THREE.ExtrudeGeometry(outer, { depth, bevelEnabled: false, curveSegments: 7 });
   }
+  /* ---- inlaid banding ----------------------------------------------------
+     Pietra-dura: a field of one stone with a repeating motif set into it in
+     another. The motif stands a few centimetres proud so it catches light at a
+     grazing angle, which is how the real inlay reads from a distance. */
+  inlay(fieldKey, motifKey, w, h, x, y, z, o = {}) {
+    const ry = o.ry ?? 0;
+    const depth = o.depth ?? 0.07;
+    const n = o.n ?? Math.max(3, Math.round(w / (o.pitch ?? 1.4)));
+    const step = w / n;
+    const c = Math.cos(ry), s2 = Math.sin(ry);
+    this.add(fieldKey, this.box(w, h, depth), x, y, z, { ry });
+    for (let i = 0; i < n; i++) {
+      const off = (i - (n - 1) / 2) * step;
+      const px = x + off * c, pz = z - off * s2;
+      const m = o.motif ?? 'diamond';
+      if (m === 'diamond') {
+        this.add(motifKey, this.box(step * 0.30, step * 0.30, depth * 1.3), px, y, pz + depth * 0.45, { ry, rz: Math.PI / 4 });
+      } else if (m === 'lozenge') {
+        this.add(motifKey, this.box(step * 0.22, h * 0.62, depth * 1.3), px, y, pz + depth * 0.45, { ry });
+      } else {
+        // a roundel
+        this.add(motifKey, this.cyl(step * 0.19, step * 0.19, depth * 1.4, 12), px, y, pz + depth * 0.45, { ry, rx: Math.PI / 2 });
+      }
+    }
+  }
   /* ---- a carved band -----------------------------------------------------
      A recessed course carrying repeated relief — the Kufic bands of the Qutb
      Minar, the friezes of Konark, the sculpture registers of Khajuraho. The
@@ -1623,7 +1648,7 @@ export function boot(mon) {
       add: b.add.bind(b), box: b.box.bind(b), plane: b.plane.bind(b), cyl: b.cyl.bind(b),
       cone: b.cone.bind(b), sph: b.sph.bind(b), torus: b.torus.bind(b), dome: b.dome.bind(b),
       onion: b.onion.bind(b), lathe: b.lathe.bind(b), arch: b.arch.bind(b), archShape: b.archShape.bind(b),
-      archFrame: b.archFrame.bind(b), jali: b.jali.bind(b), carvedBand: b.carvedBand.bind(b), block: b.block.bind(b), col: b.col.bind(b),
+      archFrame: b.archFrame.bind(b), jali: b.jali.bind(b), carvedBand: b.carvedBand.bind(b), inlay: b.inlay.bind(b), block: b.block.bind(b), col: b.col.bind(b),
       chhatri: b.chhatri.bind(b), arcade: b.arcade.bind(b), stairs: b.stairs.bind(b), railing: b.railing.bind(b),
       tree: b.tree.bind(b), person: b.person.bind(b), lamp: b.lamp.bind(b), flag: b.flag.bind(b), boat: b.boat.bind(b),
       light: b.light.bind(b), animate: b.animate.bind(b),
