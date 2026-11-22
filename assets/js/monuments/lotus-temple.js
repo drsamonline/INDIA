@@ -18,6 +18,7 @@ export default {
   accent: '#d8d2c4',
   accent2: '#f0e8d8',
   seed: 53,
+  hemiScale: 1.9,   // white marble in shade needs the sky fill
   floodScale: 0.3,
   time: 12.2,
   bounds: 90,
@@ -163,7 +164,7 @@ export default {
        outer leaves 22.5 m, turning back in;
        inner leaves 33.6 m, closing over the hall. */
     const RINGS = [
-      { H: 9.4, R0: 11.0, Rc: 19.5, Rtip: 26.0, W: 9.6, cup: 0.55, thick: 0.5, yPow: 1.75, rot: 0, mat: MARBLE2 },
+      { H: 9.4, R0: 11.0, Rc: 19.5, Rtip: 26.0, W: 6.9, cup: 0.55, thick: 0.5, yPow: 1.75, rot: 0, mat: MARBLE2 },
       { H: 22.5, R0: 12.0, Rc: 19.2, Rtip: 13.6, W: 5.7, cup: 0.8, thick: 0.42, yPow: 1.45, rot: Math.PI / 9, mat: MARBLE2 },
       { H: 33.6, R0: 10.2, Rc: 15.2, Rtip: 3.2, W: 5.5, cup: 0.7, thick: 0.38, yPow: 1.55, rot: 0, mat: MARBLE }
     ];
