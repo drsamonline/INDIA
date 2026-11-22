@@ -380,6 +380,53 @@ class Builder {
     outer.holes.push(new THREE.Path(pts));
     return new THREE.ExtrudeGeometry(outer, { depth, bevelEnabled: false, curveSegments: 7 });
   }
+  /* ---- a pierced screen -------------------------------------------------
+     A real lattice, cut as geometry: a rectangular panel with a grid of holes
+     extruded through it, so light and sky pass between the bars. Every jali on
+     the site was a flat dark plane before this; this is the same idea with the
+     material actually removed. */
+  jali(w, h, o = {}) {
+    const bar = o.bar ?? 0.08;
+    const depth = o.depth ?? 0.10;
+    const cell = o.cell ?? 0.5;
+    const cols = o.cols ?? Math.max(3, Math.round(w / cell));
+    const rows = o.rows ?? Math.max(3, Math.round(h / cell));
+    const shape = new THREE.Shape();
+    shape.moveTo(-w / 2, 0);
+    shape.lineTo(w / 2, 0);
+    shape.lineTo(w / 2, h);
+    shape.lineTo(-w / 2, h);
+    shape.closePath();
+    const cw = w / cols, ch = h / rows;
+    const arch = o.shape === 'arch';
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        const cx = -w / 2 + (i + 0.5) * cw;
+        const cy = (j + 0.5) * ch;
+        const hw = Math.max(0.015, cw / 2 - bar);
+        const hh = Math.max(0.015, ch / 2 - bar);
+        if (arch && j === rows - 1) {
+          // the top row of an arched screen is a small round-headed opening
+          const path = new THREE.Path();
+          path.moveTo(cx - hw, cy - hh);
+          path.lineTo(cx + hw, cy - hh);
+          path.lineTo(cx + hw, cy + hh * 0.15);
+          path.absarc(cx, cy + hh * 0.15, hw, 0, Math.PI, false);
+          path.lineTo(cx - hw, cy - hh);
+          shape.holes.push(path);
+        } else {
+          const path = new THREE.Path();
+          path.moveTo(cx - hw, cy - hh);
+          path.lineTo(cx + hw, cy - hh);
+          path.lineTo(cx + hw, cy + hh);
+          path.lineTo(cx - hw, cy + hh);
+          path.closePath();
+          shape.holes.push(path);
+        }
+      }
+    }
+    return new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false, curveSegments: 4 });
+  }
   /* ---- placement ---- */
   add(key, geo, x = 0, y = 0, z = 0, o = {}) {
     if (!geo) return;
@@ -1542,7 +1589,7 @@ export function boot(mon) {
       add: b.add.bind(b), box: b.box.bind(b), plane: b.plane.bind(b), cyl: b.cyl.bind(b),
       cone: b.cone.bind(b), sph: b.sph.bind(b), torus: b.torus.bind(b), dome: b.dome.bind(b),
       onion: b.onion.bind(b), lathe: b.lathe.bind(b), arch: b.arch.bind(b), archShape: b.archShape.bind(b),
-      archFrame: b.archFrame.bind(b), block: b.block.bind(b), col: b.col.bind(b),
+      archFrame: b.archFrame.bind(b), jali: b.jali.bind(b), block: b.block.bind(b), col: b.col.bind(b),
       chhatri: b.chhatri.bind(b), arcade: b.arcade.bind(b), stairs: b.stairs.bind(b), railing: b.railing.bind(b),
       tree: b.tree.bind(b), person: b.person.bind(b), lamp: b.lamp.bind(b), flag: b.flag.bind(b), boat: b.boat.bind(b),
       light: b.light.bind(b), animate: b.animate.bind(b),

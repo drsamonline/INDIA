@@ -207,7 +207,7 @@ export default {
     faces.forEach((f) => {
       const ry = f.ry;
       const nx2 = Math.sin(ry), nz2 = Math.cos(ry);
-      add('jali', box(pW, 1.2, 0.16), f.x + nx2 * 0.20, H3 + 0.75, f.z + nz2 * 0.20, { ry });
+      add('jali', ctx.jali(pW, 1.2, { cols: 5, rows: 3, bar: 0.06, depth: 0.10 }), f.x + nx2 * 0.20, H3 + 0.15, f.z + nz2 * 0.20, { ry });
       add(trim, box(pW + 0.4, 0.18, 0.34), f.x + nx2 * 0.20, H3 + 1.36, f.z + nz2 * 0.20, { ry });
       for (let i = 0; i < 11; i++) {
         const ox = (i - 5) * (pW / 11);
