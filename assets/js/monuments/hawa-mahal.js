@@ -47,7 +47,7 @@ export default {
     },
     {
       title: 'Pink at Dusk', deva: 'गुलाबी',
-      text: 'The building is red and pink sandstone, the colour that gave Jaipur its name, the Pink City. At dusk the screens turn from rose to deep terracotta as the lamps come up along the lane.',
+      text: 'The building is red and pink sandstone. At dusk the screens turn from rose to deep terracotta as the lamps come up along the lane.',
       pos: [16, 11, 34], target: [0, 9, 2], time: 21.2
     }
   ],

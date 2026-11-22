@@ -6,7 +6,7 @@ export default {
   accent: '#c9a878',
   accent2: '#e0c49a',
   seed: 89,
-  time: 15.6,
+  time: 11.2,
   bounds: 55,
   minDist: 12,
   maxDist: 200,
@@ -75,29 +75,36 @@ export default {
     add('dark', arch(2.6, 4.2, 0.3), cx, 3.0, cz + 5.55);
     add(trim, archFrame(3.2, 4.8, 0.24, 0.28), cx, 3.0, cz + 5.6);
 
-    // the shikhara: twelve tiers, each smaller and each ringed with turrets
+    // the shikhara: a curved spire, tiers hugging one another
     let y = 9.2, w = 11.0;
-    for (let i = 0; i < 12; i++) {
-      const h = 1.55;
+    const TIERS = 34;
+    for (let i = 0; i < TIERS; i++) {
+      const t = i / (TIERS - 1);
+      const h = 0.70;
+      // width follows a curve, not a straight taper
+      const wNext = 11.0 * Math.pow(1 - t - 1 / TIERS, 0.52) * 0.94 + 1.5;
       block(stone, w, h, w, cx, y, cz);
-      add(trim, box(w + 0.28, 0.16, w + 0.28), cx, y + h, cz);
+      add(trim, box(w + 0.04, 0.05, w + 0.04), cx, y + h, cz);
       // figure bands on each face
-      const n = Math.max(3, Math.round(w / 1.5));
+      const n = Math.max(3, Math.round(w / 1.35));
       for (let k = 0; k < n; k++) {
         const off = (k - (n - 1) / 2) * (w / n);
-        add('sandstonePink', box(0.55, h * 0.62, 0.16), cx + off, y + h * 0.45, cz + w / 2 + 0.02);
-        add('sandstonePink', box(0.55, h * 0.62, 0.16), cx + off, y + h * 0.45, cz - w / 2 - 0.02);
-        add('sandstonePink', box(0.16, h * 0.62, 0.55), cx + w / 2 + 0.02, y + h * 0.45, cz + off);
-        add('sandstonePink', box(0.16, h * 0.62, 0.55), cx - w / 2 - 0.02, y + h * 0.45, cz + off);
+        add('sandstonePink', box(0.42, h * 0.58, 0.10), cx + off, y + h * 0.45, cz + w / 2 + 0.01);
+        add('sandstonePink', box(0.42, h * 0.58, 0.10), cx + off, y + h * 0.45, cz - w / 2 - 0.01);
+        add('sandstonePink', box(0.10, h * 0.58, 0.42), cx + w / 2 + 0.01, y + h * 0.45, cz + off);
+        add('sandstonePink', box(0.10, h * 0.58, 0.42), cx - w / 2 - 0.01, y + h * 0.45, cz + off);
       }
-      // corner turrets, shrinking with the tower
-      const tw = w * 0.26;
-      if (i % 3 === 0) for (const [dx, dz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-        add(stone, box(tw, h * 1.5, tw), cx + dx * (w / 2 - tw / 2 + 0.05), y + h * 0.2, cz + dz * (w / 2 - tw / 2 + 0.05));
-        add(trim, box(tw + 0.2, 0.14, tw + 0.2), cx + dx * (w / 2 - tw / 2 + 0.05), y + h * 0.2 + h * 1.5, cz + dz * (w / 2 - tw / 2 + 0.05));
+      // clustered turrets flush against the corners, on the lower two-thirds
+      if (t < 0.66) {
+        const tw = w * 0.30;
+        for (const [dx, dz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+          const px = cx + dx * (w / 2 - tw / 2), pz = cz + dz * (w / 2 - tw / 2);
+          add(stone, box(tw, h * 1.9, tw), px, y + h * 0.95, pz);
+          add(trim, box(tw + 0.08, 0.07, tw + 0.08), px, y + h * 1.9, pz);
+        }
       }
-      y += h;
-      w *= 0.9;
+      y += h + 0.05;
+      w = wNext;
     }
     // amalaka, kalasha
     add(trim, cyl(w * 0.62, w * 0.78, 0.6, 16), cx, y + 0.3, cz);

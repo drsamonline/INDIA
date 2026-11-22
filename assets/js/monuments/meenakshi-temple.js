@@ -130,7 +130,8 @@ export default {
       /* ---- barrel-vaulted crest with finials ---- */
       add('yellow', box(w * 1.14, crestH * 0.22, d * 1.14), cx, y + crestH * 0.11, cz, { ry });
       const vr = d * 0.62;
-      add('red', cyl(vr, vr, w * 1.1, 14), cx, y + crestH * 0.22 + vr * 0.12, cz, { ry, rz: PI / 2 });
+      add('yellow', cyl(vr * 0.72, vr * 0.72, w * 1.06, 16), cx, y + crestH * 0.22 + vr * 0.10, cz, { ry, rz: PI / 2 });
+      add('gold', cyl(vr * 0.34, vr * 0.34, w * 1.10, 12), cx, y + crestH * 0.22 + vr * 0.10, cz, { ry, rz: PI / 2 });
       add('yellow', box(w * 1.06, crestH * 0.16, d * 0.34), cx, y + crestH * 0.22 + vr * 0.95, cz, { ry });
       // row of kalasha finials along the ridge
       const nf = 7;
