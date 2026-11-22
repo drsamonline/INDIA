@@ -10,12 +10,12 @@ export default {
   bounds: 150,
   minDist: 60,
   maxDist: 900,
-  home: { pos: [205, 122, 295], target: [0, 98, 0], fov: 40 },
+  home: { pos: [232, 128, 340], target: [0, 106, 0], fov: 40 },
   ground: { texture: 'grass', size: 2400, color: 0x8e9a68, tile: 30 },
   water: { y: -1.2, size: 900, z: 520, color: 0x2d5566, distortion: 2.0 },
   views: [
-    { name: 'Full', pos: [205, 122, 295], target: [0, 98, 0] },
-    { name: 'The figure', pos: [90, 150, 150], target: [0, 130, 0] },
+    { name: 'Full', pos: [232, 128, 340], target: [0, 106, 0] },
+    { name: 'The figure', pos: [130, 150, 215], target: [0, 112, 0] },
     { name: 'From the dam', pos: [0, 60, 300], target: [0, 110, 0] },
     { name: 'Plinth', pos: [70, 40, 90], target: [0, 30, 0] },
     { name: 'Aerial', pos: [200, 300, 260], target: [0, 80, 0] }
@@ -24,12 +24,12 @@ export default {
     {
       title: 'The Tallest Statue', deva: 'एकता की प्रतिमा',
       text: 'The Statue of Unity stands on the island of Sadhu Bet in the Narmada, facing the Sardar Sarovar dam. At 182 metres it is the tallest statue in the world, dedicated to Sardar Vallabhbhai Patel, who brought the princely states into the Indian Union.',
-      pos: [205, 122, 295], target: [0, 98, 0], time: 16.9
+      pos: [232, 128, 340], target: [0, 106, 0], time: 16.9
     },
     {
       title: 'Bronze on Steel', deva: 'कांस्य',
       text: 'The figure is a steel frame clad in about 1,700 tonnes of bronze panels over 25,000 tonnes of steel and concrete. It was designed by the sculptor Ram V. Sutar and built by Larsen & Toubro between 2013 and 2018.',
-      pos: [90, 150, 150], target: [0, 130, 0], time: 12
+      pos: [130, 150, 215], target: [0, 112, 0], time: 12
     },
     {
       title: 'The Viewing Gallery', deva: 'दीर्घा',
@@ -49,7 +49,7 @@ export default {
     {
       title: 'Night', deva: 'रात्रि',
       text: 'Floodlit after dark, the bronze reads almost black against the sky, and the dam carries a line of lights.',
-      pos: [140, 92, 200], target: [0, 96, 0], time: 21.2
+      pos: [140, 96, 210], target: [0, 102, 0], time: 21.2
     }
   ],
 
@@ -71,31 +71,85 @@ export default {
     for (let i = -2; i <= 2; i++) add('dark', box(3.2, 4.4, 0.4), i * 6, 22, 14.1);
 
     /* ---- the figure ------------------------------------------------------ */
+    // 182 m tall on the plinth: dhoti hem 27 m radius -> waist 19 m, a jacket
+    // over the chest, arms hanging clear of the body, head ~20 m on a neck.
     const BASE = 18.6;
-    const B = 'bronze';
-    // dhoti: one tapered mass from hem to waist
-    add(B, cyl(19.5, 27.5, 62, 20), 0, BASE + 31, 0, { sz: 0.78 });
-    add(B, cyl(27.6, 27.0, 3.2, 20), 0, BASE + 1.8, 0, { sz: 0.78 });     // hem
-    add(B, cyl(19.0, 20.0, 4.0, 20), 0, BASE + 63, 0, { sz: 0.76 });       // waistband
-    // torso, and the coat over it
-    add(B, cyl(18.4, 20.4, 46, 20), 0, BASE + 88, 0, { sz: 0.7 });
-    add(B, cyl(19.2, 18.8, 44, 20), 0, BASE + 90, 0, { sz: 0.73 });        // jacket
-    // shoulders
-    add(B, sph(21.0, 18), 0, BASE + 113, 0, { sy: 0.42, sz: 0.62 });
-    // arms, hanging with a slight outward angle, hands at mid-thigh
+    const B = 'bronze', J = 'copper';
+    const latheOf = (pts, seg) => ctx.lathe(pts.map(([y, r]) => [Math.max(r, 0.001), y]), seg);
+
+    // dhoti — nearly columnar, flaring only towards the hem, elliptical in plan
+    const dhoti = [[0, 27.0], [4, 26.4], [10, 25.2], [20, 23.6], [32, 22.2],
+      [46, 21.0], [60, 20.1], [74, 19.5], [88, 19.05], [92, 19.0]];
+    add(B, latheOf(dhoti, 28), 0, BASE, 0, { sz: 0.74 });
+    add(B, cyl(27.2, 27.6, 3.4, 28), 0, BASE + 1.7, 0, { sz: 0.74 });      // hem
+    // folds down the front of the dhoti, each segment set on the surface
+    const dR = (yy) => {
+      for (let i = 1; i < dhoti.length; i++) {
+        if (yy <= dhoti[i][0]) {
+          const a = dhoti[i - 1], b = dhoti[i];
+          return a[1] + (b[1] - a[1]) * ((yy - a[0]) / (b[0] - a[0]));
+        }
+      }
+      return dhoti[dhoti.length - 1][1];
+    };
+    for (let q = 0; q < 5; q++) {
+      const yy = 9 + q * 15, r = dR(yy + 7);
+      for (const xx of [-6.5, 0, 6.5]) {
+        const zz = 0.74 * Math.sqrt(Math.max(r * r - xx * xx, 1)) - 0.35;
+        add(B, box(2.4, 15.4, 0.9), xx, BASE + yy + 7, zz, { rx: -0.06 });
+      }
+    }
+    // waistband
+    add(B, cyl(19.0, 19.7, 8.0, 26), 0, BASE + 96, 0, { sz: 0.76 });
+    add(B, cyl(19.9, 19.4, 1.2, 26), 0, BASE + 100, 0, { sz: 0.76 });
+
+    // torso — narrower than the dhoti, so the waist and chest read
+    const torso = [[0, 19.0], [8, 18.6], [18, 18.0], [28, 17.5], [38, 17.2],
+      [46, 16.5], [50, 15.2], [53, 11.0]];
+    add(B, latheOf(torso, 24), 0, BASE + 100, 0, { sz: 0.72 });
+
+    // jacket: a separate layer standing 1.6 m proud of the chest, with a hem,
+    // a stand collar and a front edge
+    const jacket = [[4, 18.4], [12, 18.3], [22, 18.0], [32, 17.8], [40, 17.4],
+      [46, 16.9], [49, 16.2]];
+    add(J, latheOf(jacket, 24), 0, BASE + 100, 0, { sz: 0.74 });
+    add(J, cyl(18.5, 18.7, 1.5, 24), 0, BASE + 104, 0, { sz: 0.74 });      // jacket hem
+    add(J, cyl(16.6, 17.0, 1.3, 24), 0, BASE + 147, 0, { sz: 0.74 });      // shoulder seam
+    add(J, cyl(8.6, 9.6, 4.4, 16), 0, BASE + 147, 0, { sz: 0.86 });        // stand collar
+    add(J, box(2.4, 28, 1.2), 0, BASE + 127, 12.6, { rx: 0.09 });          // jacket front edge
+
+    // shoulders: wide and fairly square
     [-1, 1].forEach((sd) => {
-      add(B, cyl(4.4, 5.4, 46, 10), sd * 18.2, BASE + 90, 0, { rz: sd * 0.05 });
-      add(B, sph(4.6, 10), sd * 19.4, BASE + 66, 0);
-      add(B, cyl(4.0, 4.4, 22, 8), sd * 19.8, BASE + 54, 0);
-      add(B, sph(4.2, 8), sd * 20.0, BASE + 42, 0);                         // hand
+      add(J, sph(8.4, 16), sd * 24.0, BASE + 143.5, 0, { sy: 0.74, sz: 0.92 });
     });
-    // neck, head, cap
-    add(B, cyl(5.0, 6.4, 8, 12), 0, BASE + 119, 0);
-    add(B, sph(8.4, 18), 0, BASE + 131, 0, { sy: 1.2, sz: 0.9 });
-    add(B, sph(4.0, 10), 0, BASE + 126, 6.8, { sy: 0.7 });                  // jaw
-    add(B, sph(2.6, 8), 0, BASE + 134, 7.4, { sy: 0.5 });                   // brow
-    add(B, dome(8.6, 3.4, 16), 0, BASE + 136, 0, { sz: 0.92 });             // cap
-    add(B, cyl(1.6, 2.0, 1.6, 8), 0, BASE + 140.4, 0);
+    add(J, sph(17.4, 20), 0, BASE + 141, 0, { sy: 0.5, sz: 0.72 });        // yoke
+
+    // arms: hanging at the sides, hands beside the thighs
+    [-1, 1].forEach((sd) => {
+      add(B, cyl(6.2, 5.1, 34, 12), sd * 26.6, BASE + 129, 0);             // upper arm
+      add(J, cyl(6.9, 5.6, 33, 12), sd * 26.6, BASE + 129.5, 0);           // jacket sleeve
+      add(J, cyl(5.9, 6.0, 1.4, 12), sd * 26.5, BASE + 113.5, 0);          // cuff
+      add(B, sph(5.3, 12), sd * 26.4, BASE + 112, 0, { sy: 0.85 });        // elbow
+      add(B, cyl(5.0, 4.0, 30, 12), sd * 26.2, BASE + 96, 0);              // forearm
+      add(B, sph(4.0, 12), sd * 25.8, BASE + 79, 0, { sy: 1.3, sz: 0.68 }); // hand
+      add(B, cyl(3.2, 3.8, 7.0, 10), sd * 25.6, BASE + 71, 0.6, { sz: 0.68 }); // fingers
+      add(B, sph(2.5, 10), sd * 24.2, BASE + 79, 1.8, { sy: 1.5, sz: 0.55 }); // thumb
+    });
+
+    // neck, head, jaw, cap
+    add(B, cyl(6.6, 7.2, 12, 14), 0, BASE + 156, 0, { sz: 0.92 });
+    add(B, sph(9.5, 20), 0, BASE + 171.0, 0, { sy: 1.05, sz: 0.95 });      // skull
+    add(B, sph(7.6, 16), 0, BASE + 165.0, 1.6, { sy: 0.8, sz: 1.0 });      // jaw
+    add(B, sph(3.6, 12), 0, BASE + 162.4, 5.4, { sy: 0.72, sz: 1.0 });     // chin
+    add(B, box(11.8, 1.7, 2.4), 0, BASE + 172.4, 7.2);                     // brow
+    add(B, cone(1.7, 4.8, 8), 0, BASE + 169.2, 8.8, { rx: Math.PI / 2 });  // nose
+    [-1, 1].forEach((sd) => add(B, sph(2.4, 8), sd * 9.2, BASE + 169.0, -0.6, { sy: 1.3 })); // ears
+    add(B, cyl(9.4, 9.7, 0.9, 18), 0, BASE + 177.2, 0, { sz: 0.96 });     // cap band
+    add(B, dome(9.5, 3.2, 18), 0, BASE + 178.0, 0, { sz: 0.96 });          // small cap
+
+    // feet, just showing under the hem
+    add(B, sph(4.6, 12), -9.0, BASE + 2.2, 19.6, { sy: 0.5, sz: 1.7 });
+    add(B, sph(4.6, 12), 9.0, BASE + 2.2, 22.4, { sy: 0.5, sz: 1.7 });
 
     /* ---- the complex around it ------------------------------------------- */
     // memorial walk with columns

@@ -10,11 +10,11 @@ export default {
   bounds: 70,
   minDist: 18,
   maxDist: 260,
-  home: { pos: [46, 26, 84], target: [0, 22, 0], fov: 40 },
+  home: { pos: [51, 26.5, 93], target: [0, 22, 0], fov: 40 },
   ground: { texture: 'paving', size: 2400, color: 0xc6b394, tile: 12 },
   water: { y: -0.5, size: 520, z: -280, color: 0x2a5160, distortion: 2.4 },
   views: [
-    { name: 'Full', pos: [46, 26, 84], target: [0, 22, 0] },
+    { name: 'Full', pos: [51, 26.5, 93], target: [0, 22, 0] },
     { name: 'Shikhara', pos: [18, 40, 44], target: [0, 34, 0] },
     { name: 'Mandapa', pos: [0, 12, 46], target: [0, 12, 0] },
     { name: 'From the sea', pos: [-20, 12, -66], target: [0, 20, 0] },
@@ -24,7 +24,7 @@ export default {
     {
       title: 'The First Jyotirlinga', deva: 'सोमनाथ',
       text: 'Somnath, at Prabhas Patan on the Saurashtra coast, is the first of the twelve Jyotirlingas of Shiva. It has been destroyed and rebuilt repeatedly, most famously sacked by Mahmud of Ghazni in 1026.',
-      pos: [46, 26, 84], target: [0, 22, 0], time: 17.4
+      pos: [51, 26.5, 93], target: [0, 22, 0], time: 17.4
     },
     {
       title: 'Fifty Metres', deva: 'शिखर',
@@ -49,7 +49,7 @@ export default {
     {
       title: 'Night', deva: 'रात्रि',
       text: 'Floodlit after dark, the shikhara is visible along the coast, and the evening aarti draws crowds to the steps.',
-      pos: [42, 22, 76], target: [0, 24, 0], time: 21.2
+      pos: [47, 24, 85], target: [0, 24, 0], time: 21.2
     }
   ],
 
@@ -92,38 +92,77 @@ export default {
     add('dark', arch(4.2, 7.0, 0.4), sx, 3.8, sz + 8.2);
     add(trim, archFrame(5.0, 7.8, 0.4, 0.45), sx, 3.8, sz + 8.3);
 
-    // the tower: a curved tapering shikhara with vertical ribs
-    let y = 15.9, w = 16.0;
-    for (let i = 0; i < 20; i++) {
-      const h = 2.0;
-      block(stone, w, h, w, sx, y, sz);
-      // horizontal mouldings
-      add(trim, box(w + 0.16, 0.1, w + 0.16), sx, y + h, sz);
-      // vertical ribs on each face
-      const n = Math.max(3, Math.round(w / 1.6));
-      for (let k = 0; k < n; k++) {
-        const off = (k - (n - 1) / 2) * (w / n);
-        add(trim, box(0.22, h, 0.22), sx + off, y + h / 2, sz + w / 2 + 0.1);
-        add(trim, box(0.22, h, 0.22), sx + off, y + h / 2, sz - w / 2 - 0.1);
-        add(trim, box(0.22, h, 0.22), sx + w / 2 + 0.1, y + h / 2, sz + off);
-        add(trim, box(0.22, h, 0.22), sx - w / 2 - 0.1, y + h / 2, sz + off);
-      }
-      // corner pilasters that keep the tower square as it curves
-      for (const [dx, dz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-        add(stone, box(w * 0.16, h, w * 0.16), sx + dx * (w / 2 - w * 0.08), y + h / 2, sz + dz * (w / 2 - w * 0.08));
-      }
-      y += h;
-      w *= 0.955;
+    // the tower: a curvilinear nagara shikhara
+    // The core is one square-sectioned lathe: 23 stations whose half-width
+    // follows w(t) = WT + (WB-WT)(1-t)^0.55, so the silhouette is a true curve
+    // and not a stack of steps. Tiers, bands and ribs are applied over it.
+    const TY = 15.7, TH = 34.2, NT = 22;
+    const WB = 15.4, WT = 4.4;
+    const wAt = (t) => WT + (WB - WT) * Math.pow(Math.max(0, 1 - t), 0.55);
+    const tAt = (i) => 1.25 * (i / NT) - 0.25 * Math.pow(i / NT, 2.5);  // tiers crowd upwards
+
+    const prof = [];
+    for (let i = 0; i <= NT; i++) {
+      const t = tAt(i);
+      prof.push([(wAt(t) / 2) * Math.SQRT2, TH * t]);   // corner radius of the square
     }
-    // amalaka and kalasha
-    add(trim, cyl(w * 0.66, w * 0.8, 0.7, 16), sx, y + 0.35, sz);
-    add(stone, cyl(w * 0.58, w * 0.64, 1.0, 16), sx, y + 1.2, sz);
-    add(trim, cyl(w * 0.44, w * 0.54, 0.4, 16), sx, y + 1.9, sz);
-    add('gold', cyl(0.34, 0.42, 1.6, 10), sx, y + 2.9, sz);
-    add('gold', sph(0.44, 10), sx, y + 3.9, sz);
+    add(stone, ctx.lathe(prof, 4), sx, TY, sz, { ry: Math.PI / 4 });
+
+    // thin courses at the tier joints, and vertical ribs (latas) that follow
+    // the curve closely enough not to read as steps
+    for (let i = 0; i < NT; i++) {
+      const t0 = tAt(i), t1 = tAt(i + 1);
+      const y0 = TY + TH * t0, y1 = TY + TH * t1;
+      const w0 = wAt(t0), w1 = wAt(t1), wm = (w0 + w1) * 0.5;
+      // ribs and courses are subdivided so no segment is wider than the one
+      // below by more than 0.12 — the silhouette stays a curve, not a stair
+      const nsub = Math.max(2, Math.ceil((w0 - w1) / 0.12));
+      for (let q = 0; q < nsub; q++) {
+        const sa = q / nsub, sb = (q + 1) / nsub;
+        const ya = y0 + (y1 - y0) * sa, yb = y0 + (y1 - y0) * sb;
+        const wa = w0 + (w1 - w0) * sa, wb2 = w0 + (w1 - w0) * sb;
+        const wq = (wa + wb2) * 0.5, hq = yb - ya, yq = (ya + yb) * 0.5;
+        const ribs = [-0.78, -0.39, 0, 0.39, 0.78];
+        for (let k = 0; k < ribs.length; k++) {
+          const u = ribs[k] * (wq / 2);
+          const rw = k === 2 ? 0.34 : 0.14;
+          const key = k === 2 ? 'cream' : stone;   // the lata reads as a band
+          add(key, box(rw, hq + 0.02, 0.13), sx + u, yq, sz + wq / 2);
+          add(key, box(rw, hq + 0.02, 0.13), sx + u, yq, sz - wq / 2);
+          add(key, box(0.13, hq + 0.02, rw), sx + wq / 2, yq, sz + u);
+          add(key, box(0.13, hq + 0.02, rw), sx - wq / 2, yq, sz + u);
+        }
+        // the thin course at the head of each tier, following the curve
+        if (q === nsub - 1) add('cream', box(wq + 0.07, 0.065, wq + 0.07), sx, yq + hq / 2 - 0.05, sz);
+        // small corner offsets, base third only, tapering out at its head
+        if (t0 < 0.34) {
+          const fade = Math.min(1, (0.34 - t0) / 0.12);
+          const c = wq * 0.13 * fade, off = wq / 2 - c * 0.30;
+          if (c > 0.05) for (const [dx, dz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+            add(stone, box(c, hq + 0.02, c), sx + dx * off, yq, sz + dz * off);
+          }
+        }
+      }
+    }
+    // a course where the corner offsets die out
+    add('cream', box(wAt(0.34) + 0.18, 0.13, wAt(0.34) + 0.18), sx, TY + TH * 0.34, sz);
+
+    // neck, amalaka, kalasha
+    const yTop = TY + TH, wTop = wAt(1), A = wTop * 0.5;
+    add(stone, cyl(A * 0.85, A * 1.0, 1.1, 20), sx, yTop + 0.55, sz);
+    add('cream', cyl(A * 1.2, A * 1.35, 0.55, 24), sx, yTop + 1.35, sz);
+    add('cream', cyl(A * 1.32, A * 1.28, 0.5, 24), sx, yTop + 1.85, sz);
+    for (let k = 0; k < 20; k++) {
+      const a = (k / 20) * Math.PI * 2;
+      add('cream', box(0.16, 1.3, 0.4), sx + Math.cos(a) * A * 1.2, yTop + 1.6, sz + Math.sin(a) * A * 1.2, { ry: -a });
+    }
+    add('cream', cyl(A * 0.85, A * 1.05, 0.5, 18), sx, yTop + 2.35, sz);
+    add('gold', cyl(A * 0.6, A * 0.8, 1.1, 14), sx, yTop + 3.15, sz);
+    add('gold', sph(A * 0.72, 12), sx, yTop + 4.1, sz);
+    add('gold', cyl(0.3, 0.45, 1.5, 10), sx, yTop + 5.3, sz);
     // the flag
-    add('grey', cyl(0.09, 0.1, 6.0, 6), sx, y + 7.0, sz);
-    add('fabricSaffron', box(2.4, 1.4, 0.08), sx + 1.3, y + 9.0, sz);
+    add('grey', cyl(0.09, 0.1, 6.0, 6), sx, yTop + 9.1, sz);
+    add('fabricSaffron', box(2.4, 1.4, 0.08), sx + 1.3, yTop + 10.9, sz);
 
     /* ---- subsidiary shrines and the Nandi --------------------------------- */
     for (const [x, z, s] of [[-22, 4, 1.0], [22, 4, 1.0], [-22, -14, 0.85], [22, -14, 0.85]]) {

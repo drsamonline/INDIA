@@ -6,15 +6,15 @@ export default {
   accent: '#e0895f',
   accent2: '#f3b48a',
   seed: 23,
-  time: 14.6,
+  time: 10.8,
   bounds: 46,
   minDist: 12,
   maxDist: 180,
-  home: { pos: [20, 12, 40], target: [0, 9, 2], fov: 42 },
+  home: { pos: [12, 9, 32], target: [0, 8, -2], fov: 46 },
   ground: { texture: 'paving', size: 2400, color: 0xc8b79c },
   views: [
-    { name: 'Full', pos: [20, 12, 40], target: [0, 9, 2] },
-    { name: 'Facade', pos: [0, 9, 26], target: [0, 9, 2] },
+    { name: 'Full', pos: [12, 9, 32], target: [0, 8, -2] },
+    { name: 'Facade', pos: [0, 8, 30], target: [0, 8, -2] },
     { name: 'Jharokhas', pos: [7, 13, 16], target: [2, 12, 2] },
     { name: 'Crown', pos: [6, 21, 18], target: [0, 17, 2] },
     { name: 'Street', pos: [-24, 3.2, 22], target: [0, 8, 2] }
@@ -54,109 +54,86 @@ export default {
 
   build(ctx) {
     const T3 = ctx.THREE;
-    const { add, box, cyl, dome, onion, arch, archFrame, block, sph } = ctx;
+    const { add, box, cyl, sph, cone, dome, arch, archFrame, block, col } = ctx;
 
-    /* ---- the screen facade -------------------------------------------- */
-    const BAY = 2.15;            // bay width
-    const BAYS = 19;             // bays in the bottom tier
-    const TIER_H = 2.85;
-    const BASE_Y = 1.15;
-    const Z = 0;                 // facade plane
+    const BASE = 0.9, TIER_H = 2.9, BAY = 2.3;
+    const bow = (x) => -0.010 * x * x;          // the screen curves in plan
 
-    // plinth
-    block('sandstonePink', 44, BASE_Y, 12, 0, 0, Z - 4);
-    add('stone', box(44.6, 0.22, 12.6), 0, BASE_Y, Z - 4);
+    /* ---- the street and the plinth --------------------------------------- */
+    block('paving', 64, 0.6, 30, 0, -0.3, 8);
+    block('sandstoneRed', 44, 0.9, 8, 0, 0, -1.4);
+    add('marble', box(44.4, 0.12, 8.4), 0, 0.9, -1.4);
 
+    /* ---- the screen: five tiers, one room deep --------------------------- */
     for (let t = 0; t < 5; t++) {
-      const y = BASE_Y + t * TIER_H;
-      const n = BAYS - t * 2;
-      const w = n * BAY;
-      const depth = 5.2 - t * 0.55;
-      const zf = Z - t * 0.62;
-      // solid body behind the screen
-      block('sandstonePink', w, TIER_H, depth, 0, y, zf - depth / 2 - 0.25);
-      // carved band at the foot of the tier
-      add('marble', box(w + 0.6, 0.16, 0.62), 0, y + 0.08, zf + 0.28);
-      add('sandstoneRed', box(w + 0.4, 0.1, 0.5), 0, y + 0.2, zf + 0.26);
+      const y = BASE + t * TIER_H;
+      const bays = 17 - t * 2;
+      const w = bays * BAY;
+      const zf = -1.0 - t * 0.55;
 
-      for (let i = 0; i < n; i++) {
-        const x = (i - (n - 1) / 2) * BAY;
-        // the jharokha projects: a shallow box, a balcony slab, two niches
-        add('sandstonePink', box(BAY * 0.84, TIER_H * 0.76, 0.46), x, y + TIER_H * 0.4, zf + 0.24);
-        add('marble', box(BAY * 0.94, 0.11, 0.66), x, y + 0.4, zf + 0.3);
-        add('sandstoneRed', box(BAY * 0.94, 0.07, 0.6), x, y + 0.31, zf + 0.3);
-        // lower opening, screened
-        add('dark', arch(0.8, 1.06, 0.16), x, y + 0.52, zf + 0.44);
-        add('jali', arch(0.76, 1.02, 0.05), x, y + 0.54, zf + 0.58);
-        add('marble', archFrame(1.02, 1.28, 0.085, 0.1), x, y + 0.52, zf + 0.42);
-        // upper opening, smaller
-        add('dark', arch(0.58, 0.78, 0.14), x, y + 1.78, zf + 0.44);
-        add('jali', arch(0.54, 0.74, 0.05), x, y + 1.8, zf + 0.57);
-        add('marble', archFrame(0.78, 0.98, 0.075, 0.1), x, y + 1.78, zf + 0.42);
-        // canopy and finial over the bay
-        add('marble', cyl(0.24, 0.28, 0.09, 8), x, y + TIER_H * 0.84, zf + 0.3);
-        add('marble', dome(0.25, 0.22, 10), x, y + TIER_H * 0.88, zf + 0.3);
-        add('gold', cyl(0.022, 0.022, 0.14, 5), x, y + TIER_H * 0.88 + 0.24, zf + 0.3);
-        // pilaster between bays
-        if (i > 0) add('marble', box(0.12, TIER_H * 0.9, 0.26), x - BAY / 2, y + TIER_H * 0.47, zf + 0.2);
+      for (let i = 0; i < bays; i++) {
+        const x = (i - (bays - 1) / 2) * BAY;
+        const z = zf + bow(x);
+
+        // the jharokha projects from the wall
+        add('sandstonePink', box(BAY * 0.86, TIER_H * 0.80, 0.9), x, y + TIER_H * 0.40, z);
+        add('marble', box(BAY * 0.92, 0.12, 1.05), x, y + 0.10, z);
+
+        // a screened arch below, a smaller one above
+        add('dark', arch(0.86, 1.30, 0.18), x, y + 0.34, z + 0.46);
+        add('marble', archFrame(1.02, 1.46, 0.08, 0.10), x, y + 0.34, z + 0.44);
+        add('dark', arch(0.60, 0.86, 0.14), x, y + 1.72, z + 0.46);
+
+        // canopy and finial over each jharokha
+        add('marble', cyl(0.24, 0.28, 0.08, 8), x, y + TIER_H * 0.84, z + 0.30);
+        add('marble', dome(0.24, 0.20, 10), x, y + TIER_H * 0.88, z + 0.30);
+        add('gold', cyl(0.02, 0.02, 0.12, 5), x, y + TIER_H * 0.88 + 0.20, z + 0.30);
       }
-      // white cornice band
-      add('marble', box(w + 0.7, 0.2, 0.72), 0, y + TIER_H - 0.05, zf + 0.12);
-      add('marble', box(w + 0.35, 0.12, 0.52), 0, y + TIER_H - 0.42, zf + 0.1);
-      // end chhatris
-      [-1, 1].forEach((s2) => {
-        const ex = s2 * (w / 2 - 0.3);
-        add('sandstonePink', cyl(0.44, 0.5, 0.55, 8), ex, y + TIER_H + 0.27, zf - 0.4);
-        add('marble', dome(0.46, 0.52, 12), ex, y + TIER_H + 0.54, zf - 0.4);
-        add('gold', cyl(0.04, 0.04, 0.2, 5), ex, y + TIER_H + 1.08, zf - 0.4);
+
+      // the rear wall of the one-room-deep screen
+      block('sandstonePink', w, TIER_H, 0.5, 0, y, zf - 1.35);
+      // white cornice above and a moulded band below
+      add('marble', box(w + 0.5, 0.16, 1.5), 0, y + TIER_H - 0.08, zf + 0.2);
+      add('marble', box(w + 0.3, 0.12, 1.2), 0, y + 0.04, zf + 0.3);
+      // chhatris at the two ends of the tier
+      [-1, 1].forEach((s) => {
+        add('marble', cyl(0.52, 0.60, 0.12, 10), s * (w / 2 + 0.3), y + TIER_H - 0.02, zf + 0.1);
+        add('marble', dome(0.52, 0.52, 12), s * (w / 2 + 0.3), y + TIER_H + 0.10, zf + 0.1);
+        add('gold', sph(0.10, 6), s * (w / 2 + 0.3), y + TIER_H + 0.78, zf + 0.1);
       });
     }
 
-    /* ---- cusped crown over the central bay ---------------------------- */
-    const topY = BASE_Y + 5 * TIER_H;
-    add('sandstonePink', box(6.4, 1.0, 4.2), 0, topY + 0.5, -1.6);
-    add('dark', arch(2.3, 2.5, 0.3), 0, topY + 0.9, 0.15);
-    add('jali', arch(2.2, 2.4, 0.05), 0, topY + 0.95, 0.47);
-    add('marble', archFrame(2.9, 2.95, 0.18, 0.3), 0, topY + 0.9, 0.1);
-    add('marble', box(6.9, 0.26, 4.6), 0, topY + 1.05, -1.6);
-    add('sandstonePink', cyl(1.5, 1.75, 1.0, 12), 0, topY + 1.8, -1.4);
-    add('marble', onion(1.6, 2.2, 22), 0, topY + 2.3, -1.4);
-    add('gold', cyl(0.07, 0.07, 1.1, 6), 0, topY + 4.4, -1.4);
-    add('gold', sph(0.16, 8), 0, topY + 5.0, -1.4);
-    [-2.9, 2.9].forEach((x) => {
-      add('marble', cyl(0.36, 0.4, 0.9, 8), x, topY + 1.5, -1.4);
-      add('marble', dome(0.42, 0.46, 10), x, topY + 1.95, -1.4);
+    /* ---- the cusped crown over the central bays --------------------------- */
+    const topY = BASE + 5 * TIER_H;
+    block('sandstonePink', 10.4, 3.2, 2.6, 0, topY, -3.2);
+    add('dark', arch(5.8, 2.7, 0.3), 0, topY + 0.2, -2.0);
+    add('marble', archFrame(6.6, 3.0, 0.30, 0.34), 0, topY + 0.2, -1.9);
+    add('marble', box(11.2, 0.22, 3.0), 0, topY + 3.3, -3.2);
+    [-1, 1].forEach((s) => {
+      add('marble', cyl(0.5, 0.6, 0.7, 8), s * 5.4, topY + 3.7, -3.2);
+      add('marble', dome(0.5, 0.55, 12), s * 5.4, topY + 4.05, -3.2);
+      add('gold', sph(0.10, 6), s * 5.4, topY + 4.75, -3.2);
     });
+    add('gold', sph(0.16, 8), 0, topY + 3.95, -3.2);
 
-    /* ---- the palace behind ------------------------------------------- */
-    block('sandstonePink', 30, 13, 16, 0, 0, -12);
-    add('marble', box(30.4, 0.3, 16.4), 0, 13, -12);
-    for (let i = 0; i < 7; i++) {
-      const x = -12 + i * 4;
-      add('dark', arch(1.6, 2.6, 0.2), x, 0.2, -3.95);
-      add('marble', archFrame(2.0, 3.0, 0.14, 0.2), x, 0.2, -4.0);
-      add('dark', box(1.1, 1.5, 0.2), x, 8.5, -3.95);
+    /* ---- the palace mass behind, lower than the screen -------------------- */
+    block('sandstonePink', 40, 8.5, 12, 0, 1.4, -9.6);
+    add('marble', box(41, 0.4, 13), 0, 9.9, -9.6);
+    for (let i = -6; i <= 6; i++) add('dark', box(1.1, 1.6, 0.16), i * 3.0, 6.4, -3.5);
+
+    /* ---- the bazaar street ------------------------------------------------ */
+    for (let i = -4; i <= 4; i++) {
+      const x = i * 5.2;
+      block(i % 2 ? 'sandstoneBuff' : 'plaster', 4.2, 2.6, 3.0, x, 0.2, 13);
+      add('fabricSaffron', box(4.6, 0.14, 3.4), x, 2.9, 13);
+      add('dark', box(2.0, 1.4, 0.2), x, 1.2, 11.4);
     }
-    // rear courtyard wall
-    block('sandstonePink', 34, 2.4, 0.8, 0, 0, -21);
+    const people = [[-8, 8], [6, 9], [-14, 6], [14, 7], [0, 10], [-18, 9], [18, 9], [-3, 6], [9, 5]];
+    people.forEach(([x, z], i) => ctx.person(x, z, i * 1.2, ['fabricWhite', 'fabricSaffron', 'fabricRed'][i % 3], 0.95));
+    [[-20, 10], [20, 10], [-10, 11], [10, 11]].forEach(([x, z]) => ctx.lamp(x, z, 3.4, 'black'));
+    [[-26, 14], [26, 14], [-30, 4], [30, 4]].forEach(([x, z], i) => ctx.tree(x, z, 1.2, 'round'));
 
-    /* ---- street, bazaar, life ---------------------------------------- */
-    add('paving', ctx.plane(120, 26), 0, 0.05, 14, { rx: -Math.PI / 2 });
-    // bazaar awnings opposite
-    for (let i = 0; i < 8; i++) {
-      const x = -21 + i * 6;
-      block('plaster', 4.6, 2.6, 3.0, x, 0, 30);
-      add(i % 2 ? 'fabricRed' : 'fabricSaffron', box(4.9, 0.1, 3.4), x, 2.7, 29.6, { rx: -0.14 });
-      add('dark', box(1.1, 1.6, 0.14), x, 0.1, 28.45);
-    }
-    const people = [[-8, 10], [-3, 8.5], [2, 11], [7, 9], [-13, 12], [12, 12.5], [0, 7.6], [16, 10.5],
-      [-17, 8], [5, 6.5], [-5, 13], [9, 7.2]];
-    people.forEach(([x, z], i) => ctx.person(x, z, i * 1.3, ['fabricWhite', 'fabricSaffron', 'fabricRed'][i % 3], 0.82));
-    [[-19, 6], [19, 6], [-11, 18], [11, 18], [0, 19], [-24, 14]].forEach(([x, z]) => ctx.lamp(x, z, 3.0, 'black'));
-    [[-26, 4], [26, 5], [-30, 16], [30, 15]].forEach(([x, z], i) => ctx.tree(x, z, 1.0 + (i % 2) * 0.2, 'round'));
-
-    /* ---- lights ------------------------------------------------------ */
-    ctx.light({ pos: [-16, 9, 22], target: [0, 11, 0], color: 0xffd0a0, intensity: 1900, distance: 120 });
-    ctx.light({ pos: [16, 9, 22], target: [0, 11, 0], color: 0xffc890, intensity: 1900, distance: 120 });
+    ctx.light({ pos: [-20, 9, 16], target: [0, 8, 0], color: 0xffd0a0, intensity: 2600, distance: 140 });
+    ctx.light({ pos: [20, 9, 14], target: [0, 8, 0], color: 0xffc890, intensity: 2200, distance: 140 });
   }
 };
