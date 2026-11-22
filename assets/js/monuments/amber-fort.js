@@ -201,7 +201,7 @@ export default {
     // not a green slab with stripes
     [-1, 1].forEach((sx) => {
       [-1, 1].forEach((sz) => {
-        ctx.parterre(sx * 5.2, -32 + sz * 7.6, 8.4, 13.0, { y: 41.1, h: 0.7, t: 0.42, cross: false, shrubs: 5 });
+        ctx.parterre(sx * 5.2, -32 + sz * 7.6, 8.4, 13.0, { y: 41.34, h: 0.7, t: 0.42, cross: false, shrubs: 5 });
       });
     });
     add('marble', box(0.9, 0.2, 29), 0, 41.25, -32);
