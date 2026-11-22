@@ -77,6 +77,8 @@ assets/css/site.css         landing page
 tools/build_site.py         generates the pages from data/monuments.json
 tools/build_taj.py          adapts the original Taj Mahal scene into the site
 tools/qa.py                 headless-Chromium render check
+tools/linkcheck.py          every internal reference resolves
+tools/audit_data.py         data + copy audit (structure, years, images, AI tells)
 tools/MONUMENT-CONTRACT.md  how to write a new monument module
 ```
 
@@ -98,6 +100,19 @@ export default {
 ```
 
 Adding a thirteenth monument: write `assets/js/monuments/<id>.js`, add its entry to `data/monuments.json`, run `python3 tools/build_site.py`. The contract is in [`tools/MONUMENT-CONTRACT.md`](tools/MONUMENT-CONTRACT.md).
+
+## Checks
+
+```bash
+python3 tools/build_site.py     # regenerate the pages
+python3 tools/linkcheck.py      # every internal href/src/srcset resolves
+python3 tools/audit_data.py     # structure, years, image files, copy tells
+python3 tools/audit_data.py --links   # also HEAD every external link
+python3 tools/check_all.py      # render every page in headless Chromium
+```
+
+CI runs the first three on every push and fails if the generated pages are
+stale.
 
 ## Browser support
 

@@ -32,8 +32,8 @@ jobs:
           fi
       - name: Check internal links and assets
         run: python3 tools/linkcheck.py
-      - name: Check the data file is valid
-        run: python3 -c "import json;d=json.load(open('data/monuments.json'));assert len(d)==len({m['id'] for m in d});print(len(d),'monuments ok')"
+      - name: Audit the data file
+        run: python3 tools/audit_data.py --strict
 
   render:
     name: render a page in a headless browser
