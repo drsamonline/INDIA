@@ -37,7 +37,7 @@ export default {
   minDist: 15,
   maxDist: 320,
   time: 15.4,
-  home: { pos: [26, 21, 100], target: [0, 20, 0], fov: 40 },
+  home: { pos: [34, 21, 130], target: [0, 20, 0], fov: 40 },
   ground: { texture: 'grass', size: 2400, color: 0x9dab74, tile: 16 },
   views: [
     { name: 'Full', pos: [26, 21, 100], target: [0, 20, 0] },
@@ -303,6 +303,15 @@ export default {
       add(recess, box(0.14, 1.6, 0.05), i * 0.6, 33.6, ATD / 2 + 0.09);
       add(recess, box(0.14, 1.6, 0.05), i * 0.6, 33.6, -ATD / 2 - 0.09);
     }
+    // a moulded base course and a recessed field, so the attic is not a blank slab
+    add(light, box(ATW + 1.0, 0.34, ATD + 1.0), 0, 30.2, 0);
+    add(light2, box(ATW + 0.4, 0.2, ATD + 0.4), 0, 30.55, 0);
+    [-1, 1].forEach((s2) => {
+      add(recess, box(ATW * 0.52, 2.1, 0.09), 0, 31.8, s2 * (ATD / 2 + 0.03));
+      add(recess, box(ATW * 0.52, 2.1, 0.09), s2 * (ATW / 2 + 0.03), 31.8, 0, { ry: Math.PI / 2 });
+      add(light, box(ATW * 0.56, 0.16, 0.14), 0, 32.95, s2 * (ATD / 2 + 0.07));
+      add(light, box(ATW * 0.56, 0.16, 0.14), 0, 30.75, s2 * (ATD / 2 + 0.07));
+    });
     // attic cornice
     add(light, box(ATW + 1.8, 0.5, ATD + 1.8), 0, 37.6, 0);
     add(light2, box(ATW + 1.0, 0.28, ATD + 1.0), 0, 38.05, 0);
