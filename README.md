@@ -1,10 +1,10 @@
 # INDIA — monuments in code
 
-**Eighteen Indian monuments, rebuilt as live 3D miniatures in the browser.** No photographs in the models, no downloaded meshes, no build step: every dome, bracket and lattice screen is generated from code with [three.js](https://threejs.org), lit by a physical sky, and paired with the history behind it.
+**Twenty-four Indian monuments, rebuilt as live 3D miniatures in the browser.** No photographs in the models, no downloaded meshes, no build step: every dome, bracket and lattice screen is generated from code with [three.js](https://threejs.org), lit by a physical sky, and paired with the history behind it.
 
 [![Licence: CC BY-NC 4.0](https://img.shields.io/badge/licence-CC%20BY--NC%204.0-e8873a?style=flat-square)](LICENSE)
 [![Made with three.js](https://img.shields.io/badge/three.js-r169-000000?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org)
-[![Monuments](https://img.shields.io/badge/monuments-18-c1440e?style=flat-square)](#the-monuments)
+[![Monuments](https://img.shields.io/badge/monuments-24-c1440e?style=flat-square)](#the-monuments)
 [![No build step](https://img.shields.io/badge/build-none%20%C2%B7%20static%20files-f0a868?style=flat-square)](#run-it-locally)
 [![WebGL](https://img.shields.io/badge/WebGL-required-1b2740?style=flat-square)](#browser-support)
 
@@ -17,25 +17,31 @@
 ## The monuments
 
 | # | Monument | Place | Period | Page |
-|---|----------|-------|--------|------|
-| 01 | Taj Mahal | Agra, Uttar Pradesh | 1632–1653 | [open](monuments/taj-mahal.html) |
-| 02 | Qutb Minar | Mehrauli, Delhi | 1199–1220 | [open](monuments/qutub-minar.html) |
-| 03 | Hawa Mahal | Jaipur, Rajasthan | 1799 | [open](monuments/hawa-mahal.html) |
-| 04 | Charminar | Hyderabad, Telangana | 1591 | [open](monuments/charminar.html) |
-| 05 | Gateway of India | Mumbai, Maharashtra | 1913–1924 | [open](monuments/gateway-of-india.html) |
-| 06 | India Gate | New Delhi | 1921–1931 | [open](monuments/india-gate.html) |
-| 07 | Mysore Palace | Mysuru, Karnataka | 1897–1912 | [open](monuments/mysore-palace.html) |
-| 08 | Golden Temple | Amritsar, Punjab | 1577 · gilded 1830 | [open](monuments/golden-temple.html) |
-| 09 | Konark Sun Temple | Konark, Odisha | c. 1250 | [open](monuments/konark-sun-temple.html) |
-| 10 | Sanchi Stupa | Sanchi, Madhya Pradesh | 3rd century BCE | [open](monuments/sanchi-stupa.html) |
-| 11 | Victoria Memorial | Kolkata, West Bengal | 1906–1921 | [open](monuments/victoria-memorial.html) |
-| 12 | Meenakshi Temple | Madurai, Tamil Nadu | 12th–17th century | [open](monuments/meenakshi-temple.html) |
-| 13 | Lotus Temple | New Delhi | 1980–1986 | [open](monuments/lotus-temple.html) |
-| 14 | Shore Temple | Mahabalipuram, Tamil Nadu | c. 725 CE | [open](monuments/shore-temple.html) |
-| 15 | Rani ki Vav | Patan, Gujarat | 1063 | [open](monuments/rani-ki-vav.html) |
-| 16 | Amber Fort | Amer, Rajasthan | from 1592 | [open](monuments/amber-fort.html) |
-| 17 | CSMT | Mumbai, Maharashtra | 1878–1888 | [open](monuments/csmt-mumbai.html) |
-| 18 | Mahabodhi Temple | Bodh Gaya, Bihar | 3rd c. BCE onward | [open](monuments/mahabodhi-temple.html) |
+|---|---|---|---|---|
+| 1 | Taj Mahal | Agra, Uttar Pradesh | Mughal · 1632–1653 | [open](monuments/taj-mahal.html) |
+| 2 | Qutb Minar | Mehrauli, Delhi, Delhi | Delhi Sultanate · 1199–1220 | [open](monuments/qutub-minar.html) |
+| 3 | Hawa Mahal | Jaipur, Rajasthan | Rajput · 1799 | [open](monuments/hawa-mahal.html) |
+| 4 | Charminar | Hyderabad, Telangana | Qutb Shahi · 1591 | [open](monuments/charminar.html) |
+| 5 | Gateway of India | Mumbai, Maharashtra | British Raj · 1913–1924 | [open](monuments/gateway-of-india.html) |
+| 6 | India Gate | New Delhi, Delhi | British Raj · 1921–1931 | [open](monuments/india-gate.html) |
+| 7 | Mysore Palace | Mysuru, Karnataka | Wadiyar dynasty · 1897–1912 | [open](monuments/mysore-palace.html) |
+| 8 | Golden Temple | Amritsar, Punjab | Sikh · founded 1577, gilded 1830 | [open](monuments/golden-temple.html) |
+| 9 | Konark Sun Temple | Konark, Odisha | Eastern Ganga · c. 1250 | [open](monuments/konark-sun-temple.html) |
+| 10 | Sanchi Stupa | Sanchi, Madhya Pradesh | Mauryan · 3rd century BCE | [open](monuments/sanchi-stupa.html) |
+| 11 | Victoria Memorial | Kolkata, West Bengal | British Raj · 1906–1921 | [open](monuments/victoria-memorial.html) |
+| 12 | Meenakshi Temple | Madurai, Tamil Nadu | Pandya and Vijayanagara · 12th–17th c. | [open](monuments/meenakshi-temple.html) |
+| 13 | Lotus Temple | New Delhi, Delhi | Bahá’í · 1980–1986 | [open](monuments/lotus-temple.html) |
+| 14 | Shore Temple | Mahabalipuram, Tamil Nadu | Pallava · c. 725 CE | [open](monuments/shore-temple.html) |
+| 15 | Rani ki Vav | Patan, Gujarat | Solanki · 1063 | [open](monuments/rani-ki-vav.html) |
+| 16 | Amber Fort | Amer, Jaipur, Rajasthan | Kachwaha Rajput · from 1592 | [open](monuments/amber-fort.html) |
+| 17 | CSMT, Mumbai | Mumbai, Maharashtra | British Raj · 1878–1888 | [open](monuments/csmt-mumbai.html) |
+| 18 | Mahabodhi Temple | Bodh Gaya, Bihar | Mauryan to Gupta · 3rd c. BCE – 6th c. CE | [open](monuments/mahabodhi-temple.html) |
+| 19 | Statue of Unity | Kevadia, Gujarat | Modern · 2013–2018 | [open](monuments/statue-of-unity.html) |
+| 20 | Kandariya Mahadeva | Khajuraho, Madhya Pradesh | Chandela · c. 1030 | [open](monuments/kandariya-mahadeva.html) |
+| 21 | Basilica of Bom Jesus | Old Goa, Goa | Portuguese · 1594–1605 | [open](monuments/basilica-bom-jesus.html) |
+| 22 | Mehrangarh | Jodhpur, Rajasthan | Rathore Rajput · from 1459 | [open](monuments/mehrangarh-fort.html) |
+| 23 | Jantar Mantar | Jaipur, Rajasthan | Rajput · 1728–1734 | [open](monuments/jantar-mantar.html) |
+| 24 | Somnath Temple | Prabhas Patan, Gujarat | Rebuilt · 1951 | [open](monuments/somnath-temple.html) |
 
 Ten of them are UNESCO World Heritage Sites; two more are on the tentative list.
 
