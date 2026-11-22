@@ -6,6 +6,7 @@ export default {
   accent: '#b8b2a4',
   accent2: '#d8d2c4',
   seed: 83,
+  fogScale: 0.45,
   time: 16.9,
   bounds: 150,
   minDist: 60,
@@ -127,11 +128,15 @@ export default {
     // arms: hanging at the sides, hands beside the thighs
     [-1, 1].forEach((sd) => {
       add(B, cyl(6.2, 5.1, 34, 12), sd * 26.6, BASE + 129, 0);             // upper arm
-      add(J, cyl(6.9, 5.6, 33, 12), sd * 26.6, BASE + 129.5, 0);           // jacket sleeve
+      add(J, cyl(7.2, 5.4, 34, 12), sd * 22.6, BASE + 130.0, 0);           // jacket sleeve, tapered through
+      add(J, sph(5.4, 10), sd * 22.6, BASE + 113.0, 0, { sy: 0.7 });        // rounded cuff, no step
       add(J, cyl(5.9, 6.0, 1.4, 12), sd * 26.5, BASE + 113.5, 0);          // cuff
       add(B, sph(5.3, 12), sd * 26.4, BASE + 112, 0, { sy: 0.85 });        // elbow
       add(B, cyl(5.0, 4.0, 30, 12), sd * 26.2, BASE + 96, 0);              // forearm
-      add(B, sph(4.0, 12), sd * 25.8, BASE + 79, 0, { sy: 1.3, sz: 0.68 }); // hand
+      add(B, sph(4.0, 12), sd * 21.8, BASE + 79, 0, { sy: 1.3, sz: 0.68 }); // hand
+      for (let f = -2; f <= 2; f++) {
+        add(B, cyl(0.75, 0.95, 6.4, 5), sd * 21.8 + f * 1.15, BASE + 73.4, 0.2, { rx: 0.08 });
+      }
       add(B, cyl(3.2, 3.8, 7.0, 10), sd * 25.6, BASE + 71, 0.6, { sz: 0.68 }); // fingers
       add(B, sph(2.5, 10), sd * 24.2, BASE + 79, 1.8, { sy: 1.5, sz: 0.55 }); // thumb
     });
@@ -142,6 +147,14 @@ export default {
     add(B, sph(7.6, 16), 0, BASE + 165.0, 1.6, { sy: 0.8, sz: 1.0 });      // jaw
     add(B, sph(3.6, 12), 0, BASE + 162.4, 5.4, { sy: 0.72, sz: 1.0 });     // chin
     add(B, box(11.8, 1.7, 2.4), 0, BASE + 172.4, 7.2);                     // brow
+    // the moustache, the one feature that makes the face his
+    add(B, box(9.6, 1.5, 1.9), 0, BASE + 165.4, 7.9, { rx: 0.12 });
+    add(B, sph(1.5, 8), -4.6, BASE + 166.2, 7.4, { sx: 1.3, sy: 0.7 });
+    add(B, sph(1.5, 8), 4.6, BASE + 166.2, 7.4, { sx: 1.3, sy: 0.7 });
+    // cheekbones and a chin
+    add(B, sph(3.0, 10), -4.8, BASE + 168.2, 5.4, { sy: 0.8 });
+    add(B, sph(3.0, 10), 4.8, BASE + 168.2, 5.4, { sy: 0.8 });
+    add(B, sph(3.4, 10), 0, BASE + 164.4, 6.6, { sy: 0.7 });
     add(B, cone(1.7, 4.8, 8), 0, BASE + 169.2, 8.8, { rx: Math.PI / 2 });  // nose
     [-1, 1].forEach((sd) => add(B, sph(2.4, 8), sd * 9.2, BASE + 169.0, -0.6, { sy: 1.3 })); // ears
     add(B, cyl(9.4, 9.7, 0.9, 18), 0, BASE + 177.2, 0, { sz: 0.96 });     // cap band
