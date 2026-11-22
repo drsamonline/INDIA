@@ -96,7 +96,22 @@ SIL Open Font License 1.1: <https://openfontlicense.org/>. The fonts are
 self-hosted, subset to Latin and Devanagari, and are not modified beyond
 subsetting.
 
-## 6 · Corrections
+## 6 · Licence history
+
+This project was published under **CC0 1.0 Universal** in its first commits
+and relicensed to **CC BY-NC 4.0** on 22 November 2026.
+
+CC0 is irrevocable. Anyone who received a copy under CC0 — from any commit
+before that date — keeps the rights CC0 granted for that copy, and those
+rights cannot be withdrawn. The CC BY-NC 4.0 terms apply to copies taken from
+this commit onward.
+
+The same is true of the Taj Mahal scene specifically: its source file,
+`tools/source/taj-mahal.original.html`, carried a CC0 dedication in its
+header. The page served today states CC BY-NC 4.0, but the earlier dedication
+still stands for the material as it was published then.
+
+## 7 · Corrections
 
 An attribution that is wrong, or a licence that is missing, is a defect.
 Open an issue at <https://github.com/drsamonline/INDIA/issues>.

@@ -49,6 +49,14 @@ their own Creative Commons licences, the text adapted from Wikipedia is
 CC BY-SA 4.0, three.js is MIT and the typefaces are under the SIL Open Font
 License. Every one of those is listed, with its licence, in NOTICE.
 
-The full legal code of CC BY-NC 4.0 is not reproduced in this file. Read it
-at the URL above. If you redistribute this repository, ship this file, NOTICE
-and a link to that legal code together.
+On the full text
+---------------
+
+CC BY-NC 4.0, Section 3(a)(1)(C), requires that a redistributor "indicate the
+Licensed Material is licensed under this Public License, and include the text
+of, or the URI or hyperlink to, this Public License". This file gives the URI,
+so shipping it satisfies that condition without reproducing the legal code.
+
+Reproducing the full legal code alongside the work is still the tidier
+practice, and is recommended if you redistribute this repository publicly:
+https://creativecommons.org/licenses/by-nc/4.0/legalcode
