@@ -10,9 +10,23 @@ Usage:
   python3 tools/build_site.py            # build everything that exists
   python3 tools/build_site.py --only qutub-minar
 """
-import json, os, re, sys, html, argparse
+import hashlib, json, os, re, sys, html, argparse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+def asset_version(*paths):
+    """A short stamp of the files a page loads, so a cached module cannot
+    outlive a deploy. GitHub Pages serves .js with a long cache and the
+    filenames never change, which is how a browser ends up running last
+    week's model against this week's HTML."""
+    h = hashlib.md5()
+    for p in paths:
+        try:
+            with open(os.path.join(ROOT, p), 'rb') as f:
+                h.update(f.read())
+        except OSError:
+            pass
+    return '?v=' + h.hexdigest()[:10]
 DATA = os.path.join(ROOT, 'data', 'monuments.json')
 TPL = os.path.join(ROOT, 'tools', 'templates')
 SITE = 'https://drsamonline.github.io/INDIA/'
@@ -37,7 +51,10 @@ def build_pages(monuments, only=None):
             print('  skip (no module):', m['id'])
             continue
         out = tpl
+        ver = asset_version('assets/js/monument-engine.js', 'assets/js/monuments/%s.js' % m['id'],
+                            'assets/css/monument.css', 'assets/js/index-data.js')
         repl = {
+            '__V__': ver,
             '__NAME__': esc(m['name']), '__BLURB__': esc(m['blurb']),
             '__PLACE__': esc(m['place']), '__STATE__': esc(m['state']),
             '__THEME__': m.get('accent', '#e8c39a'), '__WIKI__': esc(m['wikipedia']),
@@ -107,6 +124,7 @@ def build_index(monuments):
     out = out.replace('__FIRSTNAME__', esc(monuments[0]['name']))
     out = out.replace('__FIRSTID__', monuments[0]['id'])
     out = out.replace('__FIRSTIMG__', monuments[0]['image']['src'])
+    out = out.replace('__V__', asset_version('assets/css/site.css', 'assets/js/site.js'))
     out = out.replace('__FIRSTWEBP__', monuments[0]['image']['src'].replace('.jpg', '.webp'))
     out = out.replace('__OLDESTNAME__', years[0][1])
     out = out.replace('__NEWESTNAME__', years[-1][1])
