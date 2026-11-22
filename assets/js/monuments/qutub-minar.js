@@ -1,5 +1,12 @@
 /* Qutb Minar — Delhi · procedural miniature
-   Author: Dr Sohil Momin · CC BY-NC 4.0 */
+   Author: Dr Sohil Momin · CC BY-NC 4.0
+
+   Measured against ASI / UNESCO / Peña et al. (2010) structural survey:
+     height 72.5 m · base diameter 14.32 m · top diameter 2.75 m
+     plinth: square ashlar platform ~16.5 m on side, 1.7 m deep
+     five storeys, documented heights 95 / 51 / 41 / 25 / 22 ft
+     storey 1 alternating angular + rounded fluting (24 flutes),
+     storey 2 rounded only, storey 3 angular only, storeys 4-5 round. */
 
 export default {
   id: 'qutub-minar',
@@ -9,12 +16,12 @@ export default {
   bounds: 95,
   minDist: 18,
   maxDist: 340,
-  home: { pos: [76, 30, 98], target: [0, 32, 0], fov: 40 },
+  home: { pos: [86, 36, 116], target: [0, 35, 0], fov: 40 },
   ground: { texture: 'paving', size: 1600, color: 0xc9bda6 },
   views: [
-    { name: 'Full', pos: [76, 30, 98], target: [0, 32, 0] },
-    { name: 'Base', pos: [24, 8, 32], target: [0, 9, 0] },
-    { name: 'Crown', pos: [22, 66, 26], target: [0, 63, 0] },
+    { name: 'Full', pos: [86, 36, 116], target: [0, 35, 0] },
+    { name: 'Base', pos: [26, 7, 34], target: [0, 10, 0] },
+    { name: 'Crown', pos: [13, 66, 17], target: [0, 64, 0] },
     { name: 'Courtyard', pos: [-40, 13, 40], target: [-10, 10, 4] }
   ],
   tour: [
@@ -57,33 +64,76 @@ export default {
 
   build(ctx) {
     const T3 = ctx.THREE;
-    const { add, box, cyl, sph, cone, arch, archFrame, dome, block, col } = ctx;
+    const { add, box, cyl, sph, cone, dome, arch, archFrame, block, col } = ctx;
+    const TAU = Math.PI * 2;
 
-    /* ---- fluted shaft section ---- */
-    function fluted(rTop, rBot, h, flutes, amp, rings = 16) {
-      const seg = flutes * 5;
-      const pos = [], uv = [], idx = [];
-      for (let j = 0; j <= rings; j++) {
-        const v = j / rings, y = v * h, r = rBot + (rTop - rBot) * v;
-        for (let i = 0; i <= seg; i++) {
-          const a = (i / seg) * Math.PI * 2;
-          const rr = r * (1 + amp * Math.cos(flutes * a));
-          pos.push(Math.cos(a) * rr, y, Math.sin(a) * rr);
-          uv.push(i / seg, v * 3);
+    /* ===================================================================
+       measured profile
+       =================================================================== */
+    const PLINTH_H = 1.7;        // square ashlar platform, 1.7 m deep
+    const PLINTH_W = 16.5;       // ~16.5 m on side
+    const BASE_D = 14.32;        // ASI: diameter at the base
+    const TOP_D = 2.75;          // ASI: diameter at the top
+    const TOP_Y = 69.0;          // top of the fifth storey (= platform level)
+    const TOTAL = 72.5;          // ASI: total height to the finial
+
+    // documented storey heights 95 / 51 / 41 / 25 / 22 ft, scaled so that
+    // the shafts run from the plinth to the platform under the crown.
+    const shaftTotal = TOP_Y - PLINTH_H;
+    const FT = shaftTotal / 234;
+    const H = [95 * FT, 51 * FT, 41 * FT, 25 * FT, 22 * FT];
+
+    const diaAt = (y) => BASE_D + (TOP_D - BASE_D) * ((y - PLINTH_H) / shaftTotal);
+
+    /* ===================================================================
+       fluted shaft: built flute-by-flute so that each lobe keeps its own
+       crisp arris, and band-by-band so that marble inlay sits flush in
+       the sandstone instead of being stuck on as a ring.
+       =================================================================== */
+    function lobe(t, kind, phase) {
+      // returns 0..1 radial offset across one flute
+      if (kind === 'plain') return 0;
+      if (kind === 'round') return Math.pow(Math.sin(Math.PI * t), 0.9);
+      if (kind === 'angular') return Math.pow(1 - Math.abs(2 * t - 1), 0.72);
+      // 'mixed' — alternate angular ridges and rounded ones
+      return (phase % 2 === 0)
+        ? Math.pow(1 - Math.abs(2 * t - 1), 0.72)
+        : Math.pow(Math.sin(Math.PI * t), 0.9);
+    }
+
+    function shaftBand(y0, y1, d0, d1, flutes, kind, key, amp, cx = 0, cz = 0, altKey = null) {
+      const per = kind === 'plain' ? 9 : 5;
+      const rings = 3;
+      const n = kind === 'plain' ? 1 : flutes;
+      for (let i = 0; i < n; i++) {
+        const a0 = (i / n) * TAU, a1 = ((i + 1) / n) * TAU;
+        const pos = [], uv = [], idx = [];
+        for (let j = 0; j <= rings; j++) {
+          const v = j / rings;
+          const y = y0 + (y1 - y0) * v;
+          const r = (d0 + (d1 - d0) * v) / 2;
+          for (let k = 0; k <= per; k++) {
+            const t = k / per;
+            const a = a0 + (a1 - a0) * t;
+            const rr = r * (1 + amp * lobe(t, kind, i));
+            pos.push(cx + Math.cos(a) * rr, y, cz + Math.sin(a) * rr);
+            uv.push(t, v);
+          }
         }
-      }
-      for (let j = 0; j < rings; j++) {
-        for (let i = 0; i < seg; i++) {
-          const a = j * (seg + 1) + i, b = a + seg + 1;
-          idx.push(a, b, a + 1, a + 1, b, b + 1);
+        for (let j = 0; j < rings; j++) {
+          for (let k = 0; k < per; k++) {
+            const a = j * (per + 1) + k, b = a + per + 1;
+            idx.push(a, b, a + 1, a + 1, b, b + 1);
+          }
         }
+        const g = new T3.BufferGeometry();
+        g.setAttribute('position', new T3.Float32BufferAttribute(pos, 3));
+        g.setAttribute('uv', new T3.Float32BufferAttribute(uv, 2));
+        g.setIndex(idx);
+        g.computeVertexNormals();
+        const k2 = (altKey && key === 'sandstoneRed') ? (i % 2 ? key : altKey) : key;
+        add(k2, g, 0, 0, 0);
       }
-      const g = new T3.BufferGeometry();
-      g.setAttribute('position', new T3.Float32BufferAttribute(pos, 3));
-      g.setAttribute('uv', new T3.Float32BufferAttribute(uv, 2));
-      g.setIndex(idx);
-      g.computeVertexNormals();
-      return g;
     }
 
     /* ---- paved courtyard ---- */
@@ -92,122 +142,175 @@ export default {
     add('stone', box(0.5, 0.12, 66.4), 39.2, 0.06, 6);
     add('stone', box(0.5, 0.12, 66.4), -39.2, 0.06, 6);
 
-    /* ---- plinth ---- */
-    col('stone', 12.6, 13.6, 1.0, 0, 0, 0, 36);
-    col('sandstoneBuff', 11.9, 12.4, 1.1, 0, 1.0, 0, 36);
-    for (let i = 0; i < 5; i++) block('stone', 5.0 - i * 0.32, 0.22, 1.2, 0, i * 0.22, 14.2 - i * 0.95);
-    add('stone', cyl(12.5, 12.5, 0.22, 44), 0, 2.1, 0);
-
-    /* ---- entrance doorway (facing +z) ---- */
-    add('dark', arch(2.4, 4.2, 0.5), 0, 2.2, 12.1);
-    add('marble', archFrame(2.9, 4.6, 0.24, 0.34), 0, 2.2, 12.2);
-
-    /* ---- five storeys ---- */
-    const storeys = [
-      { rB: 7.16, rT: 6.15, h: 24.4, flutes: 24, amp: 0.085, key: 'sandstoneRed' },
-      { rB: 5.62, rT: 4.95, h: 14.6, flutes: 24, amp: 0.075, key: 'sandstoneRed' },
-      { rB: 4.72, rT: 4.10, h: 10.0, flutes: 24, amp: 0.065, key: 'sandstoneRed' },
-      { rB: 3.86, rT: 3.36, h: 7.0, flutes: 12, amp: 0.04, key: 'marble' },
-      { rB: 3.14, rT: 2.60, h: 4.4, flutes: 12, amp: 0.035, key: 'marble' }
-    ];
-    let y = 2.1;
-    storeys.forEach((s, si) => {
-      add(s.key, fluted(s.rT, s.rB, s.h, s.flutes, s.amp), 0, y, 0);
-      // broad marble banding on the lower three storeys
-      if (si < 3) {
-        const f = 0.52;
-        const r = (s.rB + (s.rT - s.rB) * f) * (1 + s.amp) + 0.04;
-        add('marble', cyl(r, r, 1.1, 56), 0, y + s.h * f, 0);
-        const f2 = 0.08;
-        const r2 = (s.rB + (s.rT - s.rB) * f2) * (1 + s.amp) + 0.04;
-        add('marble', cyl(r2, r2, 0.5, 56), 0, y + s.h * f2, 0);
-      }
-      y += s.h;
-      if (si < storeys.length - 1) {
-        const rb = s.rT, rn = storeys[si + 1].rB;
-        // projecting balcony slab
-        add('sandstoneBuff', cyl(rb + 1.5, rb + 1.7, 0.5, 48), 0, y + 0.25, 0);
-        // brackets under the slab
-        const brackets = s.flutes;
-        for (let i = 0; i < brackets; i++) {
-          const a = (i / brackets) * Math.PI * 2;
-          add('sandstoneRed', box(0.28, 1.0, 0.55),
-            Math.cos(a) * (rb + 1.0), y - 0.3, Math.sin(a) * (rb + 1.0), { ry: -a });
-        }
-        // pierced railing above the slab
-        const railN = 44;
-        for (let i = 0; i < railN; i++) {
-          const a = (i / railN) * Math.PI * 2;
-          add('jali', box(1.0, 0.95, 0.07),
-            Math.cos(a) * (rb + 1.55), y + 0.98, Math.sin(a) * (rb + 1.55), { ry: -a + Math.PI / 2 });
-        }
-        add('marble', cyl(rb + 1.6, rb + 1.6, 0.12, 48), 0, y + 1.5, 0);
-        add('sandstoneBuff', cyl(rn + 0.16, rn + 0.16, 0.26, 36), 0, y + 0.05, 0);
-      }
-    });
-
-    /* ---- crown: cupola ---- */
-    const topY = y;
-    add('marble', cyl(3.45, 3.75, 0.55, 36), 0, topY + 0.28, 0);
-    for (let i = 0; i < 8; i++) {
-      const a = (i / 8) * Math.PI * 2;
-      add('marble', cyl(0.17, 0.2, 1.7, 6), Math.cos(a) * 2.6, topY + 1.35, Math.sin(a) * 2.6);
+    /* ---- square plinth (16.5 m on side, 1.7 m deep) ---- */
+    block('stone', PLINTH_W + 0.9, 0.35, PLINTH_W + 0.9, 0, 0, 0);
+    block('sandstoneBuff', PLINTH_W, 1.05, PLINTH_W, 0, 0.35, 0);
+    block('stone', PLINTH_W + 0.5, 0.3, PLINTH_W + 0.5, 0, 1.4, 0);
+    // steps up the north (model +z) face
+    for (let i = 0; i < 5; i++) {
+      block('stone', 5.4 - i * 0.3, 0.28, 0.5, 0, i * 0.28, PLINTH_W / 2 + 1.5 - i * 0.5);
     }
-    add('marble', cyl(3.05, 3.05, 0.24, 36), 0, topY + 2.3, 0);
-    add('marble', dome(2.7, 2.3, 28), 0, topY + 2.4, 0);
-    add('gold', cyl(0.11, 0.11, 1.6, 8), 0, topY + 5.2, 0);
-    add('gold', sph(0.28, 10), 0, topY + 6.1, 0);
-    add('gold', cone(0.22, 0.8, 8), 0, topY + 6.7, 0);
 
-    /* ---- low perimeter wall with crenellations ---- */
+    /* ---- entrance doorway ---- */
+    add('dark', arch(2.6, 4.4, 0.6), 0, PLINTH_H, 6.9);
+    add('marble', archFrame(3.2, 4.9, 0.26, 0.4), 0, PLINTH_H, 6.85);
+
+    /* ===================================================================
+       the five storeys
+       =================================================================== */
+    // band maps: [from, to, key] in normalised storey height
+    const red = 'sandstoneRed', buf = 'sandstoneBuff', mar = 'marble';
+    const bands = [
+      // storey 1 — red sandstone with broad inlaid marble bands low down
+      [[0.00, 0.035, mar], [0.035, 0.075, red], [0.075, 0.105, mar],
+       [0.105, 0.40, red], [0.40, 0.435, buf], [0.435, 0.72, red],
+       [0.72, 0.755, buf], [0.755, 1.00, red]],
+      // storey 2 — rounded flutes only
+      [[0.00, 0.10, red], [0.10, 0.135, buf], [0.135, 0.62, red],
+       [0.62, 0.655, buf], [0.655, 1.00, red]],
+      // storey 3 — angular flutes only
+      [[0.00, 0.11, red], [0.11, 0.15, buf], [0.15, 0.78, red],
+       [0.78, 0.82, buf], [0.82, 1.00, red]],
+      // storey 4 — Tughlaq: red sandstone banded with broad white marble
+      [[0.00, 0.16, mar], [0.16, 0.30, red], [0.30, 0.44, mar], [0.44, 0.58, red],
+       [0.58, 0.72, mar], [0.72, 0.86, red], [0.86, 1.00, mar]],
+      // storey 5 — white marble, red band at the foot and at the crown
+      [[0.00, 0.14, red], [0.14, 0.86, mar], [0.86, 1.00, red]]
+    ];
+    const storeys = [
+      { flutes: 24, kind: 'mixed', amp: 0.055 },
+      { flutes: 24, kind: 'round', amp: 0.050 },
+      { flutes: 24, kind: 'angular', amp: 0.046 },
+      { flutes: 1, kind: 'plain', amp: 0 },
+      { flutes: 1, kind: 'plain', amp: 0 }
+    ];
+
+    let y = PLINTH_H;
+    for (let si = 0; si < 5; si++) {
+      const s = storeys[si], h = H[si];
+      const dB = diaAt(y), dT = diaAt(y + h);
+      for (const [a, b, key] of bands[si]) {
+        shaftBand(y + h * a, y + h * b,
+          dB + (dT - dB) * a, dB + (dT - dB) * b,
+          s.flutes, s.kind, key, s.amp, 0, 0, si === 0 ? 'sandstonePink' : null);
+      }
+      // plain keel moulding at the foot of each storey
+      add(buf, cyl(dB / 2 + 0.14, dB / 2 + 0.14, 0.22, 48), 0, y + 0.11, 0);
+      y += h;
+
+      if (si < 4) {
+        const rT = dT / 2;
+        const proj = [1.75, 1.55, 1.30, 1.05][si];
+        const rOut = rT + proj;
+
+        /* ---- muqarnas corbel course under the slab ---- */
+        const nb = 40;
+        for (let k = 0; k < 3; k++) {
+          const rr = rT + proj * (0.30 + 0.235 * k);
+          const yy = y - 0.10 - 0.20 * (2 - k);
+          const wd = (TAU * rr / nb) * 0.92;
+          for (let i = 0; i < nb; i++) {
+            const a = (i / nb) * TAU + (k % 2) * (TAU / nb) * 0.5;
+            add(red, box(wd, 0.22, proj * 0.34), Math.cos(a) * rr, yy, Math.sin(a) * rr, { ry: -a });
+          }
+        }
+        // bell-shaped pendentive ring closing the corbels
+        add(red, ctx.lathe([[rT + 0.05, 0], [rT + proj * 0.55, 0.34], [rOut, 0.62], [rOut, 0.66]], 48), 0, y - 0.66, 0);
+
+        /* ---- projecting balcony slab ---- */
+        add('sandstoneBuff', cyl(rOut, rOut * 0.985, 0.34, 56), 0, y + 0.17, 0);
+        add(mar, cyl(rOut + 0.10, rOut + 0.10, 0.10, 56), 0, y + 0.39, 0);
+
+        /* ---- low parapet with merlon posts ---- */
+        add(red, ctx.lathe([[rOut - 0.20, 0], [rOut, 0], [rOut, 0.46], [rOut - 0.20, 0.46]], 56), 0, y + 0.44, 0);
+        const np = 52;
+        for (let i = 0; i < np; i++) {
+          const a = (i / np) * TAU;
+          add(buf, box(0.24, 0.20, 0.20), Math.cos(a) * (rOut - 0.09), y + 0.94, Math.sin(a) * (rOut - 0.09), { ry: -a });
+        }
+        // the next storey springs from a short drum on the balcony
+        const rNext = diaAt(y) / 2;
+        add(buf, cyl(rNext + 0.10, rNext + 0.10, 0.30, 44), 0, y + 0.42, 0);
+      }
+    }
+
+    /* ===================================================================
+       crown: platform, railing, chhatri, finial
+       =================================================================== */
+    const rTop = TOP_D / 2;
+    add(mar, cyl(rTop + 0.55, rTop + 0.55, 0.30, 40), 0, TOP_Y + 0.15, 0);
+    add(buf, cyl(rTop + 0.75, rTop + 0.75, 0.16, 40), 0, TOP_Y + 0.38, 0);
+    // railing round the platform
+    const nPost = 20, rRail = rTop + 0.62;
+    for (let i = 0; i < nPost; i++) {
+      const a = (i / nPost) * TAU;
+      add('black', cyl(0.045, 0.045, 0.85, 6), Math.cos(a) * rRail, TOP_Y + 0.89, Math.sin(a) * rRail);
+    }
+    add('black', ctx.torus(rRail, 0.045, 5, 40), 0, TOP_Y + 1.30, 0, { rx: Math.PI / 2 });
+    add('black', ctx.torus(rRail, 0.035, 5, 40), 0, TOP_Y + 1.02, 0, { rx: Math.PI / 2 });
+
+    // chhatri: eight columns under a small dome
+    const chY = TOP_Y + 0.44, chR = 1.55;
+    add(mar, cyl(chR + 0.32, chR + 0.38, 0.22, 20), 0, chY, 0);
+    for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * TAU;
+      add(mar, cyl(0.15, 0.17, 1.65, 8), Math.cos(a) * chR, chY + 1.0, Math.sin(a) * chR);
+      add(mar, cyl(0.20, 0.20, 0.10, 8), Math.cos(a) * chR, chY + 0.05, Math.sin(a) * chR);
+    }
+    add(mar, cyl(chR + 0.30, chR + 0.24, 0.24, 20), 0, chY + 1.90, 0);
+    add(mar, dome(chR + 0.10, 1.05, 24), 0, chY + 2.02, 0);
+    add('gold', cyl(0.06, 0.06, 0.9, 6), 0, chY + 3.35, 0);
+    add('gold', sph(0.17, 8), 0, chY + 3.85, 0);
+    add('gold', cone(0.13, 0.5, 6), 0, chY + 4.2, 0);
+
+    /* ===================================================================
+       low perimeter wall with crenellations
+       =================================================================== */
     (function wall() {
-      const R = 34, H = 2.7, T = 0.45;
-      // a ring wall, revolved from a rectangular profile
-      add('sandstoneRed', ctx.lathe([[R - T, 0], [R + T, 0], [R + T, H], [R - T, H]], 72), 0, 0, 0);
-      add('sandstoneBuff', ctx.lathe([[R - T - 0.12, H], [R + T + 0.12, H], [R + T + 0.12, H + 0.22], [R - T - 0.12, H + 0.22]], 72), 0, 0, 0);
-      // merlons
+      const R = 34, Hw = 2.7, T = 0.45;
+      add(red, ctx.lathe([[R - T, 0], [R + T, 0], [R + T, Hw], [R - T, Hw]], 72), 0, 0, 0);
+      add(buf, ctx.lathe([[R - T - 0.12, Hw], [R + T + 0.12, Hw], [R + T + 0.12, Hw + 0.22], [R - T - 0.12, Hw + 0.22]], 72), 0, 0, 0);
       const n = 72;
       for (let i = 0; i < n; i++) {
         if (i % 2) continue;
-        const a = (i / n) * Math.PI * 2;
-        add('sandstoneRed', box(0.85, 0.62, 0.7), Math.cos(a) * R, H + 0.52, Math.sin(a) * R, { ry: -a });
+        const a = (i / n) * TAU;
+        add(red, box(0.85, 0.62, 0.7), Math.cos(a) * R, Hw + 0.52, Math.sin(a) * R, { ry: -a });
       }
-      // gate piers on the south, with a gap in the wall
       [-1, 1].forEach((sg) => {
         block('sandstoneBuff', 1.7, 4.6, 1.7, sg * 3.4, 0, R);
         add('sandstoneBuff', dome(1.05, 0.95, 16), sg * 3.4, 4.6, R);
-        add('gold', ctx.cyl(0.07, 0.07, 0.6, 6), sg * 3.4, 5.7, R);
+        add('gold', cyl(0.07, 0.07, 0.6, 6), sg * 3.4, 5.7, R);
       });
     })();
 
     /* ---- Alai Darwaza ---- */
     (function alaiDarwaza(x, z) {
       const w = 9.6, h = 11;
-      block('sandstoneRed', w, h, w, x, 0, z);
+      block(red, w, h, w, x, 0, z);
       add('dark', arch(5.2, 7.4, 0.6), x, 0, z + w / 2 + 0.05);
-      add('marble', archFrame(6.0, 8.0, 0.45, 0.4), x, 0, z + w / 2 + 0.1);
+      add(mar, archFrame(6.0, 8.0, 0.45, 0.4), x, 0, z + w / 2 + 0.1);
       add('dark', arch(4.4, 6.6, 0.5), x - w / 2 - 0.05, 0, z, { ry: Math.PI / 2 });
-      add('marble', archFrame(5.1, 7.1, 0.38, 0.36), x - w / 2 - 0.1, 0, z, { ry: Math.PI / 2 });
-      block('marble', w + 1.0, 0.7, w + 1.0, x, h, z);
-      add('marble', box(w + 0.05, 0.55, w + 0.05), x, h - 1.3, z);
+      add(mar, archFrame(5.1, 7.1, 0.38, 0.36), x - w / 2 - 0.1, 0, z, { ry: Math.PI / 2 });
+      block(mar, w + 1.0, 0.7, w + 1.0, x, h, z);
+      add(mar, box(w + 0.05, 0.55, w + 0.05), x, h - 1.3, z);
       for (const [dx, dz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-        add('marble', cyl(0.6, 0.68, 2.1, 8), x + dx * (w / 2 - 0.7), h + 1.7, z + dz * (w / 2 - 0.7));
-        add('marble', dome(0.78, 0.75, 12), x + dx * (w / 2 - 0.7), h + 2.75, z + dz * (w / 2 - 0.7));
+        add(mar, cyl(0.6, 0.68, 2.1, 8), x + dx * (w / 2 - 0.7), h + 1.7, z + dz * (w / 2 - 0.7));
+        add(mar, dome(0.78, 0.75, 12), x + dx * (w / 2 - 0.7), h + 2.75, z + dz * (w / 2 - 0.7));
       }
-      add('marble', cyl(4.5, 4.7, 0.55, 30), x, h + 0.95, z);
-      add('marble', dome(4.2, 3.5, 28), x, h + 1.2, z);
+      add(mar, cyl(4.5, 4.7, 0.55, 30), x, h + 0.95, z);
+      add(mar, dome(4.2, 3.5, 28), x, h + 1.2, z);
       add('gold', cyl(0.1, 0.1, 1.4, 8), x, h + 5.6, z);
       add('gold', sph(0.24, 8), x, h + 6.3, z);
     })(-32, 26);
 
-    /* ---- Iron Pillar ---- */
+    /* ---- Iron Pillar (7.2 m shaft on its plinth) ---- */
     (function ironPillar(x, z) {
       block('stone', 3.6, 0.9, 3.6, x, 0, z);
       block('stone', 2.8, 0.7, 2.8, x, 0.9, z);
-      add('black', cyl(0.44, 0.52, 7.4, 14), x, 1.6 + 3.7, z);
-      add('black', cyl(0.58, 0.44, 0.55, 14), x, 1.6 + 7.6, z);
-      add('bronze', cyl(0.36, 0.38, 1.0, 10), x, 1.6 + 8.4, z);
-      add('bronze', sph(0.42, 10), x, 1.6 + 9.0, z);
+      add('black', cyl(0.44, 0.52, 7.2, 14), x, 1.6 + 3.6, z);
+      add('black', cyl(0.58, 0.44, 0.55, 14), x, 1.6 + 7.5, z);
+      add('bronze', cyl(0.36, 0.38, 1.0, 10), x, 1.6 + 8.3, z);
+      add('bronze', sph(0.42, 10), x, 1.6 + 8.9, z);
       ctx.railing(x, 1.6, z + 2.1, 4.8, 'black', 0.9, 0, 6);
     })(14, 14);
 
@@ -219,33 +322,33 @@ export default {
           const x = cx - 16 + i * 4, z = cz - 11 + r * 5;
           col('stone', 0.34, 0.4, 4.4, x, 0.55, z, 8);
           col('stone', 0.42, 0.46, 0.32, x, 4.95, z, 8);
-          if (i < 8 && r === 0) add('sandstoneRed', archFrame(3.3, 3.5, 0.24, 0.4), x + 2, 5.15, z);
+          if (i < 8 && r === 0) add(red, archFrame(3.3, 3.5, 0.24, 0.4), x + 2, 5.15, z);
         }
       }
       for (let i = 0; i < 7; i++) {
         const h = 1.5 + ((i * 37) % 5) * 0.6;
-        block('sandstoneRed', 3.8, h, 0.95, cx - 15 + i * 5, 0.55, cz + 14);
+        block(red, 3.8, h, 0.95, cx - 15 + i * 5, 0.55, cz + 14);
       }
-      block('sandstoneRed', 10.4, 7.6, 2.4, cx + 20, 0, cz);
+      block(red, 10.4, 7.6, 2.4, cx + 20, 0, cz);
       add('dark', arch(4.2, 6.1, 0.4), cx + 20, 0, cz + 1.3);
-      add('marble', archFrame(4.9, 6.6, 0.34, 0.3), cx + 20, 0, cz + 1.4);
-      block('marble', 11.2, 0.55, 3.0, cx + 20, 7.6, cz);
-      add('marble', dome(1.7, 1.4, 14), cx + 17.2, 8.15, cz);
-      add('marble', dome(1.7, 1.4, 14), cx + 22.8, 8.15, cz);
+      add(mar, archFrame(4.9, 6.6, 0.34, 0.3), cx + 20, 0, cz + 1.4);
+      block(mar, 11.2, 0.55, 3.0, cx + 20, 7.6, cz);
+      add(mar, dome(1.7, 1.4, 14), cx + 17.2, 8.15, cz);
+      add(mar, dome(1.7, 1.4, 14), cx + 22.8, 8.15, cz);
     })(-30, -8);
 
-    /* ---- Alai Minar stump ---- */
+    /* ---- Alai Minar stump: 25 m extant, ~24.5 m across ---- */
     (function alaiMinar(x, z) {
-      col('stone', 12.8, 13.4, 1.3, x, 0, z, 36);
-      add('sandstoneRed', fluted(11.4, 12.3, 21, 32, 0.05, 8), x, 1.3, z);
-      add('stone', cyl(11.7, 11.7, 0.55, 40), x, 22.6, z);
+      col('stone', 12.2, 12.6, 1.3, x, 0, z, 36);
+      shaftBand(1.3, 25.0, 24.4, 22.6, 32, 'angular', red, 0.05, x, z);
+      add('stone', cyl(11.2, 11.2, 0.55, 40), x, 25.3, z);
       for (let i = 0; i < 10; i++) {
-        const a = (i / 10) * Math.PI * 2;
-        add('stone', box(2.5, 1.3, 1.9), x + Math.cos(a) * 8.5, 23.1, z + Math.sin(a) * 8.5, { ry: a });
+        const a = (i / 10) * TAU;
+        add('stone', box(2.5, 1.3, 1.9), x + Math.cos(a) * 8.2, 25.9, z + Math.sin(a) * 8.2, { ry: a });
       }
     })(44, -36);
 
-    /* ---- grounds: lawn, paths, lamps, trees, people ---- */
+    /* ---- grounds ---- */
     add('foliage', ctx.plane(30, 22), -30, 0.6, -8, { rx: -Math.PI / 2 });
     add('paving', ctx.plane(9, 34), 0, 0.05, 22, { rx: -Math.PI / 2 });
     const trees = [[-58, 22], [-56, 42], [-22, 44], [8, 42], [30, 34], [-64, 2], [64, 12], [20, -22],

@@ -1,5 +1,12 @@
 /* Charminar — Hyderabad · procedural miniature
-   Author: Dr Sohil Momin · CC BY-NC 4.0 */
+   Author: Dr Sohil Momin · CC BY-NC 4.0
+
+   Measured against Wikipedia / Telangana Tourism / Archnet:
+     square block, 20 m on each side, four storeys, ~30 m to the parapet
+     four great arches, 11 m wide, opening to the four streets
+     minarets at the corners, 48.8 m to the top of the shaft, 56 m overall,
+     each in four tiers separated by projecting balconies
+     overall footprint with the minarets ~30.5 m on a side; 149 steps */
 
 export default {
   id: 'charminar',
@@ -10,14 +17,14 @@ export default {
   bounds: 80,
   minDist: 16,
   maxDist: 300,
-  home: { pos: [74, 27, 98], target: [0, 26, 0], fov: 40 },
+  home: { pos: [58, 24, 82], target: [0, 26, 0], fov: 42 },
   ground: { texture: 'paving', size: 2400, color: 0xc3b298 },
   views: [
-    { name: 'Full', pos: [74, 27, 98], target: [0, 26, 0] },
-    { name: 'Arches', pos: [15, 12, 44], target: [0, 13, 0] },
-    { name: 'Minarets', pos: [34, 50, 40], target: [0, 46, 0] },
-    { name: 'Crossing', pos: [4, 4.5, 12], target: [0, 7, 0] },
-    { name: 'Bazaar', pos: [-48, 9, 48], target: [0, 20, 0] }
+    { name: 'Full', pos: [58, 24, 82], target: [0, 26, 0] },
+    { name: 'Arches', pos: [12, 11, 40], target: [0, 12, 0] },
+    { name: 'Minarets', pos: [30, 46, 36], target: [0, 44, 0] },
+    { name: 'Crossing', pos: [3, 4, 11], target: [0, 6, 0] },
+    { name: 'Bazaar', pos: [-40, 8, 42], target: [0, 20, 0] }
   ],
   tour: [
     {
@@ -54,298 +61,313 @@ export default {
 
   build(ctx) {
     const T3 = ctx.THREE;
-    const { add, box, cyl, sph, cone, dome, onion, arch, archFrame, block, col, plane } = ctx;
+    const { add, box, cyl, sph, cone, dome, arch, archFrame, block, col, lathe } = ctx;
+    const TAU = Math.PI * 2;
 
-    /* granite and limestone plaster — a pale warm grey, never white */
-    /* The palette's textured keys multiply their own colour by a map of the
-       same colour, so `granite` and `stone` render far darker than their hex.
-       These three surfaces keep the stone grain but hold the building at the
-       pale warm grey of granite dressed in lime plaster. */
-    const grain = ctx.tex('plaster').clone();
-    grain.needsUpdate = true;
-    grain.wrapS = grain.wrapT = T3.RepeatWrapping;
-    grain.repeat.set(1, 1);
-    const surface = (color, rough) => new T3.MeshStandardMaterial({ color, roughness: rough, map: grain });
-    const MASON = surface(0xc4c8ce, 0.9);   // granite masonry — warm mid grey
-    const PL = surface(0xd6d8db, 0.86);     // lime plaster — pale warm grey
-    const CR = surface(0xedeef0, 0.82);     // dressed stucco trim — palest
-    const GR = 'granite';                   // plinth, pedestals, drums
-    const ST = 'plaster';                   // mosque shell and domes
-    const GY = 'grey';                      // shadow lines and recesses
-    const JL = 'jali';                      // pierced balcony screens
+    /* ===================================================================
+       measured envelope
+       =================================================================== */
+    const SIDE = 20.0;           // block, 20 m on each side
+    const HALF = SIDE / 2;
+    const ARCH_W = 11.0;         // great arches, 11 m wide
+    const ARCH_H = 17.0;         // apex of the opening
+    const CREST = 20.0;          // cresting above the apex
+    const H1 = 20.5;             // arch storey
+    const H2 = 25.5;             // arcaded gallery
+    const H3 = 29.0;             // upper arcade
+    const H4 = 30.6;             // pierced parapet
+    const MC = 12.4;             // minaret centres, footprint 30.4 m
+    const M_TOP = 48.8;          // top of the fourth tier
+    const M_DOME = 56.0;         // finial
 
-    /* ---- a four-centred pointed arch, as at the Charminar ------------
-       The engine's archShape rises almost vertically from the springing and
-       closes in a sharp lancet; the Charminar's arches spread wide at the
-       haunch and close in a blunt point. Built here from two quadratics a
-       side, with the springing at 40% of the height. */
-    function archProfile(w, h, sp) {
-      const hw = w / 2, s = new T3.Shape();
-      s.moveTo(-hw, 0);
-      s.lineTo(-hw, sp);
-      s.quadraticCurveTo(-hw, h * 0.74, -hw * 0.50, h * 0.905);
-      s.quadraticCurveTo(-hw * 0.18, h * 0.975, 0, h);
-      s.quadraticCurveTo(hw * 0.18, h * 0.975, hw * 0.50, h * 0.905);
-      s.quadraticCurveTo(hw, h * 0.74, hw, sp);
-      s.lineTo(hw, 0);
-      s.closePath();
-      return s;
-    }
-    const SP = 0.40;
-    function archGeo(w, h, depth) {
-      return new T3.ExtrudeGeometry(archProfile(w, h, h * SP), { depth, bevelEnabled: false, curveSegments: 10 });
-    }
-    function frameGeo(w, h, thick, depth) {
-      const outer = archProfile(w, h, h * SP);
-      const iw = w - thick * 2, ih = h - thick * 1.2;
-      const pts = archProfile(iw, ih, ih * SP).getPoints(34).map((p) => new T3.Vector2(p.x, p.y + thick * 0.55));
-      outer.holes.push(new T3.Path(pts));
-      return new T3.ExtrudeGeometry(outer, { depth, bevelEnabled: false, curveSegments: 10 });
-    }
+    const wall = 'plaster';
+    const trim = 'sandstoneBuff';
+    const white = 'white';
 
-    /* ---- a wall pierced by one great arch ----------------------------- */
-    function piercedWall(w, h, depth, aw, ah, sill) {
+    /* ---- paved square, plinth, steps ---- */
+    add('paving', ctx.plane(96, 96), 0, 0.05, 0, { rx: -Math.PI / 2 });
+    block('granite', 26, 0.45, 26, 0, 0, 0);
+    block('stone', 25.2, 0.30, 25.2, 0, 0.45, 0);
+
+    /* ===================================================================
+       the block: each face is a pierced slab, so the arch is a real
+       opening that leads through to the crossing
+       =================================================================== */
+    function piercedFace(w, h, aw, ah, thick) {
       const s = new T3.Shape();
-      s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(w / 2, h); s.lineTo(-w / 2, h); s.closePath();
-      const pts = archProfile(aw, ah, ah * SP).getPoints(34).map((p) => new T3.Vector2(p.x, p.y + (sill || 0)));
-      s.holes.push(new T3.Path(pts));
-      return new T3.ExtrudeGeometry(s, { depth, bevelEnabled: false, curveSegments: 8 });
+      s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(w / 2, h); s.lineTo(-w / 2, h);
+      s.closePath();
+      const hole = ctx.archShape(aw, ah, 0.55);
+      s.holes.push(new T3.Path(hole.getPoints(34)));
+      return new T3.ExtrudeGeometry(s, { depth: thick, bevelEnabled: false, curveSegments: 8 });
     }
 
-    /* ---- plinth ------------------------------------------------------- */
-    block(GR, 34, 1.4, 34, 0, 0, 0);
-    add(ST, box(34.8, 0.3, 34.8), 0, 1.4, 0);
-    [[0, 17.6, 0], [0, -17.6, 0], [17.6, 0, Math.PI / 2], [-17.6, 0, Math.PI / 2]].forEach(([x, z, ry]) => {
-      for (let i = 0; i < 4; i++) {
-        block(ST, 7.4, 0.35 * (i + 1), 1.0, x, 0, z + (i * 0.9) * (z > 0 ? 1 : -1), { ry });
+    const T = 1.6;                                   // wall thickness
+    const faceGeo = () => piercedFace(SIDE, H1, ARCH_W, ARCH_H, T);
+    // +z (south, the camera side), -z, +x, -x
+    add(wall, faceGeo(), 0, 0, HALF - T);
+    add(wall, faceGeo(), 0, 0, -HALF + T, { ry: Math.PI });
+    add(wall, faceGeo(), HALF - T, 0, 0, { ry: Math.PI / 2 });
+    add(wall, faceGeo(), -HALF + T, 0, 0, { ry: -Math.PI / 2 });
+
+    // inner walls closing the cross-passage at the corners
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => {
+      block(wall, 4.6, H1, 4.6, sx * (HALF - 2.3), 0, sz * (HALF - 2.3));
+    });
+    // vault over the crossing
+    add(wall, dome(ARCH_W / 2 + 0.6, 2.6, 24), 0, 14.2, 0);
+    add(trim, cyl(ARCH_W / 2 + 0.7, ARCH_W / 2 + 0.7, 0.28, 24), 0, 14.1, 0);
+    add('stone', box(ARCH_W + 0.6, 0.12, ARCH_W + 0.6), 0, 0.76, 0);
+
+    /* ---- ornamental cresting and medallions over each arch ---- */
+    const faces = [
+      { ry: 0, x: 0, z: HALF, sx: 1 },
+      { ry: Math.PI, x: 0, z: -HALF, sx: -1 },
+      { ry: Math.PI / 2, x: HALF, z: 0, sx: 1 },
+      { ry: -Math.PI / 2, x: -HALF, z: 0, sx: -1 }
+    ];
+    // outward normal of a face, and its in-plane direction
+    const NO = (ry) => [Math.sin(ry), Math.cos(ry)];
+    faces.forEach((f) => {
+      const ry = f.ry;
+      const [nx, nz] = NO(ry);
+      const at = (ox, off) => [f.x + Math.cos(ry) * ox + nx * off, f.z - Math.sin(ry) * ox + nz * off];
+
+      // ornamental cresting rising from the apex of the arch to the cornice
+      const [ax, az] = at(0, 0.34);
+      add(trim, arch(3.4, 3.2, 0.26), ax, ARCH_H, az, { ry });
+      add(wall, arch(2.7, 2.7, 0.30), ax, ARCH_H + 0.10, az, { ry });
+      add(trim, sph(0.22, 8), ax, ARCH_H + 3.30, az);
+
+      // medallions in the spandrels
+      [-1, 1].forEach((sgn) => {
+        const [mx, mz] = at(sgn * (ARCH_W / 2 + 1.45), 0.20);
+        add(trim, cyl(0.85, 0.85, 0.16, 16), mx, 12.4, mz, { rx: Math.PI / 2, ry });
+        add(wall, cyl(0.62, 0.62, 0.20, 16), mx, 12.4, mz, { rx: Math.PI / 2, ry });
+      });
+
+      // pilaster strips flanking the arch
+      [-1, 1].forEach((sgn) => {
+        const [px, pz] = at(sgn * (ARCH_W / 2 + 0.60), 0.22);
+        block(trim, 1.1, H1, 0.5, px, 0, pz, { ry });
+      });
+    });
+
+    /* ---- cornice at the head of the arch storey ---- */
+    add(trim, box(SIDE + 1.5, 0.55, SIDE + 1.5), 0, H1 - 0.1, 0);
+    add(wall, box(SIDE + 0.9, 0.30, SIDE + 0.9), 0, H1 + 0.45, 0);
+
+    /* ===================================================================
+       storey 2 — the arcaded gallery, with a clock on each face
+       =================================================================== */
+    block(wall, SIDE + 0.4, H2 - H1 - 0.3, SIDE + 0.4, 0, H1 + 0.75, 0);
+    faces.forEach((f) => {
+      const ry = f.ry;
+      const [nx, nz] = NO(ry);
+      const at = (ox, off) => [f.x + Math.cos(ry) * ox + nx * off, f.z - Math.sin(ry) * ox + nz * off];
+      const n = 5, span = 3.2;
+      for (let i = 0; i < n; i++) {
+        if (i === 2) continue;                       // centre bay carries the clock
+        const [ax, az] = at((i - (n - 1) / 2) * span, 0.28);
+        add('dark', arch(2.1, 3.2, 0.22), ax, H1 + 1.35, az, { ry });
+        add(trim, archFrame(2.45, 3.5, 0.14, 0.12), ax, H1 + 1.30, az - 0.02, { ry });
+      }
+      // clock (added 1899) — white dial in the centre bay
+      const [cx2, cz2] = at(0, 0.32);
+      add('dark', cyl(1.05, 1.05, 0.10, 20), cx2, H2 - 3.0, cz2 - 0.04, { rx: Math.PI / 2, ry });
+      add(white, cyl(0.95, 0.95, 0.12, 20), cx2, H2 - 3.0, cz2, { rx: Math.PI / 2, ry });
+      add('dark', box(0.07, 0.60, 0.07), cx2, H2 - 2.98, cz2 + 0.10, { ry });
+      add('dark', box(0.38, 0.07, 0.07), cx2 + 0.17 * Math.cos(ry), H2 - 3.0, cz2 - 0.17 * Math.sin(ry), { ry });
+    });
+
+    /* ===================================================================
+       storey 3 — the upper arcade, set back
+       =================================================================== */
+    add(trim, box(SIDE + 1.9, 0.55, SIDE + 1.9), 0, H2 - 0.05, 0);
+    block(wall, SIDE - 0.6, H3 - H2 - 0.5, SIDE - 0.6, 0, H2 + 0.5, 0);
+    faces.forEach((f) => {
+      const ry = f.ry;
+      const [nx, nz] = NO(ry);
+      const n = 7, span = 2.3;
+      for (let i = 0; i < n; i++) {
+        const ox = (i - (n - 1) / 2) * span;
+        const ax = f.x + Math.cos(ry) * ox + nx * 0.34;
+        const az = f.z - Math.sin(ry) * ox + nz * 0.34;
+        add('dark', arch(1.2, 1.9, 0.18), ax, H2 + 0.95, az, { ry });
+        add(trim, archFrame(1.5, 2.15, 0.10, 0.10), ax, H2 + 0.90, az - 0.02, { ry });
       }
     });
 
-    /* ---- the four pierced walls ---------------------------------------
-       The block is 20 m square on plan with an 11 m wide, 20 m high arch on
-       each face: the opening takes the full height of the storey and 55% of
-       its width, so the arch — not the masonry — is what reads. The wall is
-       carried 1.2 m below the plinth top so the arch hole never touches the
-       outer boundary of the extrusion (which used to break the silhouette). */
-    const W = 20, T = 2.2, AW = 11, AH = 20;
-    const PTOP = 1.4;                 // plinth top
-    const WT = PTOP + 21.2;           // 22.6 — top of the arch storey
-    const wh = WT - 0.2;              // wall shape height
-    // +Z / -Z
-    add(MASON, piercedWall(W, wh, T, AW, AH, PTOP - 0.2), 0, 0.2, W / 2 - T);
-    add(MASON, piercedWall(W, wh, T, AW, AH, PTOP - 0.2), 0, 0.2, -W / 2);
-    // +X / -X
-    add(MASON, piercedWall(W, wh, T, AW, AH, PTOP - 0.2), W / 2 - T, 0.2, 0, { ry: Math.PI / 2 });
-    add(MASON, piercedWall(W, wh, T, AW, AH, PTOP - 0.2), -W / 2, 0.2, 0, { ry: Math.PI / 2 });
+    /* ===================================================================
+       storey 4 — the pierced parapet
+       =================================================================== */
+    add(trim, box(SIDE - 0.2, 0.40, SIDE - 0.2), 0, H3 - 0.05, 0);
+    const pW = SIDE - 1.2;
+    faces.forEach((f) => {
+      const ry = f.ry;
+      const nx2 = Math.sin(ry), nz2 = Math.cos(ry);
+      add('jali', box(pW, 1.2, 0.16), f.x + nx2 * 0.20, H3 + 0.75, f.z + nz2 * 0.20, { ry });
+      add(trim, box(pW + 0.4, 0.18, 0.34), f.x + nx2 * 0.20, H3 + 1.36, f.z + nz2 * 0.20, { ry });
+      for (let i = 0; i < 11; i++) {
+        const ox = (i - 5) * (pW / 11);
+        add(trim, box(0.34, 0.42, 0.28),
+          f.x + Math.cos(ry) * ox + nx2 * 0.20, H3 + 1.62, f.z - Math.sin(ry) * ox + nz2 * 0.20, { ry });
+      }
+    });
+    // roof slab
+    add(wall, box(SIDE - 1.0, 0.30, SIDE - 1.0), 0, H3 + 0.6, 0);
 
-    /* interior of the crossing: dark faces, dark ceiling, lit floor apron */
-    const IW = W - 2 * T;             // 15.6
-    add('dark', box(IW, AH - 0.2, 0.18), 0, PTOP + AH / 2 - 0.1, IW / 2 - 0.1);
-    add('dark', box(IW, AH - 0.2, 0.18), 0, PTOP + AH / 2 - 0.1, -IW / 2 + 0.1);
-    add('dark', box(0.18, AH - 0.2, IW), IW / 2 - 0.1, PTOP + AH / 2 - 0.1, 0);
-    add('dark', box(0.18, AH - 0.2, IW), -IW / 2 + 0.1, PTOP + AH / 2 - 0.1, 0);
-    add('dark', box(IW, 0.5, IW), 0, PTOP + AH - 0.3, 0);
-    add('dark', box(IW - 0.6, 0.35, IW - 0.6), 0, PTOP + AH - 0.62, 0);
-    // inner floor + fountain
-    add('cream', box(IW, 0.3, IW), 0, PTOP + 0.15, 0);
-    [[0, W / 2 - 1.4, 0], [0, -W / 2 + 1.4, Math.PI], [W / 2 - 1.4, 0, Math.PI / 2], [-W / 2 + 1.4, 0, -Math.PI / 2]]
-      .forEach(([x, z, ry]) => add('cream', box(AW + 1.2, 0.22, 3.2), x, PTOP + 0.26, z, { ry }));
-    add(GR, cyl(2.6, 2.8, 0.9, 16), 0, PTOP + 0.5, 0);
-    add(CR, cyl(2.2, 2.2, 0.3, 16), 0, PTOP + 1.1, 0);
-    add(CR, cyl(0.35, 0.45, 1.4, 10), 0, PTOP + 1.6, 0);
-    add('water', cyl(0.9, 1.0, 0.15, 14), 0, PTOP + 1.3, 0);
-
-    /* ---- stucco arch surrounds ---------------------------------------- */
-    [[0, W / 2 + 0.01, 0], [0, -W / 2 - 0.01, Math.PI], [W / 2 + 0.01, 0, Math.PI / 2], [-W / 2 - 0.01, 0, -Math.PI / 2]]
-      .forEach(([x, z, ry]) => {
-        add(CR, frameGeo(AW + 1.3, AH + 0.7, 0.45, 0.5), x, PTOP, z, { ry });
-        add(ST, box(AW + 4.2, 0.4, 0.6), x, PTOP + AH + 0.55, z, { ry });
-        // spandrel medallions in the haunches of the arch
-        for (const s of [-1, 1]) {
-          const off = s * (AW / 2 + 1.5);
-          add(CR, cyl(0.6, 0.6, 0.24, 12), x + off * Math.cos(ry), PTOP + AH * 0.74, z - off * Math.sin(ry),
-            { rx: Math.PI / 2, ry });
-        }
+    /* ---- the mosque on the roof, at the western end ---- */
+    (function roofMosque() {
+      const x = -4.6, z = 0;
+      block(wall, 8.4, 3.4, 9.6, x, H3 + 0.75, z);
+      add(trim, box(9.2, 0.34, 10.4), x, H3 + 4.15, z);
+      add('dark', arch(2.4, 3.0, 0.24), x, H3 + 0.85, z + 4.85);
+      add(white, archFrame(2.8, 3.3, 0.16, 0.14), x, H3 + 0.8, z + 4.8);
+      add(wall, dome(2.5, 2.6, 22), x, H3 + 4.4, z);
+      add(trim, cyl(0.30, 0.30, 0.5, 10), x, H3 + 7.0, z);
+      add('gold', sph(0.16, 8), x, H3 + 7.4, z);
+      // two small chhatris at the corners of the roof
+      [[HALF - 2.4, HALF - 2.4], [-HALF + 2.4, HALF - 2.4],
+       [HALF - 2.4, -HALF + 2.4], [-HALF + 2.4, -HALF + 2.4]].forEach(([cx, cz2]) => {
+        add(trim, cyl(0.72, 0.80, 0.18, 10), cx, H3 + 0.95, cz2);
+        add(wall, dome(0.70, 0.72, 14), cx, H3 + 1.05, cz2);
+        add('gold', sph(0.08, 6), cx, H3 + 1.72, cz2);
       });
+    })();
 
-    /* ---- two arcaded gallery storeys ----------------------------------- */
-    let y = WT;
-    add(CR, box(W + 1.8, 0.75, W + 1.8), 0, y + 0.37, 0);      // cornice over the arches
-    y += 0.75;                                                  // 23.35
-
-    // storey one: five open arches to a face
-    block(PL, W + 0.6, 4.0, W + 0.6, 0, y, 0);
-    for (let f = 0; f < 4; f++) {
-      const a = (f / 4) * Math.PI * 2;
-      const cs = Math.cos(a), sn = Math.sin(a);
-      for (let i = -2; i <= 2; i++) {
-        const px = i * 2.3 * cs + (W / 2 + 0.32) * sn;
-        const pz = -i * 2.3 * sn + (W / 2 + 0.32) * cs;
-        add('dark', archGeo(2.0, 2.85, 0.14), px, y + 0.55, pz, { ry: a });
-        add(CR, frameGeo(2.36, 3.1, 0.18, 0.22), px, y + 0.55, pz, { ry: a });
+    /* ===================================================================
+       the four minarets: four tiers, three projecting balconies
+       =================================================================== */
+    function balcony(y, r, proj) {
+      const rOut = r + proj;
+      // corbels
+      const nb = 20;
+      for (let k = 0; k < 2; k++) {
+        const rr = r + proj * (0.35 + 0.3 * k);
+        const yy = y - 0.14 - 0.17 * (1 - k);
+        for (let i = 0; i < nb; i++) {
+          const a = (i / nb) * TAU;
+          add(trim, box((TAU * rr / nb) * 0.9, 0.19, proj * 0.4), Math.cos(a) * rr, yy, Math.sin(a) * rr, { ry: -a });
+        }
       }
-    }
-    y += 4.0;                                                   // 27.35
-    add(CR, box(W + 1.5, 0.55, W + 1.5), 0, y + 0.27, 0);
-    y += 0.55;                                                  // 27.9
-
-    // storey two: a band of pierced screens
-    block(PL, W - 0.2, 3.5, W - 0.2, 0, y, 0);
-    for (let f = 0; f < 4; f++) {
-      const a = (f / 4) * Math.PI * 2;
-      const cs = Math.cos(a), sn = Math.sin(a);
-      for (let i = -3; i <= 3; i++) {
-        const px = i * 1.66 * cs + (W / 2 + 0.06) * sn;
-        const pz = -i * 1.66 * sn + (W / 2 + 0.06) * cs;
-        add(JL, box(1.24, 2.5, 0.07), px, y + 1.55, pz, { ry: a });
-        add(CR, box(0.16, 2.6, 0.16), px + 0.83 * cs, y + 1.55, pz - 0.83 * sn, { ry: a });
-      }
-    }
-    y += 3.5;                                                   // 31.4
-    const RF = y;                                               // roof level
-
-    /* ---- parapet with merlons and tiny corner minarets ----------------- */
-    add(CR, box(W + 1.2, 0.5, W + 1.2), 0, RF + 0.25, 0);
-    for (let side = 0; side < 4; side++) {
-      const a = (side / 4) * Math.PI * 2;
-      const cs = Math.cos(a), sn = Math.sin(a);
-      const ex = (W / 2 + 0.35) * sn, ez = (W / 2 + 0.35) * cs;
-      block(PL, 0.5, 0.85, W + 0.9, ex, RF + 0.5, ez, { ry: a });
-      for (let i = -5; i <= 5; i++) {
-        add(CR, box(0.42, 0.5, 0.42), i * 1.8 * cs + ex, RF + 1.62, -i * 1.8 * sn + ez, { ry: a });
-      }
-    }
-    const pn = 5;
-    for (let side = 0; side < 4; side++) {
-      const a = (side / 4) * Math.PI * 2;
-      for (let i = 0; i < pn; i++) {
-        const t = (i - (pn - 1) / 2) * 4.2;
-        const x = Math.cos(a) * t + Math.cos(a + Math.PI / 2) * (W / 2 + 0.9);
-        const z = Math.sin(a) * t + Math.sin(a + Math.PI / 2) * (W / 2 + 0.9);
-        col(PL, 0.36, 0.42, 2.0, x, RF + 1.05, z, 8);
-        add(PL, dome(0.44, 0.52, 10), x, RF + 3.05, z);
-        add('gold', cone(0.11, 0.34, 6), x, RF + 3.45, z);
-      }
-    }
-
-    /* ---- the mosque on the roof: a cluster of domes -------------------- */
-    const MH = 4.6;                       // prayer-hall height
-    block(PL, 12.8, MH, 9.6, 0, RF, 0);
-    add(ST, box(13.6, 0.4, 10.4), 0, RF + 0.2, 0);        // base moulding
-    add(ST, box(13.6, 0.45, 10.4), 0, RF + MH + 0.2, 0);  // cornice
-    // five-arch facade to the east (+Z), facing the camera
-    for (let i = -2; i <= 2; i++) {
-      add('dark', archGeo(1.7, 2.5, 0.16), i * 2.3, RF + 0.9, 4.86);
-      add(CR, frameGeo(2.05, 2.8, 0.17, 0.22), i * 2.3, RF + 0.9, 4.9);
-    }
-    // side walls get two arches each
-    for (const s of [-1, 1]) {
-      for (const i of [-1, 1]) {
-        add('dark', archGeo(1.4, 2.2, 0.16), s * 6.46, RF + 0.9, i * 2.4, { ry: s * Math.PI / 2 });
-        add(CR, frameGeo(1.7, 2.45, 0.15, 0.2), s * 6.5, RF + 0.9, i * 2.4, { ry: s * Math.PI / 2 });
-      }
-    }
-    // central dome on an octagonal drum
-    col(GR, 3.05, 3.3, 1.1, 0, RF + MH + 0.2, 0, 8);
-    add(ST, cyl(3.35, 3.3, 0.28, 8), 0, RF + MH + 1.45, 0);
-    add(PL, onion(3.2, 5.0, 26), 0, RF + MH + 1.6, 0);
-    add('gold', cyl(0.1, 0.12, 1.4, 8), 0, RF + MH + 7.3, 0);
-    add('gold', sph(0.24, 10), 0, RF + MH + 8.1, 0);
-    add('gold', cone(0.14, 0.65, 8), 0, RF + MH + 8.6, 0);
-    // two flanking domes
-    for (const s of [-1, 1]) {
-      col(GR, 1.75, 1.85, 0.7, s * 4.5, RF + MH + 0.2, 0, 8);
-      add(PL, onion(1.85, 2.9, 20), s * 4.5, RF + MH + 0.9, 0);
-      add('gold', cone(0.09, 0.55, 6), s * 4.5, RF + MH + 4.1, 0);
-    }
-    // four corner turrets on the hall
-    for (const [dx, dz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-      col(PL, 0.62, 0.72, 1.5, dx * 5.6, RF + MH + 0.2, dz * 4.0, 8);
-      add(PL, onion(0.78, 1.15, 14), dx * 5.6, RF + MH + 1.7, dz * 4.0);
-      add('gold', cone(0.07, 0.32, 6), dx * 5.6, RF + MH + 3.0, dz * 4.0);
-    }
-
-    /* ---- the four minarets --------------------------------------------
-       Octagonal, four tiers of decreasing diameter, each closed by a
-       projecting balcony with a pierced railing on corbels, then a bulbous
-       dome and finial. 1.4 (plinth) to 55.4 m — 56 m to the tip. */
-    function balcony(cx, cz, y, r) {
-      const R = r + 1.18;
-      const apo = r * Math.cos(Math.PI / 8);
-      // corbel brackets under the slab
-      for (let k = 0; k < 8; k++) {
-        const a = Math.PI / 8 + k * Math.PI / 4;
-        add(GR, box(0.4, 0.62, 0.5), cx + Math.cos(a) * (apo + 0.12), y - 0.3, cz + Math.sin(a) * (apo + 0.12), { ry: -a + Math.PI / 2 });
-      }
-      // the slab itself, projecting well past the shaft
-      add(CR, cyl(R, R - 0.18, 0.5, 8), cx, y + 0.25, cz);
-      add(CR, cyl(R + 0.06, R + 0.06, 0.13, 8), cx, y + 0.55, cz);
-      // pierced railing, one panel to each octagon face
-      const chord = 2 * R * Math.sin(Math.PI / 8) - 0.1;
-      for (let k = 0; k < 8; k++) {
-        const a = Math.PI / 8 + k * Math.PI / 4;
-        add(JL, box(chord, 1.05, 0.07), cx + Math.cos(a) * (apo + 0.66), y + 1.12, cz + Math.sin(a) * (apo + 0.66), { ry: -a + Math.PI / 2 });
-        add(CR, box(0.15, 1.15, 0.15), cx + Math.cos(a) * (apo + 0.66) + Math.cos(a + Math.PI / 2) * chord / 2,
-          y + 1.12, cz + Math.sin(a) * (apo + 0.62) + Math.sin(a + Math.PI / 2) * chord / 2, { ry: -a + Math.PI / 2 });
-      }
-      add(CR, cyl(apo + 0.74, apo + 0.74, 0.15, 8), cx, y + 1.7, cz);   // handrail
+      add(trim, cyl(rOut, rOut * 0.98, 0.26, 24), 0, y + 0.13, 0);
+      add(white, cyl(rOut + 0.08, rOut + 0.08, 0.09, 24), 0, y + 0.30, 0);
+      // pierced balustrade
+      add('jali', cyl(rOut - 0.06, rOut - 0.06, 0.62, 24, true), 0, y + 0.65, 0);
+      add(trim, cyl(rOut, rOut, 0.10, 24), 0, y + 0.99, 0);
     }
 
     function minaret(cx, cz) {
-      const base = PTOP;
-      // octagonal pedestal
-      col(GR, 3.0, 3.45, 2.3, cx, base, cz, 8);
-      add(CR, cyl(3.55, 3.7, 0.42, 8), cx, base + 2.5, cz);
-      add(GY, cyl(3.1, 3.1, 0.28, 8), cx, base + 2.85, cz);   // shadow gap
-      let y = base + 3.0;
-      const TIERS = [[2.72, 2.16, 11.6], [2.06, 1.74, 9.6], [1.68, 1.44, 8.0], [1.40, 1.22, 7.0]];
-      TIERS.forEach(([rb, rt, h]) => {
-        col(PL, rt, rb, h, cx, y, cz, 8);
-        // vertical stucco pilasters on each face so the tiers read at distance
-        const apo = ((rb + rt) / 2) * Math.cos(Math.PI / 8);
-        for (let k = 0; k < 8; k++) {
-          const a = Math.PI / 8 + k * Math.PI / 4;
-          add(CR, box(0.26, h * 0.86, 0.1), cx + Math.cos(a) * (apo + 0.01), y + h / 2, cz + Math.sin(a) * (apo + 0.01), { ry: -a + Math.PI / 2 });
-        }
-        y += h;
-        balcony(cx, cz, y, rt);
-        y += 1.2;
-      });
-      // dome, drum and finial
-      add(GY, cyl(2.05, 2.15, 0.28, 8), cx, y + 0.14, cz);
-      col(GR, 2.1, 2.2, 1.15, cx, y + 0.28, cz, 8);          // drum
-      add(CR, cyl(2.28, 2.18, 0.3, 8), cx, y + 1.58, cz);
-      add(PL, onion(2.15, 4.5, 26), cx, y + 1.72, cz);
-      add(GR, cyl(0.36, 0.5, 0.45, 10), cx, y + 6.4, cz);
-      add('gold', cyl(0.09, 0.12, 2.9, 8), cx, y + 8.1, cz);
-      add('gold', sph(0.26, 10), cx, y + 9.6, cz);
-      add('gold', cone(0.15, 0.85, 8), cx, y + 10.4, cz);
-    }
-    const cx0 = W / 2 + 1.6;
-    [[cx0, cx0], [-cx0, cx0], [cx0, -cx0], [-cx0, -cx0]].forEach(([x, z]) => minaret(x, z));
+      const g = (key, geo, y, o) => add(key, geo, cx, y, cz, o);
+      // square base
+      block(trim, 5.4, 1.2, 5.4, cx, 0.75, cz);
+      block(wall, 4.6, 2.2, 4.6, cx, 1.95, cz);
 
-    /* ---- bazaar arcades ------------------------------------------------ */
-    [[-31, 0, Math.PI / 2], [31, 0, -Math.PI / 2], [0, -31, 0]].forEach(([x, z, ry]) => {
-      block(PL, 24, 6.5, 4, x, 0, z, { ry });
-      for (let i = -2; i <= 2; i++) {
-        const px = x + Math.cos(ry) * i * 4.4 + Math.sin(ry) * 2.02;
-        const pz = z - Math.sin(ry) * i * 4.4 + Math.cos(ry) * 2.02;
-        add('dark', archGeo(2.2, 3.4, 0.2), px, 0.3, pz, { ry });
-        add(CR, frameGeo(2.6, 3.8, 0.18, 0.2), px, 0.3, pz + (ry === 0 ? 0.04 : 0), { ry });
+      const tiers = [
+        { y0: 4.1, y1: 13.5, r0: 2.60, r1: 2.30 },
+        { y0: 14.2, y1: 24.0, r0: 2.15, r1: 1.95 },
+        { y0: 24.7, y1: 34.5, r0: 1.80, r1: 1.62 },
+        { y0: 35.2, y1: M_TOP, r0: 1.50, r1: 1.30 }
+      ];
+      tiers.forEach((t, i) => {
+        const hh = t.y1 - t.y0, mid = (t.y0 + t.y1) / 2;
+        g(wall, cyl(t.r1, t.r0, hh, 8), mid, { ry: Math.PI / 8 });
+        // moulded bands at the foot and head of the tier
+        g(trim, cyl(t.r0 + 0.10, t.r0 + 0.10, 0.22, 8), t.y0 + 0.16, { ry: Math.PI / 8 });
+        g(trim, cyl(t.r1 + 0.22, t.r1 + 0.10, 0.30, 8), t.y1 - 0.34, { ry: Math.PI / 8 });
+        // a tall arched niche on the cardinal faces of the octagon
+        for (let k = 0; k < 4; k++) {
+          const a = (k / 4) * TAU + Math.PI / 8;
+          const rr = (t.r0 + t.r1) / 2;
+          const wdt = i === 3 ? 0.55 : 0.82, hgt = i === 3 ? 1.8 : 2.7;
+          const px = cx + Math.cos(a) * (rr - 0.06), pz = cz + Math.sin(a) * (rr - 0.06);
+          // a lighter arch laid behind the dark opening reads as its surround
+          add(trim, arch(wdt + 0.30, hgt + 0.26, 0.10), px, t.y0 + 1.45, pz, { ry: -a + Math.PI / 2 });
+          add('dark', arch(wdt, hgt, 0.10), px + Math.cos(a) * 0.05, t.y0 + 1.50, pz + Math.sin(a) * 0.05, { ry: -a + Math.PI / 2 });
+        }
+        // projecting balcony at the head of each of the first three tiers
+        if (i < 3) {
+          const proj = [1.35, 1.15, 0.95][i];
+          // translate the balcony into place
+          const save = [cx, cz];
+          balconyTmp(t.y1 + 0.10, t.r1, proj, save[0], save[1]);
+        }
+      });
+
+      // lotus base, bulbous dome, finial
+      const rTop = 1.30;
+      g(trim, cyl(rTop + 0.35, rTop + 0.20, 0.34, 16), M_TOP + 0.05);
+      g(trim, cyl(rTop + 0.95, rTop + 0.35, 0.52, 16), M_TOP + 0.39);
+      // petal ring round the lotus base
+      for (let i = 0; i < 14; i++) {
+        const a = (i / 14) * TAU;
+        add(trim, sph(0.30, 8), cx + Math.cos(a) * (rTop + 0.62), M_TOP + 0.72, cz + Math.sin(a) * (rTop + 0.62), { sy: 0.55 });
       }
-      add(ST, box(24.6, 0.5, 4.6), x, 6.5, z, { ry });
+      g(wall, ctx.onion(rTop + 0.72, 4.7, 22), M_TOP + 0.78);
+      g(trim, cyl(0.22, 0.30, 0.62, 8), M_TOP + 5.4);
+      g('gold', sph(0.24, 8), M_TOP + 6.05);
+      g('gold', cone(0.17, 0.8, 8), M_TOP + 6.55);
+      g('gold', sph(0.11, 6), M_TOP + 7.1);
+    }
+
+    // balcony built at the origin then translated, so the ring maths stays simple
+    function balconyTmp(y, r, proj, cx, cz) {
+      const rOut = r + proj;
+      const nb = 24;
+      // corbel course under the slab
+      for (let i = 0; i < nb; i++) {
+        const a = (i / nb) * TAU;
+        add(trim, box((TAU * r / nb) * 0.85, 0.52, proj * 0.55),
+          cx + Math.cos(a) * (r + proj * 0.28), y - 0.28, cz + Math.sin(a) * (r + proj * 0.28), { ry: -a });
+      }
+      add(trim, cyl(rOut, rOut * 0.97, 0.40, 24), cx, y + 0.20, cz);
+      add(white, cyl(rOut + 0.10, rOut + 0.10, 0.10, 24), cx, y + 0.45, cz);
+      // pierced balustrade, posts and rail
+      add(trim, cyl(rOut - 0.18, rOut - 0.18, 0.60, 24, true), cx, y + 0.80, cz);
+      const np = 18;
+      for (let i = 0; i < np; i++) {
+        const a = (i / np) * TAU;
+        add(white, box(0.16, 0.34, 0.16), cx + Math.cos(a) * (rOut - 0.10), y + 1.20, cz + Math.sin(a) * (rOut - 0.10), { ry: -a });
+      }
+      add(trim, cyl(rOut + 0.02, rOut + 0.02, 0.14, 24), cx, y + 1.42, cz);
+    }
+
+    [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => minaret(sx * MC, sz * MC));
+
+    /* ===================================================================
+       the crossing: arcades round the four streets
+       =================================================================== */
+    function arcadeRow(x, z, ry, count, span) {
+      for (let i = 0; i < count; i++) {
+        const ox = (i - (count - 1) / 2) * span;
+        const px = x + Math.cos(ry) * ox, pz = z - Math.sin(ry) * ox;
+        block(wall, 1.0, 4.4, 1.0, px, 0, pz);
+        add(trim, arch(span * 0.66, 3.4, 0.3), px, 4.4, pz + 0.0, { ry });
+      }
+    }
+    // shopfront arcades standing back from the monument
+    [[0, 34, 0], [0, -34, Math.PI], [34, 0, Math.PI / 2], [-34, 0, -Math.PI / 2]].forEach(([x, z, ry]) => {
+      block('plaster', 30, 5.4, 1.6, x, 0, z, { ry });
+      add(white, box(30.6, 0.16, 2.0), x, 5.4, z, { ry });
+      for (let i = 0; i < 7; i++) {
+        const ox = (i - 3) * 4.0;
+        const px = x + Math.cos(ry) * ox, pz = z - Math.sin(ry) * ox;
+        add('dark', arch(2.4, 3.2, 0.2), px, 0.3, pz + Math.cos(ry) * 0.85, { ry });
+        add(white, archFrame(2.8, 3.5, 0.14, 0.12), px, 0.25, pz + Math.cos(ry) * 0.85, { ry });
+        add(i % 2 ? 'fabricSaffron' : 'fabricRed', box(3.0, 0.10, 1.5),
+          px, 3.9, pz + Math.cos(ry) * 1.2, { ry });
+      }
     });
 
-    /* ---- ground, crowds, lamps, trees ---------------------------------- */
-    add('paving', plane(96, 96), 0, 0.05, 0, { rx: -Math.PI / 2 });
-    const people = [[-6, 22], [6, 23], [-10, 18], [10, 17], [0, 26], [-16, 26], [16, 25], [-22, 14],
-      [22, 13], [-3, 15], [8, 27], [-13, 8], [13, 8], [18, -18], [-18, -18], [0, -24]];
-    people.forEach(([x, z], i) => ctx.person(x, z, i * 1.1, ['fabricWhite', 'fabricSaffron', 'fabricRed', 'fabricWhite'][i % 4], 0.95));
-    [[-13, 20], [13, 20], [-20, 6], [20, 6], [0, 30], [-26, -6], [26, -6]].forEach(([x, z]) => ctx.lamp(x, z, 3.2, 'black'));
-    [[-34, 30], [34, 30], [-40, -20], [40, -20], [-28, -34], [28, -34]].forEach(([x, z]) => ctx.tree(x, z, 1.1, 'round'));
+    /* ---- life ---- */
+    const people = [[-8, 16], [6, 18], [-14, 12], [13, 14], [0, 22], [-18, 20], [18, 20], [-4, 12],
+      [9, 24], [-22, 8], [22, 10], [3, 30]];
+    people.forEach(([x, z], i) => ctx.person(x, z, i * 1.1, ['fabricWhite', 'fabricSaffron', 'fabricRed'][i % 3], 0.95));
+    [[-16, 26], [16, 26], [-26, 16], [26, 16], [-30, -10], [30, 10]].forEach(([x, z]) => ctx.lamp(x, z, 3.6, 'black'));
+    [[-30, 30], [30, 30], [-32, -26], [32, -26], [-40, 14], [40, 14]].forEach(([x, z], i) => ctx.tree(x, z, 1.25, 'round'));
 
-    ctx.light({ pos: [-30, 14, 30], target: [0, 26, 0], color: 0xffd0a0, intensity: 2400, distance: 200 });
-    ctx.light({ pos: [30, 16, 26], target: [0, 26, 0], color: 0xffc890, intensity: 2000, distance: 200 });
-    ctx.light({ pos: [0, 10, 34], target: [0, 8, 0], color: 0xffd9b0, intensity: 1200, distance: 120 });
+    ctx.light({ pos: [-34, 20, 34], target: [0, 24, 0], color: 0xffd2a0, intensity: 3000, distance: 260 });
+    ctx.light({ pos: [34, 22, 30], target: [0, 24, 0], color: 0xffdcb4, intensity: 2200, distance: 260 });
   }
 };

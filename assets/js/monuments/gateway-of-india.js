@@ -1,27 +1,53 @@
 /* Gateway of India — Mumbai · procedural miniature
-   Author: Dr Sohil Momin · CC BY-NC 4.0 */
+   Author: Dr Sohil Momin · CC BY-NC 4.0
+
+   Rebuilt to measured dimensions.  1 unit = 1 metre.
+
+   real (m)                          model     source
+   ---------------------------------------------------------------------
+   overall height, to turret tip      26.0      Wikipedia; Structurae 20018993
+   central dome diameter              15.0      Wikipedia; TIFR Bombay pages (48 ft)
+   dome apex above ground             25.3      TIFR Bombay pages (83 ft)
+   plan                               oblong    Wikipedia: "rectangular, two long
+                                                sides and two much shorter ones";
+                                                octopylon, eight piers
+   front façade width                ~36.0      scaled off the lead photograph
+                                                (not stated in any source)
+   block depth                       ~17.0      octopylon plan; not stated
+   great arch span                     8.6      scaled off the lead photograph
+   great arch crown (from arch floor) 12.0      scaled off the lead photograph
+   great arch springing                8.6      scaled off the lead photograph
+   flanking arch span                  3.1      scaled off the lead photograph
+   flanking arch crown                 5.4      scaled off the lead photograph
+   wing cornice                       17.4      scaled off the lead photograph
+   central cornice                    20.4      scaled off the lead photograph
+
+   The often-quoted "15 m arch" is the dome: Wikipedia, Structurae and the
+   TIFR Bombay pages all give 15 m as the *dome diameter*.  A 15 m opening in
+   a 26 m monument would make the façade 63 m wide, which the photograph
+   rules out.  See the report. */
 
 export default {
   id: 'gateway-of-india',
   accent: '#9aa8b4',
   accent2: '#c8d6e0',
   seed: 37,
-  time: 11.6,
-  exposure: 0.88,
+  time: 15.6,
+  exposure: 0.9,
   fogScale: 0.5,
-  bounds: 62,
-  minDist: 14,
-  maxDist: 240,
-  home: { pos: [54, 23, 80], target: [0, 14, 0], fov: 40 },
+  bounds: 66,
+  minDist: 13,
+  maxDist: 260,
+  home: { pos: [19, 16, 66], target: [0, 11.5, 0], fov: 40 },
   ground: { texture: 'paving', size: 2400, color: 0xa89c86, tile: 6 },
-  groundY: -0.35,
-  water: { y: -0.28, size: 460, z: 372, color: 0x24424f, distortion: 2.2 },
+  groundY: -2.2,
+  water: { y: -1.9, size: 620, x: 0, z: -324, color: 0x22404d, distortion: 2.4 },
   views: [
-    { name: 'Full', pos: [54, 23, 80], target: [0, 14, 0] },
-    { name: 'Arch', pos: [11, 10, 30], target: [0, 12, 0] },
-    { name: 'Towers', pos: [26, 26, 38], target: [0, 21, 0] },
-    { name: 'From the sea', pos: [-34, 10, 44], target: [0, 13, 0] },
-    { name: 'Quay', pos: [-30, 4.5, 24], target: [-8, 7, 8] }
+    { name: 'Full', pos: [19, 16, 66], target: [0, 11.5, 0] },
+    { name: 'The arch', pos: [7.5, 6.5, 26], target: [0, 8, 0] },
+    { name: 'Turrets', pos: [15, 25, 30], target: [0, 19, 0] },
+    { name: 'From the sea', pos: [34, 13, -64], target: [0, 12, 0] },
+    { name: 'The quay', pos: [-22, 3.4, -26], target: [-6, 3, -6] }
   ],
   tour: [
     {
@@ -58,176 +84,326 @@ export default {
 
   build(ctx) {
     const T3 = ctx.THREE;
-    const { add, box, cyl, sph, cone, torus, dome, onion, arch, archFrame, block, col } = ctx;
+    const { add, box, cyl, sph, cone, torus, dome, onion, block, col, plane } = ctx;
 
-    function piercedWall(w, h, depth, aw, ah, sill) {
+    function tint(key, hex) {
+      const m = ctx.mat(key);
+      if (!m || !m.clone) return key;
+      const c = m.clone();
+      c.color.setHex(hex);
+      return c;
+    }
+    const jaliTone = tint('jali', 0x8f7d63);      // shadowed pierced screen
+
+    /* ------------------------------------------------------------ constants */
+    const W = 36.0;             // façade width
+    const D = 17.0;             // block depth
+    const P = 1.0;              // top of the stepped plinth = arch floor
+    const AW = 8.6, AH = 12.0, ASP = 0.715;   // great arch
+    const SW = 3.1, SH = 5.4, SSP = 0.62;     // flanking and side arches
+    const HCB = 19.6;           // central bay wall height above P
+    const HWG = 16.0;           // wing wall height above P
+    const DOME_R = 7.5;         // 15 m diameter
+    const TOP = 26.0;
+
+    const XC = AW / 2 + 4.3;    // centre of a flanking arch = 8.6
+    const FLANK_X = 11.5;       // flanking arch centre
+    const BAY = AW / 2 + 4.3;   // half-width of the central bay = 8.6
+
+    /* -------------------------------------------------------- shape helpers */
+    function pierced(w, h, depth, holes) {
       const s = new T3.Shape();
       s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(w / 2, h); s.lineTo(-w / 2, h); s.closePath();
-      const a = ctx.archShape(aw, ah);
-      const pts = a.getPoints(30).map((p) => new T3.Vector2(p.x, p.y + (sill || 0)));
-      s.holes.push(new T3.Path(pts));
-      return new T3.ExtrudeGeometry(s, { depth, bevelEnabled: false, curveSegments: 7 });
+      for (const o of holes) {
+        const a = ctx.archShape(o.w, o.h, o.spring || 0.6);
+        const pts = a.getPoints(20).map((p) => new T3.Vector2(p.x + o.x, p.y + (o.y || 0)));
+        s.holes.push(new T3.Path(pts));
+      }
+      return new T3.ExtrudeGeometry(s, { depth, bevelEnabled: false, curveSegments: 6 });
+    }
+    /* a moulded arch ring: the hole is exactly w x h */
+    function ring(w, h, spring, t, depth) {
+      const outer = ctx.archShape(w + 2 * t, h + t, spring);
+      const inner = ctx.archShape(w, h, spring);
+      const pts = inner.getPoints(22).map((p) => new T3.Vector2(p.x, p.y + t * 0.55));
+      outer.holes.push(new T3.Path(pts));
+      return new T3.ExtrudeGeometry(outer, { depth, bevelEnabled: false, curveSegments: 6 });
     }
 
-    /* ---- quay, steps, plinth -------------------------------------------- */
-    block('paving', 64, 0.9, 48, 0, -0.3, -6);
-    // the shore between the quay and the water, so the sea starts beyond it
-    block('stone', 110, 0.8, 300, 0, -0.32, 176);
-    block('basaltDark', 46, 1.2, 34, 0, 0.5, -2);
-    for (let i = 0; i < 3; i++) block('basalt', 30 - i * 1.4, 0.28, 18 - i * 1.0, 0, 0.6 + i * 0.28, 0);
-    // sea wall and mooring steps on the harbour side
-    block('basaltDark', 64, 1.7, 1.4, 0, -0.9, 17.4);
-    for (let i = 0; i < 4; i++) block('basalt', 20, 0.3, 1.0, 0, -0.5 + i * 0.3, 18.4 + i * 0.9);
-    // bollards along the quay
-    for (let i = -3; i <= 3; i++) {
-      add('black', cyl(0.22, 0.28, 0.55, 8), i * 8.4, 0.28, 16.2);
-      add('black', sph(0.24, 8), i * 8.4, 0.56, 16.2);
+    /* ------------------------------------------------ quay deck and the sea */
+    block('paving', 620, 2.2, 420, 0, -2.2, 196);        // the raised quay deck
+    block('stone', 96, 0.34, 60, 0, -0.34, 6);           // apron in front
+    // sea wall on the harbour side, with a coping and mooring rings
+    block('basaltDark', W + 22, 2.4, 1.8, 0, -2.4, -13.2);
+    block('basalt', W + 22.6, 0.34, 2.4, 0, -0.14, -13.2);
+    for (let i = -8; i <= 8; i++) {
+      add('black', torus(0.22, 0.07, 5, 10), i * 3.4, -0.9, -12.3, { rx: Math.PI / 2 });
+    }
+    // steps behind the arch, down to the water
+    for (let i = 0; i < 6; i++) {
+      block('basalt', 13 - i * 0.4, 0.32, 0.9, 0, -0.32 - i * 0.32, -9.6 - i * 0.95);
+    }
+    // bollards along the quay edge
+    for (let i = -7; i <= 7; i++) {
+      if (Math.abs(i) < 2) continue;
+      add('black', cyl(0.2, 0.26, 0.62, 8), i * 3.1, 0.31, -11.4);
+      add('black', sph(0.22, 8), i * 3.1, 0.64, -11.4);
     }
 
-    /* ---- the arch block -------------------------------------------------- */
-    const W = 30, H = 26, D = 13;
-    const AX = 15, AY = 19.6, SILL = 0.4;
-    const base = 1.44;
+    /* -------------------------------------------------- plinth and steps */
+    block('stone', W + 9, 0.34, D + 9, 0, 0, 0);
+    block('stone', W + 6, 0.34, D + 6, 0, 0.34, 0);
+    block('basaltDark', W + 3.4, 0.32, D + 3.4, 0, 0.68, 0);
+    for (let i = 0; i < 3; i++) {
+      const w2 = 26 - i * 1.6, z = D / 2 + 5.2 + i * 0.95;
+      add('stone', box(w2, 0.22 * (i + 1), 1.0), 0, 0.11 * (i + 1), z);
+      add('stone', box(w2, 0.22 * (i + 1), 1.0), 0, 0.11 * (i + 1), -z);
+    }
 
-    add('basalt', piercedWall(W, H, 1.8, AX, AY, SILL), 0, base, D / 2 - 1.8);
-    add('basalt', piercedWall(W, H, 1.8, AX, AY, SILL), 0, base, -D / 2);
-    add('basalt', box(2.6, H, D - 3.6), -AX / 2 - 1.3, base + H / 2, 0);
-    add('basalt', box(2.6, H, D - 3.6), AX / 2 + 1.3, base + H / 2, 0);
-    // the vault of the passage: three transverse ribs
-    [-1, 0, 1].forEach((i) => {
-      add('basaltDark', piercedWall(W, H, 0.9, AX, AY, SILL), 0, base, i * 3.6);
-    });
-    // ceiling and floor of the passage
-    add('basaltDark', box(AX + 0.4, 0.5, D - 3.4), 0, base + SILL + AY - 0.2, 0);
-    add('basalt', box(AX + 3.2, 0.22, D - 1.0), 0, base + 0.11, 0);
-
-    /* archivolt: three moulded rings around the great arch */
-    [0, 1, 2].forEach((k) => {
-      const grow = k * 0.55;
-      add(k === 1 ? 'basaltDark' : 'basalt',
-        archFrame(AX + 0.9 + grow * 2, AY + 0.7 + grow * 1.6, 0.34, 0.36 + k * 0.05),
-        0, base + SILL, D / 2 + 0.05 + k * 0.06);
-    });
-    // spandrel rosettes
+    /* ------------------------------------------------------ the front wall
+       Central bay 17.2 m wide with the great arch, two wings 9.4 m wide
+       each carrying a flanking arch at x = ±11.5. */
+    add('basalt', pierced(2 * BAY, HCB, 2.6, [{ x: 0, w: AW, h: AH, spring: ASP }]),
+      0, P, D / 2 - 2.6);
+    add('basalt', pierced(2 * BAY, HCB, 2.6, [{ x: 0, w: AW, h: AH, spring: ASP }]),
+      0, P, -D / 2);
     [-1, 1].forEach((s) => {
-      [[3.6, 2.2], [3.6, -1.4]].forEach(([dx, dy]) => {
-        add('basaltDark', torus(0.62, 0.13, 6, 14), s * (AX / 2 + dx), base + SILL + AY / 2 + dy, D / 2 + 0.06);
-        add('basalt', sph(0.3, 8), s * (AX / 2 + dx), base + SILL + AY / 2 + dy, D / 2 + 0.1);
+      add('basalt', pierced(9.4, HWG, 2.6, [{ x: -s * 1.8, w: SW, h: SH, spring: SSP }]),
+        s * 13.3, P, D / 2 - 2.6);
+      add('basalt', pierced(9.4, HWG, 2.6, [{ x: -s * 1.8, w: SW, h: SH, spring: SSP }]),
+        s * 13.3, P, -D / 2);
+    });
+    /* the short faces: a single arch, 3.1 m, centred */
+    [-1, 1].forEach((s) => {
+      add('basalt', pierced(D, HWG, 2.6, [{ x: 0, w: SW, h: SH, spring: SSP }]),
+        s * (W / 2 - 2.6), P, 0, { ry: s * Math.PI / 2 });
+      // a shallow hall behind the side arch, dark
+      add('dark', box(5.0, SH + 1.6, SW + 0.4), s * (W / 2 - 5.2), P + (SH + 1.6) / 2, 0);
+    });
+    // solid mass filling the wings behind the front walls
+    [-1, 1].forEach((s) => {
+      add('basaltDark', box(9.4, HWG, D - 5.2), s * 13.3, P + HWG / 2, 0);
+    });
+
+    /* ------------------------------------------ the great passage and vault
+       The lining is one extruded pointed-arch ring running the full depth,
+       so the vault reads as a genuine tunnel with the harbour at its end. */
+    add('basaltDark', ring(AW, AH, ASP, 0.62, D), 0, P, -D / 2);
+    // transverse ribs, standing proud of the lining
+    [-5.6, -1.9, 1.9, 5.6].forEach((z) => {
+      add('basalt', ring(AW - 0.5, AH - 0.3, ASP, 0.34, 0.8), 0, P, z - 0.4);
+    });
+    // keystone boss at the crown, front and back
+    [-1, 1].forEach((s) => {
+      add('basalt', box(0.9, 1.1, 0.5), 0, P + AH - 0.6, s * (D / 2 - 0.25));
+    });
+    // passage floor
+    add('basalt', box(AW + 1.4, 0.2, D + 0.4), 0, P - 0.05, 0);
+
+    /* ------------------------------------------------- archivolt and ornament
+       Three moulded rings round the great arch, front and back. */
+    [-1, 1].forEach((s) => {
+      const zf = s * (D / 2 + 0.02);
+      [0, 1, 2].forEach((k) => {
+        add(k === 1 ? 'basaltDark' : 'basalt',
+          ring(AW + 1.5 + k * 0.9, AH + 0.7 + k * 0.55, ASP, 0.24, 0.3),
+          0, P, zf + s * k * 0.28, { ry: s < 0 ? Math.PI : 0 });
+      });
+      // impost blocks at the springing, on the piers only
+      [-1, 1].forEach((d) => {
+        add('basalt', box(1.8, 0.5, 0.7), d * (AW / 2 + 0.95), P + 8.4, s * (D / 2 + 0.2));
       });
     });
-    // keystone
-    add('basaltDark', box(1.1, 1.7, 1.5), 0, base + SILL + AY - 0.4, D / 2 - 0.5);
-
-    /* ---- flanking bays --------------------------------------------------- */
+    // projecting frame: pilasters either side of the arch and a lintel band
     [-1, 1].forEach((s) => {
-      const x = s * (W / 2 - 4.3);
-      add('basalt', piercedWall(7.6, 13.4, 1.6, 3.5, 7.8, 1.1), x, base, D / 2 - 1.6);
-      add('basalt', piercedWall(7.6, 13.4, 1.6, 3.5, 7.8, 1.1), x, base, -D / 2);
-      add('basaltDark', box(3.7, 8.4, D - 3.0), x, base + 5.3, 0);
-      // jaali screen in the opening
-      for (let i = -1; i <= 1; i++) {
-        add('jaliWhite', box(0.9, 1.0, 0.07), x + i * 1.05, base + 3.0, D / 2 + 0.06);
-        add('jaliWhite', box(0.9, 1.0, 0.07), x + i * 1.05, base + 4.3, D / 2 + 0.06);
-      }
-      add('basaltDark', archFrame(4.0, 8.2, 0.3, 0.34), x, base + 1.1, D / 2 + 0.04);
+      [-1, 1].forEach((d) => {
+        add('basalt', box(1.0, 16.4, 0.75), d * (AW / 2 + 1.35), P + 8.2, s * (D / 2 + 0.3));
+        add('basaltDark', box(1.4, 0.5, 0.9), d * (AW / 2 + 1.35), P + 0.25, s * (D / 2 + 0.3));
+      });
+      add('basalt', box(AW + 4.6, 0.7, 0.8), 0, P + 16.8, s * (D / 2 + 0.3));
+    });
+    // spandrel medallions
+    [-1, 1].forEach((s) => {
+      [[1, 0], [-1, 0]].forEach(([d]) => {
+        add('basaltDark', torus(0.85, 0.16, 6, 14), d * 6.6, P + 10.2, D / 2 + 0.1);
+        add('basalt', sph(0.42, 8), d * 6.6, P + 10.2, D / 2 + 0.16);
+      });
     });
 
-    /* ---- cornice with dentils, parapet ----------------------------------- */
-    add('basalt', box(W + 2.6, 0.5, D + 2.2), 0, base + H + 0.1, 0);
-    add('basaltDark', box(W + 3.0, 0.28, D + 2.6), 0, base + H + 0.45, 0);
-    for (let i = -7; i <= 7; i++) {
-      add('basalt', box(0.5, 0.42, 0.42), i * 2.05, base + H + 0.78, D / 2 + 1.0);
-      add('basalt', box(0.5, 0.42, 0.42), i * 2.05, base + H + 0.78, -D / 2 - 1.0);
+    /* ------------------------------------------------ entablature over the arch */
+    add('basalt', box(2 * BAY + 0.6, 0.55, D + 0.6), 0, P + AH + 0.7, 0);
+    // carved bracket course
+    for (let i = -5; i <= 5; i++) {
+      add('basaltDark', box(0.7, 0.9, 0.4), i * 1.6, P + AH + 1.5, D / 2 + 0.1);
+      add('basaltDark', box(0.7, 0.9, 0.4), i * 1.6, P + AH + 1.5, -D / 2 - 0.1);
     }
-    add('basalt', box(W + 2.0, 0.55, D + 1.6), 0, base + H + 1.2, 0);
-    // merlons along the roof edge
-    for (let i = -6; i <= 6; i++) {
-      add('basalt', box(1.05, 0.9, 0.9), i * 2.3, base + H + 1.95, D / 2 - 0.3);
-      add('basalt', box(1.05, 0.9, 0.9), i * 2.3, base + H + 1.95, -D / 2 + 0.3);
-    }
-    for (let i = -2; i <= 2; i++) {
-      add('basalt', box(0.9, 0.9, 1.05), W / 2 - 0.3, base + H + 1.95, i * 2.3);
-      add('basalt', box(0.9, 0.9, 1.05), -W / 2 + 0.3, base + H + 1.95, i * 2.3);
-    }
-    // central dome behind the parapet
-    add('basalt', cyl(3.6, 3.9, 1.3, 20), 0, base + H + 1.5, -2.0);
-    add('basaltDark', onion(3.7, 5.2, 26), 0, base + H + 2.8, -2.0);
-    for (let i = 0; i < 10; i++) {
-      const a = (i / 10) * Math.PI * 2;
-      add('basalt', box(0.22, 4.4, 0.22), Math.cos(a) * 3.5, base + H + 4.9, -2.0 + Math.sin(a) * 3.5, { ry: -a, rz: 0.22 });
-    }
-    add('gold', cyl(0.09, 0.09, 1.5, 8), 0, base + H + 7.9, -2.0);
-    add('gold', sph(0.24, 8), 0, base + H + 8.7, -2.0);
-
-    /* ---- octagonal towers ------------------------------------------------ */
+    // the inscription band: a recessed panel with a moulded frame
+    add('basalt', box(2 * BAY + 0.4, 3.2, D + 0.4), 0, P + 14.6, 0);
     [-1, 1].forEach((s) => {
-      const x = s * (W / 2 + 2.7), z = D / 2 - 3.6;
-      // base block
-      add('basalt', cyl(3.3, 3.7, 3.2, 8), x, base + 1.6, z);
-      add('basaltDark', cyl(3.5, 3.5, 0.3, 8), x, base + 3.25, z);
-      // three shaft tiers with a balcony between each
-      let y = base + 3.4;
-      [[2.6, 2.35, 5.2], [2.3, 2.1, 4.6], [2.05, 1.9, 4.0]].forEach(([rb, rt, h]) => {
-        add('basalt', cyl(rt, rb, h, 8), x, y + h / 2, z);
-        // engaged columns on each face
+      add('basaltDark', box(13.4, 2.3, 0.12), 0, P + 14.8, s * (D / 2 + 0.22));
+      for (let i = 0; i < 4; i++) {
+        add('basalt', box(11.4 - i * 0.5, 0.14, 0.06), 0, P + 13.95 + i * 0.5, s * (D / 2 + 0.3));
+      }
+      add('basalt', box(14.0, 0.26, 0.34), 0, P + 16.1, s * (D / 2 + 0.26));
+    });
+
+    /* ------------------------------------------ cornices, parapets, merlons */
+    // wing cornice with dentils
+    [-1, 1].forEach((s) => {
+      add('basalt', box(9.4 + 0.9, 0.5, D + 0.9), s * 13.3, P + HWG + 0.25, 0);
+      add('basaltDark', box(9.4 + 1.5, 0.3, D + 1.5), s * 13.3, P + HWG + 0.65, 0);
+      for (let j = -4; j <= 4; j++) {
+        add('basalt', box(0.36, 0.34, 0.34), s * 13.3 + j * 1.0, P + HWG + 0.98, D / 2 + 0.72);
+        add('basalt', box(0.36, 0.34, 0.34), s * 13.3 + j * 1.0, P + HWG + 0.98, -D / 2 - 0.72);
+        add('basalt', box(0.34, 0.34, 0.36), s * (13.3 + 4.9), P + HWG + 0.98, j * 1.9);
+      }
+      add('basalt', box(9.4 + 1.0, 0.55, D + 1.0), s * 13.3, P + HWG + 1.45, 0);
+      // merlons along the wing parapet
+      for (let i = -4; i <= 4; i++) {
+        add('basalt', box(0.95, 0.85, 0.8), s * 13.3 + i * 1.05, P + HWG + 2.15, D / 2 + 0.4);
+        add('basalt', box(0.95, 0.85, 0.8), s * 13.3 + i * 1.05, P + HWG + 2.15, -D / 2 - 0.4);
+      }
+    });
+    // central bay cornice and parapet
+    add('basalt', box(2 * BAY + 1.6, 0.5, D + 1.6), 0, P + 17.3, 0);
+    add('basaltDark', box(2 * BAY + 2.2, 0.34, D + 2.2), 0, P + 17.72, 0);
+    add('basalt', box(2 * BAY + 1.4, 0.6, D + 1.4), 0, P + 18.5, 0);
+    for (let i = -6; i <= 6; i++) {
+      add('basalt', box(0.95, 0.95, 0.8), i * 1.35, P + 19.3, D / 2 + 0.4);
+      add('basalt', box(0.95, 0.95, 0.8), i * 1.35, P + 19.3, -D / 2 - 0.4);
+    }
+    for (let i = -5; i <= 5; i++) {
+      add('basalt', box(0.8, 0.95, 0.95), BAY + 0.4, P + 19.3, i * 1.5);
+      add('basalt', box(0.8, 0.95, 0.95), -BAY - 0.4, P + 19.3, i * 1.5);
+    }
+
+    /* ------------------------------------------------------ the ribbed dome
+       15 m across.  Shallow, set behind the front block: from the plaza only
+       its crown shows between the turrets, which is what the photograph
+       shows; the whole dome appears from the water and from above. */
+    add('basalt', cyl(DOME_R + 0.6, DOME_R + 1.0, 0.8, 24), 0, P + 11.2, -1.0);
+    add('basaltDark', cyl(DOME_R, DOME_R, 2.9, 24), 0, P + 14.9, -1.0);      // drum
+    for (let i = 0; i < 16; i++) {
+      const a = (i / 16) * Math.PI * 2;
+      add('basalt', box(0.24, 2.5, 0.24), Math.cos(a) * (DOME_R - 0.2), P + 14.9,
+        -1.0 + Math.sin(a) * (DOME_R - 0.2), { ry: -a });
+    }
+    add('basalt', cyl(DOME_R + 0.45, DOME_R + 0.05, 0.5, 24), 0, P + 14.55, -1.0);
+    add('basaltDark', onion(DOME_R, 5.6, 26), 0, P + 15.0, -1.0);
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2;
+      add('basalt', box(0.16, DOME_R * 0.62, 0.16),
+        Math.cos(a) * (DOME_R - 0.4), P + 17.6, -1.0 + Math.sin(a) * (DOME_R - 0.4),
+        { ry: -a, rz: 0.3 });
+    }
+    add('basalt', cyl(0.42, 0.66, 0.55, 10), 0, P + 20.4, -1.0);
+    add('gold', cyl(0.08, 0.08, 0.8, 6), 0, P + 20.9, -1.0);
+
+    /* --------------------------------------------------- four octagonal turrets
+       2.6 m across, engaged at the corners of the central bay, tips at 26 m. */
+    [-1, 1].forEach((sx) => {
+      [-1, 1].forEach((sz) => {
+        const x = sx * (BAY - 1.2), z = sz * (D / 2 - 1.6);
+        add('basalt', cyl(1.5, 1.95, 1.1, 8), x, P + 11.9, z);          // corbel
+        add('basaltDark', cyl(1.58, 1.58, 0.3, 8), x, P + 12.6, z);
+        // shaft with engaged columns
+        add('basalt', cyl(1.24, 1.32, 8.3, 8), x, P + 16.75, z);
         for (let i = 0; i < 8; i++) {
           const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
-          add('basaltDark', cyl(0.13, 0.15, h * 0.92, 5),
-            x + Math.cos(a) * (rb + 0.05), y + h / 2, z + Math.sin(a) * (rb + 0.05));
+          add('basaltDark', cyl(0.1, 0.13, 7.9, 5),
+            x + Math.cos(a) * 1.33, P + 16.6, z + Math.sin(a) * 1.33);
         }
-        y += h;
-        add('basaltDark', cyl(rb + 0.55, rb + 0.62, 0.34, 8), x, y + 0.17, z);
-        y += 0.34;
+        add('basaltDark', cyl(1.58, 1.58, 0.3, 8), x, P + 20.05, z);    // balcony
+        // open jali gallery
+        add('basalt', cyl(1.16, 1.24, 1.5, 8), x, P + 20.95, z);
+        for (let k = 0; k < 12; k++) {
+          const a = (k / 12) * Math.PI * 2;
+          add('jaliWhite', box(0.48, 0.9, 0.06), x + Math.cos(a) * 1.2, P + 20.9,
+            z + Math.sin(a) * 1.2, { ry: -a + Math.PI / 2 });
+        }
+        add('basalt', cyl(1.46, 1.26, 0.3, 8), x, P + 21.85, z);
+        // ribbed dome and finial
+        add('basaltDark', onion(1.24, 2.7, 16), x, P + 22.0, z);
+        for (let i = 0; i < 8; i++) {
+          const a = (i / 8) * Math.PI * 2;
+          add('basalt', box(0.1, 1.7, 0.1), x + Math.cos(a) * 1.14, P + 23.1,
+            z + Math.sin(a) * 1.14, { ry: -a, rz: 0.3 });
+        }
+        add('gold', cyl(0.07, 0.07, 0.9, 6), x, P + 24.7, z);
+        add('gold', sph(0.16, 8), x, P + 25.0, z);
       });
-      // jaali gallery under the dome
-      add('basalt', cyl(2.0, 2.2, 1.3, 8), x, y + 0.65, z);
-      for (let k = 0; k < 16; k++) {
-        const a = (k / 16) * Math.PI * 2;
-        add('jaliWhite', box(0.62, 1.0, 0.06), x + Math.cos(a) * 2.02, y + 0.7, z + Math.sin(a) * 2.02, { ry: -a + Math.PI / 2 });
-      }
-      y += 1.3;
-      add('basaltDark', cyl(2.35, 2.35, 0.3, 16), x, y + 0.15, z);
-      // ribbed dome
-      add('basalt', cyl(2.15, 2.3, 0.5, 8), x, y + 0.55, z);
-      add('basaltDark', onion(2.15, 3.3, 22), x, y + 0.8, z);
-      for (let i = 0; i < 8; i++) {
-        const a = (i / 8) * Math.PI * 2;
-        add('basalt', box(0.14, 2.6, 0.14), x + Math.cos(a) * 1.95, y + 2.1, z + Math.sin(a) * 1.95, { ry: -a, rz: 0.3 });
-      }
-      add('gold', cyl(0.07, 0.07, 1.1, 6), x, y + 4.2, z);
-      add('gold', sph(0.17, 8), x, y + 4.9, z);
     });
 
-    /* ---- boats on the harbour -------------------------------------------- */
-    [[-46, 268, 0.6], [16, 300, -0.3], [62, 258, 1.1], [-96, 236, 0.2], [-10, 320, 1.9]].forEach(([x, z, ry], i) => {
-      const s2 = 0.9 + (i % 3) * 0.15;
-      add(i % 2 ? 'wood' : 'plasterWhite', box(2.8 * s2, 0.75 * s2, 6.6 * s2), x, -0.18, z, { ry });
-      add(i % 2 ? 'plasterWhite' : 'wood', box(2.4 * s2, 0.55 * s2, 2.6 * s2), x, 0.55 * s2, z + 1.1 * s2, { ry });
-      add('grey', cyl(0.07, 0.07, 4.4 * s2, 5), x, 2.5 * s2, z - 0.5 * s2, { ry });
-      add('fabricWhite', box(0.06, 1.6 * s2, 1.2 * s2), x, 3.2 * s2, z - 0.5 * s2, { ry });
+    /* ------------------------------------------- the screened flanking halls */
+    [-1, 1].forEach((s) => {
+      const x = s * FLANK_X;
+      // jali screen filling the upper part of the flanking arch
+      for (let i = -2; i <= 2; i++) {
+        for (let j = 0; j < 3; j++) {
+          add('jaliWhite', box(0.62, 0.72, 0.07), x + i * 0.72, P + 2.7 + j * 0.82, D / 2 + 0.06);
+        }
+      }
+      add('basalt', ring(SW + 0.7, SH + 0.35, SSP, 0.26, 0.26), x, P, D / 2 + 0.04);
+      add('basalt', ring(SW + 0.7, SH + 0.35, SSP, 0.26, 0.26), x, P, -D / 2 - 0.3);
+      // carved blind panel above the arch: a shallow recess with a
+      // moulded frame and a grid of pierced squares, as on the reference
+      add('basaltDark', box(7.6, 5.6, 0.1), x, P + 9.6, D / 2 + 0.06);
+      add(jaliTone, box(6.4, 4.6, 0.07), x, P + 9.6, D / 2 + 0.14);
+      add('basalt', box(8.2, 0.4, 0.36), x, P + 12.6, D / 2 + 0.2);
+      add('basalt', box(8.2, 0.4, 0.36), x, P + 6.6, D / 2 + 0.2);
+      // carved band under the wing cornice
+      for (let i = -3; i <= 3; i++) {
+        add('basaltDark', box(0.62, 0.62, 0.16), x + i * 1.15, P + 14.6, D / 2 + 0.12);
+        add('basaltDark', box(0.62, 0.62, 0.16), x + i * 1.15, P + 14.6, -D / 2 - 0.12);
+      }
+      // the same blind panel on the back face
+      add('basaltDark', box(7.6, 5.6, 0.1), x, P + 9.6, -D / 2 - 0.06);
+      add(jaliTone, box(6.4, 4.6, 0.07), x, P + 9.6, -D / 2 - 0.14);
+    });
+    // side-face panels
+    [-1, 1].forEach((s) => {
+      add('basaltDark', box(0.1, 5.6, 7.0), s * (W / 2 + 0.05), P + 9.6, 0);
+      add(jaliTone, box(0.07, 4.6, 5.8), s * (W / 2 + 0.14), P + 9.6, 0);
+      add('basalt', box(0.3, 0.4, 7.6), s * (W / 2 + 0.16), P + 12.8, 0);
+      add('basalt', box(0.3, 0.4, 7.6), s * (W / 2 + 0.16), P + 6.6, 0);
+      add('basalt', ring(SW + 0.7, SH + 0.35, SSP, 0.26, 0.26),
+        s * (W / 2 + 0.02), P, 0, { ry: s * Math.PI / 2 });
     });
 
-    /* ---- plaza, palms, crowds, distant city ------------------------------- */
-    const people = [[-9, 11], [8, 12], [-15, 7], [15, 8], [0, 14], [-21, 11], [21, 10], [-4, 7],
-      [5, 6], [-12, 13], [12, 14], [17, 5], [-18, 4], [2, 17], [24, 15]];
-    people.forEach(([x, z], i) => ctx.person(x, z, i * 1.2, ['fabricWhite', 'fabricSaffron', 'fabricRed'][i % 3], 0.95));
-    [[-22, 13], [22, 13], [-28, 5], [28, 5], [0, 19]].forEach(([x, z]) => ctx.lamp(x, z, 3.6, 'black'));
-    [[-24, -15], [24, -15], [-28, -3], [28, -3], [-34, 8], [34, 8]].forEach(([x, z], i) => ctx.tree(x, z, 1.25, 'palm'));
-    [[-40, -22], [40, -22]].forEach(([x, z], i) => ctx.tree(x, z, 1.15, 'round'));
-    // the city behind the monument
-    for (let i = 0; i < 11; i++) {
-      const x = -78 + i * 15.6;
-      const h = 7 + ((i * 37) % 5) * 3.4;
-      block('plaster', 11, h, 9, x, -0.3, -58);
-      add('terracotta', box(11.6, 0.6, 9.6), x, h - 0.3, -58);
-      for (let w2 = 0; w2 < 3; w2++) add('dark', box(1.0, 1.3, 0.2), x - 3 + w2 * 3, h * 0.55, -53.4);
+    /* ------------------------------------------------- boats on the harbour */
+    const wx = -1.85;
+    [[-52, -70, 1.0, 0.5], [34, -96, 1.2, -0.4], [76, -60, 0.9, 1.1],
+     [-96, -120, 1.3, 0.2], [8, -150, 1.1, 1.9], [-20, -48, 0.8, -1.2]]
+      .forEach(([x, z, s, ry], i) => {
+        add(i % 2 ? 'wood' : 'plasterWhite', box(2.9 * s, 0.8 * s, 7.0 * s), x, wx + 0.4 * s, z, { ry });
+        add(i % 2 ? 'plasterWhite' : 'wood', box(2.4 * s, 0.6 * s, 2.8 * s), x, wx + 1.05 * s, z + 1.2 * s, { ry });
+        add('grey', cyl(0.07, 0.07, 4.6 * s, 5), x, wx + 3.1 * s, z - 0.6 * s);
+        add('fabricWhite', box(0.06, 1.7 * s, 1.3 * s), x, wx + 3.9 * s, z - 0.6 * s);
+      });
+
+    /* ------------------------------------------------- plaza life and planting */
+    const people = [[-8, 15], [7, 16], [-14, 11], [13, 12], [0, 19], [-20, 14], [20, 13],
+      [-4, 10], [4, 9], [-11, 17], [11, 18], [16, 9], [-17, 8], [2, 22], [22, 17],
+      [-24, 20], [24, 21], [0, 26]];
+    people.forEach(([x, z], i) => ctx.person(x, z, i * 1.2,
+      ['fabricWhite', 'fabricSaffron', 'fabricRed'][i % 3], 0.95));
+    [[-16, 12], [16, 12], [-26, 18], [26, 18], [0, 28]].forEach(([x, z]) => ctx.lamp(x, z, 3.6, 'black'));
+    [[-24, -6], [24, -6], [-30, 6], [30, 6], [-34, 20], [34, 20], [-22, 34], [22, 34],
+     [-40, 12], [40, 12], [-44, 30], [44, 30]]
+      .forEach(([x, z], i) => ctx.tree(x, z, 1.2 + (i % 3) * 0.2, 'palm'));
+    [[-52, 40], [52, 40], [-58, 62], [58, 62], [-46, 8], [46, 8]]
+      .forEach(([x, z], i) => ctx.tree(x, z, 1.25, 'round'));
+
+    /* the far shore across the water, kept low and hazy */
+    for (let i = 0; i < 14; i++) {
+      const x = -240 + i * 34;
+      const h = 6 + ((i * 53) % 7) * 2.6;
+      block('haze', 26, h, 14, x, -1.9, -430 - ((i * 17) % 5) * 12);
     }
-    block('plaster', 24, 22, 13, -64, -0.3, -62);
-    add('marble', onion(3.2, 4.6, 22), -64, 21.7, -62);
-    add('gold', cyl(0.1, 0.1, 1.4, 6), -64, 26.6, -62);
+    block('haze', 60, 26, 20, 150, -1.9, -470);
 
-    ctx.light({ pos: [-26, 13, 26], target: [0, 15, 0], color: 0xffd0a0, intensity: 2400, distance: 150 });
-    ctx.light({ pos: [26, 15, 24], target: [0, 15, 0], color: 0xffc890, intensity: 2000, distance: 150 });
-    ctx.light({ pos: [0, 6, 22], target: [0, 4, 0], color: 0xffd9b0, intensity: 700, distance: 60 });
+    ctx.light({ pos: [-20, 12, 22], target: [0, 12, 0], color: 0xffd0a0, intensity: 2400, distance: 160 });
+    ctx.light({ pos: [20, 14, 20], target: [0, 12, 0], color: 0xffc890, intensity: 2000, distance: 160 });
+    ctx.light({ pos: [0, 6, 16], target: [0, 4, 0], color: 0xffd9b0, intensity: 700, distance: 60 });
   }
 };
