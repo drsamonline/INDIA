@@ -10,10 +10,10 @@ export default {
   bounds: 60,
   minDist: 16,
   maxDist: 220,
-  home: { pos: [40, 21, 56], target: [0, 10, 0], fov: 40 },
+  home: { pos: [54, 27, 76], target: [0, 12, 0], fov: 40 },
   ground: { texture: 'grass', size: 2400, color: 0x8d9a63 },
   views: [
-    { name: 'Full', pos: [40, 21, 56], target: [0, 10, 0] },
+    { name: 'Full', pos: [54, 27, 76], target: [0, 12, 0] },
     { name: 'Petals', pos: [18, 24, 30], target: [0, 15, 0] },
     { name: 'Approach', pos: [0, 9, 62], target: [0, 11, 0] },
     { name: 'Aerial', pos: [40, 46, 42], target: [0, 6, 0] },
@@ -23,7 +23,7 @@ export default {
     {
       title: 'A House of Worship', deva: 'कमल मंदिर',
       text: 'The Lotus Temple is a Bahá’í House of Worship on the eastern edge of New Delhi, completed in 1986. Fariborz Sahba shaped it as a lotus of twenty-seven marble petals — nine in each of three rings.',
-      pos: [40, 21, 56], target: [0, 10, 0], time: 17.1
+      pos: [54, 27, 76], target: [0, 12, 0], time: 17.1
     },
     {
       title: 'Twenty-Seven Petals', deva: 'कमल की पंखुड़ियाँ',
@@ -77,20 +77,20 @@ export default {
     function petal(a, R, y, lean, w, h, t, key) {
       const g = dome(1, 1, 16);
       g.scale(w, h, t);
-      add(key, g, Math.cos(a) * R, y, Math.sin(a) * R, { ry: -a, rx: -lean });
+      add(key, g, Math.cos(a) * R, y, Math.sin(a) * R, { ry: -a, rx: lean });
     }
     const RINGS = [
-      { R: 12.4, y: 1.15, lean: 0.34, w: 4.2, h: 11.6, t: 1.0 },
-      { R: 9.0, y: 1.15, lean: 0.62, w: 3.6, h: 11.8, t: 0.92 },
-      { R: 5.6, y: 1.15, lean: 0.98, w: 3.0, h: 10.2, t: 0.84 },
-      { R: 3.0, y: 1.15, lean: 1.32, w: 2.4, h: 8.2, t: 0.78 }
+      { R: 12.8, y: 1.15, lean: 0.18, w: 2.9, h: 12.6, t: 0.80 },
+      { R: 9.4, y: 1.15, lean: 0.32, w: 2.6, h: 12.2, t: 0.76 },
+      { R: 6.1, y: 1.15, lean: 0.48, w: 2.3, h: 11.0, t: 0.72 },
+      { R: 3.1, y: 1.15, lean: 0.64, w: 2.0, h: 9.2, t: 0.68 }
     ];
     RINGS.forEach((r, ri) => {
       for (let i = 0; i < 9; i++) {
         const a = (i / 9) * Math.PI * 2 + (ri % 2 ? Math.PI / 9 : 0);
         petal(a, r.R, r.y, r.lean, r.w, r.h, r.t, 'marble');
         // a second, smaller petal behind each one gives the ring depth
-        petal(a + 0.11, r.R * 1.02, r.y + 0.1, r.lean + 0.04, r.w * 0.92, r.h * 0.96, r.t * 0.9, 'marbleWarm');
+        petal(a + 0.20, r.R * 1.06, r.y + 0.05, r.lean + 0.02, r.w * 0.88, r.h * 0.94, r.t * 0.85, 'marbleWarm');
       }
     });
 
