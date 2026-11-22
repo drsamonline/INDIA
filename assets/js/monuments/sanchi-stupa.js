@@ -23,37 +23,37 @@ export default {
   tour: [
     {
       title: "Ashoka's Mound", deva: 'साँची का स्तूप',
-      text: 'The Great Stupa at Sanchi was commissioned by the Mauryan emperor Ashoka in the 3rd century BCE. Its core was a simple hemispherical brick dome raised over relics of the Buddha, crowned by a chatra, the parasol that marks a place of honour.',
+      text: 'The Mauryan emperor Ashoka commissioned the Great Stupa at Sanchi in the 3rd century BCE. Its core was a plain hemispherical brick dome raised over relics of the Buddha and crowned by a chatra, the parasol that marks a place of honour.',
       pos: [-56, 26, 66], target: [0, 13, 0], time: 16.2
     },
     {
       title: 'The Dome', deva: 'अंड',
-      text: 'Under later dynasties the stupa was enlarged to roughly twice its original size and faced in stone. The dome now measures about 36 metres across and 16 metres high, set on a circular drum above a wide processional terrace.',
+      text: 'Later dynasties enlarged the stupa to roughly twice its original size and faced it in stone. The dome measures about 36 metres across and 16 metres high, on a circular drum above a wide processional terrace.',
       pos: [40, 34, 40], target: [0, 19, 0], time: 14.2
     },
     {
       title: 'Four Toranas', deva: 'चार तोरण',
-      text: 'Four carved toranas were added at the cardinal points in the 1st century BCE — two square pillars carrying three architraves that end in spiral volutes. Their lintels are crowded with scenes from the life of the Buddha.',
+      text: 'Four carved toranas went up at the cardinal points in the 1st century BCE: two square pillars carrying three architraves that end in spiral volutes. Their lintels are crowded with scenes from the life of the Buddha.',
       pos: [17, 12, 50], target: [0, 11, 26], time: 12.4
     },
     {
       title: 'The Vedika', deva: 'वेदिका',
-      text: 'A stone vedika, or railing, was built around the dome and around the terrace, copying in stone the wooden fence that once enclosed the relic mound. Its posts and three rails mark out the path of circumambulation.',
+      text: 'A stone vedika, or railing, runs around the dome and around the terrace, copying in stone the wooden fence that once enclosed the relic mound. Its posts and three rails mark out the path of circumambulation.',
       pos: [30, 7, 30], target: [15, 7, 15], time: 10.8
     },
     {
       title: 'Harmika & Chatra', deva: 'हर्मिका',
-      text: 'A square harmika, the railed balcony of the gods, sits at the summit, and above it a triple stone chatra — three parasols on a single pole. The parasol is the ancient Indian mark of sovereignty and protection.',
+      text: 'A square harmika, the railed balcony of the gods, sits at the summit, and above it a triple stone chatra — three parasols on a single pole. The parasol is the old Indian mark of sovereignty and protection.',
       pos: [22, 30, 22], target: [0, 24, 0], time: 17.4
     },
     {
       title: 'The Monastery', deva: 'विहार',
-      text: 'The site grew into a complex of monasteries, temples and smaller stupas that was occupied for more than a thousand years before being abandoned. Rediscovered and conserved in the nineteenth and twentieth centuries, it became a UNESCO World Heritage Site in 1989.',
+      text: 'Monasteries, temples and smaller stupas grew up around the Great Stupa, and the site was occupied for more than a thousand years before it was abandoned. Rediscovered and conserved in the nineteenth and twentieth centuries, it became a UNESCO World Heritage Site in 1989.',
       pos: [-20, 14, 44], target: [-46, 5, 8], time: 15.6
     },
     {
       title: 'The Stupa at Night', deva: 'रात्रि',
-      text: 'Sanchi stands on a hilltop in Raisen district above the plain. Lit after dusk, the dome reads as a single pale mass, and the gateways throw the shadows of their architraves across the terrace.',
+      text: 'Sanchi sits on a hilltop in Raisen district above the plain. Lit after dusk, the dome reads as a single pale mass while the gateways throw the shadows of their architraves across the terrace.',
       pos: [-50, 24, 60], target: [0, 14, 0], time: 21.2
     }
   ],

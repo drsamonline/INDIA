@@ -27,17 +27,17 @@ export default {
   tour: [
     {
       title: 'The Temple City', deva: 'மீனாட்சி அம்மன் கோயில்',
-      text: 'The Meenakshi Sundareswarar temple stands on the southern bank of the Vaigai at Madurai, dedicated to Meenakshi, a form of Parvati, and her consort Sundareswarar, Shiva. Sangam literature describes the temple city, and the earliest structures here date from Pandya rule in the 12th and 13th centuries.',
+      text: 'The Meenakshi Sundareswarar temple occupies the southern bank of the Vaigai at Madurai, dedicated to Meenakshi, a form of Parvati, and her consort Sundareswarar, Shiva. Sangam literature describes the temple city, and the earliest structures here date from Pandya rule in the 12th and 13th centuries.',
       pos: [64, 56, 202], target: [6, 18, 0], time: 16.4
     },
     {
       title: 'Fourteen Gopurams', deva: 'கோபுரம்',
-      text: 'Much of the present complex was rebuilt in the 14th century and enlarged under the Vijayanagara Empire and the Nayaks, who added the great gopurams. Fourteen of them rise above the streets, the tallest nearly 52 metres high, covered in thousands of painted stucco figures.',
+      text: 'Much of the present complex was rebuilt in the 14th century and enlarged under the Vijayanagara Empire and the Nayaks, who added the great gopurams. Fourteen of them rise above the streets, the tallest nearly 52 metres high and covered in thousands of painted stucco figures.',
       pos: [26, 40, 104], target: [0, 34, 72], time: 15.4
     },
     {
       title: 'Tiers of Painted Figures', deva: 'சிற்பங்கள்',
-      text: 'Each gopuram is a tapering stack of storeys, every one carrying a row of stucco deities, dancers and guardians repainted in reds, blues and yellows. A barrel-vaulted crest with gold finials closes the top.',
+      text: 'Each gopuram is a tapering stack of storeys, every one carrying a row of stucco deities, dancers and guardians, repainted in reds, blues and yellows. A barrel-vaulted crest with gold finials closes the top.',
       pos: [-18, 44, 96], target: [-70, 34, 0], time: 11.6
     },
     {
@@ -47,7 +47,7 @@ export default {
     },
     {
       title: 'The Thousand Pillar Hall', deva: 'ஆயிரங்கால் மண்டபம்',
-      text: 'Inside are the Hall of a Thousand Pillars, the Potramarai tank where pilgrims bathe, and shrines to both deities. The hall\'s carved columns and the gold-plated roofs of the two sanctums sit within a maze of courts.',
+      text: 'The Hall of a Thousand Pillars opens off the courts, its carved columns packed close together. Beyond it the two sanctums are roofed in gold plate.',
       pos: [52, 30, 40], target: [6, 10, 8], time: 12.2
     },
     {

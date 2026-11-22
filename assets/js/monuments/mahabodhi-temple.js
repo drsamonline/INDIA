@@ -22,32 +22,32 @@ export default {
   tour: [
     {
       title: 'Where the Buddha Woke', deva: 'महाबोधि मंदिर',
-      text: 'The Mahabodhi Temple stands at Bodh Gaya, beside the tree under which the Buddha is said to have attained enlightenment. Ashoka built a shrine here in the 3rd century BCE; the present temple is usually dated to the 5th or 6th century CE.',
-      pos: [-54, 31, 86], target: [0, 27, 0], time: 16.8
+      text: 'The Mahabodhi Temple at Bodh Gaya stands beside the tree the tradition names as the place of the Buddha\'s enlightenment. Ashoka built a shrine here in the 3rd century BCE; the present temple is usually dated to the 5th or 6th century CE.',
+      pos: [-38, 21, 58], target: [0, 22, 0], time: 16.8
     },
     {
       title: 'Brick and Plaster', deva: 'ईंट',
-      text: 'The tower rises about 52 metres, straight-sided and tapering, built of brick and covered in plaster, its faces crowded with niches holding images of the Buddha. It is one of the oldest brick temples surviving in India.',
+      text: 'The tower rises about 52 metres, straight-sided and tapering, built of brick under plaster, its faces crowded with niches holding images of the Buddha. It is one of the oldest brick temples surviving in India.',
       pos: [-8, 22, 22], target: [0, 26, 0], time: 12
     },
     {
       title: 'The Vajrasana', deva: 'वज्रासन',
-      text: 'Inside, a polished stone seat marks the place of enlightenment, and the shrine is in continuous worship after more than a thousand years.',
+      text: 'Inside, a polished stone seat, the vajrasana, marks the place of enlightenment. The shrine has been in continuous worship for more than a thousand years.',
       pos: [26, 12, 30], target: [0, 18, 0], time: 9.6
     },
     {
       title: 'The Bodhi Tree', deva: 'बोधि वृक्ष',
-      text: 'To the west stands a descendant of the original pipal tree, grown from a cutting taken to Sri Lanka by Ashoka’s daughter Sanghamitta and brought back. Pilgrims circle it on a raised platform.',
+      text: 'To the west stands a descendant of the original pipal tree, grown from a cutting Ashoka\'s daughter Sanghamitta carried to Sri Lanka and brought back. Pilgrims circle it on a raised platform.',
       pos: [-14, 8, 6], target: [-12, 10, -8], time: 17.2
     },
     {
       title: 'The Stone Railing', deva: 'वेदिका',
-      text: 'A carved stone railing surrounds the site, parts of it from the Mauryan period — among the oldest sculpture in India.',
+      text: 'A carved stone railing surrounds the site, parts of it from the Mauryan period and among the oldest sculpture in India.',
       pos: [16, 5, 20], target: [4, 4, 2], time: 10.4
     },
     {
       title: 'Night', deva: 'रात्रि',
-      text: 'The temple was inscribed as a UNESCO World Heritage Site in 2002, and at night it is lit for the pilgrims who keep arriving through the evening.',
+      text: 'The temple was inscribed as a UNESCO World Heritage Site in 2002. At night it is lit for the pilgrims who keep arriving through the evening.',
       pos: [-34, 19, 52], target: [0, 22, 0], time: 21.2
     }
   ],

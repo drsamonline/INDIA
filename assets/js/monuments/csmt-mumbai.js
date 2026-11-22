@@ -22,22 +22,22 @@ export default {
   tour: [
     {
       title: 'Victoria Terminus', deva: 'छत्रपति शिवाजी महाराज टर्मिनस',
-      text: 'The terminus was built in Bombay between 1878 and 1888 to a design by Frederick William Stevens, as the headquarters of the Great Indian Peninsula Railway. It was named for Queen Victoria in her jubilee year.',
+      text: 'The terminus was built in Bombay between 1878 and 1888 to a design by Frederick William Stevens, as headquarters of the Great Indian Peninsula Railway. It was named for Queen Victoria in her jubilee year.',
       pos: [58, 27, 98], target: [0, 20, 0], time: 16.2
     },
     {
       title: 'Gothic and Indian', deva: 'गॉथिक',
-      text: 'Stevens fused Victorian Gothic with Indian palace architecture: pointed arches, flying buttresses, carved animals and gargoyles, and a plan laid out as a symmetrical cross with the platforms running east.',
+      text: 'Stevens fused Victorian Gothic with Indian palace architecture: pointed arches, flying buttresses, carved animals and gargoyles, on a plan laid out as a symmetrical cross with the platforms running east.',
       pos: [4, 14, 52], target: [0, 16, 0], time: 11
     },
     {
       title: 'The Stone Dome', deva: 'गुंबद',
-      text: 'The ribbed stone dome sits over the crossing, crowned by a figure of Progress holding a torch. Around it the gables and turrets are carved with peacocks, monkeys, lions and snakes.',
+      text: 'The ribbed stone dome sits over the crossing, crowned by a figure of Progress holding a torch. Peacocks, monkeys, lions and snakes are carved into the gables and turrets around it — a menagerie in stone.',
       pos: [14, 34, 40], target: [0, 30, 0], time: 15.4
     },
     {
       title: 'The Clock Tower', deva: 'घड़ी मीनार',
-      text: 'The clock tower rises about 49 metres at the south-west corner of the building, and the station clock still keeps time over the forecourt.',
+      text: 'The clock tower rises about 49 metres at the south-west corner, and the station clock still keeps time over the forecourt.',
       pos: [-24, 28, 44], target: [-18, 32, 0], time: 9.2
     },
     {
@@ -47,7 +47,7 @@ export default {
     },
     {
       title: 'A Working Monument', deva: 'रात्रि',
-      text: 'In 2004 it became a UNESCO World Heritage Site — the first working railway station to be inscribed — and it is floodlit every evening.',
+      text: 'In 2004 it became a UNESCO World Heritage Site, the first working railway station to be inscribed. It is floodlit every evening.',
       pos: [52, 24, 90], target: [0, 20, 0], time: 21.2
     }
   ],

@@ -29,22 +29,22 @@ export default {
     },
     {
       title: 'Two Towers', deva: 'दो शिखर',
-      text: 'The complex holds two Shiva shrines and a smaller reclining Vishnu, each under a pyramidal tower of five storeys. They are built of dressed granite blocks and crowned with stupi finials.',
+      text: 'The complex holds two Shiva shrines and a smaller reclining Vishnu, each under a pyramidal tower of five storeys, built of dressed granite blocks and crowned with stupi finials.',
       pos: [-9, 16, 24], target: [0, 15, 0], time: 12
     },
     {
       title: 'Granite by the Sea', deva: 'ग्रेनाइट',
-      text: 'Thirteen centuries of salt wind and wave have pitted the stone, and sand has buried and uncovered the site more than once. The 2004 tsunami scoured the beach and revealed further structures offshore.',
+      text: 'Thirteen centuries of salt wind and wave have pitted the stone, and sand has buried the site and uncovered it again more than once. The 2004 tsunami scoured the beach and revealed further structures offshore.',
       pos: [10, 6, -26], target: [0, 10, 0], time: 10.4
     },
     {
       title: 'The Nandi Wall', deva: 'नंदी',
-      text: 'A row of Nandi bulls faces the sea along the eastern wall, carved in the round and worn almost featureless by the weather.',
+      text: 'A row of Nandi bulls faces the sea along the eastern wall, carved in the round and worn almost featureless by weather.',
       pos: [0, 3.5, 26], target: [0, 4, 8], time: 8.6
     },
     {
       title: 'The Group of Monuments', deva: 'स्मारक समूह',
-      text: 'The Shore Temple is part of the Group of Monuments at Mahabalipuram — the rathas, mandapas and the great relief of Arjuna’s Penance — inscribed as a UNESCO World Heritage Site in 1984.',
+      text: 'The Shore Temple belongs to the Group of Monuments at Mahabalipuram, with the rathas, the mandapas and the great relief of Arjuna\'s Penance, inscribed as a UNESCO World Heritage Site in 1984.',
       pos: [-34, 4, 30], target: [-4, 8, 10], time: 17.4
     },
     {

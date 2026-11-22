@@ -22,27 +22,27 @@ export default {
   tour: [
     {
       title: 'The Queen’s Stepwell', deva: 'रानी की वाव',
-      text: 'Rani ki Vav was built at Patan in 1063 by Queen Udayamati in memory of her husband Bhima I of the Chaulukya, or Solanki, dynasty. It is 64 metres long, about 20 metres wide and some 28 metres deep, with seven levels of steps.',
+      text: 'Rani ki Vav was built at Patan in 1063 by Queen Udayamati in memory of her husband Bhima I of the Chaulukya, or Solanki, dynasty. It runs 64 metres long and about 20 metres wide, some 28 metres deep, with seven levels of steps — a temple turned upside down, its sanctum at the water.',
       pos: [30, 36, 42], target: [0, 2, -6], time: 16.4
     },
     {
       title: 'Seven Levels', deva: 'सात स्तर',
-      text: 'The well descends in seven terraces, each narrower than the one above, so that from the rim you look down a stepped funnel of stone to the water at the bottom.',
+      text: 'The well descends in seven terraces, each narrower than the one above, so that from the rim the whole structure reads as a stepped funnel of stone down to the water.',
       pos: [10, 52, 24], target: [0, 0, -4], time: 12
     },
     {
       title: 'A Temple Upside Down', deva: 'उल्टा मंदिर',
-      text: 'The stepwell was designed as a temple inverted: the walls are carved with avatars of Vishnu, apsaras, nagkanyas and Jain monks, and the water at the lowest level takes the place of the sanctum.',
+      text: 'The stepwell was designed as a temple inverted. Avatars of Vishnu, apsaras, nagkanyas and Jain monks cover the walls, and the water at the lowest level takes the place of the sanctum.',
       pos: [14, 13, 16], target: [0, 4, -4], time: 9.6
     },
     {
       title: 'Five Hundred Figures', deva: 'मूर्तियाँ',
-      text: 'More than five hundred major sculptures line the walls and the faces of the terraces, among them a great reclining Vishnu in the water — one of the finest works of Māru-Gurjara carving.',
+      text: 'More than five hundred major sculptures line the walls and the faces of the terraces, among them a great reclining Vishnu in the water. The carving is among the finest of the Māru-Gurjara school.',
       pos: [8, 7, 12], target: [4, 6, 0], time: 11
     },
     {
       title: 'Buried and Found', deva: 'पुनर्खोज',
-      text: 'The Saraswati river silted over the stepwell and buried it for centuries. It was cleared in the 1950s, restored, and inscribed as a UNESCO World Heritage Site in 2014. It now appears on the reverse of the ₹100 note.',
+      text: 'The Saraswati river silted over the stepwell and buried it for centuries. It was cleared in the 1950s and restored, then inscribed as a UNESCO World Heritage Site in 2014. It now appears on the reverse of the ₹100 note.',
       pos: [4, 14, -18], target: [0, 6, -14], time: 17.2
     },
     {

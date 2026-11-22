@@ -31,27 +31,27 @@ export default {
     },
     {
       title: 'Basalt and Shadow', deva: 'मेहराब',
-      text: 'It is built of local basalt, 26 metres high, with a central arch about 15 metres across, its passage cut deep through the block. Two smaller arches flank it, and carved brackets carry the cornice above.',
+      text: 'Local basalt, 26 metres high, with a central arch about 15 metres across cut deep through the block. Two smaller arches flank it, and carved brackets carry the cornice above.',
       pos: [11, 10, 30], target: [0, 12, 0], time: 12
     },
     {
       title: 'Gujarati Detail', deva: 'जाली',
-      text: 'The ornament draws on sixteenth-century Gujarati architecture — jaali screens, lotus motifs and slender columns — set into the Indo-Saracenic frame that Wittet had used across Bombay.',
+      text: 'The ornament draws on sixteenth-century Gujarati architecture: jaali screens, lotus motifs and slender columns set into the Indo-Saracenic frame Wittet used across Bombay.',
       pos: [15, 15, 28], target: [9, 15, 0], time: 9.6
     },
     {
       title: 'The Octagonal Towers', deva: 'मीनार',
-      text: 'Two octagonal towers flank the arch, each carrying a ribbed dome of reinforced concrete. They give the monument the silhouette of a triumphal arch crossed with a mosque gateway.',
+      text: 'Two octagonal towers flank the arch, each under a ribbed dome of reinforced concrete. Together they give the monument the outline of a triumphal arch crossed with a mosque gateway.',
       pos: [26, 26, 38], target: [0, 21, 0], time: 16.4
     },
     {
       title: 'Apollo Bunder', deva: 'बंदरगाह',
-      text: 'The Gateway faces the harbour at Apollo Bunder. In 1948 the last British troops left India through this arch, and today boats leave from the quay for Elephanta Island.',
+      text: 'The Gateway faces the harbour at Apollo Bunder. The last British troops left India through this arch in 1948; today boats leave from the quay for Elephanta Island.',
       pos: [-34, 10, 44], target: [0, 13, 0], time: 17.8
     },
     {
       title: 'Harbour Lights', deva: 'रात्रि',
-      text: 'After dark the basalt goes almost black and the floodlights pick out the arch and the domes, with the city\'s lights across the water behind.',
+      text: 'After dark the basalt goes almost black and floodlights pick out the arch and the domes, with the city\'s lights across the water behind.',
       pos: [50, 20, 74], target: [0, 16, 0], time: 21.2
     }
   ],

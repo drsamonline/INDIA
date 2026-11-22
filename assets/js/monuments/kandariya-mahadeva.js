@@ -22,27 +22,27 @@ export default {
   tour: [
     {
       title: 'The Great Temple', deva: 'कंदारिया महादेव',
-      text: 'The Kandariya Mahadeva is the largest and tallest of the temples at Khajuraho, built by the Chandela kings around 1030 CE and dedicated to Shiva. It stands on a high platform with a five-part plan around a central shrine.',
+      text: 'The Kandariya Mahadeva is the largest and tallest temple at Khajuraho, built by the Chandela kings around 1030 CE and dedicated to Shiva. A high platform carries the five-part plan around a central shrine.',
       pos: [34, 18, 46], target: [0, 16, 0], time: 15.6
     },
     {
       title: 'A Mountain in Stone', deva: 'शिखर',
-      text: 'The tower rises about 31 metres in a curve of stacked tiers, each with its own row of small turrets, so the shikhara reads as a mountain with subsidiary peaks — the nagara form at its most elaborate.',
+      text: 'The tower rises about 31 metres in a curve of stacked tiers, each with its own row of small turrets, so the shikhara reads as a mountain with subsidiary peaks. The nagara form reaches its most elaborate here.',
       pos: [16, 34, 26], target: [0, 28, 0], time: 12
     },
     {
       title: 'Eight Hundred Figures', deva: 'मूर्तियाँ',
-      text: 'The walls carry some 870 sculptures: gods, nymphs, musicians, mithuna couples and animals, cut in a soft sandstone that has held its detail for a thousand years.',
+      text: 'Some 870 sculptures cover the walls: gods, nymphs, musicians, mithuna couples and animals, cut in a soft sandstone that has held its detail for a thousand years.',
       pos: [9, 9, 14], target: [0, 8, 2], time: 9.4
     },
     {
       title: 'The Platform', deva: 'जगती',
-      text: 'The temple stands on a jagati, a raised platform with a walkway for circumambulation, and is entered through a porch and a pillared hall before the dark sanctum.',
+      text: 'A jagati, the raised platform, carries a walkway for circumambulation. A porch and a pillared hall come before the dark sanctum.',
       pos: [-26, 9, 30], target: [0, 10, 0], time: 10.8
     },
     {
       title: 'Abandoned and Kept', deva: 'खजुराहो',
-      text: 'The temples were built in a burst between about 950 and 1050 and then left; the site was remote enough to escape destruction, and Khajuraho became a UNESCO World Heritage Site in 1986.',
+      text: 'The temples went up in a burst between about 950 and 1050 and were then left. The site was remote enough to escape destruction, and Khajuraho became a UNESCO World Heritage Site in 1986.',
       pos: [-30, 16, -18], target: [0, 16, 0], time: 17.4
     },
     {

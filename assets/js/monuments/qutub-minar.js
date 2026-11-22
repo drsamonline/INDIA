@@ -20,37 +20,37 @@ export default {
   tour: [
     {
       title: 'The Victory Tower', deva: 'क़ुतुब मीनार',
-      text: 'At 72.5 metres the Qutb Minar is the tallest masonry tower in India and the tallest brick minaret in the world. Qutb al-Din Aibak began it around 1199 to mark the founding of the Delhi Sultanate; his successor Iltutmish added three more storeys.',
+      text: 'At 72.5 metres, the Qutb Minar is the tallest masonry tower in India and the tallest brick minaret in the world. Qutb al-Din Aibak began it around 1199, to mark the founding of the Delhi Sultanate. Iltutmish, his successor, added three more storeys.',
       pos: [76, 30, 98], target: [0, 32, 0], time: 17.4
     },
     {
       title: 'Five Storeys, One Taper', deva: 'पाँच मंज़िलें',
-      text: 'The tower narrows from 14.3 metres at the base to 2.75 metres at the crown. Its first three storeys are red sandstone with alternating angular and round fluting, divided by projecting balconies carried on carved brackets.',
+      text: 'The tower narrows from 14.3 metres at the base to 2.75 metres at the crown. The first three storeys are red sandstone, fluted in alternating angular and round patterns and divided by projecting balconies carried on carved brackets.',
       pos: [24, 40, 34], target: [0, 40, 0], time: 12
     },
     {
       title: 'Marble & Sandstone', deva: 'संगमरमर',
-      text: 'Firoz Shah Tughlaq repaired the tower after lightning strikes in the fourteenth century, rebuilding the upper storeys in white marble and setting a cupola on top. Bands of marble cut across the red sandstone below.',
+      text: 'Lightning struck the tower in the fourteenth century; Firoz Shah Tughlaq repaired it, rebuilding the upper storeys in white marble and setting a cupola on top. Bands of marble also cut across the red sandstone below.',
       pos: [19, 60, 24], target: [0, 58, 0], time: 9.8
     },
     {
       title: 'The Iron Pillar', deva: 'लौह स्तंभ',
-      text: 'In the courtyard stands a 7-metre iron pillar cast in the Gupta period, around 400 CE, and inscribed in Sanskrit. Its resistance to rust for sixteen centuries is still studied by metallurgists.',
+      text: 'A 7-metre iron pillar stands in the courtyard, cast in the Gupta period, around 400 CE, and inscribed in Sanskrit. Metallurgists still study why it has not rusted in sixteen centuries.',
       pos: [20, 6, 22], target: [13, 5, 13], time: 11
     },
     {
       title: 'Quwwat-ul-Islam', deva: 'कुव्वत-उल-इस्लाम',
-      text: 'The mosque beside the tower, begun in 1193, was raised from the stones of twenty-seven demolished Hindu and Jain temples — their carved columns still stand in the colonnades of the courtyard.',
+      text: 'The mosque beside the tower was begun in 1193, raised from the stones of twenty-seven demolished Hindu and Jain temples. Their carved columns still carry the colonnades of the courtyard.',
       pos: [-34, 10, 30], target: [-12, 8, 2], time: 16.4
     },
     {
       title: 'The Unfinished Minar', deva: 'अलाई मीनार',
-      text: 'Alauddin Khalji planned a tower twice the height of the Qutb Minar. Work stopped after the first storey; the stump, 24 metres wide, still stands north of the complex.',
+      text: 'Alauddin Khalji planned a tower twice the height of the Qutb Minar. Work stopped after the first storey, and the stump, 24 metres wide, remains north of the complex.',
       pos: [54, 17, -8], target: [40, 12, -28], time: 17.9
     },
     {
       title: 'The Tower at Night', deva: 'रात्रि',
-      text: 'Under floodlight the fluting throws long shadows up the shaft. The complex is a UNESCO World Heritage Site, inscribed in 1993, and one of Delhi\'s most visited monuments.',
+      text: 'Floodlights throw the fluting into long shadows up the shaft. The complex was inscribed as a UNESCO World Heritage Site in 1993, and it is among the most visited monuments in Delhi.',
       pos: [70, 26, 92], target: [0, 34, 0], time: 21.4
     }
   ],

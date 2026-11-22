@@ -22,22 +22,22 @@ export default {
   tour: [
     {
       title: 'Above the Lake', deva: 'आमेर किला',
-      text: 'Amber Fort was begun in 1592 by Raja Man Singh I of the Kachwaha Rajputs, on the ridge above the Maota lake outside Jaipur. It was the seat of the rulers of Amber until the court moved down to Jaipur in 1727.',
+      text: 'Raja Man Singh I of the Kachwaha Rajputs began Amber Fort in 1592, on the ridge above the Maota lake outside Jaipur. It served as the seat of the rulers of Amber until the court moved down to Jaipur in 1727.',
       pos: [44, 50, 78], target: [0, 34, 0], time: 16.6
     },
     {
       title: 'Courtyards', deva: 'आँगन',
-      text: 'Inside the walls a sequence of courtyards climbs the hill: the Diwan-i-Aam for public audience, the Ganesh Pol gateway with its painted arches, and the private palaces behind.',
+      text: 'A sequence of courtyards climbs the hill inside the walls: the Diwan-i-Aam for public audience, the Ganesh Pol gateway with its painted arches, and the private palaces behind.',
       pos: [16, 30, 56], target: [0, 26, 0], time: 11
     },
     {
       title: 'Sheesh Mahal', deva: 'शीश महल',
-      text: 'The Hall of Mirrors is covered, walls and ceiling, in thousands of pieces of mirror set into plaster. A single lamp is enough to fill the room with light.',
+      text: 'Thousands of pieces of mirror, set into plaster, cover the walls and ceiling of the Hall of Mirrors. A single lamp is enough to fill the room with light.',
       pos: [12, 27, 44], target: [4, 26, 12], time: 9.4
     },
     {
       title: 'The Rampart', deva: 'प्राचीर',
-      text: 'A long crenellated wall with watchtowers runs along the Aravalli ridge above the fort, joining it to Jaigarh. From the rampart the whole plain towards Jaipur is visible.',
+      text: 'A long crenellated wall with watchtowers runs along the Aravalli ridge above the fort, joining it to Jaigarh. From the rampart the plain towards Jaipur opens out.',
       pos: [-56, 30, 44], target: [-18, 26, 0], time: 17.4
     },
     {
@@ -47,7 +47,7 @@ export default {
     },
     {
       title: 'Hill Forts of Rajasthan', deva: 'दुर्ग',
-      text: 'In 2013 Amber was inscribed, with five other forts of Rajasthan, as a UNESCO World Heritage Site.',
+      text: 'Amber was inscribed in 2013, with five other forts of Rajasthan, as a UNESCO World Heritage Site: the Hill Forts of Rajasthan.',
       pos: [40, 44, 72], target: [0, 34, 0], time: 21.2
     }
   ],

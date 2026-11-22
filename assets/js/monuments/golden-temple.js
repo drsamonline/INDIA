@@ -24,12 +24,12 @@ export default {
   tour: [
     {
       title: 'Harmandir Sahib', deva: 'हरमंदिर साहिब',
-      text: 'Guru Ram Das founded the town of Amritsar and began the sacred pool, the Amrit Sarovar, in 1577. His son Guru Arjan completed the Harmandir Sahib at its centre, placing it lower than the surrounding ground so that visitors step down into it.',
+      text: 'Guru Ram Das founded Amritsar and began the sacred pool, the Amrit Sarovar, in 1577. His son Guru Arjan completed the Harmandir Sahib at its centre in 1604, set lower than the ground around it so that visitors step down into it.',
       pos: [-26, 16, 46], target: [2, 11, 0], time: 16.8
     },
     {
       title: 'Four Doors', deva: 'चार द्वार',
-      text: 'The shrine has four doors facing four directions, open to every faith and every caste. The causeway from the west is the way in, and pilgrims walk it barefoot, heads covered.',
+      text: 'Four doors face four directions, open to every faith and every caste. The causeway from the west is the way in, and pilgrims walk it barefoot with their heads covered.',
       pos: [-34, 9, 26], target: [0, 9, 0], time: 12
     },
     {
@@ -39,12 +39,12 @@ export default {
     },
     {
       title: 'The Amrit Sarovar', deva: 'अमृत सरोवर',
-      text: 'The tank is the heart of the complex. A marble walkway, the parikrama, runs all the way round it, lined with arcades and balustrades, and pilgrims circle it as they recite.',
+      text: 'The tank is the heart of the complex. A marble walkway, the parikrama, runs right round it between arcades and balustrades, and pilgrims circle as they recite.',
       pos: [30, 12, 44], target: [0, 6, 0], time: 16.2
     },
     {
       title: 'Akal Takht', deva: 'अकाल तख़्त',
-      text: 'Opposite the shrine stands the Akal Takht, the seat of Sikh temporal authority and one of the five takhts. The complex also holds a clock tower, a museum and the langar, a kitchen that feeds every visitor free of charge.',
+      text: 'The Akal Takht faces the shrine across the water: seat of Sikh temporal authority and one of the five takhts. The complex also holds a clock tower, a museum and the langar, a kitchen that feeds every visitor free of charge.',
       pos: [-6, 16, -34], target: [-14, 12, -14], time: 17.4
     },
     {
@@ -54,7 +54,7 @@ export default {
     },
     {
       title: 'The Temple at Night', deva: 'रात्रि',
-      text: 'After dark the gold takes the floodlight and the whole shrine seems to float on the black water, while the parikrama stays busy through the night.',
+      text: 'After dark the floodlight takes the gold and the shrine seems to float on the black water, while the parikrama stays busy through the night.',
       pos: [-34, 18, 56], target: [0, 12, 0], time: 21.4
     }
   ],

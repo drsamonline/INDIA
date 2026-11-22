@@ -22,32 +22,32 @@ export default {
   tour: [
     {
       title: 'The Palace of Winds', deva: 'हवा महल',
-      text: 'Maharaja Sawai Pratap Singh built the Hawa Mahal in 1799 as an extension of the City Palace, reaching towards the women\'s quarters. Its five storeys rise like a pyramid, shaped — it is said — after the crown of Krishna.',
+      text: 'Maharaja Sawai Pratap Singh built the Hawa Mahal in 1799 as an extension of the City Palace, reaching towards the women\'s quarters. Lal Chand Ustad shaped its five storeys as a pyramid, after the crown of Krishna.',
       pos: [20, 12, 40], target: [0, 9, 2], time: 17.3
     },
     {
       title: '953 Windows', deva: '९५३ झरोखे',
-      text: 'The facade is a honeycomb of 953 small jharokha windows in carved sandstone. From behind these screens the women of the court could watch the street and its festivals without being seen.',
+      text: 'The facade is a honeycomb of 953 small jharokha windows cut in sandstone. From behind those screens the women of the court watched the street and its festivals without being seen.',
       pos: [0, 9, 26], target: [0, 9, 2], time: 12
     },
     {
       title: 'A Wall That Breathes', deva: 'हवा',
-      text: 'The lattice is a working cooling system. Air passes through the pierced screens and the small chambers behind them, and fountains once cooled the interior further — which is how the palace earned its name.',
+      text: 'Air passes through the pierced screens and the small chambers behind them, cooling the interior, and fountains once cooled it further. That ventilation is where the name Palace of Winds comes from.',
       pos: [7, 13, 16], target: [2, 12, 2], time: 9.6
     },
     {
       title: 'Crown of the Facade', deva: 'मुकुट',
-      text: 'The top storey carries a cusped arch crowned by a small dome and finial, with domed chhatris at the ends of each tier. The whole screen is only a few metres deep; the palace behind it is a thin, curved wall.',
+      text: 'The top storey carries a cusped arch under a small dome and finial, with domed chhatris at the ends of each tier. The whole screen is only a few metres deep; the palace behind it is a thin, curved wall.',
       pos: [6, 21, 18], target: [0, 17, 2], time: 16.8
     },
     {
       title: 'The Bazaar Below', deva: 'बाज़ार',
-      text: 'Hawa Mahal faces the busiest lane of the old city, part of the walled town laid out by Sawai Jai Singh II in 1727. In 2019 the city of Jaipur was inscribed as a UNESCO World Heritage Site.',
+      text: 'Hawa Mahal faces the busiest lane of the old city, part of the walled town Sawai Jai Singh II laid out in 1727. Jaipur City was inscribed as a UNESCO World Heritage Site in 2019.',
       pos: [-24, 3.2, 22], target: [0, 8, 2], time: 17.9
     },
     {
       title: 'Pink at Dusk', deva: 'गुलाबी',
-      text: 'The building is made of red and pink sandstone, the colour that gave Jaipur its name, the Pink City. At dusk the screens turn from rose to deep terracotta, and the lamps along the lane come up.',
+      text: 'The building is red and pink sandstone, the colour that gave Jaipur its name, the Pink City. At dusk the screens turn from rose to deep terracotta as the lamps come up along the lane.',
       pos: [16, 11, 34], target: [0, 9, 2], time: 21.2
     }
   ],
