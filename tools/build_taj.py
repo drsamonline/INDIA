@@ -47,6 +47,7 @@ src = src.replace('https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module
                   '../assets/vendor/three/build/three.module.js')
 src = src.replace('https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/',
                   '../assets/vendor/three/addons/')
+
 src = src.replace('id="haze-val">27%', 'id="haze-val">15%')
 # the page had no query-parameter support at all, which is why ?shot= did
 # nothing and the night floodlights could not be inspected
