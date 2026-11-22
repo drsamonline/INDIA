@@ -41,6 +41,17 @@ src = src.replace('haze: 0.0016', 'haze: 0.0009')
 src = src.replace('FogExp2(0xe8c39a', 'FogExp2(0xdcd3c2')
 src = src.replace('value="0.0016"', 'value="0.0009"')
 src = src.replace('id="haze-val">27%', 'id="haze-val">15%')
+# the page had no query-parameter support at all, which is why ?shot= did
+# nothing and the night floodlights could not be inspected
+
+# the sliders carry their own value attributes, which win over DEFAULTS — this
+# is why the grade changes never reached the panel
+src = src.replace('id="exposure" min="0.3" max="1.4" step="0.02" value="0.72"',
+                  'id="exposure" min="0.3" max="1.4" step="0.02" value="0.62"')
+src = src.replace('id="glow" min="0" max="1.2" step="0.02" value="0.32"',
+                  'id="glow" min="0" max="1.2" step="0.02" value="0.24"')
+src = src.replace("time: 17.35, cycle: false",
+                  "time: (parseFloat(new URLSearchParams(location.search).get('shot')) || 17.35), cycle: false")
 # The Taj already uses the same Sky addon as the engine, but at turbidity 6 and
 # mie 0.004 — a much hazier atmosphere, which is what made it read brown. These
 # are the engine's values, so the two now share one sky.
