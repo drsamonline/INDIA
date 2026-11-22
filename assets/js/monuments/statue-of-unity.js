@@ -149,7 +149,11 @@ export default {
 
     // neck, head, jaw
     add(B, cyl(6.6, 7.2, 12, 14), 0, BASE + 156, 0, { sz: 0.92 });
-    add(B, sph(9.5, 20), 0, BASE + 171.0, 0, { sy: 1.05, sz: 0.95 });      // skull
+    add(B, sph(10.4, 20), 0, BASE + 171.4, 0, { sy: 1.08, sz: 0.95 });     // skull
+    add(B, sph(2.4, 8), -9.6, BASE + 170.0, -0.4, { sx: 0.55, sy: 1.3 });  // ears
+    add(B, sph(2.4, 8), 9.6, BASE + 170.0, -0.4, { sx: 0.55, sy: 1.3 });
+    add('dark', sph(1.7, 8), -3.4, BASE + 172.0, 8.1, { sy: 0.7 });        // eye sockets
+    add('dark', sph(1.7, 8), 3.4, BASE + 172.0, 8.1, { sy: 0.7 });
     add(B, sph(7.6, 16), 0, BASE + 165.0, 1.6, { sy: 0.8, sz: 1.0 });      // jaw
     add(B, sph(3.6, 12), 0, BASE + 162.4, 5.4, { sy: 0.72, sz: 1.0 });     // chin
     add(B, box(11.8, 1.7, 2.4), 0, BASE + 172.4, 7.2);                     // brow
