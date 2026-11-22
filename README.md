@@ -85,6 +85,8 @@ tools/build_taj.py          adapts the original Taj Mahal scene into the site
 tools/qa.py                 headless-Chromium render check
 tools/linkcheck.py          every internal reference resolves
 tools/audit_data.py         data + copy audit (structure, years, images, AI tells)
+tools/check_a11y.py         skip link, canvas semantics, drawer focus trap
+tools/build_extras.py       robots.txt, sitemap.xml, 404.html
 tools/MONUMENT-CONTRACT.md  how to write a new monument module
 ```
 
@@ -115,6 +117,7 @@ python3 tools/linkcheck.py      # every internal href/src/srcset resolves
 python3 tools/audit_data.py     # structure, years, image files, copy tells
 python3 tools/audit_data.py --links   # also HEAD every external link
 python3 tools/check_all.py      # render every page in headless Chromium
+python3 tools/check_a11y.py     # skip link, canvas semantics, drawer focus trap
 ```
 
 CI runs the first three on every push and fails if the generated pages are

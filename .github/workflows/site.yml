@@ -58,3 +58,5 @@ jobs:
           echo "CHROME_PATH=$(cat chrome_path.txt)" >> "$GITHUB_ENV"
       - name: Boot two pages and check for console errors
         run: python3 tools/check_all.py --only qutub-minar golden-temple --out shots
+      - name: Check the accessibility contract
+        run: python3 tools/check_a11y.py --only qutub-minar

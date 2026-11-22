@@ -551,7 +551,7 @@ export function boot(mon) {
   skip.className = 'skip-link';
   skip.href = '#panel';
   skip.textContent = 'Skip to the controls';
-  body.appendChild(skip);
+  body.prepend(skip);   // first in tab order
 
   const app = $('app');
   if (app) {
