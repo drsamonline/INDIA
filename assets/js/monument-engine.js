@@ -385,6 +385,13 @@ class Builder {
     if (!geo) return;
     const g = geo.index ? geo.toNonIndexed() : geo;
     if (g !== geo) geo.dispose();
+    // merging needs identical attributes on every geometry; a module that
+    // builds a custom surface may omit uv or normal, which breaks the merge
+    if (!g.getAttribute('uv')) {
+      const n = g.getAttribute('position').count;
+      g.setAttribute('uv', new THREE.Float32BufferAttribute(new Float32Array(n * 2), 2));
+    }
+    if (!g.getAttribute('normal')) g.computeVertexNormals();
     const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(o.rx || 0, o.ry || 0, o.rz || 0, 'YXZ'));
     const s = new THREE.Vector3(o.sx ?? o.s ?? 1, o.sy ?? o.s ?? 1, o.sz ?? o.s ?? 1);
     const m = new THREE.Matrix4().compose(new THREE.Vector3(x, y, z), q, s);

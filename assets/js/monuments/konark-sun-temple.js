@@ -12,13 +12,13 @@ export default {
   bounds: 105,
   minDist: 20,
   maxDist: 380,
-  home: { pos: [92, 30, 96], target: [2, 13, 14], fov: 40 },
+  home: { pos: [90, 29, 100], target: [0, 13, 18], fov: 40 },
   ground: { texture: 'grass', size: 1700, color: 0x93a06e },
   views: [
-    { name: 'Full', pos: [92, 30, 96], target: [2, 13, 14] },
+    { name: 'Full', pos: [90, 29, 100], target: [0, 13, 18] },
     { name: 'Wheels', pos: [40, 5.5, 24], target: [26, 2.2, 4] },
     { name: 'Roof', pos: [36, 32, 46], target: [0, 22, 8] },
-    { name: 'Horses', pos: [22, 6, 80], target: [0, 5, 46] },
+    { name: 'Horses', pos: [31, 11, 84], target: [-2, 4, 52] },
     { name: 'Deul', pos: [-50, 22, -54], target: [-2, 13, -20] }
   ],
   tour: [
@@ -166,37 +166,44 @@ export default {
       add('sandstoneBuff', archFrame(3.0, 4.4, 0.26, 0.3), s * 8.8, BY + 0.9, JZ + JW / 2 + 0.05);
     }
 
-    /* ---------- roof: stepped pidha tiers ---------- */
+    /* ---------- roof: stepped pidha tiers ----------
+       Each tier is a recessed drum closed by a projecting potika cornice, so
+       the pyramid reads as a stack of ledges rather than a smooth cone. */
     let ry = BY + BH;                            // 15.1
-    const tiers = 9;
+    const tiers = 7;
     for (let i = 0; i < tiers; i++) {
-      const w = 28.8 - i * 2.35;
-      const h = 1.34;
-      block('granite', w, h, w, 0, ry, JZ);
-      block('stone', w + 0.72, 0.32, w + 0.72, 0, ry + h - 0.34, JZ);            // cornice
-      block('grey', w + 0.34, 0.14, w + 0.34, 0, ry + 0.06, JZ);               // shadow line
-      // carved band of small blocks around each tier
-      const n = 4 + i;
-      for (let k = 0; k < n && i < 6; k++) {
-        const t2 = -w / 2 + 1.2 + k * ((w - 2.4) / Math.max(1, n - 1));
-        add('grey', box(0.55, h * 0.42, 0.22), t2, ry + h * 0.55, JZ + w / 2 + 0.16);
-        add('grey', box(0.55, h * 0.42, 0.22), t2, ry + h * 0.55, JZ - w / 2 - 0.16);
-        add('grey', box(0.22, h * 0.42, 0.55), JZ + w / 2 + 0.16, ry + h * 0.55, t2, {});
+      const w = 29.0 - i * 2.95;
+      const h = 1.6;
+      block('granite', w, h - 0.44, w, 0, ry, JZ);                       // drum
+      block('grey', w + 0.16, 0.12, w + 0.16, 0, ry + 0.02, JZ);         // shadow line
+      block('stone', w + 1.05, 0.44, w + 1.05, 0, ry + h - 0.44, JZ);    // potika cornice
+      block('grey', w + 1.12, 0.1, w + 1.12, 0, ry + h - 0.52, JZ);      // under-cut
+      // small carved blocks around each tier face
+      const n = 3 + i;
+      for (let k = 0; k < n; k++) {
+        const t2 = -w / 2 + 1.0 + k * ((w - 2.0) / Math.max(1, n - 1));
+        const yy = ry + (h - 0.44) * 0.5;
+        add('grey', box(0.5, (h - 0.44) * 0.5, 0.2), t2, yy, JZ + w / 2 + 0.14);
+        add('grey', box(0.5, (h - 0.44) * 0.5, 0.2), t2, yy, JZ - w / 2 - 0.14);
+        add('grey', box(0.2, (h - 0.44) * 0.5, 0.5), JZ + w / 2 + 0.14, yy, t2);
+        add('grey', box(0.2, (h - 0.44) * 0.5, 0.5), JZ - w / 2 - 0.14, yy, t2);
       }
       ry += h;
     }
     // amalaka, beki and kalasha
-    add('granite', cyl(4.4, 5.0, 0.6, 16), 0, ry + 0.3, JZ);
-    add('sandstoneBuff', cyl(4.2, 4.4, 1.4, 20), 0, ry + 1.3, JZ);
-    for (let i = 0; i < 18; i++) {
-      const a = (i / 18) * PI * 2;
-      add('grey', box(0.45, 1.2, 0.3), Math.cos(a) * 4.3, ry + 1.3, JZ + Math.sin(a) * 4.3, { ry: -a });
+    add('granite', cyl(4.5, 5.2, 0.6, 16), 0, ry + 0.3, JZ);
+    add('sandstoneBuff', cyl(4.25, 4.5, 1.35, 20), 0, ry + 1.3, JZ);
+    for (let i = 0; i < 20; i++) {
+      const a = (i / 20) * PI * 2;
+      add('grey', box(0.42, 1.25, 0.28), Math.cos(a) * 4.4, ry + 1.3, JZ + Math.sin(a) * 4.4, { ry: -a });
     }
-    add('sandstoneBuff', cyl(2.8, 3.2, 0.45, 16), 0, ry + 2.2, JZ);
-    add('granite', cyl(1.9, 2.3, 0.8, 14), 0, ry + 2.8, JZ);
-    add('sandstoneBuff', sph(1.35, 12), 0, ry + 3.9, JZ);
-    add('granite', cyl(0.45, 0.62, 0.9, 8), 0, ry + 4.8, JZ);
-    add('gold', cone(0.42, 1.0, 8), 0, ry + 5.7, JZ);
+    add('sandstoneBuff', cyl(3.0, 3.4, 0.45, 16), 0, ry + 2.2, JZ);
+    add('granite', cyl(2.0, 2.4, 0.7, 14), 0, ry + 2.75, JZ);
+    // the kalasha: a pot, a flared mouth and a spike
+    add('sandstoneBuff', ctx.lathe([[0.06, 0], [0.55, 0.12], [1.15, 0.55], [1.4, 1.05],
+      [1.22, 1.65], [0.78, 2.05], [0.58, 2.3], [0.74, 2.6], [0.46, 2.95], [0.16, 3.35],
+      [0.06, 3.7]], 16), 0, ry + 3.45, JZ);
+    add('gold', cone(0.26, 0.9, 8), 0, ry + 7.4, JZ);
 
     /* ---------- the broken deul behind: a rough, collapsed mass ---------- */
     const DZ = -21;
@@ -242,32 +249,59 @@ export default {
     // dark recess between the two halls
     block('dark', 20, 8, 3.4, 0, TOP, -6.4);
 
-    /* ---------- seven horses ---------- */
-    function horse(x, z, s) {
-      const G = (k, w, h, d, px, py, pz, o) =>
-        add(k, box(w * s, h * s, d * s), x + px * s, py * s, z + pz * s, o || {});
-      // legs and hooves
-      [[-0.38, 1.05], [0.38, 1.05], [-0.38, -0.95], [0.38, -0.95]].forEach(([lx, lz]) => {
-        G('stone', 0.26, 1.5, 0.3, lx, 0.75, lz);
-        G('stone', 0.34, 0.2, 0.44, lx, 0.1, lz);
+    /* ---------- seven horses ----------
+       Built from tapered cylinders and ellipsoids rather than boxes, so the
+       barrel, the arched neck, the head, four jointed legs and the tail each
+       read in profile even from the far end of the enclosure. */
+    function horse(x, z, s, ry) {
+      const c = Math.cos(ry), n = Math.sin(ry);
+      const P = (dx, dz) => [x + (dx * c + dz * n) * s, z + (-dx * n + dz * c) * s];
+      const put = (k, geo, dx, dy, dz, o) => {
+        const [px, pz] = P(dx, dz);
+        add(k, geo, px, dy * s, pz, Object.assign({ ry }, o || {}));
+      };
+      const ell = (k, dx, dy, dz, a, b, cc, o) => {
+        const [px, pz] = P(dx, dz);
+        add(k, sph(1, 14), px, dy * s, pz, Object.assign({ ry, sx: a * s, sy: b * s, sz: cc * s }, o || {}));
+      };
+      const BODY = 'sandstoneBuff';
+      // barrel, chest and rump
+      ell(BODY, 0, 2.02, 0, 0.60, 0.66, 1.20);
+      ell(BODY, 0, 1.94, 0.94, 0.56, 0.60, 0.50);
+      ell(BODY, 0, 2.06, -0.92, 0.58, 0.62, 0.56);
+      // neck: a tapered shaft from the withers up and forward, thin at the head
+      put(BODY, cyl(0.23, 0.47, 1.55, 10), 0, 2.88, 1.06, { rx: -0.74 });
+      // mane along the crest
+      put('grey', box(0.12, 1.4, 0.2), 0, 2.98, 0.86, { rx: -0.74 });
+      // cheek, then a head long and narrow, carried forward and down
+      ell(BODY, 0, 3.42, 1.62, 0.23, 0.24, 0.22, { rx: -0.4 });
+      ell(BODY, 0, 3.5, 1.9, 0.165, 0.215, 0.46, { rx: -0.78 });
+      ell(BODY, 0, 3.28, 2.2, 0.135, 0.17, 0.24, { rx: -0.78 });
+      ell('grey', 0, 3.22, 2.32, 0.13, 0.14, 0.10, { rx: -0.78 });   // muzzle
+      // ears
+      put('grey', cone(0.09, 0.32, 6), -0.14, 3.78, 1.6, { rx: -0.45, rz: -0.14 });
+      put('grey', cone(0.09, 0.32, 6), 0.14, 3.78, 1.6, { rx: -0.45, rz: 0.14 });
+      // four jointed legs: upper, lower, hoof
+      const legs = [[-0.38, 0.80, 0], [0.38, 0.80, 0], [-0.38, -0.88, 0.16], [0.38, -0.88, 0.16]];
+      legs.forEach(([lx, lz, tilt]) => {
+        put(BODY, cyl(0.14, 0.22, 0.92, 8), lx, 1.56, lz, { rx: tilt });
+        put(BODY, cyl(0.08, 0.13, 0.92, 8), lx, 0.6, lz - tilt * 0.35);
+        put('grey', box(0.24, 0.16, 0.32), lx, 0.08, lz - tilt * 0.5);
       });
-      G('sandstoneBuff', 1.05, 1.3, 2.55, 0, 2.0, 0);                    // barrel
-      G('sandstoneBuff', 0.95, 1.42, 1.15, 0, 2.02, 1.32);               // chest
-      G('sandstoneBuff', 1.0, 1.32, 1.2, 0, 2.08, -1.3);                 // rump
-      G('sandstoneBuff', 0.66, 1.55, 0.7, 0, 3.15, 1.85, { rx: 0.5 });   // neck
-      G('stone', 0.3, 1.3, 0.28, 0, 3.32, 1.6, { rx: 0.5 });        // mane
-      G('sandstoneBuff', 0.5, 0.6, 1.15, 0, 3.95, 2.45, { rx: 0.5 });    // head
-      G('stone', 0.36, 0.36, 0.42, 0, 3.78, 2.95, { rx: 0.5 });     // muzzle
-      G('stone', 0.13, 0.4, 0.16, -0.16, 4.32, 2.2, { rx: 0.2 });   // ears
-      G('stone', 0.13, 0.4, 0.16, 0.16, 4.32, 2.2, { rx: 0.2 });
-      G('stone', 0.22, 1.5, 0.24, 0, 2.35, -2.05, { rx: 1.75 });    // tail
-      G('granite', 1.16, 0.16, 2.2, 0, 2.6, -0.05);                  // saddle cloth
+      // tail, falling from the dock
+      put('grey', cyl(0.09, 0.19, 0.85, 8), 0, 2.4, -1.34, { rx: 0.5 });
+      put('grey', cyl(0.05, 0.10, 0.8, 8), 0, 1.7, -1.62, { rx: 0.28 });
+      put('grey', cone(0.15, 0.5, 7), 0, 1.22, -1.74, { rx: Math.PI });
+      // a cloth over the back, kept flat so it does not read as a box
+      put('granite', box(0.86, 0.07, 1.7), 0, 2.62, -0.05);
+      // breast band
+      put('grey', box(0.9, 0.12, 0.18), 0, 2.28, 1.14);
     }
-    for (let i = 0; i < 7; i++) horse(-10.8 + i * 3.6, 51.0, 1.12);
+    for (let i = 0; i < 7; i++) horse(-11.4 + i * 3.8, 52.4, 1.08, (i % 2 ? 0.04 : -0.04));
     // the beam the team is yoked to
-    add('granite', box(26, 0.5, 0.6), 0, 2.9, 49.2);
-    [-9, 9].forEach((x) => add('granite', box(0.5, 2.4, 0.5), x, 1.4, 49.2));
-    add('paving', plane(34, 13), 0, 0.14, 51.0, { rx: -PI / 2 });
+    add('granite', box(27, 0.5, 0.6), 0, 3.0, 48.9);
+    [-9.5, 9.5].forEach((x) => add('granite', box(0.5, 2.6, 0.5), x, 1.4, 48.9));
+    add('paving', plane(34, 15), 0, 0.14, 52.0, { rx: -PI / 2 });
 
     /* ---------- subsidiary shrine, ruined, to the south-west ---------- */
     (function shrine(cx, cz) {
