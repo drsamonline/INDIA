@@ -6,16 +6,16 @@ export default {
   accent: '#b0a48c',
   accent2: '#d0c4a8',
   seed: 59,
-  time: 7.2,
+  time: 8.6,
   bounds: 55,
   minDist: 12,
   maxDist: 200,
-  home: { pos: [-26, 13, 40], target: [0, 11, 0], fov: 40 },
+  home: { pos: [-42, 20, 62], target: [0, 12, 0], fov: 40 },
   ground: { texture: 'sandGround', size: 2400, color: 0xcdbb96 },
   groundY: -0.3,
   water: { y: -0.24, size: 620, z: 330, color: 0x2a5361, distortion: 2.6 },
   views: [
-    { name: 'Full', pos: [-26, 13, 40], target: [0, 11, 0] },
+    { name: 'Full', pos: [-42, 20, 62], target: [0, 12, 0] },
     { name: 'Towers', pos: [-9, 16, 24], target: [0, 15, 0] },
     { name: 'From the sea', pos: [10, 6, -26], target: [0, 10, 0] },
     { name: 'Nandi', pos: [0, 3.5, 26], target: [0, 4, 8] },
@@ -78,6 +78,19 @@ export default {
       for (let i = 0; i < tiers; i++) {
         block(key, w, 2.1, w, cx, y, cz);
         add('stone', box(w + 0.55, 0.22, w + 0.55), cx, y + 2.1, cz);
+        // a projecting cornice, and a row of carved figures under it
+        add('granite', box(w + 1.15, 0.34, w + 1.15), cx, y + 1.94, cz);
+        add('stone', box(w + 1.25, 0.12, w + 1.25), cx, y + 1.72, cz);
+        const nf = Math.max(3, Math.round(w / 1.5));
+        for (let k = 0; k < nf; k++) {
+          const off = (k - (nf - 1) / 2) * (w / nf);
+          for (const [dx, dz] of [[0, 1], [0, -1], [1, 0], [-1, 0]]) {
+            const px = cx + (dx ? dx * (w / 2 + 0.12) : off);
+            const pz = cz + (dz ? dz * (w / 2 + 0.12) : off);
+            add('stone', box(0.34, 0.86, 0.34), px, y + 1.16, pz);
+            add('granite', sph(0.2, 6), px, y + 1.62, pz);
+          }
+        }
         // corner pilasters and a shallow niche on each face
         for (const [dx, dz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
           add('stone', box(0.45, 2.0, 0.45), cx + dx * (w / 2 - 0.2), y + 1.05, cz + dz * (w / 2 - 0.2));
