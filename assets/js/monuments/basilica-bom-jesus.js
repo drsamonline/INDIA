@@ -37,7 +37,7 @@ export default {
     },
     {
       title: 'The Casket', deva: 'अवशेष',
-      text: 'Inside, gilded altars and a painted ceiling frame the chapel that holds the silver casket of St Francis Xavier, who died off the China coast in 1552. His relics are displayed every ten years.',
+      text: 'The chapel behind these walls holds the silver casket of St Francis Xavier, the Jesuit missionary who died off the China coast in 1552; his relics are displayed every ten years. The interior, with its gilded altars and painted ceiling, is not modelled here.',
       pos: [26, 12, 18], target: [0, 10, -6], time: 10.6
     },
     {
