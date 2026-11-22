@@ -197,13 +197,11 @@ export default {
     // a charbagh garden between them
     block('stone', 22, 3, 34, 0, 38, -32);
     add(trim, box(23, 0.4, 35), 0, 41, -32);
-    // the charbagh: four quartered beds with clipped hedges and a cross path,
-    // not a green slab with stripes
-    [-1, 1].forEach((sx) => {
-      [-1, 1].forEach((sz) => {
-        ctx.parterre(sx * 5.2, -32 + sz * 7.6, 8.4, 13.0, { y: 41.34, h: 0.7, t: 0.42, cross: false, shrubs: 5 });
-      });
-    });
+    // NOTE: the charbagh beds were built here and removed again. The court is
+    // modelled as a roofed block — there is a stone mass from y 42 to 42.3
+    // spanning the whole court — so a garden on the floor at 41.34 is inside a
+    // sealed room and can never be seen. The court needs to be an open
+    // courtyard before a garden in it means anything.
     add('marble', box(0.9, 0.2, 29), 0, 41.25, -32);
     add('marble', box(19, 0.2, 0.9), 0, 41.25, -32);
     add('water', box(5.4, 0.12, 3.6), 0, 41.32, -32);
