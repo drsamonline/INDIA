@@ -386,6 +386,11 @@ class Builder {
      the site was a flat dark plane before this; this is the same idea with the
      material actually removed. */
   jali(w, h, o = {}) {
+    // a screen with many bays would rebuild the same extrusion hundreds of
+    // times; cache by shape and hand out clones, since add() transforms in place
+    const key = [w, h, o.cols, o.rows, o.bar, o.depth, o.cell, o.shape].join('|');
+    this._jali = this._jali || {};
+    if (this._jali[key]) return this._jali[key].clone();
     const bar = o.bar ?? 0.08;
     const depth = o.depth ?? 0.10;
     const cell = o.cell ?? 0.5;
@@ -425,7 +430,9 @@ class Builder {
         }
       }
     }
-    return new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false, curveSegments: 4 });
+    const g = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false, curveSegments: 4 });
+    this._jali[key] = g;
+    return g.clone();
   }
   /* ---- placement ---- */
   add(key, geo, x = 0, y = 0, z = 0, o = {}) {

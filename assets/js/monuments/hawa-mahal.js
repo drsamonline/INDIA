@@ -146,7 +146,7 @@ export default {
         add('white', box(bw * 0.94, 0.09, 0.66), x, y + 0.10, z + 0.26, { ry });
 
         // arched, pierced screen under a white surround
-        add('jaliWhite', arch(bw * 0.76, TH * 0.52, 0.06), x, y + TH * 0.13, z + 0.50, { ry });
+        add('jaliWhite', ctx.jali(bw * 0.74, TH * 0.50, { cols: 3, rows: 4, bar: 0.05, depth: 0.07, shape: 'arch' }), x, y + TH * 0.14, z + 0.50, { ry });
         add('white', archFrame(bw * 0.84, TH * 0.57, 0.05, 0.08), x, y + TH * 0.11, z + 0.48, { ry });
         // a second, small pierced panel on the wall above the casement
         add('jaliWhite', arch(bw * 0.30, TH * 0.15, 0.05), x, y + TH * 0.70, zw, { ry });
