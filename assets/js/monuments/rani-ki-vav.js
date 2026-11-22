@@ -29,7 +29,8 @@ export default {
     { name: 'From above', pos: [12, 46, 22], target: [0, -12, -3] },
     { name: 'Seven levels', pos: [26, 8, 20], target: [0, -10, -4] },
     { name: 'Carving', pos: [12, -4, 6], target: [0, -9, -4] },
-    { name: 'The well', pos: [14, 6, -22], target: [0, -12, -26] }
+    { name: 'The well', pos: [14, 6, -22], target: [0, -12, -26] },
+    { name: 'The tank', pos: [3, -3, -12], target: [0, -22, -21.6] }
   ],
   tour: [
     {
