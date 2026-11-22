@@ -8,6 +8,7 @@ export default {
   accent: '#b8a888',
   accent2: '#d8c8a8',
   seed: 300,
+  time: 10.2,
   bounds: 100,
   minDist: 16,
   maxDist: 340,
@@ -89,27 +90,27 @@ export default {
 
     /* ---------- harmika and triple chatra ---------- */
     const HY = DTOP - 0.9;
-    block('sandstoneBuff', 5.6, 1.0, 5.6, 0, HY, 0);
-    block('granite', 5.2, 2.4, 5.2, 0, HY + 1.0, 0);
-    block('sandstoneBuff', 5.9, 0.4, 5.9, 0, HY + 3.4, 0);
+    block('sandstoneBuff', 7.4, 1.1, 7.4, 0, HY, 0);
+    block('granite', 6.8, 2.9, 6.8, 0, HY + 1.1, 0);
+    block('sandstoneBuff', 7.8, 0.45, 7.8, 0, HY + 4.0, 0);
     // small vedika around the harmika
     for (let i = 0; i < 6; i++) {
-      const t = -2.2 + i * 0.88;
+      const t = -3.0 + i * 1.2;
       for (const s of [-1, 1]) {
-        block('stone', 0.2, 0.75, 0.2, t, HY + 3.8, s * 2.55);
-        block('stone', 0.2, 0.75, 0.2, s * 2.55, HY + 3.8, t);
+        block('stone', 0.26, 0.95, 0.26, t, HY + 4.45, s * 3.45);
+        block('stone', 0.26, 0.95, 0.26, s * 3.45, HY + 4.45, t);
       }
     }
     for (const s of [-1, 1]) {
-      add('stone', box(5.4, 0.12, 0.14), 0, HY + 4.5, s * 2.55);
-      add('stone', box(0.14, 0.12, 5.4), s * 2.55, HY + 4.5, 0);
-      add('stone', box(5.4, 0.12, 0.14), 0, HY + 4.1, s * 2.55);
-      add('stone', box(0.14, 0.12, 5.4), s * 2.55, HY + 4.1, 0);
+      add('stone', box(7.2, 0.14, 0.16), 0, HY + 5.1, s * 3.45);
+      add('stone', box(0.16, 0.14, 7.2), s * 3.45, HY + 5.1, 0);
+      add('stone', box(7.2, 0.14, 0.16), 0, HY + 4.7, s * 3.45);
+      add('stone', box(0.16, 0.14, 7.2), s * 3.45, HY + 4.7, 0);
     }
-    const PY = HY + 4.6;
-    col('stone', 0.34, 0.46, 5.8, 0, PY, 0, 10);
+    const PY = HY + 5.4;
+    col('stone', 0.36, 0.5, 8.4, 0, PY, 0, 10);
     // three parasols, diminishing upward
-    [[3.1, 1.0], [2.5, 2.6], [1.9, 4.2]].forEach(([r, y]) => {
+    [[4.4, 1.1], [3.5, 3.1], [2.7, 5.1]].forEach(([r, y]) => {
       add('sandstoneBuff', cyl(r, r - 0.12, 0.34, 22), 0, PY + y, 0);
       add('stone', cyl(r - 0.2, r - 0.32, 0.16, 22), 0, PY + y - 0.24, 0);
       for (let i = 0; i < 12; i++) {
