@@ -32,18 +32,18 @@ export default {
   accent: '#9aa8b4',
   accent2: '#c8d6e0',
   seed: 37,
-  time: 15.6,
+  time: 11.4,
   exposure: 0.9,
-  fogScale: 0.5,
+  fogScale: 0.32,
   bounds: 66,
   minDist: 13,
   maxDist: 260,
-  home: { pos: [19, 16, 66], target: [0, 11.5, 0], fov: 40 },
+  home: { pos: [44, 21, 84], target: [0, 12.5, 0], fov: 40 },
   ground: { texture: 'paving', size: 2400, color: 0xa89c86, tile: 6 },
   groundY: -2.2,
-  water: { y: -1.9, size: 620, x: 0, z: -324, color: 0x22404d, distortion: 2.4 },
+  water: { y: -1.9, size: 300, x: 0, z: -170, color: 0x1b3540, distortion: 0.7 },
   views: [
-    { name: 'Full', pos: [19, 16, 66], target: [0, 11.5, 0] },
+    { name: 'Full', pos: [44, 21, 84], target: [0, 12.5, 0] },
     { name: 'The arch', pos: [7.5, 6.5, 26], target: [0, 8, 0] },
     { name: 'Turrets', pos: [15, 25, 30], target: [0, 19, 0] },
     { name: 'From the sea', pos: [34, 13, -64], target: [0, 12, 0] },
@@ -93,6 +93,8 @@ export default {
       c.color.setHex(hex);
       return c;
     }
+    // weathered Deccan basalt is a warm buff-grey, not near-black
+    const MASON = tint('basaltDark', 0xb0a184);
     const jaliTone = tint('jali', 0x8f7d63);      // shadowed pierced screen
 
     /* ------------------------------------------------------------ constants */
@@ -134,7 +136,7 @@ export default {
     block('paving', 620, 2.2, 420, 0, -2.2, 196);        // the raised quay deck
     block('stone', 96, 0.34, 60, 0, -0.34, 6);           // apron in front
     // sea wall on the harbour side, with a coping and mooring rings
-    block('basaltDark', W + 22, 2.4, 1.8, 0, -2.4, -13.2);
+    block(MASON, W + 22, 2.4, 1.8, 0, -2.4, -13.2);
     block('basalt', W + 22.6, 0.34, 2.4, 0, -0.14, -13.2);
     for (let i = -8; i <= 8; i++) {
       add('black', torus(0.22, 0.07, 5, 10), i * 3.4, -0.9, -12.3, { rx: Math.PI / 2 });
@@ -153,7 +155,7 @@ export default {
     /* -------------------------------------------------- plinth and steps */
     block('stone', W + 9, 0.34, D + 9, 0, 0, 0);
     block('stone', W + 6, 0.34, D + 6, 0, 0.34, 0);
-    block('basaltDark', W + 3.4, 0.32, D + 3.4, 0, 0.68, 0);
+    block(MASON, W + 3.4, 0.32, D + 3.4, 0, 0.68, 0);
     for (let i = 0; i < 3; i++) {
       const w2 = 26 - i * 1.6, z = D / 2 + 5.2 + i * 0.95;
       add('stone', box(w2, 0.22 * (i + 1), 1.0), 0, 0.11 * (i + 1), z);
@@ -182,13 +184,13 @@ export default {
     });
     // solid mass filling the wings behind the front walls
     [-1, 1].forEach((s) => {
-      add('basaltDark', box(9.4, HWG, D - 5.2), s * 13.3, P + HWG / 2, 0);
+      add(MASON, box(9.4, HWG, D - 5.2), s * 13.3, P + HWG / 2, 0);
     });
 
     /* ------------------------------------------ the great passage and vault
        The lining is one extruded pointed-arch ring running the full depth,
        so the vault reads as a genuine tunnel with the harbour at its end. */
-    add('basaltDark', ring(AW, AH, ASP, 0.62, D), 0, P, -D / 2);
+    add(MASON, ring(AW, AH, ASP, 0.62, D), 0, P, -D / 2);
     // transverse ribs, standing proud of the lining
     [-5.6, -1.9, 1.9, 5.6].forEach((z) => {
       add('basalt', ring(AW - 0.5, AH - 0.3, ASP, 0.34, 0.8), 0, P, z - 0.4);
@@ -205,7 +207,7 @@ export default {
     [-1, 1].forEach((s) => {
       const zf = s * (D / 2 + 0.02);
       [0, 1, 2].forEach((k) => {
-        add(k === 1 ? 'basaltDark' : 'basalt',
+        add(k === 1 ? MASON : 'basalt',
           ring(AW + 1.5 + k * 0.9, AH + 0.7 + k * 0.55, ASP, 0.24, 0.3),
           0, P, zf + s * k * 0.28, { ry: s < 0 ? Math.PI : 0 });
       });
@@ -218,14 +220,14 @@ export default {
     [-1, 1].forEach((s) => {
       [-1, 1].forEach((d) => {
         add('basalt', box(1.0, 16.4, 0.75), d * (AW / 2 + 1.35), P + 8.2, s * (D / 2 + 0.3));
-        add('basaltDark', box(1.4, 0.5, 0.9), d * (AW / 2 + 1.35), P + 0.25, s * (D / 2 + 0.3));
+        add(MASON, box(1.4, 0.5, 0.9), d * (AW / 2 + 1.35), P + 0.25, s * (D / 2 + 0.3));
       });
       add('basalt', box(AW + 4.6, 0.7, 0.8), 0, P + 16.8, s * (D / 2 + 0.3));
     });
     // spandrel medallions
     [-1, 1].forEach((s) => {
       [[1, 0], [-1, 0]].forEach(([d]) => {
-        add('basaltDark', torus(0.85, 0.16, 6, 14), d * 6.6, P + 10.2, D / 2 + 0.1);
+        add(MASON, torus(0.85, 0.16, 6, 14), d * 6.6, P + 10.2, D / 2 + 0.1);
         add('basalt', sph(0.42, 8), d * 6.6, P + 10.2, D / 2 + 0.16);
       });
     });
@@ -234,13 +236,13 @@ export default {
     add('basalt', box(2 * BAY + 0.6, 0.55, D + 0.6), 0, P + AH + 0.7, 0);
     // carved bracket course
     for (let i = -5; i <= 5; i++) {
-      add('basaltDark', box(0.7, 0.9, 0.4), i * 1.6, P + AH + 1.5, D / 2 + 0.1);
-      add('basaltDark', box(0.7, 0.9, 0.4), i * 1.6, P + AH + 1.5, -D / 2 - 0.1);
+      add(MASON, box(0.7, 0.9, 0.4), i * 1.6, P + AH + 1.5, D / 2 + 0.1);
+      add(MASON, box(0.7, 0.9, 0.4), i * 1.6, P + AH + 1.5, -D / 2 - 0.1);
     }
     // the inscription band: a recessed panel with a moulded frame
     add('basalt', box(2 * BAY + 0.4, 3.2, D + 0.4), 0, P + 14.6, 0);
     [-1, 1].forEach((s) => {
-      add('basaltDark', box(13.4, 2.3, 0.12), 0, P + 14.8, s * (D / 2 + 0.22));
+      add(MASON, box(13.4, 2.3, 0.12), 0, P + 14.8, s * (D / 2 + 0.22));
       for (let i = 0; i < 4; i++) {
         add('basalt', box(11.4 - i * 0.5, 0.14, 0.06), 0, P + 13.95 + i * 0.5, s * (D / 2 + 0.3));
       }
@@ -251,7 +253,7 @@ export default {
     // wing cornice with dentils
     [-1, 1].forEach((s) => {
       add('basalt', box(9.4 + 0.9, 0.5, D + 0.9), s * 13.3, P + HWG + 0.25, 0);
-      add('basaltDark', box(9.4 + 1.5, 0.3, D + 1.5), s * 13.3, P + HWG + 0.65, 0);
+      add(MASON, box(9.4 + 1.5, 0.3, D + 1.5), s * 13.3, P + HWG + 0.65, 0);
       for (let j = -4; j <= 4; j++) {
         add('basalt', box(0.36, 0.34, 0.34), s * 13.3 + j * 1.0, P + HWG + 0.98, D / 2 + 0.72);
         add('basalt', box(0.36, 0.34, 0.34), s * 13.3 + j * 1.0, P + HWG + 0.98, -D / 2 - 0.72);
@@ -266,7 +268,7 @@ export default {
     });
     // central bay cornice and parapet
     add('basalt', box(2 * BAY + 1.6, 0.5, D + 1.6), 0, P + 17.3, 0);
-    add('basaltDark', box(2 * BAY + 2.2, 0.34, D + 2.2), 0, P + 17.72, 0);
+    add(MASON, box(2 * BAY + 2.2, 0.34, D + 2.2), 0, P + 17.72, 0);
     add('basalt', box(2 * BAY + 1.4, 0.6, D + 1.4), 0, P + 18.5, 0);
     for (let i = -6; i <= 6; i++) {
       add('basalt', box(0.95, 0.95, 0.8), i * 1.35, P + 19.3, D / 2 + 0.4);
@@ -282,14 +284,14 @@ export default {
        its crown shows between the turrets, which is what the photograph
        shows; the whole dome appears from the water and from above. */
     add('basalt', cyl(DOME_R + 0.6, DOME_R + 1.0, 0.8, 24), 0, P + 11.2, -1.0);
-    add('basaltDark', cyl(DOME_R, DOME_R, 2.9, 24), 0, P + 14.9, -1.0);      // drum
+    add(MASON, cyl(DOME_R, DOME_R, 2.9, 24), 0, P + 14.9, -1.0);      // drum
     for (let i = 0; i < 16; i++) {
       const a = (i / 16) * Math.PI * 2;
       add('basalt', box(0.24, 2.5, 0.24), Math.cos(a) * (DOME_R - 0.2), P + 14.9,
         -1.0 + Math.sin(a) * (DOME_R - 0.2), { ry: -a });
     }
     add('basalt', cyl(DOME_R + 0.45, DOME_R + 0.05, 0.5, 24), 0, P + 14.55, -1.0);
-    add('basaltDark', onion(DOME_R, 5.6, 26), 0, P + 15.0, -1.0);
+    add(MASON, onion(DOME_R, 5.6, 26), 0, P + 15.0, -1.0);
     for (let i = 0; i < 12; i++) {
       const a = (i / 12) * Math.PI * 2;
       add('basalt', box(0.16, DOME_R * 0.62, 0.16),
@@ -305,15 +307,15 @@ export default {
       [-1, 1].forEach((sz) => {
         const x = sx * (BAY - 1.2), z = sz * (D / 2 - 1.6);
         add('basalt', cyl(1.5, 1.95, 1.1, 8), x, P + 11.9, z);          // corbel
-        add('basaltDark', cyl(1.58, 1.58, 0.3, 8), x, P + 12.6, z);
+        add(MASON, cyl(1.58, 1.58, 0.3, 8), x, P + 12.6, z);
         // shaft with engaged columns
         add('basalt', cyl(1.24, 1.32, 8.3, 8), x, P + 16.75, z);
         for (let i = 0; i < 8; i++) {
           const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
-          add('basaltDark', cyl(0.1, 0.13, 7.9, 5),
+          add(MASON, cyl(0.1, 0.13, 7.9, 5),
             x + Math.cos(a) * 1.33, P + 16.6, z + Math.sin(a) * 1.33);
         }
-        add('basaltDark', cyl(1.58, 1.58, 0.3, 8), x, P + 20.05, z);    // balcony
+        add(MASON, cyl(1.58, 1.58, 0.3, 8), x, P + 20.05, z);    // balcony
         // open jali gallery
         add('basalt', cyl(1.16, 1.24, 1.5, 8), x, P + 20.95, z);
         for (let k = 0; k < 12; k++) {
@@ -323,7 +325,7 @@ export default {
         }
         add('basalt', cyl(1.46, 1.26, 0.3, 8), x, P + 21.85, z);
         // ribbed dome and finial
-        add('basaltDark', onion(1.24, 2.7, 16), x, P + 22.0, z);
+        add(MASON, onion(1.24, 2.7, 16), x, P + 22.0, z);
         for (let i = 0; i < 8; i++) {
           const a = (i / 8) * Math.PI * 2;
           add('basalt', box(0.1, 1.7, 0.1), x + Math.cos(a) * 1.14, P + 23.1,
@@ -347,22 +349,22 @@ export default {
       add('basalt', ring(SW + 0.7, SH + 0.35, SSP, 0.26, 0.26), x, P, -D / 2 - 0.3);
       // carved blind panel above the arch: a shallow recess with a
       // moulded frame and a grid of pierced squares, as on the reference
-      add('basaltDark', box(7.6, 5.6, 0.1), x, P + 9.6, D / 2 + 0.06);
+      add(MASON, box(7.6, 5.6, 0.1), x, P + 9.6, D / 2 + 0.06);
       add(jaliTone, box(6.4, 4.6, 0.07), x, P + 9.6, D / 2 + 0.14);
       add('basalt', box(8.2, 0.4, 0.36), x, P + 12.6, D / 2 + 0.2);
       add('basalt', box(8.2, 0.4, 0.36), x, P + 6.6, D / 2 + 0.2);
       // carved band under the wing cornice
       for (let i = -3; i <= 3; i++) {
-        add('basaltDark', box(0.62, 0.62, 0.16), x + i * 1.15, P + 14.6, D / 2 + 0.12);
-        add('basaltDark', box(0.62, 0.62, 0.16), x + i * 1.15, P + 14.6, -D / 2 - 0.12);
+        add(MASON, box(0.62, 0.62, 0.16), x + i * 1.15, P + 14.6, D / 2 + 0.12);
+        add(MASON, box(0.62, 0.62, 0.16), x + i * 1.15, P + 14.6, -D / 2 - 0.12);
       }
       // the same blind panel on the back face
-      add('basaltDark', box(7.6, 5.6, 0.1), x, P + 9.6, -D / 2 - 0.06);
+      add(MASON, box(7.6, 5.6, 0.1), x, P + 9.6, -D / 2 - 0.06);
       add(jaliTone, box(6.4, 4.6, 0.07), x, P + 9.6, -D / 2 - 0.14);
     });
     // side-face panels
     [-1, 1].forEach((s) => {
-      add('basaltDark', box(0.1, 5.6, 7.0), s * (W / 2 + 0.05), P + 9.6, 0);
+      add(MASON, box(0.1, 5.6, 7.0), s * (W / 2 + 0.05), P + 9.6, 0);
       add(jaliTone, box(0.07, 4.6, 5.8), s * (W / 2 + 0.14), P + 9.6, 0);
       add('basalt', box(0.3, 0.4, 7.6), s * (W / 2 + 0.16), P + 12.8, 0);
       add('basalt', box(0.3, 0.4, 7.6), s * (W / 2 + 0.16), P + 6.6, 0);
