@@ -978,10 +978,10 @@ function main() {
   sky.scale.setScalar(4000);
   scene.add(sky);
   const skyU = sky.material.uniforms;
-  skyU.turbidity.value = 6;
-  skyU.rayleigh.value = 2;
-  skyU.mieCoefficient.value = 0.004;
-  skyU.mieDirectionalG.value = 0.85;
+  skyU.turbidity.value = 2.8;
+  skyU.rayleigh.value = 2.6;
+  skyU.mieCoefficient.value = 0.0022;
+  skyU.mieDirectionalG.value = 0.86;
   const envScene = new THREE.Scene();
   const pmrem = new THREE.PMREMGenerator(renderer);
   let envRT = null, lastEnvT = -99, lastEnvMs = 0, lastEnvCover = -99;

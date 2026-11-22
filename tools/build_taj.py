@@ -41,6 +41,13 @@ src = src.replace('haze: 0.0016', 'haze: 0.0009')
 src = src.replace('FogExp2(0xe8c39a', 'FogExp2(0xdcd3c2')
 src = src.replace('value="0.0016"', 'value="0.0009"')
 src = src.replace('id="haze-val">27%', 'id="haze-val">15%')
+# The Taj already uses the same Sky addon as the engine, but at turbidity 6 and
+# mie 0.004 — a much hazier atmosphere, which is what made it read brown. These
+# are the engine's values, so the two now share one sky.
+src = src.replace('skyU.turbidity.value = 6;', 'skyU.turbidity.value = 2.8;')
+src = src.replace('skyU.rayleigh.value = 2;', 'skyU.rayleigh.value = 2.6;')
+src = src.replace('skyU.mieCoefficient.value = 0.004;', 'skyU.mieCoefficient.value = 0.0022;')
+src = src.replace('skyU.mieDirectionalG.value = 0.85;', 'skyU.mieDirectionalG.value = 0.86;')
 # match the site's grade: the engine runs 0.52-0.62 exposure, a 0.9 bloom
 # threshold and a lighter glow, so the Taj sat brighter and hazier than the
 # other twenty-three pages
