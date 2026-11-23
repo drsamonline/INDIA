@@ -37,6 +37,13 @@ src = src.replace('CC0 1.0 Universal', 'CC BY-NC 4.0')
 src = src.replace('Dr Sohil Momin, CC0.', 'Dr Sohil Momin, CC BY-NC 4.0.')
 src = src.replace('CC0 1.0', 'CC BY-NC 4.0')
 # the fog was a warm tan at 0.0016 density, which washed the whole scene brown
+# The demo shipped its FPS/MS/MB monitor mounted on every visit, so the Taj page
+# carried a "0 FPS (0-1)" chip in the top-left corner. It is a development tool:
+# keep the code, mount it only when the URL asks for it.
+src = src.replace('document.body.appendChild(stats.dom);',
+                  "if (new URLSearchParams(location.search).has('stats')) document.body.appendChild(stats.dom);")
+src = src.replace('    stats.begin();', '    if (stats && stats.dom.parentNode) stats.begin();')
+src = src.replace('    stats.end();', '    if (stats && stats.dom.parentNode) stats.end();')
 src = src.replace('haze: 0.0016', 'haze: 0.0009')
 src = src.replace('FogExp2(0xe8c39a', 'FogExp2(0xdcd3c2')
 src = src.replace('value="0.0016"', 'value="0.0009"')

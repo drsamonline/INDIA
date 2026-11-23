@@ -786,7 +786,7 @@ function createStats() {
   };
 }
 const stats = createStats();
-document.body.appendChild(stats.dom);
+if (new URLSearchParams(location.search).has('stats')) document.body.appendChild(stats.dom);
 
 /* ---------------- toast + loader ---------------- */
 let toastTimer = null;
@@ -2669,7 +2669,7 @@ function main() {
   let weatherTimer = 0, flash = 0, lightningTimer = 9, pendingThunder = 0, lastWet = -1;
   function tick(now) {
     requestAnimationFrame(tick);
-    stats.begin();
+    if (stats && stats.dom.parentNode) stats.begin();
     const dt = clamp((now - lastT) / 1000, 0, 0.05);
     lastT = now;
     if (state.motion) animTime += dt * state.speed;
@@ -2883,7 +2883,7 @@ function main() {
     uiAcc += dt;
     if (uiAcc > 0.12) { uiAcc = 0; syncHud(); }
     if (!contextLost) composer.render();
-    stats.end();
+    if (stats && stats.dom.parentNode) stats.end();
   }
   requestAnimationFrame(tick);
 

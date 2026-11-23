@@ -631,6 +631,23 @@ text or class rather than assuming the Taj's id.
 
 ---
 
+### 26. The Taj carried a debug FPS chip
+
+The page is generated from the original three.js demo, and that demo mounts an
+FPS/MS/MB monitor unconditionally at `top:0;left:0;z-index:10000`. Every visitor
+saw **"0 FPS (0-1)"** in the corner of the flagship page; the only rule that hid
+it was `body.cinematic .stats-root`.
+
+The code is still there and still works — `build_taj.py` now mounts it only when
+the URL carries `?stats`, and the two `stats.begin()/end()` calls in the render
+loop are guarded on the panel being attached. The engine pages never had one.
+
+Worth looking at the Taj's own UI rather than only its geometry: the tour and
+views frame correctly (checked stops 1 and 2), and this chip was the one thing
+on screen that said "unfinished".
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
