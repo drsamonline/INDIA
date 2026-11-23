@@ -80,10 +80,15 @@ export default {
     const { add, box, cyl, cone, sph, plane, arch, archFrame, block, col, THREE } = ctx;
     const PI = Math.PI;
 
-    /* the painted stucco palette — figures, not stripes */
-    const FIG = ['sandstoneBuff', 'terracotta', 'stone', 'sandstonePink', 'basaltDark'];
+    /* the painted stucco palette — figures, not stripes. These are the colours
+       the gopurams are actually repainted in: a red, a yellow, a blue, a pink
+       and a green, on ochre stucco. The old five stone greys read as stripes. */
+    const FIG = ['red', 'yellow', 'blue', 'pinkPaint', 'teal', 'terracotta'];
     const CREAM = (() => { const mm = ctx.mat('sandstoneBuff'); if (!mm || !mm.clone) return 'sandstoneBuff'; const c = mm.clone(); c.color.setHex(0xd8b98e); return c; })();   // the ochre stucco of the storey walls
     const CORN = 'cream';            // the pale moulded cornices between them
+    // the recess the figure rows stand in: shadowed ochre, not black — a pure
+    // black band read as a painted stripe across every storey
+    const NICHE = (() => { const mm = ctx.mat('plaster'); if (!mm || !mm.clone) return 'dark'; const c = mm.clone(); c.color.setHex(0x3b2b21); return c; })();
 
     /* ---------------------------------------------------------- gopuram
        A gopuram is a granite base pierced by the gateway, then nine (or
@@ -117,33 +122,53 @@ export default {
         const bodyH = tierH * 0.78, cornH = tierH * 0.22;
         /* sculpted wall */
         block(CREAM, w, bodyH, d, cx, y, cz, { ry });
-        /* dense rows of stucco figures on all four faces */
+        /* dense rows of stucco figures on all four faces. A figure is seven
+           pieces, not four boxes: a ledge, a dhoti flared at the feet, a torso
+           that widens into the shoulders, two arms, a head and a crown. The old
+           four boxes were all about the same width, so the register read as a
+           picket fence of coloured bars rather than as sculpture.
+           The recess behind the row is one dark band per face per storey, not a
+           niche box per figure: same read, a fraction of the geometry. */
         const fh = bodyH * 0.68;
-        const fy = y + bodyH * 0.26 + fh / 2;
-        const nL = Math.max(4, Math.round(w / 1.35));
-        const nS = Math.max(3, Math.round(d / 1.35));
+        const fy0 = y + bodyH * 0.15;
+        const sp = 1.10;   // dense: a real register almost touches, figure to figure
+        const nL = Math.max(4, Math.round(w / sp));
+        const nS = Math.max(3, Math.round(d / sp));
         const sL = w / nL, sS = d / nS;
-        const figure = (key, px, pz, wFig, hFig, ry2, out) => {
-          // base, body, shoulders, head — a figure in four pieces
-          add(key, box(wFig, hFig * 0.16, 0.17), px, fy - hFig * 0.42, pz + out * 0.06, { ry: ry2 });
-          add(key, box(wFig * 0.86, hFig * 0.50, 0.19), px, fy, pz + out * 0.07, { ry: ry2 });
-          add(key, box(wFig * 1.02, hFig * 0.16, 0.17), px, fy + hFig * 0.33, pz + out * 0.06, { ry: ry2 });
-          add(key, box(wFig * 0.44, hFig * 0.22, 0.16), px, fy + hFig * 0.48, pz + out * 0.05, { ry: ry2 });
+        for (const side of [1, -1]) {
+          const a = P(0, side * (d / 2 - 0.02)), b = P(side * (w / 2 - 0.02), 0);
+          add(NICHE, box(w * 0.96, fh * 1.02, 0.05), a[0], fy0 + fh * 0.51, a[1], { ry: ry + (side > 0 ? 0 : PI) });
+          add(NICHE, box(d * 0.96, fh * 1.02, 0.05), b[0], fy0 + fh * 0.51, b[1], { ry: ry + side * PI / 2 });
+        }
+        const figure = (px, pz, ryF, H, key) => {
+          const cs2 = Math.cos(ryF), sn2 = Math.sin(ryF);
+          // local (lx, ly, lz) in the figure's own frame, lz pointing outward
+          const put = (k, geo, lx, ly, lz, o) => {
+            add(k, geo, px + lx * cs2 + lz * sn2, ly, pz - lx * sn2 + lz * cs2,
+              Object.assign({ ry: ryF }, o));
+          };
+          put(CREAM, box(0.64, 0.07, 0.46), 0, fy0 + 0.035, 0.08);                  // its ledge
+          put(key, cyl(0.17, 0.25, H * 0.30, 5), 0, fy0 + H * 0.21, 0.07);          // dhoti
+          put(key, cyl(0.20, 0.145, H * 0.32, 5), 0, fy0 + H * 0.52, 0.07);         // torso to shoulders
+          put('ivory', cyl(0.042, 0.05, H * 0.30, 4), -0.185, fy0 + H * 0.50, 0.08, { rz: 0.12 });
+          put('ivory', cyl(0.042, 0.05, H * 0.30, 4), 0.185, fy0 + H * 0.50, 0.08, { rz: -0.12 });
+          put('ivory', cyl(0.105, 0.115, H * 0.13, 5), 0, fy0 + H * 0.745, 0.06);   // head
+          put('gold', cyl(0.05, 0.09, H * 0.11, 5), 0, fy0 + H * 0.86, 0.05);       // crown
         };
         for (let j = 0; j < nL; j++) {
           const off = (j - (nL - 1) / 2) * sL;
           const k = FIG[(j * 3 + i * 2) % FIG.length];
           for (const side of [1, -1]) {
-            const p = P(off, side * (d / 2 + 0.08));
-            figure(k, p[0], p[1], sL * 0.40, fh, ry + (side > 0 ? 0 : PI), side);
+            const p = P(off, side * (d / 2 + 0.06));
+            figure(p[0], p[1], ry + (side > 0 ? 0 : PI), fh, k);
           }
         }
         for (let j = 0; j < nS; j++) {
           const off = (j - (nS - 1) / 2) * sS;
           const k = FIG[(j * 5 + i * 3 + 1) % FIG.length];
           for (const side of [1, -1]) {
-            const p = P(side * (w / 2 + 0.08), off);
-            figure(k, p[0], p[1], sS * 0.40, fh, ry + side * PI / 2, side);
+            const p = P(side * (w / 2 + 0.06), off);
+            figure(p[0], p[1], ry + side * PI / 2, fh, k);
           }
         }
         /* moulded base, then the projecting cornice */

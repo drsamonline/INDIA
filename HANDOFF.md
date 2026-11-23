@@ -156,12 +156,27 @@ ambient/grade decision, not a per-page hack.
 
 | Monument | What's missing |
 |---|---|
-| Meenakshi | four boxes per figure; a real gopuram carries thousands of carved figures |
 | Statue of Unity | head cropped in some framings, bronze very dark, legs thin, shawl falls read as flaps |
 | Konark | wheels have flat spokes |
 | Kandariya | ~870 sculptures suggested by two registers |
 | CSMT | the carved menagerie is absent |
 | Golden Temple | gold reads matte |
+
+---
+
+### 5. Meenakshi's figures — done
+
+A figure is seven pieces now (ledge, dhoti flared at the feet, torso widening
+to the shoulders, two arms, head, gold crown), standing on a cream ledge in a
+warm shadowed recess, painted from a red/yellow/blue/pink/teal palette, at 1.10 m
+spacing. The recess is **one dark band per face per storey**, not a niche box per
+figure — same read, a fraction of the geometry.
+
+The first attempt (nine pieces, a niche box each, 1.12 m spacing) **did not boot
+at all**: no error, just a page that never reached `dataset.boot`. That is trap 2.
+The numbers: 265k triangles before, 666k after, boot 85 s under software
+rendering against `check_all.py`'s 200 s wait. Do not push past ~700k without
+re-measuring.
 
 ---
 
