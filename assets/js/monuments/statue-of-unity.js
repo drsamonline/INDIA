@@ -504,6 +504,10 @@ export default {
       const NVl = 22, NUl = 22;
       const pos = [], uv = [], idx = [];
       const cx = sd * 8.5;
+      // mid-stride: the right leg carries the weight, the left is stepping
+      // through. Without it the figure stood square, which is the one thing
+      // the pose of this statue is not.
+      const zoff = sd * 7.5;
       for (let i = 0; i <= NVl; i++) {
         const v = i / NVl;
         const t = 0.375 - 0.33 * v;               // up inside the hem, down to the ankle
@@ -513,7 +517,7 @@ export default {
         for (let j = 0; j <= NUl; j++) {
           const a = (j / NUl) * Math.PI * 2;
           const rr = r * (1 + 0.05 * Math.cos(5 * a + sd));
-          pos.push(cx + Math.cos(a) * rr, Y(t), Math.sin(a) * rr * 1.05);
+          pos.push(cx + Math.cos(a) * rr, Y(t), zoff + Math.sin(a) * rr * 1.05);
           uv.push(j / NUl, v);
         }
       }
@@ -534,15 +538,15 @@ export default {
 
     /* ---- feet, in sandals ----------------------------------------------- */
     [-1, 1].forEach((sd) => {
-      const x = sd * 8.2;
-      add(B, sph(4.4, 14), x, Y(0.028), 5.0, { sx: 0.95, sy: 0.62, sz: 1.9 });
-      add(B, box(7.6, 2.6, 17.0), x, Y(0.016), 5.4, { ry: sd * 0.09 });
-      add(B, sph(3.4, 10), x + sd * 0.6, Y(0.022), 13.0, { sx: 0.9, sy: 0.55, sz: 0.9 });
+      const x = sd * 8.2, zf = sd * 7.5;      // the foot follows its leg
+      add(B, sph(4.4, 14), x, Y(0.028), zf + 5.0, { sx: 0.95, sy: 0.62, sz: 1.9 });
+      add(B, box(7.6, 2.6, 17.0), x, Y(0.016), zf + 5.4, { ry: sd * 0.09 });
+      add(B, sph(3.4, 10), x + sd * 0.6, Y(0.022), zf + 13.0, { sx: 0.9, sy: 0.55, sz: 0.9 });
       // the sandal sole and its strap
-      add(DK, box(8.4, 1.1, 18.2), x, Y(0.002), 5.2, { ry: sd * 0.09 });
-      add(C, box(8.0, 0.9, 3.0), x, Y(0.045), 8.0, { ry: sd * 0.09 });
+      add(DK, box(8.4, 1.1, 18.2), x, Y(0.002), zf + 5.2, { ry: sd * 0.09 });
+      add(C, box(8.0, 0.9, 3.0), x, Y(0.045), zf + 8.0, { ry: sd * 0.09 });
       // toes
-      for (let k = -1; k <= 1; k++) add(B, sph(1.05, 6), x + k * 2.2, Y(0.020), 12.6, { sy: 0.6, sz: 1.3 });
+      for (let k = -1; k <= 1; k++) add(B, sph(1.05, 6), x + k * 2.2, Y(0.020), zf + 12.6, { sy: 0.6, sz: 1.3 });
     });
 
     /* ---- the arms: one swept surface each, shoulder to wrist ------------ */

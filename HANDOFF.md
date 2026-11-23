@@ -543,6 +543,19 @@ counted 27 pages until the probe was removed.
 
 ---
 
+### 22. Statue of Unity: the stride
+
+The tour text now says he was modelled mid-stride — which he was not. The figure
+stood square, and the walking pose is the statue's signature. The legs and feet
+carry a `zoff` of ±7.5 m now, so one leg is stepping through and the weight is
+on the other, and the feet travel with their legs.
+
+Worth knowing: the dhoti hem at t 0.295 leaves 45 m of bare leg on a 182 m
+figure, which is 25 % of the height — that is what the photographs show, so it
+is right, but it reads as a short tunic until the stride is in.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
