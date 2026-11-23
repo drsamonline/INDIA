@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>INDIA — Twenty-four monuments, built again in code</title>
+<meta name="description" content="A procedural atlas of Indian monuments: 24 heritage sites rebuilt as live three.js miniatures, each with a guided tour, its history and its sources. Free for non-commercial use with credit.">
+<meta name="author" content="Dr Sohil Momin">
+<meta name="theme-color" content="#f7f0e4">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/fonts.css?v=9c666402f5">
+<link rel="preload" as="image" href="assets/img/taj-mahal.webp" type="image/webp" fetchpriority="high">
+<link rel="stylesheet" href="assets/css/site.css?v=9c666402f5">
+<script>document.documentElement.classList.add("js");</script>
+<meta property="og:type" content="website">
+<meta property="og:title" content="INDIA — Twenty-four monuments, built again in code">
+<meta property="og:description" content="24 Indian monuments rebuilt as live 3D miniatures — procedural geometry, guided tours, history and sources.">
+<meta property="og:image" content="https://drsamonline.github.io/INDIA/assets/img/taj-mahal.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CollectionPage","name":"INDIA — monuments in code","author":{"@type":"Person","name":"Dr Sohil Momin"},"license":"https://creativecommons.org/licenses/by-nc/4.0/","isPartOf":{"@type":"WebSite","name":"INDIA","url":"https://drsamonline.github.io/INDIA/"}}
+</script>
+<meta name="description" content="A procedural atlas of Indian monuments: 24 heritage sites rebuilt as live three.js miniatures, each with a guided tour, its history and its sources. Free for non-commercial use with credit.">
+<link rel="canonical" href="https://drsamonline.github.io/INDIA/play/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Twenty-four monuments, built again in code. — live demo">
+<meta property="og:description" content="A procedural atlas of Indian monuments: 24 heritage sites rebuilt as live three.js miniatures, each with a guided tour, its history and its sources. Free for non-commercial use with credit.">
+<meta property="og:url" content="https://drsamonline.github.io/INDIA/play/">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="index, follow">
+</head>
+<body>
+<a class="skip" href="#gallery">Skip to the monuments</a>
+
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <clipPath id="archClip" clipPathUnits="objectBoundingBox">
+      <path d="M0.5,0 C0.64,0.055 0.86,0.17 0.92,0.35 L0.92,1 L0.08,1 L0.08,0.35 C0.14,0.17 0.36,0.055 0.5,0 Z"/>
+    </clipPath>
+  </defs>
+</svg>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="index.html" aria-label="INDIA — home">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 50c-7 0-13-4-16-10 5-1 9 1 12 4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M32 50c7 0 13-4 16-10-5-1-9 1-12 4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M32 50c-5-4-8-10-7-16 5 1 9 5 10 11" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M32 50c5-4 8-10 7-16-5 1-9 5-10 11" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M32 48c-2-5-2-12 0-17 2 5 2 12 0 17z" fill="currentColor" opacity=".8"/><circle cx="32" cy="19" r="2.4" fill="currentColor"/></svg>
+      <span><span class="brand-word">India</span><span class="brand-sub">Monuments in code</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#monuments">Monuments</a>
+      <a href="#method">Method</a>
+      <a href="#sources">Sources</a>
+      <a href="credits.html">Credits</a>
+    </nav>
+    <a class="nav-cta" href="https://github.com/drsamonline/INDIA" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.95.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>
+      GitHub
+    </a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-in">
+      <div class="hero-copy">
+        <span class="kicker">A procedural atlas · 24 monuments</span>
+        <h1>Twenty-four monuments, built again in <em>code</em>.</h1>
+        <p class="hero-lede">No downloaded models. Every dome, bracket and lattice screen in the gallery is generated by a few thousand lines of JavaScript and lit by a physical sky. Walk around them, watch the light change, read the history.</p>
+        <div class="hero-actions">
+          <a class="btn btn-solid" href="#monuments">Explore the gallery
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-line" href="monuments/taj-mahal.html">Start with the Taj Mahal</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>24</b><span>Monuments</span></div>
+          <div class="stat"><b>14</b><span>States &amp; UTs</span></div>
+          <div class="stat"><b>100%</b><span>Procedural</span></div>
+          <div class="stat"><b>CC BY-NC</b><span>Attribution, non-commercial</span></div>
+        </div>
+      </div>
+      <div class="hero-art">
+        <span class="arch-chip"><i></i>Live 3D · WebGL</span>
+        <div class="arch">
+          <div class="arch-in">
+            <picture>
+              <source type="image/webp" srcset="assets/img/taj-mahal.webp">
+              <img src="assets/img/taj-mahal.jpg" alt="The Taj Mahal at Agra, photographed from the garden side" width="1400" height="920" fetchpriority="high">
+            </picture>
+          </div>
+        </div>
+        <span class="arch-badge"><b>1632</b><span>Taj Mahal · Agra</span></span>
+        <p class="arch-caption">Photograph by Yann, edited by Jim Carter · CC BY-SA 4.0<br>via Wikimedia Commons · <a href="credits.html">all credits</a></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip" aria-hidden="true">
+    <div class="strip-track">
+      <span>ताज महल <b></b> Taj Mahal</span><span>क़ुतुब मीनार <b></b> Qutb Minar</span><span>हवा महल <b></b> Hawa Mahal</span><span>चारमीनार <b></b> Charminar</span><span>गेटवे ऑफ़ इंडिया <b></b> Gateway of India</span><span>इंडिया गेट <b></b> India Gate</span><span>मैसूर पैलेस <b></b> Mysore Palace</span><span>हरमंदिर साहिब <b></b> Golden Temple</span><span>कोणार्क <b></b> Konark</span><span>साँची <b></b> Sanchi</span><span>विक्टोरिया मेमोरियल <b></b> Victoria Memorial</span><span>मीनाक्षी <b></b> Meenakshi</span><span>कमल मंदिर <b></b> Lotus Temple</span><span>तटीय मंदिर <b></b> Shore Temple</span><span>रानी की वाव <b></b> Rani ki Vav</span><span>आमेर किला <b></b> Amber Fort</span><span>सीएसएमटी <b></b> CSMT</span><span>महाबोधि <b></b> Mahabodhi</span>
+      <span>ताज महल <b></b> Taj Mahal</span><span>क़ुतुब मीनार <b></b> Qutb Minar</span><span>हवा महल <b></b> Hawa Mahal</span><span>चारमीनार <b></b> Charminar</span><span>गेटवे ऑफ़ इंडिया <b></b> Gateway of India</span><span>इंडिया गेट <b></b> India Gate</span><span>मैसूर पैलेस <b></b> Mysore Palace</span><span>हरमंदिर साहिब <b></b> Golden Temple</span><span>कोणार्क <b></b> Konark</span><span>साँची <b></b> Sanchi</span><span>विक्टोरिया मेमोरियल <b></b> Victoria Memorial</span><span>मीनाक्षी <b></b> Meenakshi</span><span>कमल मंदिर <b></b> Lotus Temple</span><span>तटीय मंदिर <b></b> Shore Temple</span><span>रानी की वाव <b></b> Rani ki Vav</span><span>आमेर किला <b></b> Amber Fort</span><span>सीएसएमटी <b></b> CSMT</span><span>महाबोधि <b></b> Mahabodhi</span>
+    </div>
+  </div>
+
+  <section class="sec" id="about">
+    <div class="wrap intro-grid">
+      <div class="rv">
+        <span class="eyebrow">The idea</span>
+        <h2 style="font-size:clamp(26px,3.4vw,42px);margin-bottom:22px">Why build a monument twice?</h2>
+        <p class="intro-text">A monument is a set of decisions frozen in stone: how wide the arch, how many flutes on the shaft, how far the balcony projects. Rebuilding one in code makes those decisions visible. You can change the hour of the day, stand at the foot of the minaret, or watch a monsoon arrive over the charbagh.</p>
+        <p class="intro-text">Each page in this atlas is a single miniature, drawn from primitives — cylinders, boxes, lathes and arches — and merged into a handful of draw calls. The colours come from the real materials: Makrana marble, red sandstone from Dholpur, Deccan basalt, khondalite, gold leaf.</p>
+        <p class="intro-text">The history on every page is adapted from Wikipedia and cited in full on the <a href="credits.html">credits page</a>. The photographs are from Wikimedia Commons, each with its own licence. The models themselves are released under CC BY-NC 4.0.</p>
+      </div>
+      <div class="principles rv">
+        <div class="principle"><b>01</b><div><h3>Silhouette first</h3><p>Proportion and profile before ornament. If you cannot recognise the building from across the room, the model has failed.</p></div></div>
+        <div class="principle"><b>02</b><div><h3>Light is the material</h3><p>A physical sky, a moving sun and floodlights at dusk. Marble is a different colour at six in the morning and nine at night.</p></div></div>
+        <div class="principle"><b>03</b><div><h3>Sources in the open</h3><p>Every page links its Wikipedia article, its UNESCO record and the Commons file behind its photograph, with the licence named.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="monuments" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="eyebrow">The gallery</span>
+          <h2>24 monuments, from Sanchi Stupa to the Statue of Unity</h2>
+        </div>
+        <p>Oldest to newest spans more than two thousand years — a Mauryan stupa and a 2018 bronze — modelled on the same terms.</p>
+      </div>
+      <div class="filters" role="group" aria-label="Filter monuments by region">
+        <button class="on" data-filter="all">All</button>
+        <button data-filter="North">North</button>
+        <button data-filter="South">South</button>
+        <button data-filter="East">East</button>
+        <button data-filter="West">West</button>
+        <button data-filter="Central">Central</button>
+      </div>
+      <div class="cards" id="cards">
+
+      <a class="card" href="monuments/taj-mahal.html" data-region="North" data-id="taj-mahal">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/taj-mahal-450.webp 450w, assets/img/thumb/taj-mahal-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/taj-mahal-900.jpg" srcset="assets/img/thumb/taj-mahal-450.jpg 450w, assets/img/thumb/taj-mahal-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Taj Mahal, Agra" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">01</span><span class="card-tag">UNESCO</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Agra · Uttar Pradesh</p>
+          <h3 class="card-title">Taj Mahal <span class="deva">ताज महल</span></h3>
+          <p class="card-meta">Mughal · 1632–1653</p>
+          <p class="card-blurb">A white marble mausoleum on the Yamuna at Agra, built by Shah Jahan for Mumtaz Mahal and finished in 1648.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/qutub-minar.html" data-region="North" data-id="qutub-minar">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/qutub-minar-450.webp 450w, assets/img/thumb/qutub-minar-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/qutub-minar-900.jpg" srcset="assets/img/thumb/qutub-minar-450.jpg 450w, assets/img/thumb/qutub-minar-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Qutb Minar, Mehrauli, Delhi" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">02</span><span class="card-tag">UNESCO</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Mehrauli, Delhi · Delhi</p>
+          <h3 class="card-title">Qutb Minar <span class="deva">क़ुतुब मीनार</span></h3>
+          <p class="card-meta">Delhi Sultanate · 1199–1220</p>
+          <p class="card-blurb">A 72.5-metre victory tower of fluted red sandstone and marble, begun by Qutb al-Din Aibak and completed under later sultans.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/hawa-mahal.html" data-region="North" data-id="hawa-mahal">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/hawa-mahal-450.webp 450w, assets/img/thumb/hawa-mahal-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/hawa-mahal-900.jpg" srcset="assets/img/thumb/hawa-mahal-450.jpg 450w, assets/img/thumb/hawa-mahal-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Hawa Mahal, Jaipur" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">03</span><span class="card-tag">UNESCO</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Jaipur · Rajasthan</p>
+          <h3 class="card-title">Hawa Mahal <span class="deva">हवा महल</span></h3>
+          <p class="card-meta">Rajput · 1799</p>
+          <p class="card-blurb">A honeycomb screen of 953 latticed windows in red and pink sandstone, built so the women of the palace could watch the street unseen.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/charminar.html" data-region="South" data-id="charminar">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/charminar-450.webp 450w, assets/img/thumb/charminar-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/charminar-900.jpg" srcset="assets/img/thumb/charminar-450.jpg 450w, assets/img/thumb/charminar-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Charminar, Hyderabad" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">04</span><span class="card-tag">UNESCO tentative</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Hyderabad · Telangana</p>
+          <h3 class="card-title">Charminar <span class="deva">चारमीनार</span></h3>
+          <p class="card-meta">Qutb Shahi · 1591</p>
+          <p class="card-blurb">Four grand arches and four minarets over the old city, raised in 1591 at the crossing of Hyderabad&#x27;s bazaars.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/gateway-of-india.html" data-region="West" data-id="gateway-of-india">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/gateway-of-india-450.webp 450w, assets/img/thumb/gateway-of-india-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/gateway-of-india-900.jpg" srcset="assets/img/thumb/gateway-of-india-450.jpg 450w, assets/img/thumb/gateway-of-india-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Gateway of India, Mumbai" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">05</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Mumbai · Maharashtra</p>
+          <h3 class="card-title">Gateway of India <span class="deva">गेटवे ऑफ़ इंडिया</span></h3>
+          <p class="card-meta">British Raj · 1913–1924</p>
+          <p class="card-blurb">A basalt triumphal arch on the Mumbai waterfront, built to mark a royal landing and later the last exit of the Raj.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/india-gate.html" data-region="North" data-id="india-gate">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/india-gate-450.webp 450w, assets/img/thumb/india-gate-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/india-gate-900.jpg" srcset="assets/img/thumb/india-gate-450.jpg 450w, assets/img/thumb/india-gate-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="India Gate, New Delhi" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">06</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">New Delhi · Delhi</p>
+          <h3 class="card-title">India Gate <span class="deva">इंडिया गेट</span></h3>
+          <p class="card-meta">British Raj · 1921–1931</p>
+          <p class="card-blurb">Lutyens&#x27; 42-metre war memorial arch, inscribed with the names of 74,187 soldiers of the First World War.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/mysore-palace.html" data-region="South" data-id="mysore-palace">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/mysore-palace-450.webp 450w, assets/img/thumb/mysore-palace-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/mysore-palace-900.jpg" srcset="assets/img/thumb/mysore-palace-450.jpg 450w, assets/img/thumb/mysore-palace-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Mysore Palace, Mysuru" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">07</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Mysuru · Karnataka</p>
+          <h3 class="card-title">Mysore Palace <span class="deva">मैसूर पैलेस</span></h3>
+          <p class="card-meta">Wadiyar dynasty · 1897–1912</p>
+          <p class="card-blurb">The Amba Vilas Palace: a royal residence of pink domes, arched colonnades and a gold finial, lit by a hundred thousand lamps on Sundays.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/golden-temple.html" data-region="North" data-id="golden-temple">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/golden-temple-450.webp 450w, assets/img/thumb/golden-temple-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/golden-temple-900.jpg" srcset="assets/img/thumb/golden-temple-450.jpg 450w, assets/img/thumb/golden-temple-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Golden Temple, Amritsar" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">08</span><span class="card-tag">UNESCO tentative</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Amritsar · Punjab</p>
+          <h3 class="card-title">Golden Temple <span class="deva">हरमंदिर साहिब</span></h3>
+          <p class="card-meta">Sikh · founded 1577, gilded 1830</p>
+          <p class="card-blurb">Harmandir Sahib, the holiest gurdwara of Sikhism, set on an island in the Amrit Sarovar and clad in gold leaf.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/konark-sun-temple.html" data-region="East" data-id="konark-sun-temple">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/konark-sun-temple-450.webp 450w, assets/img/thumb/konark-sun-temple-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/konark-sun-temple-900.jpg" srcset="assets/img/thumb/konark-sun-temple-450.jpg 450w, assets/img/thumb/konark-sun-temple-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Konark Sun Temple, Konark" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">09</span><span class="card-tag">UNESCO</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Konark · Odisha</p>
+          <h3 class="card-title">Konark Sun Temple <span class="deva">कोणार्क सूर्य मंदिर</span></h3>
+          <p class="card-meta">Eastern Ganga · c. 1250</p>
+          <p class="card-blurb">A stone chariot for the sun god, with 24 carved wheels, seven horses and a tower that once stood 61 metres high.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/sanchi-stupa.html" data-region="Central" data-id="sanchi-stupa">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/sanchi-450.webp 450w, assets/img/thumb/sanchi-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/sanchi-900.jpg" srcset="assets/img/thumb/sanchi-450.jpg 450w, assets/img/thumb/sanchi-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Sanchi Stupa, Sanchi" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">10</span><span class="card-tag">UNESCO</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Sanchi · Madhya Pradesh</p>
+          <h3 class="card-title">Sanchi Stupa <span class="deva">साँची का स्तूप</span></h3>
+          <p class="card-meta">Mauryan · 3rd century BCE</p>
+          <p class="card-blurb">Ashoka&#x27;s hemispherical relic mound, ringed by a stone railing and four carved gateways on a hill above the plain.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/victoria-memorial.html" data-region="East" data-id="victoria-memorial">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/victoria-memorial-kolkata-450.webp 450w, assets/img/thumb/victoria-memorial-kolkata-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/victoria-memorial-kolkata-900.jpg" srcset="assets/img/thumb/victoria-memorial-kolkata-450.jpg 450w, assets/img/thumb/victoria-memorial-kolkata-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Victoria Memorial, Kolkata" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">11</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Kolkata · West Bengal</p>
+          <h3 class="card-title">Victoria Memorial <span class="deva">विक्टोरिया मेमोरियल</span></h3>
+          <p class="card-meta">British Raj · 1906–1921</p>
+          <p class="card-blurb">A white marble domed hall on the Kolkata Maidan, the largest monument to a monarch anywhere in the world.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/meenakshi-temple.html" data-region="South" data-id="meenakshi-temple">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/meenakshi-temple-450.webp 450w, assets/img/thumb/meenakshi-temple-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/meenakshi-temple-900.jpg" srcset="assets/img/thumb/meenakshi-temple-450.jpg 450w, assets/img/thumb/meenakshi-temple-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Meenakshi Temple, Madurai" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">12</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Madurai · Tamil Nadu</p>
+          <h3 class="card-title">Meenakshi Temple <span class="deva">मीनाक्षी मंदिर</span></h3>
+          <p class="card-meta">Pandya and Vijayanagara · 12th–17th c.</p>
+          <p class="card-blurb">Fourteen painted gopurams above the Vaigai at Madurai, a temple city dedicated to Meenakshi and Sundareswarar.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/lotus-temple.html" data-region="North" data-id="lotus-temple">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/lotus-temple-450.webp 450w, assets/img/thumb/lotus-temple-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/lotus-temple-900.jpg" srcset="assets/img/thumb/lotus-temple-450.jpg 450w, assets/img/thumb/lotus-temple-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Lotus Temple, New Delhi" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">13</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">New Delhi · Delhi</p>
+          <h3 class="card-title">Lotus Temple <span class="deva">कमल मंदिर</span></h3>
+          <p class="card-meta">Bahá’í · 1980–1986</p>
+          <p class="card-blurb">Twenty-seven marble petals closed around a silent hall: the Bahá’í House of Worship, open to every faith.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/shore-temple.html" data-region="South" data-id="shore-temple">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/shore-temple-450.webp 450w, assets/img/thumb/shore-temple-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/shore-temple-900.jpg" srcset="assets/img/thumb/shore-temple-450.jpg 450w, assets/img/thumb/shore-temple-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Shore Temple, Mahabalipuram" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">14</span><span class="card-tag">UNESCO</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Mahabalipuram · Tamil Nadu</p>
+          <h3 class="card-title">Shore Temple <span class="deva">तटीय मंदिर</span></h3>
+          <p class="card-meta">Pallava · c. 725 CE</p>
+          <p class="card-blurb">A granite shrine of tiered towers standing where the Bay of Bengal runs up the sand at Mamallapuram.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/rani-ki-vav.html" data-region="West" data-id="rani-ki-vav">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/rani-ki-vav-450.webp 450w, assets/img/thumb/rani-ki-vav-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/rani-ki-vav-900.jpg" srcset="assets/img/thumb/rani-ki-vav-450.jpg 450w, assets/img/thumb/rani-ki-vav-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Rani ki Vav, Patan" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">15</span><span class="card-tag">UNESCO</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Patan · Gujarat</p>
+          <h3 class="card-title">Rani ki Vav <span class="deva">रानी की वाव</span></h3>
+          <p class="card-meta">Solanki · 1063</p>
+          <p class="card-blurb">A seven-storey stepwell sunk into the Gujarat plain, its walls lined with five hundred carved figures.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/amber-fort.html" data-region="North" data-id="amber-fort">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/amber-fort-450.webp 450w, assets/img/thumb/amber-fort-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/amber-fort-900.jpg" srcset="assets/img/thumb/amber-fort-450.jpg 450w, assets/img/thumb/amber-fort-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Amber Fort, Amer, Jaipur" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">16</span><span class="card-tag">UNESCO tentative</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Amer, Jaipur · Rajasthan</p>
+          <h3 class="card-title">Amber Fort <span class="deva">आमेर किला</span></h3>
+          <p class="card-meta">Kachwaha Rajput · from 1592</p>
+          <p class="card-blurb">A hilltop palace of yellow sandstone above Maota Lake, its ramparts running along the Aravalli ridge.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/csmt-mumbai.html" data-region="West" data-id="csmt-mumbai">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/csmt-mumbai-450.webp 450w, assets/img/thumb/csmt-mumbai-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/csmt-mumbai-900.jpg" srcset="assets/img/thumb/csmt-mumbai-450.jpg 450w, assets/img/thumb/csmt-mumbai-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="CSMT, Mumbai, Mumbai" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">17</span><span class="card-tag">UNESCO</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Mumbai · Maharashtra</p>
+          <h3 class="card-title">CSMT, Mumbai <span class="deva">छत्रपति शिवाजी महाराज टर्मिनस</span></h3>
+          <p class="card-meta">British Raj · 1878–1888</p>
+          <p class="card-blurb">Stevens’ Victorian Gothic terminus: pointed arches, a stone dome and a clock tower over one of the busiest stations in India.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/mahabodhi-temple.html" data-region="East" data-id="mahabodhi-temple">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/mahabodhi-temple-450.webp 450w, assets/img/thumb/mahabodhi-temple-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/mahabodhi-temple-900.jpg" srcset="assets/img/thumb/mahabodhi-temple-450.jpg 450w, assets/img/thumb/mahabodhi-temple-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Mahabodhi Temple, Bodh Gaya" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">18</span><span class="card-tag">UNESCO</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Bodh Gaya · Bihar</p>
+          <h3 class="card-title">Mahabodhi Temple <span class="deva">महाबोधि मंदिर</span></h3>
+          <p class="card-meta">Mauryan to Gupta · 3rd c. BCE – 6th c. CE</p>
+          <p class="card-blurb">The brick tower at Bodh Gaya raised where the Buddha attained enlightenment: one of the oldest brick temples surviving in India.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/statue-of-unity.html" data-region="West" data-id="statue-of-unity">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/statue-of-unity-450.webp 450w, assets/img/thumb/statue-of-unity-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/statue-of-unity-900.jpg" srcset="assets/img/thumb/statue-of-unity-450.jpg 450w, assets/img/thumb/statue-of-unity-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Statue of Unity, Kevadia" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">19</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Kevadia · Gujarat</p>
+          <h3 class="card-title">Statue of Unity <span class="deva">एकता की प्रतिमा</span></h3>
+          <p class="card-meta">Modern · 2013–2018</p>
+          <p class="card-blurb">At 182 metres, the world’s tallest statue: Sardar Vallabhbhai Patel in bronze, facing the Narmada dam.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/kandariya-mahadeva.html" data-region="Central" data-id="kandariya-mahadeva">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/kandariya-mahadeva-450.webp 450w, assets/img/thumb/kandariya-mahadeva-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/kandariya-mahadeva-900.jpg" srcset="assets/img/thumb/kandariya-mahadeva-450.jpg 450w, assets/img/thumb/kandariya-mahadeva-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Kandariya Mahadeva, Khajuraho" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">20</span><span class="card-tag">UNESCO</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Khajuraho · Madhya Pradesh</p>
+          <h3 class="card-title">Kandariya Mahadeva <span class="deva">कंदारिया महादेव मंदिर</span></h3>
+          <p class="card-meta">Chandela · c. 1030</p>
+          <p class="card-blurb">The tallest of the Khajuraho temples: a 31-metre mountain of sandstone covered in carved figures.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/basilica-bom-jesus.html" data-region="West" data-id="basilica-bom-jesus">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/basilica-bom-jesus-450.webp 450w, assets/img/thumb/basilica-bom-jesus-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/basilica-bom-jesus-900.jpg" srcset="assets/img/thumb/basilica-bom-jesus-450.jpg 450w, assets/img/thumb/basilica-bom-jesus-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Basilica of Bom Jesus, Old Goa" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">21</span><span class="card-tag">UNESCO</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Old Goa · Goa</p>
+          <h3 class="card-title">Basilica of Bom Jesus <span class="deva">बॉम जीसस बासीलिका</span></h3>
+          <p class="card-meta">Portuguese · 1594–1605</p>
+          <p class="card-blurb">A baroque basilica of laterite and white plaster in Old Goa, holding the relics of St Francis Xavier.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/mehrangarh-fort.html" data-region="North" data-id="mehrangarh-fort">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/mehrangarh-fort-450.webp 450w, assets/img/thumb/mehrangarh-fort-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/mehrangarh-fort-900.jpg" srcset="assets/img/thumb/mehrangarh-fort-450.jpg 450w, assets/img/thumb/mehrangarh-fort-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Mehrangarh, Jodhpur" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">22</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Jodhpur · Rajasthan</p>
+          <h3 class="card-title">Mehrangarh <span class="deva">मेहरानगढ़ किला</span></h3>
+          <p class="card-meta">Rathore Rajput · from 1459</p>
+          <p class="card-blurb">A fort on a 120-metre rock above Jodhpur, its walls up to 36 metres high and 21 metres thick.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/jantar-mantar.html" data-region="North" data-id="jantar-mantar">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/jantar-mantar-450.webp 450w, assets/img/thumb/jantar-mantar-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/jantar-mantar-900.jpg" srcset="assets/img/thumb/jantar-mantar-450.jpg 450w, assets/img/thumb/jantar-mantar-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Jantar Mantar, Jaipur" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">23</span><span class="card-tag">UNESCO</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Jaipur · Rajasthan</p>
+          <h3 class="card-title">Jantar Mantar <span class="deva">जंतर मंतर</span></h3>
+          <p class="card-meta">Rajput · 1728–1734</p>
+          <p class="card-blurb">Nineteen masonry instruments in lime plaster, built to measure the sky, among them a sundial 27 metres high.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="monuments/somnath-temple.html" data-region="West" data-id="somnath-temple">
+        <div class="card-media">
+          <picture>
+            <source type="image/webp" srcset="assets/img/thumb/somnath-temple-450.webp 450w, assets/img/thumb/somnath-temple-900.webp 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw">
+            <img src="assets/img/thumb/somnath-temple-900.jpg" srcset="assets/img/thumb/somnath-temple-450.jpg 450w, assets/img/thumb/somnath-temple-900.jpg 900w" sizes="(max-width: 720px) 92vw, (max-width: 1000px) 46vw, 31vw" alt="Somnath Temple, Prabhas Patan" loading="lazy" width="900" height="600">
+          </picture>
+          <span class="card-num">24</span>
+        </div>
+        <div class="card-body">
+          <p class="card-kicker">Prabhas Patan · Gujarat</p>
+          <h3 class="card-title">Somnath Temple <span class="deva">सोमनाथ मंदिर</span></h3>
+          <p class="card-meta">Rebuilt · 1951</p>
+          <p class="card-blurb">The first of the twelve Jyotirlingas, on the Gujarat shore, destroyed and rebuilt many times.</p>
+          <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </div>
+      </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="method" style="padding-top:0">
+    <div class="wrap">
+      <div class="method rv">
+        <span class="eyebrow">The method</span>
+        <h2>One engine, twenty-four buildings, no assets.</h2>
+        <div class="method-grid">
+          <div class="method-item">
+            <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 3v18M4 7.5l8 4.5 8-4.5"/></svg></div>
+            <h3>Geometry from code</h3>
+            <p>Each monument is a module of a few hundred lines. Primitives are transformed, merged by material and drawn in one pass — twelve thousand to ninety thousand triangles, under two dozen draw calls.</p>
+          </div>
+          <div class="method-item">
+            <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div>
+            <h3>A sky that moves</h3>
+            <p>Rayleigh and Mie scattering drive the sky, the sun and the moon. Clouds, rain and mist are layered on top; at dusk the floodlights come up and the stone turns amber.</p>
+          </div>
+          <div class="method-item">
+            <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h7v14H4zM13 5h7v14h-7z"/><path d="M11 9h2M11 15h2"/></svg></div>
+            <h3>History in place</h3>
+            <p>Every page carries a guided tour, a history drawer and the sources behind it. Read the story of the building while you orbit it, then follow the links to Wikipedia and UNESCO.</p>
+          </div>
+        </div>
+        <div class="method-note">
+          <span>Built with three.js · no build step · runs from a static folder</span>
+          <a href="https://github.com/drsamonline/INDIA" target="_blank" rel="noopener">Read the source on GitHub →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="timeline" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><span class="eyebrow">Two thousand years</span><h2>A timeline of the atlas</h2></div>
+        <p>From Ashoka's relic mound to Lutyens' memorial arch. Scroll the line sideways.</p>
+      </div>
+      <div class="timeline">
+      <a class="tl-item" href="monuments/sanchi-stupa.html"><span class="tl-year">250 BCE</span><span class="tl-name">Sanchi Stupa</span><span class="tl-place">Sanchi</span></a>
+      <a class="tl-item" href="monuments/mahabodhi-temple.html"><span class="tl-year">500</span><span class="tl-name">Mahabodhi Temple</span><span class="tl-place">Bodh Gaya</span></a>
+      <a class="tl-item" href="monuments/shore-temple.html"><span class="tl-year">725</span><span class="tl-name">Shore Temple</span><span class="tl-place">Mahabalipuram</span></a>
+      <a class="tl-item" href="monuments/kandariya-mahadeva.html"><span class="tl-year">1030</span><span class="tl-name">Kandariya Mahadeva</span><span class="tl-place">Khajuraho</span></a>
+      <a class="tl-item" href="monuments/rani-ki-vav.html"><span class="tl-year">1063</span><span class="tl-name">Rani ki Vav</span><span class="tl-place">Patan</span></a>
+      <a class="tl-item" href="monuments/qutub-minar.html"><span class="tl-year">1199</span><span class="tl-name">Qutb Minar</span><span class="tl-place">Mehrauli, Delhi</span></a>
+      <a class="tl-item" href="monuments/meenakshi-temple.html"><span class="tl-year">1200</span><span class="tl-name">Meenakshi Temple</span><span class="tl-place">Madurai</span></a>
+      <a class="tl-item" href="monuments/konark-sun-temple.html"><span class="tl-year">1250</span><span class="tl-name">Konark Sun Temple</span><span class="tl-place">Konark</span></a>
+      <a class="tl-item" href="monuments/mehrangarh-fort.html"><span class="tl-year">1459</span><span class="tl-name">Mehrangarh</span><span class="tl-place">Jodhpur</span></a>
+      <a class="tl-item" href="monuments/golden-temple.html"><span class="tl-year">1577</span><span class="tl-name">Golden Temple</span><span class="tl-place">Amritsar</span></a>
+      <a class="tl-item" href="monuments/charminar.html"><span class="tl-year">1591</span><span class="tl-name">Charminar</span><span class="tl-place">Hyderabad</span></a>
+      <a class="tl-item" href="monuments/amber-fort.html"><span class="tl-year">1592</span><span class="tl-name">Amber Fort</span><span class="tl-place">Amer, Jaipur</span></a>
+      <a class="tl-item" href="monuments/basilica-bom-jesus.html"><span class="tl-year">1605</span><span class="tl-name">Basilica of Bom Jesus</span><span class="tl-place">Old Goa</span></a>
+      <a class="tl-item" href="monuments/taj-mahal.html"><span class="tl-year">1632</span><span class="tl-name">Taj Mahal</span><span class="tl-place">Agra</span></a>
+      <a class="tl-item" href="monuments/jantar-mantar.html"><span class="tl-year">1734</span><span class="tl-name">Jantar Mantar</span><span class="tl-place">Jaipur</span></a>
+      <a class="tl-item" href="monuments/hawa-mahal.html"><span class="tl-year">1799</span><span class="tl-name">Hawa Mahal</span><span class="tl-place">Jaipur</span></a>
+      <a class="tl-item" href="monuments/csmt-mumbai.html"><span class="tl-year">1878</span><span class="tl-name">CSMT, Mumbai</span><span class="tl-place">Mumbai</span></a>
+      <a class="tl-item" href="monuments/mysore-palace.html"><span class="tl-year">1897</span><span class="tl-name">Mysore Palace</span><span class="tl-place">Mysuru</span></a>
+      <a class="tl-item" href="monuments/victoria-memorial.html"><span class="tl-year">1906</span><span class="tl-name">Victoria Memorial</span><span class="tl-place">Kolkata</span></a>
+      <a class="tl-item" href="monuments/gateway-of-india.html"><span class="tl-year">1913</span><span class="tl-name">Gateway of India</span><span class="tl-place">Mumbai</span></a>
+      <a class="tl-item" href="monuments/india-gate.html"><span class="tl-year">1921</span><span class="tl-name">India Gate</span><span class="tl-place">New Delhi</span></a>
+      <a class="tl-item" href="monuments/somnath-temple.html"><span class="tl-year">1951</span><span class="tl-name">Somnath Temple</span><span class="tl-place">Prabhas Patan</span></a>
+      <a class="tl-item" href="monuments/lotus-temple.html"><span class="tl-year">1986</span><span class="tl-name">Lotus Temple</span><span class="tl-place">New Delhi</span></a>
+      <a class="tl-item" href="monuments/statue-of-unity.html"><span class="tl-year">2018</span><span class="tl-name">Statue of Unity</span><span class="tl-place">Kevadia</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="sources" style="padding-top:0">
+    <div class="wrap sources">
+      <div class="rv">
+        <span class="eyebrow">Sources &amp; licence</span>
+        <h2 style="font-size:clamp(24px,3vw,36px);margin-bottom:18px">Facts from Wikipedia, photographs from Commons</h2>
+        <p>Every history in this atlas is adapted from the English Wikipedia article on the monument, which is published under CC BY-SA 4.0. The facts, dates and figures are checked against the article and against UNESCO's World Heritage records where a site is inscribed.</p>
+        <p>The photographs are the lead images of those articles on Wikimedia Commons. Each is credited to its photographer with the licence named, and links back to the original file. The 3D models use no photographs at all — they are geometry, generated at runtime.</p>
+      </div>
+      <div class="lic rv">
+        <h3>Reuse</h3>
+        <p><b>Code and models:</b> <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a> — copy, remix and publish with credit to Dr Sohil Momin; not for commercial use.<br><br>
+        <b>Photographs:</b> each under its own licence (CC BY, CC BY-SA, FAL), credited on the <a href="credits.html">credits page</a>.<br><br>
+        <b>Text:</b> adapted from Wikipedia under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.<br><br>
+        <b>Type:</b> Cormorant Garamond, JetBrains Mono and Noto Sans Devanagari, all under the SIL Open Font License.</p>
+        <a class="btn btn-line" href="credits.html">Full credits &amp; licences</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-in">
+    <div>
+      <div class="foot-brand">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 50c-7 0-13-4-16-10 5-1 9 1 12 4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M32 50c7 0 13-4 16-10-5-1-9 1-12 4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M32 50c-5-4-8-10-7-16 5 1 9 5 10 11" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M32 50c5-4 8-10 7-16-5 1-9 5-10 11" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M32 48c-2-5-2-12 0-17 2 5 2 12 0 17z" fill="currentColor" opacity=".8"/></svg>
+        India
+      </div>
+      <p class="foot-meta" style="margin-top:12px">
+        A procedural atlas of Indian monuments by <b>Dr Sohil Momin</b>.<br>
+        Released under <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a> · history from <a href="credits.html">Wikipedia &amp; Wikimedia Commons</a>.
+      </p>
+    </div>
+    <div class="foot-links">
+      <a href="https://github.com/drsamonline/INDIA" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.95.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>
+        Source
+      </a>
+      <a href="credits.html">Credits</a>
+      <a href="#top">Top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/site.js?v=9c666402f5" defer></script>
+</body>
+</html>
