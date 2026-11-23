@@ -94,8 +94,11 @@ export default {
       c.color.setHex(hex);
       return c;
     }
-    // weathered Deccan basalt is a warm buff-grey, not near-black
-    const MASON = tint('basaltDark', 0xb0a184);
+    // Weathered Deccan basalt is a warm buff-brown. The tint is taken from
+    // 'cream', which carries no texture map: cloning a textured material
+    // multiplies the hex down by roughly half, which is why this gateway was
+    // rendering grey.
+    const MASON = tint('cream', 0xc9a878);
     const jaliTone = tint('jali', 0x8f7d63);      // shadowed pierced screen
 
     /* ------------------------------------------------------------ constants */
@@ -138,13 +141,13 @@ export default {
     block('stone', 96, 0.34, 60, 0, -0.34, 6);           // apron in front
     // sea wall on the harbour side, with a coping and mooring rings
     block(MASON, W + 22, 2.4, 1.8, 0, -2.4, -13.2);
-    block('basalt', W + 22.6, 0.34, 2.4, 0, -0.14, -13.2);
+    block(MASON, W + 22.6, 0.34, 2.4, 0, -0.14, -13.2);
     for (let i = -8; i <= 8; i++) {
       add('black', torus(0.22, 0.07, 5, 10), i * 3.4, -0.9, -12.3, { rx: Math.PI / 2 });
     }
     // steps behind the arch, down to the water
     for (let i = 0; i < 6; i++) {
-      block('basalt', 13 - i * 0.4, 0.32, 0.9, 0, -0.32 - i * 0.32, -9.6 - i * 0.95);
+      block(MASON, 13 - i * 0.4, 0.32, 0.9, 0, -0.32 - i * 0.32, -9.6 - i * 0.95);
     }
     // bollards along the quay edge
     for (let i = -7; i <= 7; i++) {
@@ -166,19 +169,19 @@ export default {
     /* ------------------------------------------------------ the front wall
        Central bay 17.2 m wide with the great arch, two wings 9.4 m wide
        each carrying a flanking arch at x = ±11.5. */
-    add('basalt', pierced(2 * BAY, HCB, 2.6, [{ x: 0, w: AW, h: AH, spring: ASP }]),
+    add(MASON, pierced(2 * BAY, HCB, 2.6, [{ x: 0, w: AW, h: AH, spring: ASP }]),
       0, P, D / 2 - 2.6);
-    add('basalt', pierced(2 * BAY, HCB, 2.6, [{ x: 0, w: AW, h: AH, spring: ASP }]),
+    add(MASON, pierced(2 * BAY, HCB, 2.6, [{ x: 0, w: AW, h: AH, spring: ASP }]),
       0, P, -D / 2);
     [-1, 1].forEach((s) => {
-      add('basalt', pierced(9.4, HWG, 2.6, [{ x: -s * 1.8, w: SW, h: SH, spring: SSP }]),
+      add(MASON, pierced(9.4, HWG, 2.6, [{ x: -s * 1.8, w: SW, h: SH, spring: SSP }]),
         s * 13.3, P, D / 2 - 2.6);
-      add('basalt', pierced(9.4, HWG, 2.6, [{ x: -s * 1.8, w: SW, h: SH, spring: SSP }]),
+      add(MASON, pierced(9.4, HWG, 2.6, [{ x: -s * 1.8, w: SW, h: SH, spring: SSP }]),
         s * 13.3, P, -D / 2);
     });
     /* the short faces: a single arch, 3.1 m, centred */
     [-1, 1].forEach((s) => {
-      add('basalt', pierced(D, HWG, 2.6, [{ x: 0, w: SW, h: SH, spring: SSP }]),
+      add(MASON, pierced(D, HWG, 2.6, [{ x: 0, w: SW, h: SH, spring: SSP }]),
         s * (W / 2 - 2.6), P, 0, { ry: s * Math.PI / 2 });
       // a shallow hall behind the side arch, dark
       add('dark', box(5.0, SH + 1.6, SW + 0.4), s * (W / 2 - 5.2), P + (SH + 1.6) / 2, 0);
@@ -194,14 +197,14 @@ export default {
     add(MASON, ring(AW, AH, ASP, 0.62, D), 0, P, -D / 2);
     // transverse ribs, standing proud of the lining
     [-5.6, -1.9, 1.9, 5.6].forEach((z) => {
-      add('basalt', ring(AW - 0.5, AH - 0.3, ASP, 0.34, 0.8), 0, P, z - 0.4);
+      add(MASON, ring(AW - 0.5, AH - 0.3, ASP, 0.34, 0.8), 0, P, z - 0.4);
     });
     // keystone boss at the crown, front and back
     [-1, 1].forEach((s) => {
-      add('basalt', box(0.9, 1.1, 0.5), 0, P + AH - 0.6, s * (D / 2 - 0.25));
+      add(MASON, box(0.9, 1.1, 0.5), 0, P + AH - 0.6, s * (D / 2 - 0.25));
     });
     // passage floor
-    add('basalt', box(AW + 1.4, 0.2, D + 0.4), 0, P - 0.05, 0);
+    add(MASON, box(AW + 1.4, 0.2, D + 0.4), 0, P - 0.05, 0);
 
     /* ------------------------------------------------- archivolt and ornament
        Three moulded rings round the great arch, front and back. */
@@ -214,103 +217,105 @@ export default {
       });
       // impost blocks at the springing, on the piers only
       [-1, 1].forEach((d) => {
-        add('basalt', box(1.8, 0.5, 0.7), d * (AW / 2 + 0.95), P + 8.4, s * (D / 2 + 0.2));
+        add(MASON, box(1.8, 0.5, 0.7), d * (AW / 2 + 0.95), P + 8.4, s * (D / 2 + 0.2));
       });
     });
     // projecting frame: pilasters either side of the arch and a lintel band
     [-1, 1].forEach((s) => {
       [-1, 1].forEach((d) => {
-        add('basalt', box(1.0, 16.4, 0.75), d * (AW / 2 + 1.35), P + 8.2, s * (D / 2 + 0.3));
+        add(MASON, box(1.0, 16.4, 0.75), d * (AW / 2 + 1.35), P + 8.2, s * (D / 2 + 0.3));
         add(MASON, box(1.4, 0.5, 0.9), d * (AW / 2 + 1.35), P + 0.25, s * (D / 2 + 0.3));
       });
-      add('basalt', box(AW + 4.6, 0.7, 0.8), 0, P + 16.8, s * (D / 2 + 0.3));
+      add(MASON, box(AW + 4.6, 0.7, 0.8), 0, P + 16.8, s * (D / 2 + 0.3));
     });
     // spandrel medallions
     [-1, 1].forEach((s) => {
       [[1, 0], [-1, 0]].forEach(([d]) => {
         add(MASON, torus(0.85, 0.16, 6, 14), d * 6.6, P + 10.2, D / 2 + 0.1);
-        add('basalt', sph(0.42, 8), d * 6.6, P + 10.2, D / 2 + 0.16);
+        add(MASON, sph(0.42, 8), d * 6.6, P + 10.2, D / 2 + 0.16);
       });
     });
 
     /* ------------------------------------------------ entablature over the arch */
-    add('basalt', box(2 * BAY + 0.6, 0.55, D + 0.6), 0, P + AH + 0.7, 0);
+    add(MASON, box(2 * BAY + 0.6, 0.55, D + 0.6), 0, P + AH + 0.7, 0);
     // carved bracket course
     for (let i = -5; i <= 5; i++) {
       add(MASON, box(0.7, 0.9, 0.4), i * 1.6, P + AH + 1.5, D / 2 + 0.1);
       add(MASON, box(0.7, 0.9, 0.4), i * 1.6, P + AH + 1.5, -D / 2 - 0.1);
     }
     // the inscription band: a recessed panel with a moulded frame
-    add('basalt', box(2 * BAY + 0.4, 3.2, D + 0.4), 0, P + 14.6, 0);
+    add(MASON, box(2 * BAY + 0.4, 3.2, D + 0.4), 0, P + 14.6, 0);
     [-1, 1].forEach((s) => {
       add(MASON, box(13.4, 2.3, 0.12), 0, P + 14.8, s * (D / 2 + 0.22));
       for (let i = 0; i < 4; i++) {
-        add('basalt', box(11.4 - i * 0.5, 0.14, 0.06), 0, P + 13.95 + i * 0.5, s * (D / 2 + 0.3));
+        add(MASON, box(11.4 - i * 0.5, 0.14, 0.06), 0, P + 13.95 + i * 0.5, s * (D / 2 + 0.3));
       }
-      add('basalt', box(14.0, 0.26, 0.34), 0, P + 16.1, s * (D / 2 + 0.26));
+      add(MASON, box(14.0, 0.26, 0.34), 0, P + 16.1, s * (D / 2 + 0.26));
     });
 
     /* ------------------------------------------ cornices, parapets, merlons */
     // wing cornice with dentils
     [-1, 1].forEach((s) => {
-      add('basalt', box(9.4 + 0.9, 0.5, D + 0.9), s * 13.3, P + HWG + 0.25, 0);
+      add(MASON, box(9.4 + 0.9, 0.5, D + 0.9), s * 13.3, P + HWG + 0.25, 0);
       add(MASON, box(9.4 + 1.5, 0.3, D + 1.5), s * 13.3, P + HWG + 0.65, 0);
       for (let j = -4; j <= 4; j++) {
-        add('basalt', box(0.36, 0.34, 0.34), s * 13.3 + j * 1.0, P + HWG + 0.98, D / 2 + 0.72);
-        add('basalt', box(0.36, 0.34, 0.34), s * 13.3 + j * 1.0, P + HWG + 0.98, -D / 2 - 0.72);
-        add('basalt', box(0.34, 0.34, 0.36), s * (13.3 + 4.9), P + HWG + 0.98, j * 1.9);
+        add(MASON, box(0.36, 0.34, 0.34), s * 13.3 + j * 1.0, P + HWG + 0.98, D / 2 + 0.72);
+        add(MASON, box(0.36, 0.34, 0.34), s * 13.3 + j * 1.0, P + HWG + 0.98, -D / 2 - 0.72);
+        add(MASON, box(0.34, 0.34, 0.36), s * (13.3 + 4.9), P + HWG + 0.98, j * 1.9);
       }
-      add('basalt', box(9.4 + 1.0, 0.55, D + 1.0), s * 13.3, P + HWG + 1.45, 0);
+      add(MASON, box(9.4 + 1.0, 0.55, D + 1.0), s * 13.3, P + HWG + 1.45, 0);
       // merlons along the wing parapet
       for (let i = -4; i <= 4; i++) {
-        add('basalt', box(0.95, 0.85, 0.8), s * 13.3 + i * 1.05, P + HWG + 2.15, D / 2 + 0.4);
-        add('basalt', box(0.95, 0.85, 0.8), s * 13.3 + i * 1.05, P + HWG + 2.15, -D / 2 - 0.4);
+        add(MASON, box(0.95, 0.85, 0.8), s * 13.3 + i * 1.05, P + HWG + 2.15, D / 2 + 0.4);
+        add(MASON, box(0.95, 0.85, 0.8), s * 13.3 + i * 1.05, P + HWG + 2.15, -D / 2 - 0.4);
       }
     });
     // central bay cornice and parapet
-    add('basalt', box(2 * BAY + 1.6, 0.5, D + 1.6), 0, P + 17.3, 0);
+    add(MASON, box(2 * BAY + 1.6, 0.5, D + 1.6), 0, P + 17.3, 0);
     add(MASON, box(2 * BAY + 2.2, 0.34, D + 2.2), 0, P + 17.72, 0);
-    add('basalt', box(2 * BAY + 1.4, 0.6, D + 1.4), 0, P + 18.5, 0);
+    add(MASON, box(2 * BAY + 1.4, 0.6, D + 1.4), 0, P + 18.5, 0);
     for (let i = -6; i <= 6; i++) {
-      add('basalt', box(0.95, 0.95, 0.8), i * 1.35, P + 19.3, D / 2 + 0.4);
-      add('basalt', box(0.95, 0.95, 0.8), i * 1.35, P + 19.3, -D / 2 - 0.4);
+      add(MASON, box(0.95, 0.95, 0.8), i * 1.35, P + 19.3, D / 2 + 0.4);
+      add(MASON, box(0.95, 0.95, 0.8), i * 1.35, P + 19.3, -D / 2 - 0.4);
     }
     for (let i = -5; i <= 5; i++) {
-      add('basalt', box(0.8, 0.95, 0.95), BAY + 0.4, P + 19.3, i * 1.5);
-      add('basalt', box(0.8, 0.95, 0.95), -BAY - 0.4, P + 19.3, i * 1.5);
+      add(MASON, box(0.8, 0.95, 0.95), BAY + 0.4, P + 19.3, i * 1.5);
+      add(MASON, box(0.8, 0.95, 0.95), -BAY - 0.4, P + 19.3, i * 1.5);
     }
 
     /* ------------------------------------------------------ the ribbed dome
-       15 m across.  Shallow, set behind the front block: from the plaza only
-       its crown shows between the turrets, which is what the photograph
-       shows; the whole dome appears from the water and from above. */
-    add('basalt', cyl(DOME_R + 0.6, DOME_R + 1.0, 0.8, 24), 0, P + 11.2, -1.0);
-    add(MASON, cyl(DOME_R, DOME_R, 2.9, 24), 0, P + 14.9, -1.0);      // drum
+       15 m across.  Set behind the front block, its crown riding about 5 m
+       above the parapet — at the old height it cleared the parapet by 1 m and
+       the monument read from the plaza as a flat-topped block with four
+       turrets and no dome at all. Apex ~25 m, matching the 25.3 m in the
+       sources; the turret tips stay at 26. */
+    add(MASON, cyl(DOME_R + 0.6, DOME_R + 1.0, 0.8, 24), 0, P + 14.2, -1.0);
+    add(MASON, cyl(DOME_R, DOME_R, 2.9, 24), 0, P + 17.9, -1.0);      // drum
     for (let i = 0; i < 16; i++) {
       const a = (i / 16) * Math.PI * 2;
-      add('basalt', box(0.24, 2.5, 0.24), Math.cos(a) * (DOME_R - 0.2), P + 14.9,
+      add(MASON, box(0.24, 2.5, 0.24), Math.cos(a) * (DOME_R - 0.2), P + 17.9,
         -1.0 + Math.sin(a) * (DOME_R - 0.2), { ry: -a });
     }
-    add('basalt', cyl(DOME_R + 0.45, DOME_R + 0.05, 0.5, 24), 0, P + 14.55, -1.0);
-    add(MASON, onion(DOME_R, 5.6, 26), 0, P + 15.0, -1.0);
+    add(MASON, cyl(DOME_R + 0.45, DOME_R + 0.05, 0.5, 24), 0, P + 17.55, -1.0);
+    add(MASON, onion(DOME_R, 5.6, 26), 0, P + 18.0, -1.0);
     for (let i = 0; i < 12; i++) {
       const a = (i / 12) * Math.PI * 2;
-      add('basalt', box(0.16, DOME_R * 0.62, 0.16),
-        Math.cos(a) * (DOME_R - 0.4), P + 17.6, -1.0 + Math.sin(a) * (DOME_R - 0.4),
+      add(MASON, box(0.16, DOME_R * 0.62, 0.16),
+        Math.cos(a) * (DOME_R - 0.4), P + 20.6, -1.0 + Math.sin(a) * (DOME_R - 0.4),
         { ry: -a, rz: 0.3 });
     }
-    add('basalt', cyl(0.42, 0.66, 0.55, 10), 0, P + 20.4, -1.0);
-    add('gold', cyl(0.08, 0.08, 0.8, 6), 0, P + 20.9, -1.0);
+    add(MASON, cyl(0.42, 0.66, 0.55, 10), 0, P + 23.4, -1.0);
+    add('gold', cyl(0.08, 0.08, 0.8, 6), 0, P + 23.9, -1.0);
 
     /* --------------------------------------------------- four octagonal turrets
        2.6 m across, engaged at the corners of the central bay, tips at 26 m. */
     [-1, 1].forEach((sx) => {
       [-1, 1].forEach((sz) => {
         const x = sx * (BAY - 1.2), z = sz * (D / 2 - 1.6);
-        add('basalt', cyl(1.5, 1.95, 1.1, 8), x, P + 11.9, z);          // corbel
+        add(MASON, cyl(1.5, 1.95, 1.1, 8), x, P + 11.9, z);          // corbel
         add(MASON, cyl(1.58, 1.58, 0.3, 8), x, P + 12.6, z);
         // shaft with engaged columns
-        add('basalt', cyl(1.24, 1.32, 8.3, 8), x, P + 16.75, z);
+        add(MASON, cyl(1.24, 1.32, 8.3, 8), x, P + 16.75, z);
         for (let i = 0; i < 8; i++) {
           const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
           add(MASON, cyl(0.1, 0.13, 7.9, 5),
@@ -318,18 +323,18 @@ export default {
         }
         add(MASON, cyl(1.58, 1.58, 0.3, 8), x, P + 20.05, z);    // balcony
         // open jali gallery
-        add('basalt', cyl(1.16, 1.24, 1.5, 8), x, P + 20.95, z);
+        add(MASON, cyl(1.16, 1.24, 1.5, 8), x, P + 23.95, z);
         for (let k = 0; k < 12; k++) {
           const a = (k / 12) * Math.PI * 2;
-          add('jaliWhite', box(0.48, 0.9, 0.06), x + Math.cos(a) * 1.2, P + 20.9,
+          add('jaliWhite', box(0.48, 0.9, 0.06), x + Math.cos(a) * 1.2, P + 23.9,
             z + Math.sin(a) * 1.2, { ry: -a + Math.PI / 2 });
         }
-        add('basalt', cyl(1.46, 1.26, 0.3, 8), x, P + 21.85, z);
+        add(MASON, cyl(1.46, 1.26, 0.3, 8), x, P + 21.85, z);
         // ribbed dome and finial
         add(MASON, onion(1.24, 2.7, 16), x, P + 22.0, z);
         for (let i = 0; i < 8; i++) {
           const a = (i / 8) * Math.PI * 2;
-          add('basalt', box(0.1, 1.7, 0.1), x + Math.cos(a) * 1.14, P + 23.1,
+          add(MASON, box(0.1, 1.7, 0.1), x + Math.cos(a) * 1.14, P + 23.1,
             z + Math.sin(a) * 1.14, { ry: -a, rz: 0.3 });
         }
         add('gold', cyl(0.07, 0.07, 0.9, 6), x, P + 24.7, z);
@@ -346,14 +351,14 @@ export default {
           add('jaliWhite', box(0.62, 0.72, 0.07), x + i * 0.72, P + 2.7 + j * 0.82, D / 2 + 0.06);
         }
       }
-      add('basalt', ring(SW + 0.7, SH + 0.35, SSP, 0.26, 0.26), x, P, D / 2 + 0.04);
-      add('basalt', ring(SW + 0.7, SH + 0.35, SSP, 0.26, 0.26), x, P, -D / 2 - 0.3);
+      add(MASON, ring(SW + 0.7, SH + 0.35, SSP, 0.26, 0.26), x, P, D / 2 + 0.04);
+      add(MASON, ring(SW + 0.7, SH + 0.35, SSP, 0.26, 0.26), x, P, -D / 2 - 0.3);
       // carved blind panel above the arch: a shallow recess with a
       // moulded frame and a grid of pierced squares, as on the reference
       add(MASON, box(7.6, 5.6, 0.1), x, P + 9.6, D / 2 + 0.06);
       add(jaliTone, box(6.4, 4.6, 0.07), x, P + 9.6, D / 2 + 0.14);
-      add('basalt', box(8.2, 0.4, 0.36), x, P + 12.6, D / 2 + 0.2);
-      add('basalt', box(8.2, 0.4, 0.36), x, P + 6.6, D / 2 + 0.2);
+      add(MASON, box(8.2, 0.4, 0.36), x, P + 12.6, D / 2 + 0.2);
+      add(MASON, box(8.2, 0.4, 0.36), x, P + 6.6, D / 2 + 0.2);
       // carved band under the wing cornice
       for (let i = -3; i <= 3; i++) {
         add(MASON, box(0.62, 0.62, 0.16), x + i * 1.15, P + 14.6, D / 2 + 0.12);
@@ -367,9 +372,9 @@ export default {
     [-1, 1].forEach((s) => {
       add(MASON, box(0.1, 5.6, 7.0), s * (W / 2 + 0.05), P + 9.6, 0);
       add(jaliTone, box(0.07, 4.6, 5.8), s * (W / 2 + 0.14), P + 9.6, 0);
-      add('basalt', box(0.3, 0.4, 7.6), s * (W / 2 + 0.16), P + 12.8, 0);
-      add('basalt', box(0.3, 0.4, 7.6), s * (W / 2 + 0.16), P + 6.6, 0);
-      add('basalt', ring(SW + 0.7, SH + 0.35, SSP, 0.26, 0.26),
+      add(MASON, box(0.3, 0.4, 7.6), s * (W / 2 + 0.16), P + 12.8, 0);
+      add(MASON, box(0.3, 0.4, 7.6), s * (W / 2 + 0.16), P + 6.6, 0);
+      add(MASON, ring(SW + 0.7, SH + 0.35, SSP, 0.26, 0.26),
         s * (W / 2 + 0.02), P, 0, { ry: s * Math.PI / 2 });
     });
 
