@@ -73,8 +73,18 @@ export default {
   build(ctx) {
     const { add, box, cyl, sph, cone, torus, block, col, plane } = ctx;
     // khondalite is a grey-brown stone, not terracotta
-    const GREY = (() => { const mm = ctx.mat('granite'); if (!mm || !mm.clone) return 'granite'; const c = mm.clone(); c.color.setHex(0x8b8878); return c; })();
-    const PALE = (() => { const mm = ctx.mat('sandstoneBuff'); if (!mm || !mm.clone) return 'sandstoneBuff'; const c = mm.clone(); c.color.setHex(0x9d9a86); return c; })();
+    /* Khondalite, not granite: a warm brown-ochre that weathers grey-green, and
+       chlorite for the carved detail. Both were tinted grey off textured bases,
+       which halved them again — the temple rendered cold grey. */
+    const stoneTint = (col) => {
+      const mm = ctx.mat('cream');
+      if (!mm || !mm.clone) return 'cream';
+      const c = mm.clone();
+      c.color.setHex(col);
+      return c;
+    };
+    const GREY = stoneTint(0xa8815c);     // the khondalite mass
+    const PALE = stoneTint(0xc6a274);     // carved detail and the wheels
     const PI = Math.PI;
     const arch = ctx.arch, archFrame = ctx.archFrame;
 

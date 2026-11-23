@@ -471,6 +471,21 @@ contact sheets — regenerate them with the throwaway script in the session note
 
 ---
 
+### 19. Konark's stone
+
+The temple is **khondalite**, a warm brown-ochre that weathers grey-green, with
+chlorite for the carved detail. The module had it as `granite` tinted 0x8b8878
+and `sandstoneBuff` tinted 0x9d9a86 — grey hexes off textured bases, so it was
+halved twice over and the temple rendered cold grey.
+
+Both are tinted off `cream` now: 0xa8815c for the mass, 0xc6a274 for the carved
+detail and the wheels.
+
+Shore Temple was checked at the same time and left alone: Pallava granite really
+is a dark grey-brown, and the page reads correctly for what it is.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
