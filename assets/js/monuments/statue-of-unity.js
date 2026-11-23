@@ -36,38 +36,44 @@ export default {
     { name: 'Full', pos: [206, 118, 358], target: [0, 128, 0] },
     { name: 'The figure', pos: [158, 168, 322], target: [0, 152, 0] },
     { name: 'From the dam', pos: [0, 70, 420], target: [0, 130, 0] },
+    { name: 'The face', pos: [0, 221, 122], target: [0, 213, 0] },
     { name: 'Plinth', pos: [96, 46, 116], target: [0, 34, 0] },
     { name: 'Aerial', pos: [250, 360, 300], target: [0, 100, 0] }
   ],
   tour: [
     {
-      title: 'The Tallest Statue', deva: 'एकता की प्रतिमा',
-      text: 'The Statue of Unity stands on the island of Sadhu Bet in the Narmada, facing the Sardar Sarovar dam. At 182 metres it is the tallest statue in the world, dedicated to Sardar Vallabhbhai Patel, who brought the princely states into the Indian Union.',
+      title: 'The Tallest Statue', deva: 'विश्व की सबसे ऊँची',
+      text: 'Rising 182 metres above the Narmada, the Statue of Unity is the tallest statue on Earth; with its 58 metre plinth it reaches 240. It was unveiled on 31 October 2018, Patel\u2019s 143rd birth anniversary.',
       pos: [238, 132, 360], target: [0, 118, 0], time: 16.9
     },
     {
-      title: 'Bronze on Steel', deva: 'कांस्य',
-      text: 'The figure is a steel frame clad in about 1,700 tonnes of bronze panels over 25,000 tonnes of steel and concrete. It was designed by the sculptor Ram V. Sutar and built by Larsen & Toubro between 2013 and 2018.',
+      title: 'The Iron Man', deva: 'लौह पुरुष',
+      text: 'Vallabhbhai Patel, born in 1875, was India\u2019s first Deputy Prime Minister and Home Minister. He brought more than five hundred princely states into the new union, which earned him the name Iron Man, and the Bharat Ratna in 1991.',
       pos: [130, 150, 215], target: [0, 112, 0], time: 12
     },
     {
-      title: 'The Viewing Gallery', deva: 'दीर्घा',
-      text: 'A gallery at 153 metres holds two hundred people at a time, looking out over the reservoir and the Vindhya hills.',
+      title: 'The Walking Pose', deva: 'चलती मुद्रा',
+      text: 'Ram V. Sutar modelled him mid-stride, in dhoti and shawl, walking forward. The skin is about 1,700 tonnes of bronze in 565 large panels, over a concrete and steel core built by Larsen & Toubro between 2013 and 2018.',
+      pos: [96, 150, 150], target: [0, 118, 0], time: 11.4
+    },
+    {
+      title: 'The Viewing Gallery', deva: 'दर्शन दीर्घा',
+      text: 'A gallery sits inside the chest at about 153 metres, holding two hundred visitors at a time. From its windows the Sardar Sarovar dam and the Vindhya and Satpura hills lie along the horizon.',
       pos: [60, 170, 110], target: [0, 155, 0], time: 9.6
     },
     {
-      title: 'The Dam', deva: 'सरदार सरोवर',
-      text: 'The statue faces the Sardar Sarovar dam across the water, a deliberate pairing: the man who argued for the project, looking at it.',
-      pos: [0, 60, 300], target: [0, 110, 0], time: 17.6
-    },
-    {
-      title: 'The Island', deva: 'साधु बेट',
-      text: 'The plinth is a memorial complex with a museum, a garden and a memorial walk. The statue was unveiled on 31 October 2018, Patel’s birthday.',
+      title: 'Sadhu Bet', deva: 'साधु बेट',
+      text: 'The statue stands on Sadhu Bet, an island in the Narmada reached by a bridge from the mainland. The plinth is a memorial complex with a museum, gardens and a memorial walk along the water.',
       pos: [70, 40, 90], target: [0, 30, 0], time: 11
     },
     {
-      title: 'Night', deva: 'रात्रि',
-      text: 'Floodlit after dark, the bronze reads almost black against the sky, and the dam carries a line of lights.',
+      title: 'Sardar Sarovar', deva: 'सरदार सरोवर',
+      text: 'Three kilometres away the Sardar Sarovar dam spans the Narmada: a concrete gravity dam 1,210 metres long and 163 metres from its deepest foundation. In the monsoon its spillway gates open in great white plumes.',
+      pos: [0, 60, 300], target: [0, 110, 0], time: 17.6
+    },
+    {
+      title: 'Light of Unity', deva: 'एकता की ज्योति',
+      text: 'After dark the floodlights take the bronze, the gallery glows at the chest, and the dam carries a line of lights across the water. This concludes the tour.',
       pos: [140, 96, 210], target: [0, 102, 0], time: 21.2
     }
   ],

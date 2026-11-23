@@ -112,9 +112,13 @@ height (20 m published vs ~14 m in the photograph).
 
 ## Open work
 
-> **Statue of Unity is out of scope for now.** The user is having it rebuilt by
-> another model alongside the Taj and will send the finished page. Do not touch
-> `statue-of-unity.js` or its page until that arrives.
+> **Statue of Unity — the other model's page was reviewed and rejected.** It
+> arrived as a self-contained Taj-style scene (142 KB, three.js from a CDN). Its
+> figure is a blocky robot: a faceless blob head, panel shoulders, no readable
+> shawl, and in the postcard preset the statue **floats above its plinth**. Its
+> scene has nothing the engine module lacks (dam, river, gardens, tour, weather
+> are all already there). What was worth taking — a better-written tour and a
+> close face view — has been ported. The engine module stays.
 
 ### 1. ~~Taj night floodlights~~ — done and seen
 
@@ -501,6 +505,35 @@ demo page's credit block.
 
 `docs/preview.jpg` is the README hero and is a *photograph*, not a render — it
 does not go stale with the models.
+
+---
+
+### 21. The other model's statue page — what was taken, what was rejected
+
+Reviewed the 142 KB self-contained page produced elsewhere. Rendered it at its
+own presets (`postcard`, `face`, `profile`, `aerial`).
+
+**Rejected:** the figure. It is a blocky humanoid — faceless rounded head with a
+single nose bump, shoulders as separate panels, a segmented lower body, and in
+`postcard` the statue floats clear of its plinth. The scene is no richer than
+the engine module's: dam, river, gardens, tour, weather and floodlights all
+already exist here.
+
+**Taken:**
+
+- the **tour**, rewritten from 6 stops to 7 with better copy: the Iron Man
+  history, the walking pose with the 565 panels and 1,700 t of bronze, Sadhu
+  Bet, the gallery at 153 m, the dam, and the light of unity
+- one **corrected fact**: their dam height of 138 m is the head above the
+  riverbed; the figure that matters is **163 m from the deepest foundation**,
+  with the dam 1,210 m long (SSNNL, NCA)
+- a **'The face' view** at [0, 221, 122] → [0, 213, 0], so the sculpted face can
+  actually be looked at — the page had no way to see it
+
+Two things to keep in mind for the next file that arrives: it is worth rendering
+someone else's page at *its own* presets before judging it, and a pasted page
+dropped into `monuments/` for a look must be deleted again — `linkcheck.py`
+counted 27 pages until the probe was removed.
 
 ---
 
