@@ -156,11 +156,15 @@ tried and none moved it; the answer was in the light readings.
 **Do not chase this again.** If it must be fixed, the honest route is a global
 ambient/grade decision, not a per-page hack.
 
-### 4. Detail shortfalls, in priority order
+### 4. Detail shortfalls — all closed
 
-| Monument | What's missing |
-|---|---|
-| CSMT | the carved menagerie is absent |
+| Monument | Was missing | Now |
+|---|---|---|
+| Kandariya | ~870 sculptures as two registers of flat boxes | seven-piece figures in warm-shadowed niches |
+| CSMT | the carved menagerie | lions, peacocks, monkeys, elephants and snakes on the gable apexes and in the great arch's spandrels |
+| Golden Temple | gold read matte | gold at metalness 0.72 reads as leaf |
+| Konark | flat spokes | tapered beams with medallions |
+| Meenakshi | four boxes per figure | seven-piece figures in a recessed register |
 
 ---
 

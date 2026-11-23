@@ -139,6 +139,64 @@ export default {
       }
     };
 
+    /* ---- the menagerie ---------------------------------------------------
+       Stevens peopled the gables, capitals and spandrels with carved animals:
+       lions, tigers, monkeys, peacocks, elephants and snakes. The page had
+       none of them, which is the one thing that separates this building from
+       any other Gothic terminus. Each is a handful of primitives, sized to
+       read at 40 m and to be found at 8 m. */
+    const beast = (kind, bx, by, bz, ry, sc = 1) => {
+      const cs = Math.cos(ry), sn = Math.sin(ry);
+      const put = (k, geo, lx, ly, lz, o) => {
+        add(k, geo, bx + (lx * cs + lz * sn) * sc, by + ly * sc, bz + (-lx * sn + lz * cs) * sc,
+          Object.assign({ ry }, o || {}));
+      };
+      if (kind === 'lion') {
+        put(ST, box(0.86, 0.34, 0.32), 0, 0.30, 0);                 // body
+        put(ST, sph(0.20, 8), 0.44, 0.40, 0);                       // head
+        put(ST, box(0.20, 0.10, 0.26), 0.58, 0.36, 0);              // muzzle
+        put(ST, cone(0.13, 0.22, 5), 0.34, 0.56, 0);                // mane crest
+        for (const sx of [-0.28, 0.26]) for (const sz of [-0.13, 0.13]) {
+          put(ST, cyl(0.045, 0.05, 0.24, 4), sx, 0.12, sz);         // legs
+        }
+        put(ST, cyl(0.035, 0.03, 0.44, 4), -0.44, 0.34, 0, { rz: 0.7 });  // tail
+      } else if (kind === 'peacock') {
+        put(ST, cyl(0.16, 0.20, 0.40, 6), 0, 0.34, 0, { rx: 0.3 });  // body
+        put(ST, cyl(0.06, 0.07, 0.30, 5), 0.16, 0.56, 0, { rz: -0.5 }); // neck
+        put(ST, sph(0.075, 8), 0.26, 0.68, 0);                      // head
+        put(TR, cone(0.05, 0.12, 4), 0.28, 0.76, 0);                // crest
+        put(TR, cyl(0.46, 0.46, 0.04, 14), -0.30, 0.44, 0, { rx: PI / 2, rz: 0.2 }); // tail fan
+        for (let i = 0; i < 5; i++) {
+          const a = -0.9 + i * 0.45;
+          put(RD, box(0.05, 0.40, 0.03), -0.30 + Math.sin(a) * 0.22, 0.44 + Math.cos(a) * 0.22, 0.03);
+        }
+        put(ST, cyl(0.03, 0.03, 0.20, 4), 0, 0.12, 0.06);           // legs
+        put(ST, cyl(0.03, 0.03, 0.20, 4), 0, 0.12, -0.06);
+      } else if (kind === 'monkey') {
+        put(ST, sph(0.17, 8), 0, 0.30, 0, { sy: 1.3 });              // seated body
+        put(ST, sph(0.13, 8), 0, 0.52, 0.02);                        // head
+        put(ST, sph(0.06, 6), 0, 0.46, 0.10);                        // muzzle
+        put(ST, cyl(0.035, 0.03, 0.34, 4), -0.16, 0.34, -0.04, { rz: 0.9 }); // tail
+        put(ST, cyl(0.035, 0.03, 0.22, 4), -0.26, 0.20, -0.02, { rz: 0.2 });
+        put(ST, cyl(0.03, 0.03, 0.16, 4), 0.12, 0.16, 0.08, { rx: 0.6 });   // arm
+      } else if (kind === 'elephant') {
+        put(ST, box(0.86, 0.44, 0.40), 0, 0.36, 0);                  // body
+        put(ST, sph(0.22, 8), 0.46, 0.40, 0);                        // head
+        put(ST, cyl(0.05, 0.08, 0.30, 5), 0.58, 0.24, 0, { rz: 0.5 });  // trunk
+        put(ST, box(0.20, 0.22, 0.06), 0.42, 0.44, 0.20);            // ears
+        put(ST, box(0.20, 0.22, 0.06), 0.42, 0.44, -0.20);
+        for (const sx of [-0.26, 0.26]) for (const sz of [-0.14, 0.14]) {
+          put(ST, cyl(0.06, 0.065, 0.26, 4), sx, 0.13, sz);
+        }
+      } else {                                                        // snake
+        for (let i = 0; i < 4; i++) {
+          put(ST, cyl(0.09, 0.11, 0.16, 6), -0.24 + i * 0.16, 0.16 + i * 0.10, 0, { rz: 0.6 });
+        }
+        put(ST, sph(0.10, 8), 0.28, 0.52, 0, { sx: 1.4, sy: 0.7 });
+      }
+    };
+    const BESTIARY = ['lion', 'peacock', 'monkey', 'elephant', 'snake'];
+
     /* a crocketed gable: tympanum of stacked boxes behind two raking edges */
     const gable = (cx, cy, cz, w, h, dep, key, trim) => {
       const steps = 5;
@@ -183,7 +241,7 @@ export default {
     add(RD, box(L - 3, 0.4, 0.7), 0, CORN + 2.2, ZF - D / 2 - 2.5);
 
     /* ---- ten gabled bays: three-storey arcade ---------------------------- */
-    BAY.forEach((bx) => {
+    BAY.forEach((bx, BI) => {
       [-1, 1].forEach((s) => {
         const x = s * bx;
         // ground: a deep arcade, two wide arches per bay
@@ -201,6 +259,8 @@ export default {
         add(RD, box(6.0, 0.34, 0.5), x, 19.9, ZF + 0.1);
         // gable
         gable(x, CORN + 1.3, ZF - 0.4, 6.6, 3.5, 1.1, ST, TR);
+        // the beast at the apex of each gable
+        beast(BESTIARY[(BI + s + 8) % BESTIARY.length], x, CORN + 4.9, ZF + 0.2, 0, 0.85);
         // buttress piers between the bays
         add(ST, box(0.9, CORN - PL - 1.0, 1.0), x + s * 3.4, PL, ZF + 0.3);
         add(TR, box(1.2, 0.4, 1.3), x + s * 3.4, CORN - 1.1, ZF + 0.3);
@@ -231,6 +291,9 @@ export default {
       add(OP, arch(6.0, 13.0, 0.5), 0, PL, TZ - 0.1);
       add(TR, archFrame(6.9, 13.7, 0.45, 0.55), 0, PL, TZ + 0.05);
       add(RD, box(8.0, 0.45, 0.7), 0, PL + 14.3, TZ + 0.2);
+      // a beast in each spandrel of the great arch
+      beast('lion', -4.4, PL + 10.6, TZ + 0.1, 0, 1.0);
+      beast('peacock', 4.4, PL + 10.6, TZ + 0.1, PI, 1.0);
       // corner buttresses, full height of the shaft
       [-1, 1].forEach((s) => {
         add(ST, cyl(1.25, 1.45, 20.5, 8), s * 5.3, PL, TZ - 1.2);
