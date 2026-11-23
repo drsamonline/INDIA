@@ -129,10 +129,58 @@ export default {
     ];
     // outward normal of a face, and its in-plane direction
     const NO = (ry) => [Math.sin(ry), Math.cos(ry)];
+
+    /* ---- the lotus-petal fringe ------------------------------------------
+       A row of pointed petals hangs under every cornice and round every
+       balcony at the Charminar, and it is most of what the stucco ornament is
+       made of. Each petal is a four-sided pyramid, six triangles, and a whole
+       row is ONE geometry: the boot time is spent on geometry items, not on
+       triangles (§30). Items are [x, y, z, ry] in local coordinates. */
+    const petalField = (items, w, h, d, key, ox = 0, oz = 0) => {
+      const pos = [], uv = [], idx = [];
+      for (const [px, py, pz, ry] of items) {
+        const c = Math.cos(ry), s2 = Math.sin(ry);
+        const base = pos.length / 3;
+        for (const [lx, lz] of [[-w / 2, -d / 2], [w / 2, -d / 2], [w / 2, d / 2], [-w / 2, d / 2]]) {
+          pos.push(px + lx * c + lz * s2, py, pz - lx * s2 + lz * c);
+          uv.push(0.5, 1);
+        }
+        pos.push(px, py - h, pz);
+        uv.push(0.5, 0);
+        for (let k = 0; k < 4; k++) idx.push(base + k, base + ((k + 1) % 4), base + 4);
+        idx.push(base, base + 1, base + 2, base, base + 2, base + 3);
+      }
+      const g = new T3.BufferGeometry();
+      g.setAttribute('position', new T3.Float32BufferAttribute(pos, 3));
+      g.setAttribute('uv', new T3.Float32BufferAttribute(uv, 2));
+      g.setIndex(idx);
+      g.computeVertexNormals();
+      add(key, g, ox, 0, oz);
+    };
+    // a fringe along one face of the block
+    const fringeFace = (f, y, off, span, n, w, h) => {
+      const items = [];
+      const ry = f.ry, nx = Math.sin(ry), nz = Math.cos(ry);
+      for (let i = 0; i < n; i++) {
+        const ox = (i - (n - 1) / 2) * (span / n);
+        items.push([f.x + Math.cos(ry) * ox + nx * off, y, f.z - Math.sin(ry) * ox + nz * off, ry]);
+      }
+      petalField(items, w, h, 0.16, trim);
+    };
     faces.forEach((f) => {
       const ry = f.ry;
       const [nx, nz] = NO(ry);
       const at = (ox, off) => [f.x + Math.cos(ry) * ox + nx * off, f.z - Math.sin(ry) * ox + nz * off];
+
+      /* The great arch is cut through the pierced wall, so its edge is raw.
+         Two concentric hood moulds give it the deep stepped portal the
+         building actually has — the plain cut edge is what made the portal
+         look like a hole in a cardboard box. */
+      [[ARCH_W + 1.5, ARCH_H + 0.75, 0.55, 0.50],
+       [ARCH_W + 2.9, ARCH_H + 1.45, 0.34, 0.44]].forEach(([w2, h2, dp, th]) => {
+        const [hx, hz] = at(0, 0.10);
+        add(trim, archFrame(w2, h2, dp, th), hx, 0.02, hz, { ry });
+      });
 
       // ornamental cresting rising from the apex of the arch to the cornice
       const [ax, az] = at(0, 0.34);
@@ -147,6 +195,15 @@ export default {
         ctx.inlay(wall, trim, 1.30, 1.30, mx, 12.4, mz + 0.06, { n: 1, motif: 'roundel', depth: 0.05, ry });
       });
 
+      // a row of blind arches in each spandrel. The Charminar's spandrels are
+      // covered in small niches; bare plaster beside the great arch is the
+      // plainest thing on the building
+      [-1, 1].forEach((sgn) => {
+        const [bx, bz] = at(sgn * (ARCH_W / 2 + 3.6), 0.14);
+        ctx.carvedBand(trim, 3.0, 1.7, bx, 15.9, bz,
+          { n: 3, motif: 'arch', depth: 0.18, ry, back: wall });
+      });
+
       // pilaster strips flanking the arch
       [-1, 1].forEach((sgn) => {
         const [px, pz] = at(sgn * (ARCH_W / 2 + 0.60), 0.22);
@@ -157,6 +214,7 @@ export default {
     /* ---- cornice at the head of the arch storey ---- */
     add(trim, box(SIDE + 1.5, 0.55, SIDE + 1.5), 0, H1 - 0.1, 0);
     add(wall, box(SIDE + 0.9, 0.30, SIDE + 0.9), 0, H1 + 0.45, 0);
+    faces.forEach((f) => fringeFace(f, H1 - 0.36, 0.80, SIDE + 1.3, 26, 0.26, 0.42));
 
     /* ===================================================================
        storey 2 — the arcaded gallery, with a clock on each face
@@ -185,6 +243,7 @@ export default {
        storey 3 — the upper arcade, set back
        =================================================================== */
     add(trim, box(SIDE + 1.9, 0.55, SIDE + 1.9), 0, H2 - 0.05, 0);
+    faces.forEach((f) => fringeFace(f, H2 - 0.34, 1.00, SIDE + 1.7, 26, 0.26, 0.40));
     block(wall, SIDE - 0.6, H3 - H2 - 0.5, SIDE - 0.6, 0, H2 + 0.5, 0);
     faces.forEach((f) => {
       const ry = f.ry;
@@ -203,6 +262,7 @@ export default {
        storey 4 — the pierced parapet
        =================================================================== */
     add(trim, box(SIDE - 0.2, 0.40, SIDE - 0.2), 0, H3 - 0.05, 0);
+    faces.forEach((f) => fringeFace(f, H3 - 0.30, -0.10, SIDE - 0.4, 22, 0.22, 0.34));
     const pW = SIDE - 1.2;
     faces.forEach((f) => {
       const ry = f.ry;
@@ -332,6 +392,14 @@ export default {
         add(white, box(0.16, 0.34, 0.16), cx + Math.cos(a) * (rOut - 0.10), y + 1.20, cz + Math.sin(a) * (rOut - 0.10), { ry: -a });
       }
       add(trim, cyl(rOut + 0.02, rOut + 0.02, 0.14, 24), cx, y + 1.42, cz);
+      // the petal fringe under the slab: the detail that makes a minaret read
+      // as a minaret rather than as a pipe with rings on it
+      const ring = [];
+      for (let i = 0; i < 24; i++) {
+        const a = (i / 24) * TAU;
+        ring.push([Math.cos(a) * (rOut - 0.14), y + 0.01, Math.sin(a) * (rOut - 0.14), -a]);
+      }
+      petalField(ring, 0.22, 0.36, 0.15, trim, cx, cz);
     }
 
     [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => minaret(sx * MC, sz * MC));

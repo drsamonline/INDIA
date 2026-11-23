@@ -46,7 +46,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§32):** Qutb Minar's inscription bands — six on the first storey,
+**Latest run (§33):** Charminar's stucco ornament — a lotus-petal fringe under
+the three cornices and round every minaret balcony, blind-arch rows in the
+spandrels, and two hood moulds round each great arch. 80k → 87k triangles, boot
+50 s, `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
+
+**Previous run (§32):** Qutb Minar's inscription bands — six on the first storey,
 two each on the second and third, one on the fourth — rebuilt as projecting
 courses carrying a connected row of raised letters, one geometry per band. The
 script is **naskh, not Kufic**; the roadmap had it wrong. 91k → 102k triangles,
@@ -900,6 +905,35 @@ committing, not after.
 
 Still soft: the bands stand a little proud of the fluting, where the real ones
 are flush, and the letters are a rhythm rather than a text.
+
+---
+
+### 33. Charminar — the stucco, and an offset measured from the wrong place
+
+The ornament was frames and discs on bare plaster. What the building is actually
+made of, at the scale the site is viewed from, is the lotus-petal fringe: a row
+of pointed petals under every cornice and round every balcony.
+
+| Added | Where |
+|---|---|
+| lotus-petal fringe | under the cornices of all three storeys, and a ring of 24 round every minaret balcony — the detail that makes a minaret read as a minaret rather than as a pipe with rings on it |
+| blind-arch rows | the spandrels either side of each great arch (`carvedBand`, motif `arch`); bare plaster beside the arch was the plainest thing on the building |
+| two hood moulds | round each great arch, whose edge was a raw cut through the pierced wall — the portal read as a hole in a cardboard box |
+
+A petal is a four-sided pyramid, six triangles, and a whole row is one geometry
+(§30 again). The fringe rows cost 1.7k triangles each and 12 geometry items
+between them.
+
+**The mistake worth recording:** `fringeFace` took an offset and added it to the
+face's own coordinate, which already sits on the face — so every fringe was
+placed a half-width out in mid-air, and the home view showed rows of dark dashes
+floating beside the tower. When a row of detail appears detached from the thing
+it belongs to, check whether its offset is measured from the face or from the
+centre.
+
+Still soft: the archivolt has no petal fringe of its own (the real ones do), the
+spandrel rows are three niches where the building has many, and the plaster
+itself is still one flat colour.
 
 ---
 
