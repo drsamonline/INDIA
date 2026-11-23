@@ -29,7 +29,7 @@ export default {
     { name: 'Shikhara', pos: [20, 38, 30], target: [0, 27, -8] },
     { name: 'Carving', pos: [12, 10, 22], target: [0, 8, 6] },
     { name: 'Platform', pos: [-30, 9, 30], target: [0, 9, 0] },
-    { name: 'From the north', pos: [-26, 15, -16], target: [0, 16, 0] }
+    { name: 'From the north', pos: [-70, 17, -42], target: [0, 17, 0] }
   ],
   tour: [
     {

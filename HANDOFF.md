@@ -569,10 +569,21 @@ Fixed from it: Mahabodhi's "The tower" (framed 24 m of 52) and "From the east"
 (34 of 52), CSMT's "The Clock Tower" (32 of 48.8), Somnath's "Fifty Metres"
 (35 of 50), and the statue's "Light of Unity" (184 of 240).
 
-Two things learned: a 5 % margin is not enough when the camera looks up at the
-subject — the tower was still clipped at 51.7 m of 52 until the frame was 64 m
-tall; and a "The tower" view that shows half the tower is a defect, while a
-"Carving" view that shows a metre of wall is not.
+Two more of the same class: Kandariya's "From the north" (22 m of 31) and
+Charminar's "Fifty-Six Metres" (35 of 56).
+
+Three things learned:
+
+- a 5 % margin is not enough when the camera looks up at the subject — the tower
+  was still clipped at 51.7 m of 52 until the frame was 64 m tall
+- the **model is often taller than the published figure**: Kandariya's 31 m
+  temple sits on a jagati platform, so framing to 31 m still cut the finial.
+  Pull back until the render says so, not until the arithmetic does
+- a "The tower" view that shows half the tower is a defect, while a "Carving"
+  view that shows a metre of wall is not
+
+Of the 122 flags, these seven were the whole-subject ones. The rest are
+deliberate close-ups and should be left alone.
 
 ---
 

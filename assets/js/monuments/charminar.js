@@ -46,7 +46,7 @@ export default {
     {
       title: 'Fifty-Six Metres', deva: 'मीनारें',
       text: 'The four minarets rise to 56 metres, each with balconies ringed by pierced screens, a bulbous dome and a finial. The Charminar was the tallest building in Hyderabad for 396 years, until 1987.',
-      pos: [30, 46, 34], target: [0, 44, 0], time: 16.6
+      pos: [61, 48, 69], target: [0, 44, 0], time: 16.6
     },
     {
       title: 'Laad Bazaar', deva: 'लाड बाज़ार',
