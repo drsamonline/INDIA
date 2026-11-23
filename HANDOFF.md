@@ -376,6 +376,30 @@ camera angle; two of my checks looked reversed because of where the camera was.
 
 ---
 
+### 15. The tint audit, and two more that read wrong
+
+`tools/tintcheck.py` scans every module for `ctx.mat('<name>')` used as a clone
+base and flags the ones whose material carries a **texture map** — the map
+multiplies the colour, so the hex you write is roughly twice what you get. Eight
+clones are on textured bases; most are deliberate (a dark niche, a grey). The
+check is there so the next one is caught before it ships.
+
+Two more pages read wrong on the fresh contact sheet:
+
+- **Sanchi** — the great stupa's plaster dome was yellow-green. It was `plaster`
+  (textured, warm) under a huge `foliage` mound that bounced green into it. The
+  dome is a pale untextured tint now.
+- **Jantar Mantar** — the instruments were saturated pink-red, because the
+  materials were literally named `sandstonePink` and `sandstoneRed`. They are
+  lime plaster over rubble: pale warm ochre. Both are tinted off `cream` now.
+
+Still on the list: **Meenakshi's gopurams** read as striped office blocks at
+distance — the painted figure registers do not carry at 560 px. That needs the
+tier walls broken up (darker recess bands, more colour contrast), not another
+colour pass.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

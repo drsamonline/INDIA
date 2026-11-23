@@ -70,7 +70,17 @@ export default {
     const { add, box, cyl, sph, torus, dome, arch, archFrame, block, col, chhatri, lathe } = ctx;
     const rng = ctx.rng;
 
-    const BODY = 'sandstonePink', BODY2 = 'sandstoneRed', SCALE = 'marble';
+    /* The instruments are lime plaster over rubble, a pale warm ochre — not
+       the saturated pink-red sandstone the materials named. Cloned from
+       'cream', which has no texture map to halve the colour. */
+    const tintMat = (col) => {
+      const mm = ctx.mat('cream');
+      if (!mm || !mm.clone) return 'cream';
+      const c = mm.clone();
+      c.color.setHex(col);
+      return c;
+    };
+    const BODY = tintMat(0xd9c49b), BODY2 = tintMat(0xc8ad82), SCALE = 'marble';
     const PL = 'plaster', PLW = 'plasterWhite', LAWN = 'grass', METAL = 'bronze';
 
     /* ---------------------------------------------------------------- utils */

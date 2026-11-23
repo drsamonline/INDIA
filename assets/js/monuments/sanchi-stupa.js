@@ -75,7 +75,18 @@ export default {
   build(ctx) {
     const { add, box, cyl, sph, cone, torus, block, col, plane, dome } = ctx;
     // the site is pale sandstone, not orange
-    const PALE = (() => { const mm = ctx.mat('sandstoneBuff'); if (!mm || !mm.clone) return 'sandstoneBuff'; const c = mm.clone(); c.color.setHex(0xdfd3b4); return c; })();
+    // Cloned from 'cream', which carries no texture map: a textured base
+    // multiplies the hex down and warms it, which is why the stupa's plaster
+    // came out yellow-green under the grass mound's bounce.
+    const tintMat = (col) => {
+      const mm = ctx.mat('cream');
+      if (!mm || !mm.clone) return 'cream';
+      const c = mm.clone();
+      c.color.setHex(col);
+      return c;
+    };
+    const PALE = tintMat(0xdfd3b4);
+    const DOME = tintMat(0xe9e3d6);
     const PI = Math.PI;
     const arch = ctx.arch;
 
@@ -109,7 +120,7 @@ export default {
     add('foliage', cyl(DR + 1.6, DR + 2.4, 0.4, 44), 0, 0.1, 0);
 
     /* ---------- the anda: 36.6 m across, summit at 16.46 m -------------- */
-    add('plaster', dome(AR, AH, 52), 0, DRUM, 0);
+    add(DOME, dome(AR, AH, 52), 0, DRUM, 0);
     add('granite', cyl(AR + 0.05, AR + 0.15, 0.35, 52), 0, DRUM, 0);    // base edging
     add('granite', cyl(AR - 0.35, AR - 0.25, 0.22, 52), 0, DRUM + 0.35, 0);
 
