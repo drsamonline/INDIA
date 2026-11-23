@@ -156,7 +156,6 @@ ambient/grade decision, not a per-page hack.
 
 | Monument | What's missing |
 |---|---|
-| Konark | wheels have flat spokes |
 | Kandariya | ~870 sculptures suggested by two registers |
 | CSMT | the carved menagerie is absent |
 | Golden Temple | gold reads matte |
@@ -200,6 +199,23 @@ Four faults, four fixes:
 Numbers: 41k triangles, boot 37 s. The scene dump (`tools/` has no equivalent;
 see the session notes) confirmed the figure is one merged mesh and the shawl a
 second — worth knowing before hunting for a stray mesh.
+
+---
+
+### 7. Konark's wheels — done
+
+The wheels were eight flat 0.17 m bars inside a thin hoop: a bicycle wheel, not
+three metres of carved stone. Now each spoke is a tapered beam (0.09 at the rim,
+0.15 at the hub), each half-spoke carries a medallion at mid-span, the hub is a
+twelve-petal lotus rosette on a boss, the rim is 0.22 thick with a second ring
+inside it, and the beaded rim went from sixteen blocks to twenty-four.
+
+One false start: spandrel rosettes in the spaces between the spokes filled the
+openings and the wheel read as a solid gold disc. They were cut. A wheel needs
+its holes.
+
+61k triangles before, 96k after, boot 46 s. Judge a wheel from about 6 m — the
+named 'Wheels' view is far enough back that the medallions are three pixels.
 
 ---
 

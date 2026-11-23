@@ -107,19 +107,40 @@ export default {
 
     /* ---------- 24 wheels, twelve to a flank --------------------------- */
     const WR = 1.485;                 // 2.97 m diameter
+    /* A Konark wheel is not a hoop with bars in it: the spokes are tapered
+       carved beams, each half carries a medallion at mid-span, the spaces
+       between them are filled with rosettes, and the hub is a lotus. The old
+       wheel was eight flat 0.17 m bars and a thin rim, which read as a bicycle
+       wheel rather than three metres of stone. */
     function wheel(cx, cy, cz, side) {
-      const x = cx * side;
-      add(PALE, torus(WR, 0.17, 6, 24), x, cy, cz, { ry: PI / 2 });
-      add(GREY, torus(WR * 0.79, 0.09, 5, 20), x, cy, cz, { ry: PI / 2 });
-      add(PALE, cyl(0.40, 0.40, 0.55, 10), x, cy, cz, { rz: PI / 2 });
-      add('grey', cyl(0.20, 0.20, 0.68, 8), x, cy, cz, { rz: PI / 2 });
-      for (let i = 0; i < 8; i++) {
-        add(PALE, box(0.17, WR * 1.5, 0.13), x, cy, cz, { rx: (i * PI) / 8 });
+      const x = cx * side, out = side;
+      // the rim, a thick carved band with a second ring inside it
+      add(PALE, torus(WR, 0.22, 6, 26), x, cy, cz, { ry: PI / 2 });
+      add(GREY, torus(WR * 0.80, 0.11, 5, 22), x, cy, cz, { ry: PI / 2 });
+      // the hub: a lotus rosette on a boss
+      add(PALE, cyl(0.52, 0.52, 0.44, 12), x, cy, cz, { rz: PI / 2 });
+      add('grey', cyl(0.64, 0.64, 0.16, 12), x + out * 0.18, cy, cz, { rz: PI / 2 });
+      for (let i = 0; i < 12; i++) {
+        const a = (i / 12) * PI * 2;
+        add('grey', cyl(0.075, 0.115, 0.34, 5),
+          x + out * 0.20, cy + Math.cos(a) * 0.46, cz + Math.sin(a) * 0.46, { rx: a });
       }
-      // beaded rim, sixteen blocks
-      for (let i = 0; i < 16; i++) {
-        const a = (i / 16) * PI * 2;
-        add('grey', box(0.26, 0.24, 0.38), x, cy + Math.cos(a) * WR, cz + Math.sin(a) * WR, { rx: a });
+      add(PALE, cyl(0.22, 0.22, 0.64, 8), x, cy, cz, { rz: PI / 2 });
+      // eight spokes: tapered beams, with a medallion half way out on each
+      for (let i = 0; i < 8; i++) {
+        const a = (i * PI) / 8;
+        add(PALE, cyl(0.09, 0.15, WR * 1.52, 6), x, cy, cz, { rx: a });
+        for (const s of [1, -1]) {
+          const d = WR * 0.46 * s;
+          const py = cy + Math.cos(a) * d, pz = cz + Math.sin(a) * d;
+          add('grey', cyl(0.17, 0.17, 0.08, 8), x + out * 0.10, py, pz, { rz: PI / 2 });
+          add(PALE, cyl(0.075, 0.075, 0.12, 6), x + out * 0.13, py, pz, { rz: PI / 2 });
+        }
+      }
+      // beaded rim, twenty-four blocks
+      for (let i = 0; i < 24; i++) {
+        const a = (i / 24) * PI * 2;
+        add('grey', box(0.28, 0.26, 0.42), x, cy + Math.cos(a) * WR, cz + Math.sin(a) * WR, { rx: a });
       }
     }
     for (let side = -1; side <= 1; side += 2) {
