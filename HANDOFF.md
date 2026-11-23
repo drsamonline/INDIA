@@ -12,7 +12,7 @@ page per monument plus a landing page that links them all.
 - **Repo:** `https://github.com/drsamonline/INDIA` (public, branch `main`)
 - **Live:** `https://drsamonline.github.io/INDIA/` (GitHub Pages)
 - **Licence:** CC BY-NC 4.0, author **Dr Sohil Momin**
-- **Head of main:** `HEAD_SHA`
+- **Head of main:** `a8518b6`
 - **Working tree:** clean
 - **CI:** green on every push (`site` + `pages-build-deployment`)
 
