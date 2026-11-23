@@ -437,6 +437,24 @@ repo-wide key rename.
 
 ---
 
+### 17. Golden Temple wings, and the tint trap's fourth and fifth victims
+
+**Parikrama.** The wings were 9.2 m blocks with square-headed slots. They are two
+full storeys of white marble arcade now, 12.4 m to the cornice, with **arched**
+openings (arch + archFrame) on both storeys, a string course, a parapet and the
+chhatris riding up with it. 74k -> 151k triangles: arches cost more than boxes.
+
+**Somnath and CSMT** were both still tinted off **textured** bases, so their
+stone kept rendering darker than the hex however the hex was set. Both are
+cloned from `cream` now. That is the trap's fourth and fifth victim — Hawa Mahal
+and the Gateway were the first two. Somnath's default hour also moved 10.6 ->
+15.4; at 10.6 the pale stone read grey-brown from the home camera.
+
+`tools/tintcheck.py` still reports 7 clones on textured bases, all deliberate
+(a dark niche, a grey roof, Konark's stone). Run it after any colour work.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

@@ -368,12 +368,14 @@ export default {
       block('marbleWarm', horiz ? len : PR, 0.5, horiz ? PR : len,
         horiz ? 0 : s * (inner + PR / 2), -0.5, horiz ? s * (inner + PR / 2) : 0);
 
-      // the wing itself: a two-storey white marble block with a parapet
-      block('marble', w, 9.2, d, cx, 0, cz);
-      add('marble', box(w + 0.8, 0.55, d + 0.8), cx, 9.45, cz);       // cornice
-      block('marbleWarm', w - 0.4, 1.0, d - 0.4, cx, 9.2, cz);        // parapet
-      add('marble', box(w - 0.1, 0.22, d - 0.1), cx, 10.2, cz);
-      add('marble', box(w + 0.4, 0.2, d + 0.4), cx, 5.1, cz);         // string course
+      /* The wings were 9.2 m blocks with square-headed slots. The parikrama
+         buildings are two full storeys of white marble arcade, ~12.5 m to the
+         cornice, with arched openings and a balustraded parapet. */
+      block('marble', w, 12.4, d, cx, 0, cz);
+      add('marble', box(w + 0.8, 0.55, d + 0.8), cx, 12.65, cz);      // cornice
+      block('marbleWarm', w - 0.4, 1.0, d - 0.4, cx, 12.4, cz);       // parapet
+      add('marble', box(w - 0.1, 0.22, d - 0.1), cx, 13.4, cz);
+      add('marble', box(w + 0.4, 0.2, d + 0.4), cx, 6.4, cz);         // string course
 
       // arcade facing the tank: tall lower arches, small windows above
       const n = Math.round(len / 5.6);
@@ -382,13 +384,16 @@ export default {
         const t = -len / 2 + (i + 0.5) * (len / n);
         const px = horiz ? t : s * (walkOut + 0.25);
         const pz = horiz ? s * (walkOut + 0.25) : t;
-        add('dark', box(3.9, 5.2, 0.5), px, 2.7, pz, { ry });
-        add('marble', box(4.6, 0.4, 0.6), px, 5.45, pz, { ry });
-        add('dark', box(2.0, 2.4, 0.35), px, 7.4, pz, { ry });
-        add('marble', box(2.5, 0.25, 0.45), px, 8.7, pz, { ry });
+        // ground arcade: an arch, not a slot, in a marble surround
+        add('dark', arch(3.4, 4.9, 0.5), px, 0.3, pz - 0.12, { ry });
+        add('marble', archFrame(4.2, 5.5, 0.30, 0.5), px, 0.3, pz - 0.04, { ry });
+        // upper storey: a smaller arched window over each bay
+        add('dark', arch(1.9, 2.7, 0.35), px, 7.3, pz - 0.12, { ry });
+        add('marble', archFrame(2.5, 3.2, 0.24, 0.4), px, 7.3, pz - 0.04, { ry });
+        add('marble', box(2.9, 0.22, 0.5), px, 10.7, pz, { ry });
         const tm = t + (len / n) / 2;
         if (i < n - 1) {
-          add('marble', box(0.7, 9.0, 0.7), horiz ? tm : s * (walkOut + 0.3), 4.5,
+          add('marble', box(0.7, 12.2, 0.7), horiz ? tm : s * (walkOut + 0.3), 6.1,
             horiz ? s * (walkOut + 0.3) : tm);
         }
       }
@@ -397,9 +402,9 @@ export default {
         const t = -len / 2 + (i + 0.5) * (len / Math.max(2, Math.round(len / 22)));
         const px = horiz ? t : s * (walkOut + WING / 2);
         const pz = horiz ? s * (walkOut + WING / 2) : t;
-        add('marble', cyl(0.95, 1.05, 0.9, 10), px, 10.6, pz);
-        add('marble', dome(0.98, 1.15, 14), px, 11.05, pz);
-        add(GD, sph(0.09, 6), px, 12.35, pz);
+        add('marble', cyl(0.95, 1.05, 0.9, 10), px, 13.6, pz);
+        add('marble', dome(0.98, 1.15, 14), px, 14.05, pz);
+        add(GD, sph(0.09, 6), px, 15.35, pz);
       }
     });
 

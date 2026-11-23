@@ -81,11 +81,11 @@ export default {
       if (rough !== undefined) c.roughness = rough;
       return c;
     };
-    const ST = tint('sandstoneBuff', 0xe6d3a6);   // Kurla stone, a pale warm buff
+    const ST = tint('cream', 0xd8bd88);           // Kurla stone — off an untextured base, or the map halves it
     const TR = 'white';                           // white stone dressings
-    const RD = tint('sandstoneBuff', 0xbfa074);   // string courses, in a deeper stone
+    const RD = tint('cream', 0xb2946a);           // string courses, in a deeper stone
     const OP = 'dark';
-    const RF = tint('grey', 0x6b6660, 0.9);       // grey roof, not red tile
+    const RF = tint('cream', 0x6b6660, 0.9);      // grey roof, not red tile
     const IR = 'grey';
 
     /* ---- measured levels ------------------------------------------------ */

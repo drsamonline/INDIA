@@ -24,7 +24,7 @@ export default {
   accent2: '#e4d2b4',
   seed: 107,
   floodScale: 0.3,
-  time: 10.6,
+  time: 15.4,          // a warm afternoon: at 10.6 the pale stone read grey-brown
   bounds: 82,
   minDist: 20,
   maxDist: 300,
@@ -90,7 +90,10 @@ export default {
       if (rough !== undefined) c.roughness = rough;
       return c;
     };
-    const ST = tint('basalt', 0xd9cfb4), ST2 = tint('basalt', 0xc2b598), TR = 'cream', DK = 'dark', GD = 'gold';
+    // Cloned from 'cream', which has no texture map. Off 'basalt' the stone
+    // map multiplied the hex down by half, which is why the temple kept
+    // rendering grey-brown however light the tint was set.
+    const ST = tint('cream', 0xd9cfb4), ST2 = tint('cream', 0xc2b598), TR = 'cream', DK = 'dark', GD = 'gold';
 
     const TERR = 2.7;                    // top of the terrace
     const MZ = 6;                        // sabhamandapa centre, z
