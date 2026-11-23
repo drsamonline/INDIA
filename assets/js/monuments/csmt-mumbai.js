@@ -22,7 +22,7 @@ export default {
   minDist: 34,
   maxDist: 430,
   home: { pos: [78, 32, 103], target: [9, 26, -6], fov: 40 },
-  ground: { texture: 'paving', size: 2800, color: 0xa89c86 },
+  ground: { texture: 'paving', size: 2800, color: 0x9c9a94 },
   views: [
     { name: 'Full', pos: [78, 32, 103], target: [9, 26, -6] },
     { name: 'West facade', pos: [4, 20, 82], target: [0, 22, 0] },
@@ -69,11 +69,23 @@ export default {
 
     /* ---- materials: yellow Malad stone, white Porbunder detail, red
             sandstone banding, grey basalt, red tile roofs ------------------ */
-    const ST = 'plaster';
-    const TR = 'white';
-    const RD = 'sandstoneRed';
+    /* The station is Kurla stone: a warm buff-yellow limestone with white
+       dressings and grey basalt in the plinth, under grey roofs. It was modelled
+       in cream plaster with red tile roofs, which made a Gothic terminus look
+       like an Italian villa. */
+    const tint = (base, col, rough) => {
+      const mm = ctx.mat(base);
+      if (!mm || !mm.clone) return base;
+      const c = mm.clone();
+      c.color.setHex(col);
+      if (rough !== undefined) c.roughness = rough;
+      return c;
+    };
+    const ST = tint('sandstoneBuff', 0xe6d3a6);   // Kurla stone, a pale warm buff
+    const TR = 'white';                           // white stone dressings
+    const RD = tint('sandstoneBuff', 0xbfa074);   // string courses, in a deeper stone
     const OP = 'dark';
-    const RF = 'terracotta';
+    const RF = tint('grey', 0x6b6660, 0.9);       // grey roof, not red tile
     const IR = 'grey';
 
     /* ---- measured levels ------------------------------------------------ */

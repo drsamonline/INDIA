@@ -219,6 +219,29 @@ named 'Wheels' view is far enough back that the medallions are three pixels.
 
 ---
 
+### 8. The full repass — every page against the real building
+
+Rendered all 24 at 560x350 into `shots/audit/` and compared each against the
+building. Ranked by how far it is from reading as itself:
+
+| # | Monument | What is wrong | State |
+|---|---|---|---|
+| 1 | CSMT | cream plaster and a **red tile roof** on a Kurla-stone Gothic terminus | **done** — Kurla buff, grey roof, grey forecourt |
+| 2 | Basilica of Bom Jesus | **symmetric** facade with the bell tower hidden at the rear | **done** — one tall tower at the front right, as the church actually stands |
+| 3 | Golden Temple | the shrine is too small for the tank; no causeway read | todo |
+| 4 | Somnath | dark grey stone; the real temple is pale with a gilded shikhara | todo |
+| 5 | Hawa Mahal | flat parapet; needs the curved cornice and five domed chhatris | todo |
+| 6 | Mahabodhi | curved shikhara; the real spire is a straight tapering brick tower | todo |
+| 7 | India Gate / Gateway of India | both read plain: no inscription band, canopy, pools | todo |
+| 8 | Meenakshi | towers read as striped office blocks at distance | todo |
+| 9 | Statue of Unity | default view reads dark and small | todo |
+
+Clean: Taj, Qutub Minar, Charminar, Mysore Palace, Victoria Memorial,
+Mehrangarh, Rani ki Vav, Sanchi, Lotus, Shore, Konark, Amber, Jantar Mantar,
+Kandariya.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

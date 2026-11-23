@@ -169,14 +169,30 @@ export default {
       }
     });
     add(LT2, box(1.2, 0.45, NL + 0.8), 0, RIDGE + 0.2, NZC);
-    // the rear gable and the square belfry behind it
+    // the rear gable
     add(LT, triPrism(NW + 0.4, rise + 0.2, 0.9), 0, NH, ZB - 0.4);
-    block(LT, 7, 24, 7, -9.5, Y0, ZB - 3.0);
-    block(BA, 7.8, 0.6, 7.8, -9.5, Y0 + 24, ZB - 3.0);
-    add(DK, ctx.arch(2.4, 4.4, 0.4), -9.5, Y0 + 17, ZB + 0.55);
-    add(BA, ctx.archFrame(3.0, 5.0, 0.36, 0.42), -9.5, Y0 + 17, ZB + 0.75);
-    add(LT2, dome(3.4, 2.6, 16), -9.5, Y0 + 24.6, ZB - 3.0);
-    add(BA, cyl(0.24, 0.34, 1.5, 8), -9.5, Y0 + 28.0, ZB - 3.0);
+    /* The bell tower. It was modelled at the rear of the nave, where nothing
+       could see it; the church's actual silhouette is asymmetric — one tall
+       square tower at the front, on the right of the facade as you face it.
+       The left tower was never completed, and the facade alone is what the
+       photographs show. */
+    const TX = NW / 2 + 3.6, TZ = ZF - 4.6, TH = 27;
+    block(LT, 7, TH, 7, TX, Y0, TZ);
+    block(BA, 7.8, 0.7, 7.8, TX, Y0 + 2.4, TZ);          // plinth band
+    [9.0, 15.4, 21.6].forEach((y) => add(BA, box(7.4, 0.4, 7.4), TX, Y0 + y, TZ));
+    // the belfry opening, facing the forecourt, and one on the flank
+    add(DK, ctx.arch(2.4, 4.4, 0.4), TX, Y0 + 16.4, TZ + 3.55);
+    add(BA, ctx.archFrame(3.0, 5.0, 0.36, 0.42), TX, Y0 + 16.4, TZ + 3.75);
+    add(DK, ctx.arch(2.4, 4.4, 0.4), TX + 3.55, Y0 + 16.4, TZ, { ry: Math.PI / 2 });
+    add(BA, ctx.archFrame(3.0, 5.0, 0.36, 0.42), TX + 3.75, Y0 + 16.4, TZ, { ry: Math.PI / 2 });
+    // balustrade, then a small dome and a finial
+    block(BA, 7.9, 0.6, 7.9, TX, Y0 + TH, TZ);
+    for (let i = 0; i < 4; i++) {
+      const a = (i / 4) * Math.PI * 2 + Math.PI / 4;
+      add(BA, cyl(0.28, 0.34, 1.1, 6), TX + Math.cos(a) * 3.4, Y0 + TH + 1.15, TZ + Math.sin(a) * 3.4);
+    }
+    add(LT2, dome(3.4, 2.6, 16), TX, Y0 + TH + 0.6, TZ);
+    add(BA, cyl(0.24, 0.34, 1.5, 8), TX, Y0 + TH + 3.9, TZ);
 
     /* ==================================================================== *
      * THE FACADE — three tiers, an attic and a pediment, apex at 25 m
