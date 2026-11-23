@@ -47,9 +47,9 @@ Thirteen of them are UNESCO World Heritage Sites; two more are on the tentative 
 
 ## What is on each page
 
-- **A procedural model** — 8,000–85,000 triangles merged into a dozen draw calls, with MSAA, soft shadows, bloom, a filmic grade and a miniature tilt-shift lens.
+- **A procedural model** — 25,000–690,000 triangles merged into a few dozen draw calls, with MSAA, soft shadows, bloom, a filmic grade and a miniature tilt-shift lens.
 - **A sky that moves** — a physical Rayleigh/Mie sky, sun and moon, stars, clouds, mist and monsoon rain, over a neutral studio environment map that gives marble, gold and stone a believable specular response. Drag the time slider from dawn to night.
-- **Viewpoints** — three to five camera positions per monument, each with its own tour stop.
+- **Viewpoints** — four to six camera positions per monument, each with its own tour stop.
 - **A guided tour** — a narrated walk through the building's history, its parts and its setting.
 - **The history** — a drawer with the story, quick facts, links to Wikipedia, UNESCO and the ASI, and the credit for the photograph on the landing page.
 - **Controls** — exposure, bloom, blur, wireframe, grid, quality, screenshot, auto-orbit, day–night cycle.
@@ -86,6 +86,9 @@ tools/qa.py                 headless-Chromium render check
 tools/linkcheck.py          every internal reference resolves
 tools/audit_data.py         data + copy audit (structure, years, images, AI tells)
 tools/check_a11y.py         skip link, canvas semantics, drawer focus trap
+tools/framecheck.py         named views and tour stops frame their subject
+tools/tintcheck.py          flags material tints taken from textured bases
+tools/build_gallery.py      rebuilds docs/gallery.jpg from shots/audit
 tools/build_extras.py       robots.txt, sitemap.xml, 404.html
 tools/MONUMENT-CONTRACT.md  how to write a new monument module
 ```
@@ -107,7 +110,7 @@ export default {
 };
 ```
 
-Adding a thirteenth monument: write `assets/js/monuments/<id>.js`, add its entry to `data/monuments.json`, run `python3 tools/build_site.py`. The contract is in [`tools/MONUMENT-CONTRACT.md`](tools/MONUMENT-CONTRACT.md).
+Adding a twenty-fifth monument: write `assets/js/monuments/<id>.js`, add its entry to `data/monuments.json`, run `python3 tools/build_site.py`. The contract is in [`tools/MONUMENT-CONTRACT.md`](tools/MONUMENT-CONTRACT.md).
 
 ## Checks
 
@@ -118,6 +121,8 @@ python3 tools/audit_data.py     # structure, years, image files, copy tells
 python3 tools/audit_data.py --links   # also HEAD every external link
 python3 tools/check_all.py      # render every page in headless Chromium
 python3 tools/check_a11y.py     # skip link, canvas semantics, drawer focus trap
+python3 tools/framecheck.py     # every view and tour stop frames its subject
+python3 tools/tintcheck.py      # no material tinted off a textured base
 ```
 
 CI runs the first three on every push and fails if the generated pages are
