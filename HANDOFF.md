@@ -326,9 +326,12 @@ Two faults, and one of them is a trap worth keeping:
 - The ground was a brown checkerboard from the paving texture at a 12 m tile;
   it is a stone precinct at a 30 m tile now.
 
-Still wrong: the shikhara's silhouette. It is a curvilinear lathe with
-urushringas, but the horizontal ribs and the corner offsets make it read as a
-stepped pyramid rather than the smooth tapering tower at Somnath.
+The shikhara read as a **pinecone**, not a stepped pyramid. The fault was three
+rings of sixteen miniature spires across its faces: at four segments each, half
+of every cone is in shadow, so a hundred of them speckled the tower dark. The
+face rings are gone; the spires sit at the corners only, where they step the
+silhouette, and the vertical ribs and horizontal bands carry the surface. The
+spires were also `ST2`, the darker tone — they are the tower's own stone now.
 
 ---
 

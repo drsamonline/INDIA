@@ -134,7 +134,7 @@ export default {
     const miniSpire = (x, z, y, s) => {
       const prof = [[0.001, 0], [0.56, 0.10], [0.50, 0.42], [0.35, 0.66],
         [0.20, 0.84], [0.10, 0.95], [0.001, 1.0]];
-      add(ST2, ctx.lathe(prof.map(([r, t]) => [r * s, t * s * 1.35]), 4), x, y, z, { ry: Math.PI / 4 });
+      add(ST, ctx.lathe(prof.map(([r, t]) => [r * s, t * s * 1.35]), 4), x, y, z, { ry: Math.PI / 4 });
       add(TR, cone(s * 0.10, s * 0.34, 4), x, y + s * 1.52, z);
     };
 
@@ -296,11 +296,14 @@ export default {
     // the silhouette the way the urushringas of the Kailash Mahameru form do
     for (const [t, s] of [[0.26, 2.5], [0.48, 2.0], [0.68, 1.55]]) {
       const w = wAt(t), y = SHY + SHH * t;
-      spireRing(0, SZ, w + 0.5, w + 0.5, y - 0.4, s, 16);
+      /* No ring of spires across the faces. At four segments each they are
+         low-poly enough that half of every cone is in shadow, so a hundred of
+         them turned the tower into a pinecone. The vertical ribs and the
+         horizontal bands carry the surface; the spires belong at the corners,
+         where they step the silhouette. */
       for (const [dx, dz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
         miniSpire(dx * (w / 2 + 0.15), SZ + dz * (w / 2 + 0.15), y, s * 1.15);
-        miniSpire(dx * (w / 2 + 0.15), SZ + dz * (w / 2 - 2.0), y + 0.5, s * 0.8);
-        miniSpire(dx * (w / 2 - 2.0), SZ + dz * (w / 2 + 0.15), y + 0.5, s * 0.8);
+        miniSpire(dx * (w / 2 - 2.0), SZ + dz * (w / 2 - 1.6), y + 0.5, s * 0.8);
       }
     }
 
