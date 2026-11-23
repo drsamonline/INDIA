@@ -68,11 +68,11 @@ Nothing else in this roadmap matters until they exist.
 Ranked by how much detail work each needs, judged from the renders rather than
 from the code.
 
-### Tier 1 — needs a modelled surface, not tuned primitives (3)
+### Tier 1 — needs a modelled surface, not tuned primitives (2)
 
 | Monument | The problem | The fix |
 |---|---|---|
-| **Meenakshi** | fourteen gopurams read as tiered blocks with window rows. Three cosmetic passes failed | model one gopuram properly — tier walls, projecting cornices, figure registers as instanced relief — then instance it fourteen times at the documented sizes |
+| ~~**Meenakshi**~~ | **done** — the fourteen gopurams were tiered blocks with window rows. One gopuram generator now builds them: a concave taper, chamfered corners, three-moulding cornices, kudu rows, figure registers merged per face, a barrel-vault crest with kalashas, granite bases with gateways. 688k → 373k triangles and the boot got faster | — |
 | **Lotus** | petals read as leaves; the ring parameterisation is right, the section is not | a folded double-curved shell with a keel and a thin edge, traced from the elevation, as the head and the petals eventually were |
 | **Statue of Unity** | arms fuse to the torso at the armpit; a single closed loft cannot make two arm loops. The costume now follows the reference (shawl over both shoulders, dhoti wrapped to the ankles, sandals) | separate arm shells that meet a shoulder cap, or quad topology on the torso. The portrait is a separate problem: it needs sculpted mesh, not more passes over this code |
 

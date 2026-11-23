@@ -84,6 +84,16 @@ export default {
        the gopurams are actually repainted in: a red, a yellow, a blue, a pink
        and a green, on ochre stucco. The old five stone greys read as stripes. */
     const FIG = ['red', 'yellow', 'blue', 'pinkPaint', 'teal', 'terracotta'];
+    /* The figures are painted in the same five colours, but mixed a third of
+       the way to the ochre of the wall: at full saturation a 1 m figure at
+       200 m is a pixel of primary colour and the register reads as confetti. */
+    const MUTE = FIG.map((k) => {
+      const mm = ctx.mat(k);
+      if (!mm || !mm.clone) return k;
+      const c = mm.clone();
+      c.color.lerp(new THREE.Color(0xd8b98e), 0.34);
+      return c;
+    });
     const CREAM = (() => { const mm = ctx.mat('sandstoneBuff'); if (!mm || !mm.clone) return 'sandstoneBuff'; const c = mm.clone(); c.color.setHex(0xd8b98e); return c; })();   // the ochre stucco of the storey walls
     // The cornices were 'cream' (0xe6d6b8) while the walls are ochre, so every
     // storey was capped by a bright white band and the tower read as a striped
@@ -91,133 +101,198 @@ export default {
     const CORN = (() => { const mm = ctx.mat('cream'); if (!mm || !mm.clone) return 'cream'; const c = mm.clone(); c.color.setHex(0xbfa076); return c; })();
     // the recess the figure rows stand in: shadowed ochre, not black — a pure
     // black band read as a painted stripe across every storey
-    const NICHE = (() => { const mm = ctx.mat('plaster'); if (!mm || !mm.clone) return 'dark'; const c = mm.clone(); c.color.setHex(0x3b2b21); return c; })();
+    const NICHE = (() => { const mm = ctx.mat('plaster'); if (!mm || !mm.clone) return 'dark'; const c = mm.clone(); c.color.setHex(0x9a7a5c); return c; })();
 
     /* ---------------------------------------------------------- gopuram
-       A gopuram is a granite base pierced by the gateway, then nine (or
-       fewer) storeys, each a sculpted wall carrying a projecting cornice.
-       Every storey is set in from the one below, so the sides lean in by
-       about a third over the full height. A barrel-vaulted crest with gold
-       kalashas closes the top. */
+       A gopuram is a granite base pierced by the gateway, then n storeys,
+       each a sculpted wall carrying a projecting cornice, and a barrel
+       vaulted crest with gold kalashas.
+
+       The storeys are set in by an accelerating amount — 1 − K·u^1.45 — so the
+       sides lean in on a shallow concave curve. A constant step per storey is
+       what made these read as office blocks with window rows: the silhouette
+       was a straight stair with a square corner at every tier. The corners are
+       chamfered, the cornice projects in three mouldings, and the figures
+       stand in a recessed register at a spacing that lets one figure read as a
+       figure rather than as a pixel of confetti. */
     function gopuram(cx, cz, W, D, H, nT, ry, o = {}) {
       const cs = Math.cos(ry), sn = Math.sin(ry);
       const P = (lx, lz) => [cx + lx * cs + lz * sn, cz - lx * sn + lz * cs];
-      const BASEH = o.baseH ?? H * 0.18;
-      const crestH = o.crestH ?? Math.max(3.2, H * 0.088);
+      const BASEH = o.baseH ?? H * 0.20;
+      const crestH = o.crestH ?? Math.max(3.8, H * 0.10);
       const tierH = (H - BASEH - crestH) / nT;
-      const taper = o.taper ?? 0.955;
+      const K = 1 - Math.pow(o.taper ?? 0.955, nT);   // total shrink, base to top
+      const shrink = (u) => 1 - K * Math.pow(u, 1.45);
 
-      /* granite base with the tall gateway passage */
-      block('granite', W, BASEH, D, cx, 0, cz, { ry });
-      block('plasterWhite', W * 1.015, 0.7, D * 1.015, cx, BASEH - 0.7, cz, { ry });
-      block('granite', W * 1.03, 0.5, D * 1.03, cx, 0, cz, { ry });
-      const gw = Math.min(W * 0.3, 9.5);
+      /* ---- the granite base, pierced by the gateway ---- */
+      block('granite', W * 1.05, 1.0, D * 1.05, cx, 0, cz, { ry });          // plinth
+      block('granite', W, BASEH - 1.0, D, cx, 1.0, cz, { ry });
+      block('plasterWhite', W * 1.02, 0.8, D * 1.02, cx, BASEH - 0.8, cz, { ry });
+      const gw = Math.min(W * 0.26, 8.4);
+      const gh = (BASEH - 1.0) * 0.86;
       const p0 = P(0, D / 2 + 0.06);
-      add('dark', arch(gw, BASEH * 0.78, 0.4), p0[0], 0.05, p0[1], { ry });
-      add('granite', archFrame(gw + 1.5, BASEH * 0.84, 0.55, 0.5), p0[0], 0.05, p0[1], { ry });
-      for (const s of [-1, 1]) {
-        const q = P(s * (gw / 2 + 1.9), D / 2 + 0.06);
-        add('dark', box(1.5, BASEH * 0.5, 0.4), q[0], BASEH * 0.27, q[1], { ry });
+      add('dark', arch(gw, gh, 0.45), p0[0], 1.0, p0[1], { ry });
+      add('granite', archFrame(gw + 1.8, gh + 1.0, 0.7, 0.6), p0[0], 1.0, p0[1], { ry });
+      add('granite', box(gw + 3.4, 0.5, 0.9), p0[0], 1.05, p0[1], { ry });    // threshold
+      for (const s2 of [-1, 1]) {
+        // pilasters flanking the gateway, and a deep cornice over the base
+        const q = P(s2 * (gw / 2 + 3.4), D / 2 + 0.05);
+        add('granite', box(1.8, BASEH - 2.2, 0.7), q[0], 1.0 + (BASEH - 2.2) / 2, q[1], { ry });
+        const r2 = P(s2 * (W / 2 - 1.6), D / 2 + 0.05);
+        add('granite', box(2.2, BASEH - 1.8, 0.6), r2[0], 1.0 + (BASEH - 1.8) / 2, r2[1], { ry });
       }
+      block('granite', W * 1.08, 0.9, D * 1.08, cx, BASEH - 1.7, cz, { ry });
 
-      let w = W, d = D, y = BASEH;
-      for (let i = 0; i < nT; i++) {
+      let y = BASEH;
+      for (let i2 = 0; i2 < nT; i2++) {
+        const u = i2 / nT;
+        const w = W * shrink(u), d = D * shrink(u);
         const bodyH = tierH * 0.84, cornH = tierH * 0.16;
-        /* sculpted wall */
+
+        /* the sculpted wall, with its corners chamfered off */
         block(CREAM, w, bodyH, d, cx, y, cz, { ry });
-        /* dense rows of stucco figures on all four faces. A figure is seven
-           pieces, not four boxes: a ledge, a dhoti flared at the feet, a torso
-           that widens into the shoulders, two arms, a head and a crown. The old
-           four boxes were all about the same width, so the register read as a
-           picket fence of coloured bars rather than as sculpture.
-           The recess behind the row is one dark band per face per storey, not a
-           niche box per figure: same read, a fraction of the geometry. */
-        const fh = bodyH * 0.68;
-        const fy0 = y + bodyH * 0.15;
-        const sp = 1.06;   // dense: a real register almost touches, figure to figure
-        const nL = Math.max(4, Math.round(w / sp));
-        const nS = Math.max(3, Math.round(d / sp));
+        for (const [ux, uz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+          const q = P(ux * (w / 2 - 0.75), uz * (d / 2 - 0.75));
+          block(CREAM, 1.6, bodyH, 1.6, q[0], y, q[1], { ry: ry + PI / 4 });
+        }
+        /* the moulded base of the storey: three set-backs, not one slab */
+        add(CORN, box(w * 1.025, bodyH * 0.06, d * 1.025), cx, y + bodyH * 0.03, cz, { ry });
+
+        /* the register of stucco figures, recessed under the cornice */
+        const fh = bodyH * 0.74;
+        const fy0 = y + bodyH * 0.17;
+        const sp = 1.00;
+        const nL = Math.max(3, Math.round(w / sp));
+        const nS = Math.max(2, Math.round(d / sp));
         const sL = w / nL, sS = d / nS;
         for (const side of [1, -1]) {
           const a = P(0, side * (d / 2 - 0.02)), b = P(side * (w / 2 - 0.02), 0);
-          add(NICHE, box(w * 0.96, fh * 1.02, 0.05), a[0], fy0 + fh * 0.51, a[1], { ry: ry + (side > 0 ? 0 : PI) });
-          add(NICHE, box(d * 0.96, fh * 1.02, 0.05), b[0], fy0 + fh * 0.51, b[1], { ry: ry + side * PI / 2 });
+          add(NICHE, box(w * 0.97, fh * 1.02, 0.05), a[0], fy0 + fh * 0.50, a[1], { ry: ry + (side > 0 ? 0 : PI) });
+          add(NICHE, box(d * 0.97, fh * 1.02, 0.05), b[0], fy0 + fh * 0.50, b[1], { ry: ry + side * PI / 2 });
         }
-        const figure = (px, pz, ryF, H, key) => {
-          const cs2 = Math.cos(ryF), sn2 = Math.sin(ryF);
-          // local (lx, ly, lz) in the figure's own frame, lz pointing outward
-          const put = (k, geo, lx, ly, lz, o) => {
-            add(k, geo, px + lx * cs2 + lz * sn2, ly, pz - lx * sn2 + lz * cs2,
-              Object.assign({ ry: ryF }, o));
+        /* A figure is three hexagonal prisms — a dhoti flared at the feet, a
+           torso widening into the shoulders, and a head under a crown — and a
+           whole face of them is ONE geometry, emitted for every third figure
+           so three colours can run through the row.
+           This matters more than the triangles do: the boot time is spent on
+           the number of geometry items, not on their size. Ninety figures a
+           face built as five separate pieces each was 460 items a storey and
+           put the page's boot at 217 s; the same row as three merged strips is
+           12 items a storey. */
+        const figureRow = (n, sL, phase) => {
+          const pos = [], uv = [], idx = [];
+          const prism = (cx0, y0, y1, r0, r1, seg) => {
+            const base = pos.length / 3;
+            for (let k = 0; k <= 1; k++) {
+              const r = k ? r1 : r0, yy = k ? y1 : y0;
+              for (let j = 0; j < seg; j++) {
+                const a = (j / seg) * Math.PI * 2 + 0.26;
+                pos.push(cx0 + Math.cos(a) * r, yy, Math.sin(a) * r * 0.72 + 0.10);
+                uv.push(j / seg, k);
+              }
+            }
+            for (let j = 0; j < seg; j++) {
+              const a = base + j, b = base + ((j + 1) % seg);
+              idx.push(a, b, a + seg, b, b + seg, a + seg);
+            }
           };
-          put(CREAM, box(0.96, 0.07, 0.52), 0, fy0 + 0.035, 0.09);                  // its ledge
-          put(key, cyl(0.26, 0.36, H * 0.30, 5), 0, fy0 + H * 0.21, 0.08);          // dhoti
-          put(key, cyl(0.30, 0.22, H * 0.32, 5), 0, fy0 + H * 0.52, 0.08);          // torso to shoulders
-          put('ivory', cyl(0.060, 0.075, H * 0.30, 4), -0.27, fy0 + H * 0.50, 0.09, { rz: 0.12 });
-          put('ivory', cyl(0.060, 0.075, H * 0.30, 4), 0.27, fy0 + H * 0.50, 0.09, { rz: -0.12 });
-          put('ivory', cyl(0.15, 0.16, H * 0.13, 5), 0, fy0 + H * 0.745, 0.07);     // head
-          put('gold', cyl(0.07, 0.13, H * 0.11, 5), 0, fy0 + H * 0.86, 0.06);       // crown
+          const arm = (cx0, y0, len) => {
+            const base = pos.length / 3;
+            for (let k = 0; k <= 1; k++) {
+              const yy = k ? y0 - len : y0;
+              for (let j = 0; j < 4; j++) {
+                const a = (j / 4) * Math.PI * 2;
+                pos.push(cx0 + Math.cos(a) * 0.09, yy, 0.10 + Math.sin(a) * 0.09);
+                uv.push(j / 4, k);
+              }
+            }
+            for (let j = 0; j < 4; j++) {
+              const a = base + j, b = base + ((j + 1) % 4);
+              idx.push(a, b, a + 4, b, b + 4, a + 4);
+            }
+          };
+          for (let i = 0; i < n; i++) {
+            if (i % 3 !== phase) continue;
+            const x = (i - (n - 1) / 2) * sL;
+            prism(x, 0, fh * 0.54, 0.46, 0.30, 6);            // the dhoti
+            prism(x, fh * 0.52, fh * 0.82, 0.25, 0.35, 6);    // the torso
+            prism(x, fh * 0.81, fh * 0.99, 0.20, 0.16, 6);    // head and crown
+            // arms: without them a figure is a bowling pin, which is what the
+            // register read as from four metres
+            arm(x - 0.30, fh * 0.76, fh * 0.50);
+            arm(x + 0.30, fh * 0.76, fh * 0.50);
+          }
+          const g = new THREE.BufferGeometry();
+          g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+          g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+          g.setIndex(idx);
+          g.computeVertexNormals();
+          return g;
         };
-        for (let j = 0; j < nL; j++) {
-          const off = (j - (nL - 1) / 2) * sL;
-          const k = FIG[(j * 3 + i * 2) % FIG.length];
-          for (const side of [1, -1]) {
-            const p = P(off, side * (d / 2 + 0.06));
-            figure(p[0], p[1], ry + (side > 0 ? 0 : PI), fh, k);
+        for (const side of [1, -1]) {
+          const a = P(0, side * (d / 2 + 0.20));
+          for (let ph = 0; ph < 3; ph++) {
+            const k = MUTE[(i2 * 2 + ph * 2 + (side > 0 ? 0 : 1)) % MUTE.length];
+            add(k, figureRow(nL, sL, ph), a[0], fy0, a[1], { ry: ry + (side > 0 ? 0 : PI) });
+          }
+          const b = P(side * (w / 2 + 0.20), 0);
+          for (let ph = 0; ph < 3; ph++) {
+            const k = MUTE[(i2 * 3 + ph * 2 + (side > 0 ? 0 : 1)) % MUTE.length];
+            add(k, figureRow(nS, sS, ph), b[0], fy0, b[1], { ry: ry + side * PI / 2 });
           }
         }
-        for (let j = 0; j < nS; j++) {
-          const off = (j - (nS - 1) / 2) * sS;
-          const k = FIG[(j * 5 + i * 3 + 1) % FIG.length];
+
+        /* the projecting cornice: three mouldings, each standing further out,
+           with a row of kudu dormer faces on the face of it */
+        const yc = y + bodyH;
+        block(CORN, w * 1.05, cornH * 0.40, d * 1.05, cx, yc, cz, { ry });
+        block(CORN, w * 1.10, cornH * 0.30, d * 1.10, cx, yc + cornH * 0.40, cz, { ry });
+        add('terracotta', box(w * 1.115, cornH * 0.12, d * 1.115), cx, yc + cornH * 0.70, cz, { ry });
+        block(CORN, w * 1.07, cornH * 0.18, d * 1.07, cx, yc + cornH * 0.82, cz, { ry });
+        for (let j2 = 0; j2 < nL; j2++) {
+          const off = (j2 - (nL - 1) / 2) * sL;
           for (const side of [1, -1]) {
-            const p = P(side * (w / 2 + 0.06), off);
-            figure(p[0], p[1], ry + side * PI / 2, fh, k);
+            const p = P(off, side * (d / 2 * 1.055 + 0.06));
+            add('dark', plane(sL * 0.42, cornH * 0.34), p[0], yc + cornH * 0.21, p[1],
+              { ry: ry + (side > 0 ? 0 : PI) });
           }
         }
-        /* moulded base, then the projecting cornice */
-        add('cream', box(w * 1.03, bodyH * 0.08, d * 1.03), cx, y + bodyH * 0.04, cz, { ry });
-        block(CORN, w * 1.095, cornH * 0.58, d * 1.095, cx, y + bodyH, cz, { ry });
-        add('terracotta', box(w * 1.105, cornH * 0.1, d * 1.105), cx, y + bodyH + cornH * 0.58, cz, { ry });
-        add(CORN, box(w * 1.075, cornH * 0.2, d * 1.075), cx, y + bodyH + cornH * 0.68, cz, { ry });
-        /* corner pilasters give the storey a vertical as well as a horizontal rhythm */
+        /* corner pilasters: a vertical rhythm against the horizontal one */
         for (const [ux, uz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-          block('cream', 1.4, tierH * 0.98, 1.4, cx + ux * (w / 2 - 0.55), y, cz + uz * (d / 2 - 0.55), { ry });
+          const q = P(ux * (w / 2 - 0.5), uz * (d / 2 - 0.5));
+          block('cream', 1.5, tierH * 0.96, 1.5, q[0], y, q[1], { ry });
         }
-        /* kudu niches along the cornice of the long faces */
-        for (let j = 0; j < nL; j++) {
-          const off = (j - (nL - 1) / 2) * sL;
-          for (const side of [1, -1]) {
-            const p = P(off, side * (d / 2 + 0.1));
-            add('dark', plane(sL * 0.3, cornH * 0.26), p[0], y + bodyH + cornH * 0.28, p[1], { ry: ry + (side > 0 ? 0 : PI) });
-          }
-        }
+
         y += tierH;
-        w *= taper; d *= taper;
       }
 
-      /* ---- barrel-vaulted crest with gold finials ---- */
-      const vr = Math.min(d * 0.30, 3.4);
-      block(CORN, w * 1.05, crestH * 0.16, d * 1.05, cx, y, cz, { ry });
-      add('cream', cyl(vr, vr, w * 1.0, 14), cx, y + crestH * 0.16, cz, { ry, rz: PI / 2 });
-      add('gold', cyl(vr * 0.2, vr * 0.2, w * 1.01, 8), cx, y + crestH * 0.16 + vr * 0.95, cz, { ry, rz: PI / 2 });
-      add('plasterWhite', box(w * 1.02, crestH * 0.1, d * 0.44), cx, y + crestH * 0.16 + vr * 0.58, cz, { ry });
-      /* decorated semicircular ends to the vault */
+      /* ---- the crest: a stepped upapitha, the shala, the kalashas ---- */
+      const wT = W * shrink((nT - 1) / nT) * Math.pow(shrink(1) / shrink((nT - 1) / nT), 0.6);
+      const dT = D * shrink((nT - 1) / nT) * Math.pow(shrink(1) / shrink((nT - 1) / nT), 0.6);
+      block(CORN, wT * 1.12, crestH * 0.13, dT * 1.12, cx, y, cz, { ry });
+      block(CORN, wT * 1.05, crestH * 0.12, dT * 1.05, cx, y + crestH * 0.13, cz, { ry });
+      const vr = Math.min(dT * 0.34, 3.8);
+      const yv = y + crestH * 0.25 + vr * 0.35;
+      /* the barrel vault, along the long axis */
+      add('cream', cyl(vr, vr, wT * 1.00, 16), cx, yv, cz, { ry, rz: PI / 2 });
+      add('gold', cyl(vr * 0.15, vr * 0.15, wT * 1.02, 8), cx, yv + vr * 0.98, cz, { ry, rz: PI / 2 });
+      /* the two ends of the vault: a semicircular screen with a boss */
       for (const sgn of [-1, 1]) {
-        const q = P(sgn * w * 0.5, 0);
-        add('cream', cyl(vr * 1.06, vr * 1.06, 0.45, 14), q[0], y + crestH * 0.16, q[1], { ry, rz: PI / 2 });
-        add('terracotta', cyl(vr * 0.62, vr * 0.62, 0.6, 12), q[0], y + crestH * 0.16, q[1], { ry, rz: PI / 2 });
-        add('gold', cyl(vr * 0.26, vr * 0.26, 0.7, 10), q[0], y + crestH * 0.16, q[1], { ry, rz: PI / 2 });
+        const q = P(sgn * wT * 0.50, 0);
+        add('terracotta', cyl(vr * 1.03, vr * 1.03, 0.55, 16), q[0], yv, q[1], { ry, rz: PI / 2 });
+        add('cream', cyl(vr * 0.74, vr * 0.74, 0.75, 14), q[0], yv, q[1], { ry, rz: PI / 2 });
+        add('gold', cyl(vr * 0.30, vr * 0.30, 0.85, 10), q[0], yv, q[1], { ry, rz: PI / 2 });
       }
       const nf = o.finials ?? 7;
-      for (let j = 0; j < nf; j++) {
-        const off = (j - (nf - 1) / 2) * (w * 0.94 / Math.max(1, nf - 1));
+      for (let j2 = 0; j2 < nf; j2++) {
+        const off = (j2 - (nf - 1) / 2) * (wT * 0.86 / Math.max(1, nf - 1));
         const q = P(off, 0);
-        const big = j === (nf - 1) / 2;
-        const s = big ? 1.5 : 0.95;
-        const yb = y + crestH * 0.16 + vr * 1.0;
-        add('gold', cyl(0.15 * s, 0.22 * s, 1.0 * s, 6), q[0], yb, q[1], { ry });
-        add('gold', sph(0.32 * s, 8), q[0], yb + 0.62 * s, q[1], { ry });
-        add('goldLeaf', cone(0.19 * s, 0.7 * s, 6), q[0], yb + 1.1 * s, q[1], { ry });
+        const big = Math.abs(j2 - (nf - 1) / 2) < 0.01;
+        const s3 = big ? 1.45 : 0.92;
+        const yb = yv + vr * 1.05;
+        add('gold', cyl(0.16 * s3, 0.24 * s3, 1.1 * s3, 6), q[0], yb, q[1], { ry });
+        add('gold', sph(0.34 * s3, 8), q[0], yb + 0.70 * s3, q[1], { ry });
+        add('goldLeaf', cone(0.20 * s3, 0.75 * s3, 6), q[0], yb + 1.22 * s3, q[1], { ry });
       }
     }
 
