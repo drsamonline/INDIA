@@ -160,9 +160,7 @@ ambient/grade decision, not a per-page hack.
 
 | Monument | What's missing |
 |---|---|
-| Kandariya | ~870 sculptures suggested by two registers |
 | CSMT | the carved menagerie is absent |
-| Golden Temple | gold reads matte |
 
 ---
 
@@ -408,6 +406,27 @@ darker than the wall now and read as shadowed mouldings.
 688k triangles, boot 80-120 s. That is close to the ceiling: the page takes
 three attempts' worth of waiting under software rendering, and another tier's
 worth of jali would not boot at all.
+
+---
+
+### 16. Kandariya and the Golden Temple's gold
+
+**Kandariya.** Each "sculpture" was one flat box, two rows of them — a dashed
+line across the wall at any distance. A figure is seven pieces now (niche,
+pedestal, dhoti, torso, two arms, head). The niche was `dark` (0x0f0c09), so
+every register read as a black stripe on a cream wall; it is a warm shadow now.
+37k -> 62k triangles.
+
+**Golden Temple.** The gold was the engine's `gold`, metalness 1.0 — and a metal
+with only a weak environment map to reflect renders dark and flat. Cloned at
+metalness 0.72, roughness 0.30, brighter hex. The shrine reads as gold leaf now,
+with its reflection in the tank.
+
+Trap worth remembering: a blanket `s.replace("'gold'", "GD")` also rewrote the
+arguments of the helper that defined GD, producing `const GD = gilt(GD, …)` —
+a self-reference that throws at module evaluation and shows up as **a page that
+never boots**, not as a syntax error. Check the definition site after a
+repo-wide key rename.
 
 ---
 

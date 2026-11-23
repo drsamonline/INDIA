@@ -75,6 +75,19 @@ export default {
 
   build(ctx) {
     const { add, box, cyl, sph, cone, torus, dome, onion, arch, archFrame, block, col, plane, lathe } = ctx;
+
+    /* The engine's gold is metalness 1.0, and a metal with only a weak
+       environment map to reflect renders dark and flat — which is why the gold
+       read matte. Less metal, a little more roughness, a brighter hex. */
+    const gilt = (base, col, metal, rough) => {
+      const mm = ctx.mat(base);
+      if (!mm || !mm.clone) return base;
+      const c = mm.clone();
+      c.color.setHex(col); c.metalness = metal; c.roughness = rough;
+      return c;
+    };
+    const GD = gilt('gold', 0xe0b04e, 0.72, 0.30);
+    const GDL = gilt('goldLeaf', 0xf7cd6b, 0.66, 0.26);
     const PI = Math.PI;
 
     /* ---------- measured plan ------------------------------------------- */
@@ -183,32 +196,32 @@ export default {
         const centre = k === 0;
         // marble dado panel below
         add('marble', box(1.5, 1.35, 0.16), x + f.nx * 0.06, 1.25, z + f.nz * 0.06, { ry: f.ry });
-        add('gold', box(1.62, 0.1, 0.2), x + f.nx * 0.07, 2.0, z + f.nz * 0.07, { ry: f.ry });
+        add(GD, box(1.62, 0.1, 0.2), x + f.nx * 0.07, 2.0, z + f.nz * 0.07, { ry: f.ry });
         // tall cusped niche in gold
         if (centre) {
           add('dark', arch(1.55, 3.4, 0.22), x + f.nx * 0.04, 2.35, z + f.nz * 0.04, { ry: f.ry });
-          add('goldLeaf', archFrame(1.95, 3.75, 0.16, 0.22), x + f.nx * 0.08, 2.35, z + f.nz * 0.08, { ry: f.ry });
+          add(GDL, archFrame(1.95, 3.75, 0.16, 0.22), x + f.nx * 0.08, 2.35, z + f.nz * 0.08, { ry: f.ry });
         } else {
           add('dark', arch(1.25, 2.6, 0.2), x + f.nx * 0.04, 2.55, z + f.nz * 0.04, { ry: f.ry });
-          add('goldLeaf', archFrame(1.6, 2.92, 0.14, 0.2), x + f.nx * 0.08, 2.55, z + f.nz * 0.08, { ry: f.ry });
+          add(GDL, archFrame(1.6, 2.92, 0.14, 0.2), x + f.nx * 0.08, 2.55, z + f.nz * 0.08, { ry: f.ry });
         }
         // upper window
         add('dark', box(1.05, 1.5, 0.2), x + f.nx * 0.04, 6.1, z + f.nz * 0.04, { ry: f.ry });
-        add('goldLeaf', box(1.3, 0.16, 0.24), x + f.nx * 0.08, 6.95, z + f.nz * 0.08, { ry: f.ry });
-        add('goldLeaf', box(1.3, 0.16, 0.24), x + f.nx * 0.08, 5.3, z + f.nz * 0.08, { ry: f.ry });
+        add(GDL, box(1.3, 0.16, 0.24), x + f.nx * 0.08, 6.95, z + f.nz * 0.08, { ry: f.ry });
+        add(GDL, box(1.3, 0.16, 0.24), x + f.nx * 0.08, 5.3, z + f.nz * 0.08, { ry: f.ry });
         // pilaster between bays
-        add('gold', box(0.34, H1 - M1 - 0.4, 0.26), x + ax * BAY / 2 + f.nx * 0.1,
+        add(GD, box(0.34, H1 - M1 - 0.4, 0.26), x + ax * BAY / 2 + f.nx * 0.1,
           (M1 + H1) / 2 - 0.1, z + az * BAY / 2 + f.nz * 0.1, { ry: f.ry });
       }
     });
 
     /* first-floor roof: a projecting slab and a gold cornice */
-    block('gold', EAVE * 2, 0.28, EAVE * 2, 0, H1, 0);
-    add('goldLeaf', box(EAVE * 2 + 0.4, 0.16, EAVE * 2 + 0.4), 0, H1 + 0.34, 0);
+    block(GD, EAVE * 2, 0.28, EAVE * 2, 0, H1, 0);
+    add(GDL, box(EAVE * 2 + 0.4, 0.16, EAVE * 2 + 0.4), 0, H1 + 0.34, 0);
     // brackets under the eave
     for (let i = 0; i < 24; i++) {
       const a = (i / 24) * PI * 2;
-      add('gold', box(0.3, 0.45, 0.7), Math.cos(a) * (EAVE - 0.5), H1 - 0.3,
+      add(GD, box(0.3, 0.45, 0.7), Math.cos(a) * (EAVE - 0.5), H1 - 0.3,
         Math.sin(a) * (EAVE - 0.5), { ry: -a });
     }
 
@@ -216,8 +229,8 @@ export default {
     const PARA = 1.2;
     const PY = H1 + 0.4;
     const PW = EAVE - 0.55;
-    block('gold', PW * 2, PARA, PW * 2, 0, PY, 0);
-    add('goldLeaf', box(PW * 2 + 0.3, 0.14, PW * 2 + 0.3), 0, PY + PARA, 0);
+    block(GD, PW * 2, PARA, PW * 2, 0, PY, 0);
+    add(GDL, box(PW * 2 + 0.3, 0.14, PW * 2 + 0.3), 0, PY + PARA, 0);
 
     /* the row of small gold kiosks along the parapet, as in the photograph */
     for (let i = 0; i < 4; i++) {
@@ -228,30 +241,30 @@ export default {
         const x = horiz ? t : s * PW;
         const z = horiz ? s * PW : t;
         add('yellow', box(0.72, 0.55, 0.72), x, PY + PARA + 0.28, z);
-        add('goldLeaf', box(0.92, 0.1, 0.92), x, PY + PARA + 0.6, z);
-        add('gold', sph(0.46, 8), x, PY + PARA + 0.84, z, { sy: 0.72 });
-        add('goldLeaf', sph(0.07, 6), x, PY + PARA + 1.24, z);
+        add(GDL, box(0.92, 0.1, 0.92), x, PY + PARA + 0.6, z);
+        add(GD, sph(0.46, 8), x, PY + PARA + 0.84, z, { sy: 0.72 });
+        add(GDL, sph(0.07, 6), x, PY + PARA + 1.24, z);
       }
     }
 
     /* four corner pavilions — the Mamtees of the SGPC description */
     for (const [dx, dz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
       const x = dx * PW, z = dz * PW;
-      add('gold', box(2.2, 0.3, 2.2), x, PY + PARA + 0.15, z);
+      add(GD, box(2.2, 0.3, 2.2), x, PY + PARA + 0.15, z);
       block('yellow', 1.9, 2.1, 1.9, x, PY + PARA + 0.3, z);             // solid tower
       add('dark', box(1.1, 1.4, 1.1), x, PY + PARA + 1.35, z);           // shadowed opening
-      add('goldLeaf', box(2.35, 0.3, 2.35), x, PY + PARA + 2.55, z);     // entablature
-      add('gold', cyl(1.0, 1.1, 0.45, 12), x, PY + PARA + 2.85, z);      // drum
-      add('gold', onion(1.06, 1.5, 16), x, PY + PARA + 3.05, z);
-      add('goldLeaf', cyl(0.05, 0.05, 0.45, 6), x, PY + PARA + 4.7, z);
-      add('goldLeaf', sph(0.09, 6), x, PY + PARA + 4.95, z);
+      add(GDL, box(2.35, 0.3, 2.35), x, PY + PARA + 2.55, z);     // entablature
+      add(GD, cyl(1.0, 1.1, 0.45, 12), x, PY + PARA + 2.85, z);      // drum
+      add(GD, onion(1.06, 1.5, 16), x, PY + PARA + 3.05, z);
+      add(GDL, cyl(0.05, 0.05, 0.45, 6), x, PY + PARA + 4.7, z);
+      add(GDL, sph(0.09, 6), x, PY + PARA + 4.95, z);
     }
 
     /* small upper storey: a square room with three gates, then the dome */
     const U2 = 9.35;                                    // top of the parapet
     const U2W = 8.2;
     block('yellow', U2W, 2.95, U2W, 0, U2, 0);
-    add('goldLeaf', box(U2W + 0.2, 0.16, U2W + 0.2), 0, U2 + 1.1, 0);
+    add(GDL, box(U2W + 0.2, 0.16, U2W + 0.2), 0, U2 + 1.1, 0);
     faces.forEach((f) => {
       const off = U2W / 2;
       const px = f.nx * off, pz = f.nz * off;
@@ -259,32 +272,32 @@ export default {
       for (let k = -1; k <= 1; k++) {
         const x = px + ax * k * 2.5, z = pz + az * k * 2.5;
         add('dark', box(0.95, 1.7, 0.18), x + f.nx * 0.03, U2 + 1.5, z + f.nz * 0.03, { ry: f.ry });
-        add('goldLeaf', box(1.2, 0.14, 0.22), x + f.nx * 0.06, U2 + 2.45, z + f.nz * 0.06, { ry: f.ry });
+        add(GDL, box(1.2, 0.14, 0.22), x + f.nx * 0.06, U2 + 2.45, z + f.nz * 0.06, { ry: f.ry });
       }
     });
     // chhajja over the upper storey
-    add('goldLeaf', box(U2W + 1.6, 0.22, U2W + 1.6), 0, U2 + 3.05, 0);
-    add('gold', box(U2W + 1.1, 0.24, U2W + 1.1), 0, U2 + 3.24, 0);
+    add(GDL, box(U2W + 1.6, 0.22, U2W + 1.6), 0, U2 + 3.05, 0);
+    add(GD, box(U2W + 1.1, 0.24, U2W + 1.1), 0, U2 + 3.24, 0);
 
     /* drum and the low fluted onion dome */
     const DRY = 13.0;
-    add('gold', cyl(2.95, 3.15, 1.0, 24), 0, DRY + 0.5, 0);
-    add('goldLeaf', cyl(3.25, 3.1, 0.16, 24), 0, DRY + 1.05, 0);
+    add(GD, cyl(2.95, 3.15, 1.0, 24), 0, DRY + 0.5, 0);
+    add(GDL, cyl(3.25, 3.1, 0.16, 24), 0, DRY + 1.05, 0);
     const DOME_BASE = DRY + 1.0;                        // 14.0
-    add('gold', onion(2.95, 1.85, 34), 0, DOME_BASE, 0);
+    add(GD, onion(2.95, 1.85, 34), 0, DOME_BASE, 0);
     // fluting: 18 thin ribs following the bulb
     for (let i = 0; i < 18; i++) {
       const a = (i / 18) * PI * 2;
       [[0.12, 2.78], [0.45, 2.98], [0.78, 2.62], [1.1, 1.95], [1.4, 1.2]].forEach(([t, r]) => {
-        add('goldLeaf', box(0.1, 0.34, 0.16), Math.cos(a) * r, DOME_BASE + t, Math.sin(a) * r, { ry: -a });
+        add(GDL, box(0.1, 0.34, 0.16), Math.cos(a) * r, DOME_BASE + t, Math.sin(a) * r, { ry: -a });
       });
     }
     // cupola on the crown: the smaller dome of the pair
-    add('gold', cyl(0.95, 1.05, 0.4, 14), 0, DOME_BASE + 1.78, 0);
-    add('goldLeaf', cyl(1.12, 1.05, 0.1, 14), 0, DOME_BASE + 2.0, 0);
-    add('gold', onion(0.92, 1.0, 18), 0, DOME_BASE + 2.02, 0);
-    add('gold', cyl(0.05, 0.05, 0.6, 6), 0, DOME_BASE + 3.0, 0);
-    add('goldLeaf', sph(0.1, 8), 0, DOME_BASE + 3.34, 0);
+    add(GD, cyl(0.95, 1.05, 0.4, 14), 0, DOME_BASE + 1.78, 0);
+    add(GDL, cyl(1.12, 1.05, 0.1, 14), 0, DOME_BASE + 2.0, 0);
+    add(GD, onion(0.92, 1.0, 18), 0, DOME_BASE + 2.02, 0);
+    add(GD, cyl(0.05, 0.05, 0.6, 6), 0, DOME_BASE + 3.0, 0);
+    add(GDL, sph(0.1, 8), 0, DOME_BASE + 3.34, 0);
 
     /* ---------- har ki pauri: steps from the shrine into the water ----- */
     for (let i = 0; i < 5; i++) {
@@ -305,18 +318,18 @@ export default {
     for (const s of [-1, 1]) {
       for (let i = 0; i <= 24; i++) {
         const x = C0 + (i / 24) * CL;
-        add('gold', cyl(0.09, 0.12, 0.95, 6), -x, 0.48, s * CW);
+        add(GD, cyl(0.09, 0.12, 0.95, 6), -x, 0.48, s * CW);
       }
-      add('gold', box(CL, 0.12, 0.16), CM, 1.0, s * CW);
-      add('gold', box(CL, 0.1, 0.12), CM, 0.6, s * CW);
+      add(GD, box(CL, 0.12, 0.16), CM, 1.0, s * CW);
+      add(GD, box(CL, 0.1, 0.12), CM, 0.6, s * CW);
     }
     // lanterns along the balustrade
     for (let i = 1; i < 12; i++) {
       const x = -(C0 + (i / 12) * CL);
       for (const s of [-1, 1]) {
-        add('gold', cyl(0.07, 0.09, 2.1, 6), x, 1.05, s * CW);
-        add('goldLeaf', sph(0.22, 8), x, 2.2, s * CW);
-        add('gold', cone(0.26, 0.24, 6), x, 2.42, s * CW);
+        add(GD, cyl(0.07, 0.09, 2.1, 6), x, 1.05, s * CW);
+        add(GDL, sph(0.22, 8), x, 2.2, s * CW);
+        add(GD, cone(0.26, 0.24, 6), x, 2.42, s * CW);
       }
     }
 
@@ -326,14 +339,14 @@ export default {
       block('marbleWarm', 9.4, 6.4, 7.2, x, 0.6, 0);
       add('marble', box(10.2, 0.4, 8.0), x, 7.2, 0);
       add('dark', arch(2.6, 3.05, 0.5), x, 0.6, 3.62, { ry: PI / 2 });
-      add('gold', archFrame(3.2, 3.5, 0.22, 0.36), x - 0.06, 0.6, 3.66, { ry: PI / 2 });
+      add(GD, archFrame(3.2, 3.5, 0.22, 0.36), x - 0.06, 0.6, 3.66, { ry: PI / 2 });
       for (const s of [-1, 1]) {
-        add('gold', cyl(0.5, 0.55, 1.4, 10), x, 7.4, s * 2.6);
-        add('gold', onion(0.62, 1.0, 16), x, 8.6, s * 2.6);
+        add(GD, cyl(0.5, 0.55, 1.4, 10), x, 7.4, s * 2.6);
+        add(GD, onion(0.62, 1.0, 16), x, 8.6, s * 2.6);
       }
-      add('gold', cyl(1.5, 1.65, 0.8, 16), x, 7.5, 0);
-      add('gold', onion(1.7, 2.1, 20), x, 8.2, 0);
-      add('goldLeaf', sph(0.12, 8), x, 10.5, 0);
+      add(GD, cyl(1.5, 1.65, 0.8, 16), x, 7.5, 0);
+      add(GD, onion(1.7, 2.1, 20), x, 8.2, 0);
+      add(GDL, sph(0.12, 8), x, 10.5, 0);
     })(-(TX + 3.0));
 
     /* ---------- the parikrama and its arcades --------------------------- */
@@ -386,7 +399,7 @@ export default {
         const pz = horiz ? s * (walkOut + WING / 2) : t;
         add('marble', cyl(0.95, 1.05, 0.9, 10), px, 10.6, pz);
         add('marble', dome(0.98, 1.15, 14), px, 11.05, pz);
-        add('gold', sph(0.09, 6), px, 12.35, pz);
+        add(GD, sph(0.09, 6), px, 12.35, pz);
       }
     });
 
@@ -400,9 +413,9 @@ export default {
         add('marble', box(2.8, 0.28, 0.4), x + 6.5, 5.25, z + i * 2.9, { ry: PI / 2 });
       }
       block('marbleWarm', 13, 1.1, 11, x, 8.9, z);
-      add('gold', cyl(4.2, 4.6, 1.6, 20), x, 10.5, z);
-      add('gold', onion(4.3, 5.2, 26), x, 11.3, z);
-      add('goldLeaf', sph(0.22, 8), x, 16.9, z);
+      add(GD, cyl(4.2, 4.6, 1.6, 20), x, 10.5, z);
+      add(GD, onion(4.3, 5.2, 26), x, 11.3, z);
+      add(GDL, sph(0.22, 8), x, 16.9, z);
       // Nishan Sahib
       add('grey', cyl(0.1, 0.13, 14, 6), x + 11, 7, z + 5);
       add('fabricSaffron', ctx.plane(2.2, 1.4), x + 12.1, 12.6, z + 5);
@@ -417,7 +430,7 @@ export default {
       add('black', box(0.1, 1.6, 0.14), x - 4.1, 15.0, z);
       add('black', box(0.14, 0.12, 1.1), x - 4.1, 14.6, z);
       add('marble', dome(3.0, 2.4, 16), x, 17.85, z);
-      add('gold', cyl(0.08, 0.08, 1.4, 6), x, 20.3, z);
+      add(GD, cyl(0.08, 0.08, 1.4, 6), x, 20.3, z);
     })(62, -88);
 
     /* ---------- pilgrims, lamps, trees ---------------------------------- */
