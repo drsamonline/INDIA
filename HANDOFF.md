@@ -667,6 +667,27 @@ got them wrong twice, and a test that encodes them cannot.
 
 ---
 
+### 28. CI was green; now it also guards the tint trap
+
+`gh run list` on the last eight pushes: every `site` run and every
+`pages-build-deployment` succeeded. The workflow already rebuilds and fails on
+stale generated pages, runs `linkcheck.py` and `audit_data.py --strict`.
+
+It did not run `tintcheck.py`, which is the guard for the trap that has now cost
+six monuments. Added, in a form that can pass:
+
+- `tools/tintcheck.allow` lists the five deliberate textured-base tints
+  (amber's sandstone, lotus's two marbles, meenakshi's wall and niche)
+- `--ci` fails only on tints **not** in that list, and names the file, line, base
+  and hex
+- verified by injecting `ctx.mat('granite').clone()` into Konark: exit 1, naming
+  `konark-sun-temple.js:86`; removed, exit 0
+
+The rest of the workflow is unchanged. Reproduced every CI step locally before
+committing: rebuild produces no diff, 0 errors, 26 pages resolve, 0 new tints.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

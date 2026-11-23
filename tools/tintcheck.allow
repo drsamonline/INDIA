@@ -1,0 +1,8 @@
+# Deliberate tints taken from textured bases. Each is a surface where the
+# texture is wanted and the darkened hex is intended.
+# Anything NOT listed here fails tools/tintcheck.py --ci.
+amber-fort.js:sandstoneBuff
+lotus-temple.js:marble
+lotus-temple.js:marbleWarm
+meenakshi-temple.js:sandstoneBuff
+meenakshi-temple.js:plaster

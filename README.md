@@ -88,7 +88,7 @@ tools/audit_data.py         data + copy audit (structure, years, images, AI tell
 tools/check_a11y.py         skip link, canvas semantics, drawer focus trap
 tools/check_ui.py           the documented keyboard shortcuts, exercised
 tools/framecheck.py         named views and tour stops frame their subject
-tools/tintcheck.py          flags material tints taken from textured bases
+tools/tintcheck.py          flags material tints taken from textured bases (--ci: new ones only)
 tools/build_gallery.py      rebuilds docs/gallery.jpg from shots/audit
 tools/build_extras.py       robots.txt, sitemap.xml, 404.html
 tools/MONUMENT-CONTRACT.md  how to write a new monument module
@@ -124,7 +124,7 @@ python3 tools/check_all.py      # render every page in headless Chromium
 python3 tools/check_a11y.py     # skip link, canvas semantics, drawer focus trap
 python3 tools/check_ui.py       # H T A C R and 1-9 actually do something
 python3 tools/framecheck.py     # every view and tour stop frames its subject
-python3 tools/tintcheck.py      # no material tinted off a textured base
+python3 tools/tintcheck.py --ci # no NEW material tinted off a textured base
 ```
 
 CI runs the first three on every push and fails if the generated pages are
