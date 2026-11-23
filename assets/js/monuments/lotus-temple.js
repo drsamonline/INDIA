@@ -117,39 +117,82 @@ export default {
     }
 
     /* ---- one petal -------------------------------------------------------
-       The petal is traced as a curve in elevation, not as a taper: it springs
-       from the base ring, bulges outward past its mid-radius, then turns back
-       in and closes to a rounded tip. The width swells and dies away along the
-       same parameter, and the section is a shallow arc, so the petal is a
-       folded sheet rather than a cone. */
+       A lotus petal is not a leaf: it is doubly curved. It curves along its
+       length — springs near-vertical, bellies out, and turns back in to a point
+       — and it curves across its width three times over: a keel runs up the
+       centre, the flanks cup back toward the axis of the flower, and the rim
+       turns out again. The old petal had one shallow arc across the width, so
+       every leaf read as a bent sheet with a knife edge.
+
+       The shell is built as two surfaces offset along the true normal, joined
+       by a rim, so the edge is a thin lip rather than an open sheet. */
     function petalGeometry(o) {
-      const { H, R0, Rc, Rtip, W, cup, thick, yPow = 1.55 } = o;
-      const NU = 22, NV = 9;
-      const pos = [], uv = [], idx = [];
-      // quadratic Bezier in the (radius, height) plane
+      const { H, R0, Rc, Rtip, W, keel, wrap, edge, thick, yPow = 1.5, droop = 0 } = o;
+      const NU = 26, NV = 12;
+      // the elevation, in the (radius, height) plane
       const spineR = (u) => (1 - u) * (1 - u) * R0 + 2 * u * (1 - u) * Rc + u * u * Rtip;
-      const spineY = (u) => H * Math.pow(u, yPow);
-      // width: nothing at the root, widest at about a third, rounding to a point
-      const halfW = (u) => W * Math.sin(Math.PI * Math.pow(u, 0.62));
-      const bow = (u, v) => cup * (1 - v * v) * Math.sin(Math.PI * Math.pow(u, 0.5));
+      // a petal that arcs over and hangs at the tip — the entrance leaves —
+      // needs the height to fall again after its maximum, which a monotonic
+      // u^yPow cannot do
+      const spineY = (u) => H * Math.pow(u, yPow) * (1 - droop * Math.pow(u, 4));
+      // broad by a third of the height, then tapering to a point at the tip
+      const halfW = (u) => W * Math.pow(u, 0.42) * Math.pow(1 - Math.pow(u, 3.2), 0.55);
+      // the section: keel, cup, rim
+      const sect = (u, v) => {
+        const av = Math.abs(v);
+        const k = keel * Math.pow(1 - av * av, 1.5);
+        const w = -wrap * av * av;
+        const e = edge * Math.pow(Math.max(0, (av - 0.82) / 0.18), 2);
+        return k + w + e;
+      };
+      const S = (u, v) => [v * halfW(u), spineY(u), spineR(u) + sect(u, v)];
+      const N = (u, v) => {
+        const e = 2e-3;
+        const a = S(u, Math.min(1, v + e)), b = S(u, Math.max(-1, v - e));
+        const c = S(Math.min(1, u + e), v), d = S(Math.max(0, u - e), v);
+        const du = [c[0] - d[0], c[1] - d[1], c[2] - d[2]];
+        const dv = [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+        const n = [du[1] * dv[2] - du[2] * dv[1], du[2] * dv[0] - du[0] * dv[2],
+          du[0] * dv[1] - du[1] * dv[0]];
+        const L = Math.hypot(n[0], n[1], n[2]) || 1;
+        return [n[0] / L, n[1] / L, n[2] / L];
+      };
+      const pos = [], uv = [], idx = [];
+      const hh = thick / 2;
       for (let side = 0; side < 2; side++) {
-        const off = side ? -thick : 0;
+        const sg = side ? -1 : 1;
         const base = pos.length / 3;
-        for (let i = 0; i <= NU; i++) {
-          const u = i / NU;
-          const hw = halfW(u), r = spineR(u), y = spineY(u);
-          for (let j = 0; j <= NV; j++) {
-            const v = (j / NV) * 2 - 1;
-            pos.push(v * hw, y, r + bow(u, v) + off);
+        for (let i2 = 0; i2 <= NU; i2++) {
+          const u = i2 / NU;
+          for (let j2 = 0; j2 <= NV; j2++) {
+            const v = (j2 / NV) * 2 - 1;
+            const p = S(u, v), n = N(u, v);
+            pos.push(p[0] + n[0] * hh * sg, p[1] + n[1] * hh * sg, p[2] + n[2] * hh * sg);
             uv.push((v + 1) / 2, u);
           }
         }
-        for (let i = 0; i < NU; i++) {
-          for (let j = 0; j < NV; j++) {
-            const a = base + i * (NV + 1) + j, b = a + NV + 1;
+        for (let i2 = 0; i2 < NU; i2++) {
+          for (let j2 = 0; j2 < NV; j2++) {
+            const a = base + i2 * (NV + 1) + j2, b = a + NV + 1;
             if (side === 0) idx.push(a, b, a + 1, a + 1, b, b + 1);
             else idx.push(a, a + 1, b, a + 1, b + 1, b);
           }
+        }
+      }
+      // the rim down each side of the petal: the two surfaces joined
+      for (const vEdge of [1, -1]) {
+        const base = pos.length / 3;
+        for (let i2 = 0; i2 <= NU; i2++) {
+          const u = i2 / NU;
+          const p = S(u, vEdge), n = N(u, vEdge);
+          pos.push(p[0] + n[0] * hh, p[1] + n[1] * hh, p[2] + n[2] * hh);
+          pos.push(p[0] - n[0] * hh, p[1] - n[1] * hh, p[2] - n[2] * hh);
+          uv.push(0, u); uv.push(1, u);
+        }
+        for (let i2 = 0; i2 < NU; i2++) {
+          const a = base + i2 * 2;
+          if (vEdge > 0) idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
+          else idx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3);
         }
       }
       const g = new T3.BufferGeometry();
@@ -161,13 +204,16 @@ export default {
     }
 
     /* ---- three rings of nine ---------------------------------------------
-       entrance leaves 7.8 m, opening outwards to a 70 m span;
-       outer leaves 22.5 m, turning back in;
-       inner leaves 33.6 m, closing over the hall. */
+       Entrance leaves 7.8 m high, springing at the edge of the podium and
+       peeling out to the documented 70 m span; outer leaves 22.5 m, leaning in
+       over them; inner leaves 33.6 m, closing over the hall. The petals are
+       wide enough in each ring to almost touch their neighbours: a ring of nine
+       at radius r has 0.70 r between petal centres, and a 14 m petal at that
+       spacing is what makes a bud rather than a crown of spikes. */
     const RINGS = [
-      { H: 9.4, R0: 11.0, Rc: 19.5, Rtip: 26.0, W: 6.9, cup: 0.55, thick: 0.5, yPow: 1.75, rot: 0, mat: MARBLE2 },
-      { H: 22.5, R0: 12.0, Rc: 19.2, Rtip: 13.6, W: 5.7, cup: 0.8, thick: 0.42, yPow: 1.45, rot: Math.PI / 9, mat: MARBLE2 },
-      { H: 33.6, R0: 10.2, Rc: 15.2, Rtip: 3.2, W: 5.5, cup: 0.7, thick: 0.38, yPow: 1.55, rot: 0, mat: MARBLE }
+      { H: 8.6, R0: 21.0, Rc: 27.0, Rtip: 32.5, W: 8.2, keel: 1.6, wrap: 4.0, edge: 0.5, thick: 0.5, yPow: 1.15, droop: 0.42, rot: 0, mat: MARBLE2 },
+      { H: 22.5, R0: 21.0, Rc: 25.0, Rtip: 14.0, W: 7.4, keel: 1.9, wrap: 4.6, edge: 0.55, thick: 0.45, yPow: 1.35, rot: Math.PI / 9, mat: MARBLE2 },
+      { H: 33.6, R0: 17.6, Rc: 21.0, Rtip: 6.5, W: 7.2, keel: 1.7, wrap: 4.2, edge: 0.5, thick: 0.4, yPow: 1.55, rot: 0, mat: MARBLE }
     ];
     RINGS.forEach((r) => {
       for (let i = 0; i < 9; i++) {
