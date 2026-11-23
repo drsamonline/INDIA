@@ -34,7 +34,7 @@ index.html, credits.html       generated from tools/templates/
 tools/                         build + QA scripts (see below)
 DIMENSIONS.md                  every model's figures with a source per row
 ROADMAP.md                     what each monument still needs, ranked
-docs/gallery.jpg               contact sheet of all 24
+docs/gallery.jpg               contact sheet of all 24 (tools/build_gallery.py)
 LICENSE, NOTICE                CC BY-NC 4.0 with a licence history
 ```
 
@@ -483,6 +483,24 @@ detail and the wheels.
 
 Shore Temple was checked at the same time and left alone: Pallava granite really
 is a dark grey-brown, and the page reads correctly for what it is.
+
+---
+
+### 20. The repo's gallery was three sessions stale
+
+`docs/gallery.jpg` is the repo's own record of the 24, and it still showed every
+model from before the repass: Jantar Mantar orange, Somnath dark, Konark cold
+grey, Hawa Mahal brick red, the Gateway grey, Meenakshi's office blocks.
+
+`tools/build_gallery.py` rebuilds it from `shots/audit/` — 4 columns, name and
+place/era under each tile, 1550x1710. Run it after any pass that changes a page.
+
+The Taj tile needs `taj_tile.py`-style handling (12 s after `__tajReady`, with
+`#info`, `#panel` and `#cluster` hidden) or it catches the intro overlay and the
+demo page's credit block.
+
+`docs/preview.jpg` is the README hero and is a *photograph*, not a render — it
+does not go stale with the models.
 
 ---
 
