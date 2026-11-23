@@ -228,7 +228,7 @@ building. Ranked by how far it is from reading as itself:
 |---|---|---|---|
 | 1 | CSMT | cream plaster and a **red tile roof** on a Kurla-stone Gothic terminus | **done** — Kurla buff, grey roof, grey forecourt |
 | 2 | Basilica of Bom Jesus | **symmetric** facade with the bell tower hidden at the rear | **done** — one tall tower at the front right, as the church actually stands |
-| 3 | Golden Temple | the shrine is too small for the tank; no causeway read | todo |
+| 3 | Golden Temple | **done** — the fault was the tank, not the shrine: distortion 0.9 made it a mirror of a pale sky | done |
 | 4 | Somnath | dark grey stone; the real temple is pale with a gilded shikhara | todo |
 | 5 | Hawa Mahal | flat parapet; needs the curved cornice and five domed chhatris | todo |
 | 6 | Mahabodhi | curved shikhara; the real spire is a straight tapering brick tower | todo |
@@ -282,6 +282,25 @@ shoulder-to-arm junction is a union of two surfaces rather than one blend — it
 holds at the site's viewing distances but not at 6 m. A single field that fuses
 torso and arms (the `smin` in the module is currently dead code) is the honest
 fix if this page is revisited.
+
+---
+
+### 10. Golden Temple — the tank, not the shrine
+
+The audit note said "shrine too small for the tank". That was wrong. The plan
+is 12.25 m on a 20.4 m platform in a 148 m tank — a 1:7.3 ratio, which is what
+the building actually is, and `DIMENSIONS.md` has it right.
+
+What was wrong was the **water**: `distortion: 0.9` on the engine's Water
+shader left the tank a near-perfect mirror of a bright sky, so the tank read as
+a pale marble floor continuous with the deck. With the tank invisible there was
+no island, and the shrine looked lost on a plaza. Distortion 4.2 and a darker
+water colour restore the pool, and `fogScale: 0.34` clears a courtyard that was
+sitting in open-country haze.
+
+Still soft: the parikrama wings are 9.2 m blocks where the real arcades are
+taller and much more ornate, and the dome is the documented 5.9 m rather than
+the larger mass photographs suggest.
 
 ---
 

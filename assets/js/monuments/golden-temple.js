@@ -17,6 +17,7 @@ export default {
   accent2: '#ffe08a',
   seed: 47,
   floodScale: 0.35,
+  fogScale: 0.34,          // a walled courtyard, not a hazy plain
   bounds: 110,
   minDist: 14,
   maxDist: 420,
@@ -24,7 +25,9 @@ export default {
   home: { pos: [-36, 12.5, 46], target: [0, 7.6, 0], fov: 40 },
   ground: { texture: 'paving', size: 2400, color: 0xd8cdb8 },
   groundY: -7.95,
-  water: { y: -2.6, size: 157, color: 0x123641, distortion: 0.9 },
+  // distortion 0.9 left the tank a near-perfect mirror of a bright sky, so it
+  // read as a pale marble floor. Ripples are what say "water".
+  water: { y: -2.6, size: 157, color: 0x0e2a34, distortion: 4.2 },
   views: [
     { name: 'Full', pos: [-36, 12.5, 46], target: [0, 7.6, 0] },
     { name: 'Causeway', pos: [-64, 8.0, 12], target: [-6, 9, 0] },
