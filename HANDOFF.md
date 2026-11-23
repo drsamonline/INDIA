@@ -556,6 +556,26 @@ is right, but it reads as a short tunic until the stride is in.
 
 ---
 
+### 23. Frame check — the statue's bug was not unique
+
+`tools/framecheck.py` measures every named view and tour stop: the distance to
+its target, the vertical extent that distance covers at the camera's fov, and
+whether that is enough for the building's published height. It is a report, not
+a verdict — most flags are deliberate detail views ("Portal", "Carving", "Flag",
+"The face"), and the ones worth acting on are those *named for the whole
+subject*.
+
+Fixed from it: Mahabodhi's "The tower" (framed 24 m of 52) and "From the east"
+(34 of 52), CSMT's "The Clock Tower" (32 of 48.8), Somnath's "Fifty Metres"
+(35 of 50), and the statue's "Light of Unity" (184 of 240).
+
+Two things learned: a 5 % margin is not enough when the camera looks up at the
+subject — the tower was still clipped at 51.7 m of 52 until the frame was 64 m
+tall; and a "The tower" view that shows half the tower is a defect, while a
+"Carving" view that shows a metre of wall is not.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

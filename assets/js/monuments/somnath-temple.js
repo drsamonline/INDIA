@@ -52,7 +52,7 @@ export default {
     {
       title: 'Fifty Metres', deva: 'शिखर',
       text: 'The present temple was rebuilt between 1950 and 1951 on the initiative of Sardar Vallabhbhai Patel, in the Kailash Mahameru Prasad style: a 50-metre shikhara of carved grey sandstone rising over the sanctum.',
-      pos: [18, 40, 44], target: [0, 34, 0], time: 12
+      pos: [26, 40, 68], target: [0, 30, 0], time: 12
     },
     {
       title: 'The Pillared Hall', deva: 'सभा मंडप',

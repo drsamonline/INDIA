@@ -74,7 +74,7 @@ export default {
     {
       title: 'Light of Unity', deva: 'एकता की ज्योति',
       text: 'After dark the floodlights take the bronze, the gallery glows at the chest, and the dam carries a line of lights across the water. This concludes the tour.',
-      pos: [140, 96, 210], target: [0, 102, 0], time: 21.2
+      pos: [175, 150, 300], target: [0, 148, 0], time: 21.2
     }
   ],
 

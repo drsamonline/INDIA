@@ -49,7 +49,7 @@ export default {
     {
       title: 'The Clock Tower', deva: 'घड़ी मीनार',
       text: 'The clock tower rises about 49 metres at the south-west corner, and the station clock still keeps time over the forecourt.',
-      pos: [-24, 28, 44], target: [-18, 32, 0], time: 9.2
+      pos: [-38, 30, 74], target: [-18, 26, 0], time: 9.2
     },
     {
       title: 'Three Million a Day', deva: 'भीड़',

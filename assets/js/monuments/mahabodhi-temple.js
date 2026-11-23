@@ -25,9 +25,9 @@ export default {
   ground: { texture: 'grass', size: 2400, color: 0x8f9a66, tile: 16 },
   views: [
     { name: 'Full', pos: [-58, 31, 88], target: [6, 23, 0] },
-    { name: 'The tower', pos: [-12, 22, 30], target: [0, 26, 0] },
+    { name: 'The tower', pos: [-34, 26, 88], target: [0, 27, 0] },
     { name: 'Crown', pos: [-16, 46, 20], target: [0, 45, 0] },
-    { name: 'From the east', pos: [4, 13, 46], target: [0, 18, 0] },
+    { name: 'From the east', pos: [8, 24, 92], target: [0, 26, 0] },
     { name: 'Bodhi tree', pos: [-8, 9, 22], target: [-20, 11, -4] }
   ],
   tour: [
