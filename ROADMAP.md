@@ -74,7 +74,7 @@ from the code.
 |---|---|---|
 | **Meenakshi** | fourteen gopurams read as tiered blocks with window rows. Three cosmetic passes failed | model one gopuram properly — tier walls, projecting cornices, figure registers as instanced relief — then instance it fourteen times at the documented sizes |
 | **Lotus** | petals read as leaves; the ring parameterisation is right, the section is not | a folded double-curved shell with a keel and a thin edge, traced from the elevation, as the head and the petals eventually were |
-| **Statue of Unity** | arms fuse to the torso at the armpit; a single closed loft cannot make two arm loops | separate arm shells that meet a shoulder cap, or quad topology on the torso |
+| **Statue of Unity** | arms fuse to the torso at the armpit; a single closed loft cannot make two arm loops. The costume now follows the reference (shawl over both shoulders, dhoti wrapped to the ankles, sandals) | separate arm shells that meet a shoulder cap, or quad topology on the torso. The portrait is a separate problem: it needs sculpted mesh, not more passes over this code |
 
 ### Tier 2 — good massing, missing the detail that identifies it (9)
 

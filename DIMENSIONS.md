@@ -255,7 +255,13 @@ not at a corner — confirmed by the photograph and the nomination text.
 | Feet gap | 6.4 m | 6.4 m | — |
 | Shoulders | ~46 m *(photo)* | 49 m | — |
 | Head | ~8 heads tall | 21.5 m (8.5 heads) | — |
-| Dhoti hem / waist / shoulder | 0.30 / 0.60 / 0.875 of height *(photo)* | same | — |
+| Waist / shoulder | 0.60 / 0.875 of height *(photo)* | same | — |
+| Dhoti skirt hem | 0.40 of height (73 m) | 0.393 (71.5 m) | supplied turnaround |
+| Dhoti over the legs | wrapped to just above the ankle, ankles bare | cloth to 0.125, ankle bare below | Wikipedia ("Patel's dhoti-clad legs and sandalled feet"); Incredible India |
+| Footwear | sandals: flat sole, instep strap, heel strap | same | ibid. |
+| Shawl | chaddar over both shoulders; hem at 0.53 of height in front, 0.44 at the back | 0.535 / 0.445 | supplied turnaround |
+| Head across the skull | 17 m | 17 m | supplied turnaround |
+| Skirt across the hem | 51 m | 51 m | supplied turnaround |
 
 ## Basilica of Bom Jesus
 

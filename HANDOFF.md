@@ -12,7 +12,7 @@ page per monument plus a landing page that links them all.
 - **Repo:** `https://github.com/drsamonline/INDIA` (public, branch `main`)
 - **Live:** `https://drsamonline.github.io/INDIA/` (GitHub Pages)
 - **Licence:** CC BY-NC 4.0, author **Dr Sohil Momin**
-- **Head of main:** `ee26dbf`
+- **Head of main:** `HEAD_SHA`
 - **Working tree:** clean
 - **CI:** green on every push (`site` + `pages-build-deployment`)
 
@@ -37,7 +37,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 
 | Item | Why it is open |
 |---|---|
-| Statue of Unity is not a portrait | It is a good procedural figure with a sculpted face, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
+| Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
+
+**Latest run (§29):** the Statue of Unity figure rebuilt against the turnaround
+the user supplied — shawl over both shoulders, dhoti wrapped to the ankles,
+sandals, hair rim, buttons, cuffs. 41k → 50k triangles, boot 65 s, 0 errors,
+`audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` 0 new, `check_a11y` ok.
 
 **Known soft spots, judged acceptable:** India Gate's attic is squat (block
 width is unpublished, the model's 37 m is photo-derived); Shore Temple and
@@ -726,6 +731,48 @@ committing: rebuild produces no diff, 0 errors, 26 pages resolve, 0 new tints.
 
 ---
 
+### 29. Statue of Unity — the figure rebuilt against the turnaround
+
+The user sent five 3D-model listings (Sketchfab store, FAB, Meshy) and two
+renders of a sculpted figure, and chose the procedural route: rebuild the figure
+with the turnaround as modelling reference, no imported mesh, so the site's
+"No downloaded models" claim and its CC BY-NC licence both stand. What the
+reference showed the model getting wrong:
+
+| Fault | What was wrong |
+|---|---|
+| shawl | a one-shoulder uttariya. The reference is a chaddar over **both** shoulders — hem at 0.53 of height in front, 0.44 at the back, the opening widening downwards |
+| legs | bare bronze below a hem at t 0.295, 25 % of the figure. The dhoti is wrapped round the legs to just above the ankle — "Patel's dhoti-clad legs and sandalled feet" — which is also why the base is narrower than the shoulders |
+| skirt | hem at 0.295 and 41 m across; the reference is 51 m across with its hem at 0.39, turning in at the edge |
+| feet | three spheres and three boxes: boulders beside a skateboard. A lofted foot now, flat sole, five toes, instep strap, heel strap |
+| head | 14.6 m across on a 21.5 m height read as a narrow head on a long neck; the reference is 17 m. The crown was an open ring and there was no hair |
+| face | a 0.95 m moustache bump. Patel is clean-shaven |
+| placket | no buttons. Five discs now, and sleeve cuffs at the wrists |
+
+Technique worth keeping:
+
+- **Two shells whose thickness fades to nothing at the edge** is what makes cloth
+  read as a garment. The old shawl closed its front edges with flat quads standing
+  beside the arm, which is exactly what read as "flaps". The thickness now falls
+  to zero at the hem, the collar and the two front falls, so the shawl is one
+  closed lens, and a tube swept along each edge gives the rolled seam.
+- **A loft that runs along z winds its rings the opposite way to a vertical
+  loft.** The foot came out inside-out — dark, and invisible from the front —
+  until the index order was reversed. A surface that renders dark with a sane
+  material is a winding bug, not a lighting bug.
+- **A hard `cap()` window cuts a feature off with a step**: the brow read as a bar
+  and the nose ridge as a fin. `exp(-(v/w)^4)` is flat in the middle and dies
+  smoothly.
+- **Folds have to be metres deep to read.** 0.6 m of ripple on a 182 m figure is
+  invisible; the gathers are 1 m and up.
+
+Still not right: the shawl's front falls hang as two stiff panels rather than
+falling in folds, the skirt reads a little like a tutu at the front, and the face
+is a displacement, not a portrait. 50k triangles, boot 65 s under software
+rendering.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
@@ -752,6 +799,12 @@ These cost real time last session. All are true.
    Amber ended up inside walls. Both are fixed; trust it now.
 9. **Always render and look before committing.** Several changes in this
    session looked correct in code and wrong on screen, and vice versa.
+10. **`?view=` and `?look=` do nothing without `?shot=`.** Both are parsed
+    inside `if (params.has('shot'))`, so `?view=3` on its own opens the home
+    view and comes out identical to `?view=1`. Pass `?shot=11&view=3`. Two
+    `?look=` shots with az 0 and az 40 also came out identical in this session
+    and the cause was not chased — render a view and look at it before trusting
+    the parameter.
 
 ---
 
