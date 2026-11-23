@@ -29,12 +29,12 @@ export default {
   bounds: 200,
   minDist: 90,
   maxDist: 1200,
-  home: { pos: [188, 104, 312], target: [0, 120, 0], fov: 40 },
+  home: { pos: [206, 118, 358], target: [0, 128, 0], fov: 40 },
   ground: { texture: 'grass', size: 2600, color: 0x8e9a68, tile: 30 },
   water: { y: -1.2, size: 1100, z: 620, color: 0x2d5566, distortion: 2.0 },
   views: [
-    { name: 'Full', pos: [188, 104, 312], target: [0, 120, 0] },
-    { name: 'The figure', pos: [148, 172, 306], target: [0, 148, 0] },
+    { name: 'Full', pos: [206, 118, 358], target: [0, 128, 0] },
+    { name: 'The figure', pos: [158, 168, 322], target: [0, 152, 0] },
     { name: 'From the dam', pos: [0, 70, 420], target: [0, 130, 0] },
     { name: 'Plinth', pos: [96, 46, 116], target: [0, 34, 0] },
     { name: 'Aerial', pos: [250, 360, 300], target: [0, 100, 0] }
@@ -43,7 +43,7 @@ export default {
     {
       title: 'The Tallest Statue', deva: 'एकता की प्रतिमा',
       text: 'The Statue of Unity stands on the island of Sadhu Bet in the Narmada, facing the Sardar Sarovar dam. At 182 metres it is the tallest statue in the world, dedicated to Sardar Vallabhbhai Patel, who brought the princely states into the Indian Union.',
-      pos: [232, 128, 340], target: [0, 106, 0], time: 16.9
+      pos: [238, 132, 360], target: [0, 118, 0], time: 16.9
     },
     {
       title: 'Bronze on Steel', deva: 'कांस्य',
@@ -76,7 +76,20 @@ export default {
     const T3 = ctx.THREE;
     const { add, box, cyl, sph, cone, block, col, torus } = ctx;
 
-    const B = 'bronze', C = 'copper', DK = 'dark';
+    // The engine's bronze is metalness 0.9, and a metal with only a weak
+    // environment map to reflect renders almost black — which is why the
+    // figure read as a silhouette with a few copper highlights. Less metal,
+    // more diffuse colour, so the panels catch the key light instead.
+    const patina = (base, col, metal, rough) => {
+      const mm = ctx.mat(base);
+      if (!mm || !mm.clone) return base;
+      const c = mm.clone();
+      c.color.setHex(col); c.metalness = metal; c.roughness = rough;
+      return c;
+    };
+    const B = patina('bronze', 0xb08a52, 0.62, 0.46);    // the figure
+    const C = patina('bronze', 0xc49b62, 0.55, 0.40);    // the shawl, a shade lighter so it reads as cloth
+    const DK = 'dark';
     const H = 182, BASE = 58;              // figure height, plinth top
     const Y = (t) => BASE + H * t;
 
@@ -349,13 +362,13 @@ export default {
     // falls, short over the back
     const dropAt = (ang) => {
       let d = Math.abs(((ang - Math.PI / 2) % (Math.PI * 2) + Math.PI * 3) % (Math.PI * 2) - Math.PI);
-      const k = Math.min(1, Math.max(0, (d - 0.58) / 1.10));
+      const k = Math.min(1, Math.max(0, (d - 0.34) / 1.16));
       return 0.575 + (0.848 - 0.575) * (k * k * (3 - 2 * k));
     };
     const shawlGeo = (off, thick) => {
       const NUu = 52, NVv = 16;
       const pos = [], uv = [], idx = [];
-      const a0 = Math.PI / 2 + 0.58, a1 = Math.PI / 2 + Math.PI * 2 - 0.58;
+      const a0 = Math.PI / 2 + 0.34, a1 = Math.PI / 2 + Math.PI * 2 - 0.34;
       for (let i = 0; i <= NVv; i++) {
         const v = i / NVv;
         for (let j = 0; j <= NUu; j++) {
@@ -363,7 +376,12 @@ export default {
           const ang = a0 + (a1 - a0) * u;
           const t = 0.862 + (dropAt(ang) - 0.862) * v;
           const p = surf(t, ang);
-          const r = Math.hypot(p[0], p[2]) + off + 0.35 * Math.sin(6.2 * u * Math.PI);
+          // folds deepen as the cloth hangs: a constant ripple read as a
+          // smooth sheet with a wobble in it
+          // the mean stays on the body surface and only the ripple grows, so
+          // the cloth hangs on the shoulders instead of floating off them
+          const amp = 0.18 + 0.55 * v;
+          const r = Math.hypot(p[0], p[2]) + off + amp * Math.sin(7.4 * u * Math.PI);
           pos.push(Math.cos(ang) * r, p[1], Math.sin(ang) * r);
           uv.push(u, v);
         }
@@ -383,20 +401,29 @@ export default {
     };
     add(C, shawlGeo(0.6, 1.0), 0, 0, 0);
     add(C, shawlGeo(1.6, 1.0), 0, 0, 0);
-    // the two edges of the shawl, closing the cloth
-    for (const ang of [Math.PI / 2 + 0.58, Math.PI / 2 + Math.PI * 2 - 0.58]) {
+    // the two front edges of the shawl, closing the cloth. These used to be
+    // flat 1 m boards hanging beside the arms, which is what read as "flaps";
+    // the fold now thins and curls inward as it falls.
+    for (const ang of [Math.PI / 2 + 0.34, Math.PI / 2 + Math.PI * 2 - 0.34]) {
+      const NVv = 14;
       const pos = [], idx = [], uv = [];
-      for (let i = 0; i <= 1; i++) {
-        for (let v = 0; v <= 12; v++) {
-          const vv = v / 12;
-          const t = 0.862 + (dropAt(ang) - 0.862) * vv;
-          const p = surf(t, ang);
-          const r = Math.hypot(p[0], p[2]) + 0.6 + (i ? 1.0 : 0);
+      for (let v = 0; v <= NVv; v++) {
+        const vv = v / NVv;
+        const t = 0.862 + (dropAt(ang) - 0.862) * vv;
+        const p = surf(t, ang);
+        const base = Math.hypot(p[0], p[2]);
+        const th = 0.95 * (1 - 0.82 * vv * vv);         // the fold thins as it falls
+        const curl = -0.25 * vv * vv;                   // and curls in at the hem
+        for (let i = 0; i <= 1; i++) {
+          const r = base + 0.52 + curl + th * i;
           pos.push(Math.cos(ang) * r, p[1], Math.sin(ang) * r);
           uv.push(vv, i);
         }
       }
-      for (let v = 0; v < 12; v++) idx.push(v, 13 + v, v + 1, v + 1, 13 + v, 14 + v);
+      for (let v = 0; v < NVv; v++) {
+        const a = v * 2;
+        idx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3);
+      }
       const g = new T3.BufferGeometry();
       g.setAttribute('position', new T3.Float32BufferAttribute(pos, 3));
       g.setAttribute('uv', new T3.Float32BufferAttribute(uv, 2));
@@ -409,11 +436,13 @@ export default {
     const legGeo = (sd) => {
       const NVl = 22, NUl = 22;
       const pos = [], uv = [], idx = [];
-      const cx = sd * 7.6;
+      const cx = sd * 8.1;
       for (let i = 0; i <= NVl; i++) {
         const v = i / NVl;
         const t = 0.375 - 0.33 * v;               // up inside the hem, down to the ankle
-        const r = 7.1 - 2.1 * v + 1.2 * Math.sin(Math.PI * v * 1.05) * (1 - v);
+        // thicker than they were: at 182 m the legs are ~15 m across at the
+        // thigh, and the old 7.1-2.1v taper read as two sticks under a skirt
+        const r = 8.6 - 2.3 * v + 1.5 * Math.sin(Math.PI * v * 1.05) * (1 - v);
         for (let j = 0; j <= NUl; j++) {
           const a = (j / NUl) * Math.PI * 2;
           const rr = r * (1 + 0.05 * Math.cos(5 * a + sd));

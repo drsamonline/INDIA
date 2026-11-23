@@ -156,7 +156,6 @@ ambient/grade decision, not a per-page hack.
 
 | Monument | What's missing |
 |---|---|
-| Statue of Unity | head cropped in some framings, bronze very dark, legs thin, shawl falls read as flaps |
 | Konark | wheels have flat spokes |
 | Kandariya | ~870 sculptures suggested by two registers |
 | CSMT | the carved menagerie is absent |
@@ -177,6 +176,30 @@ at all**: no error, just a page that never reached `dataset.boot`. That is trap 
 The numbers: 265k triangles before, 666k after, boot 85 s under software
 rendering against `check_all.py`'s 200 s wait. Do not push past ~700k without
 re-measuring.
+
+---
+
+### 6. Statue of Unity — done
+
+Four faults, four fixes:
+
+- **Head cropped.** Home and the Full view were at pos [188,104,312] target
+  y 120; the crown at 240 m sat just above the top edge. Now [206,118,358]
+  → y 128, and the tour's opening stop matches.
+- **Bronze very dark.** The engine's bronze is metalness 0.9, and a metal with
+  only a weak environment map renders near black. The module clones its own:
+  colour b08a52, metalness 0.62, roughness 0.46, so the panels catch the key
+  light. The shawl takes a slightly lighter tone (c49b62) so it reads as cloth.
+- **Legs thin.** Radius 7.1−2.1v → 8.6−2.3v with a stronger calf, stance 7.6 → 8.1.
+- **Shawl falls read as flaps.** They *were* flat 1 m boards: the two closing
+  quads ran straight down at constant thickness. The fold now thins to 18 % and
+  curls in at the hem, the ripple deepens as the cloth hangs, and the front
+  opening was narrowed from ±33° to ±19° — at an 11 m chest radius the old gap
+  was 7 m of bare chest, which is why it read as an open coat.
+
+Numbers: 41k triangles, boot 37 s. The scene dump (`tools/` has no equivalent;
+see the session notes) confirmed the figure is one merged mesh and the shawl a
+second — worth knowing before hunting for a stray mesh.
 
 ---
 
