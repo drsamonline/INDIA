@@ -29,8 +29,13 @@ export default {
   minDist: 20,
   maxDist: 300,
   home: { pos: [74, 30, 98], target: [0, 24, 2], fov: 40 },
-  ground: { texture: 'paving', size: 2400, color: 0xbdb096, tile: 12 },
-  water: { y: -0.5, size: 620, z: -330, color: 0x2a5160, distortion: 2.4 },
+  // a stone precinct, not the brown checkerboard the paving texture made of it
+  ground: { texture: 'stone', size: 2400, color: 0xc9c1b1, tile: 30 },
+  // The sea sat at y -0.5, which is BELOW the engine's ground plane at -0.02,
+  // so it never rendered: the site read as a desert plain with no water in
+  // sight. It is 0.08 above the plane now, behind the sea wall at z -36.
+  // the near edge sits behind the sea wall at z -36, and it runs to the horizon
+  water: { y: 0.08, size: 1200, z: -640, color: 0x1d4653, distortion: 2.8 },
   views: [
     { name: 'Full', pos: [74, 30, 98], target: [0, 24, 2] },
     { name: 'Shikhara', pos: [22, 40, 48], target: [0, 36, -14] },
@@ -75,8 +80,17 @@ export default {
     const T3 = ctx.THREE;
     const { add, box, cyl, sph, cone, block, col, torus } = ctx;
 
-    /* a warm grey-brown stone, a paler cream for the carved trim */
-    const ST = 'basalt', ST2 = 'basaltDark', TR = 'cream', DK = 'dark', GD = 'gold';
+    /* A pale warm sandstone, not the dark grey it was rendering: Somnath is
+       built of light stone, and the carving reads only when the mass is light. */
+    const tint = (base, col, rough) => {
+      const mm = ctx.mat(base);
+      if (!mm || !mm.clone) return base;
+      const c = mm.clone();
+      c.color.setHex(col);
+      if (rough !== undefined) c.roughness = rough;
+      return c;
+    };
+    const ST = tint('basalt', 0xd9cfb4), ST2 = tint('basalt', 0xc2b598), TR = 'cream', DK = 'dark', GD = 'gold';
 
     const TERR = 2.7;                    // top of the terrace
     const MZ = 6;                        // sabhamandapa centre, z

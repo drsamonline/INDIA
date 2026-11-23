@@ -229,7 +229,7 @@ building. Ranked by how far it is from reading as itself:
 | 1 | CSMT | cream plaster and a **red tile roof** on a Kurla-stone Gothic terminus | **done** — Kurla buff, grey roof, grey forecourt |
 | 2 | Basilica of Bom Jesus | **symmetric** facade with the bell tower hidden at the rear | **done** — one tall tower at the front right, as the church actually stands |
 | 3 | Golden Temple | **done** — the fault was the tank, not the shrine: distortion 0.9 made it a mirror of a pale sky | done |
-| 4 | Somnath | dark grey stone; the real temple is pale with a gilded shikhara | todo |
+| 4 | Somnath | **done** — pale sandstone, sea visible again; shikhara still reads stepped | done |
 | 5 | Hawa Mahal | flat parapet; needs the curved cornice and five domed chhatris | todo |
 | 6 | Mahabodhi | curved shikhara; the real spire is a straight tapering brick tower | todo |
 | 7 | India Gate / Gateway of India | both read plain: no inscription band, canopy, pools | todo |
@@ -301,6 +301,28 @@ sitting in open-country haze.
 Still soft: the parikrama wings are 9.2 m blocks where the real arcades are
 taller and much more ornate, and the dome is the documented 5.9 m rather than
 the larger mass photographs suggest.
+
+---
+
+### 11. Somnath — pale stone, and a sea that was never drawn
+
+Two faults, and one of them is a trap worth keeping:
+
+- **The stone.** The module named its materials `basalt` and `basaltDark`, which
+  are pale tans in this engine — but the render came out dark grey-brown. The
+  temple is light stone; the masses are now tinted 0xd9cfb4 / 0xc2b598 and the
+  carved trim reads.
+- **The sea was invisible.** `water.y` was -0.5 and the engine's ground plane
+  sits at -0.02, so the whole Arabian Sea was **under an opaque plane** and
+  never drew. That is why the site read as a desert plain. The water is at
+  +0.08 now, running from behind the sea wall at z -36 to the horizon.
+  **Any module whose water y is below `groundY` (default -0.02) has no water.**
+- The ground was a brown checkerboard from the paving texture at a 12 m tile;
+  it is a stone precinct at a 30 m tile now.
+
+Still wrong: the shikhara's silhouette. It is a curvilinear lathe with
+urushringas, but the horizontal ribs and the corner offsets make it read as a
+stepped pyramid rather than the smooth tapering tower at Somnath.
 
 ---
 
