@@ -12,9 +12,9 @@ page per monument plus a landing page that links them all.
 - **Repo:** `https://github.com/drsamonline/INDIA` (public, branch `main`)
 - **Live:** `https://drsamonline.github.io/INDIA/` (GitHub Pages)
 - **Licence:** CC BY-NC 4.0, author **Dr Sohil Momin**
-- **Head of main:** `a34419b`
+- **Head of main:** `055f083` for the code; this file is the tip of `main`
 - **Working tree:** clean
-- **Commits in the last session:** 71
+- **Commits in the last session:** 71, then 2 more (Taj clock + floods, Amber court)
 
 The user is Dr Sohil Momin. He works fast, says "go" to mean "continue the
 queue", and wants tables and bullets, not paragraphs. He checks the live site,
