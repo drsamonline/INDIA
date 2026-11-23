@@ -587,25 +587,32 @@ deliberate close-ups and should be left alone.
 
 ---
 
-### 24. The front page, and two cards with no picture
+### 24. The front page, and a false diagnosis I had to undo
 
-Two things found by looking at `index.html` for the first time:
+**Real:** the lede opened "No photographs, no downloaded models" directly above a
+credited photograph of the Taj. Reworded to "No downloaded models…" — the claim
+is about the gallery, which is true. The photograph keeps its credit line.
 
-- **The lede contradicted the hero.** It opened "No photographs, no downloaded
-  models" directly above a credited photograph of the Taj. Reworded to "No
-  downloaded models…" — the claim is about the gallery, which is true. The
-  photograph keeps its credit line.
-- **Two cards had no thumbnail.** `sanchi-stupa` and `victoria-memorial` were
-  the only two without `assets/img/thumb/<id>-{450,900}.{jpg,webp}` — their
-  files are `sanchi-*` and `victoria-memorial-kolkata-*`, so the card builder's
-  `<id>-900.jpg` path 404'd. Generated both sizes in both formats, 3:2, matching
-  the other 22.
+**Not real: "two cards had no thumbnail."** I generated thumbs for
+`sanchi-stupa` and `victoria-memorial` on the strength of a broken-image count,
+committed them, and wrote it up as a finding. It was wrong. The card builder
+takes its stem from the **image filename**, not the monument id, so the cards
+asked for `thumb/sanchi-900.jpg` and `thumb/victoria-memorial-kolkata-900.jpg`,
+both of which existed all along. The four generated files were unused and have
+been deleted.
 
-**A test-harness trap worth remembering:** checking `naturalWidth > 0` on every
-card image reports failures that are not real. `loading="lazy"` leaves offscreen
-images unrequested by design, and a single-threaded `TCPServer` drops requests
-when 24 images load at once — the same page gave 0, 9 and 15 "broken" on
-successive runs. Verify a specific URL serves instead of counting.
+What made the false reading possible, and how to avoid it:
+
+- `loading="lazy"` leaves offscreen images unrequested, so `naturalWidth === 0`
+  means "never asked for", not "broken"
+- a single-threaded `TCPServer` drops requests when 24 images load at once — the
+  same page gave **0, then 9, then 15** "broken" across runs with no code change
+- **`linkcheck.py` already covers this**: it parses `src` and `srcset` in the
+  generated HTML, and it reports the file when one is removed (verified by
+  removing `amber-fort-900.jpg` and watching it name it twice)
+
+The lesson is the one already in the traps list and which I ignored: when a
+measurement disagrees with the files on disk, doubt the measurement.
 
 ---
 
