@@ -81,7 +81,17 @@ export default {
     const WELLZ = -28.5;      // centre of the draw-well
     const WELLR = 5.0;        // 10 m across
 
-    const key = 'sandstoneBuff', carve = 'cream', shade = 'dark';
+    /* Rani ki Vav is a pale grey-beige sandstone. 'sandstoneBuff' is a warm
+       tan under a warm sun, which rendered the whole stepwell orange. Cloned
+       from 'cream', which carries no texture map to halve it. */
+    const tintMat = (col) => {
+      const mm = ctx.mat('cream');
+      if (!mm || !mm.clone) return 'cream';
+      const c = mm.clone();
+      c.color.setHex(col);
+      return c;
+    };
+    const key = tintMat(0xcfc2a6), carve = 'cream', shade = 'dark';
 
     /* ---------------- the ground: a flat plain with a hole in it -------- */
     function landPlane(w, d, x, z) {

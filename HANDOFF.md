@@ -455,6 +455,22 @@ and the Gateway were the first two. Somnath's default hour also moved 10.6 ->
 
 ---
 
+### 18. The contact sheet, and two last things it found
+
+`shots/audit/` holds all 24 at 560x350 and `sheet_a.jpg` / `sheet_b.jpg` are the
+contact sheets — regenerate them with the throwaway script in the session notes
+(4x3 grid, labels, 2280x1160). Two things only a sheet shows:
+
+- **Rani ki Vav was orange.** `sandstoneBuff` is a warm tan under a warm sun;
+  the stepwell is pale grey-beige sandstone. Cloned from `cream` at 0xcfc2a6.
+  Sixth victim of the texture-map trap.
+- **The Taj tile was a loading screen.** `check_all.py` screenshots 1.8 s after
+  `is-ready`, and the Taj's first frames are heavy enough that the intro overlay
+  is still fading. It needs ~12 s after `__tajReady`; use a raw Playwright
+  script for that page rather than `check_all.py`.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
