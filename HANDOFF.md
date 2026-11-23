@@ -587,6 +587,28 @@ deliberate close-ups and should be left alone.
 
 ---
 
+### 24. The front page, and two cards with no picture
+
+Two things found by looking at `index.html` for the first time:
+
+- **The lede contradicted the hero.** It opened "No photographs, no downloaded
+  models" directly above a credited photograph of the Taj. Reworded to "No
+  downloaded models…" — the claim is about the gallery, which is true. The
+  photograph keeps its credit line.
+- **Two cards had no thumbnail.** `sanchi-stupa` and `victoria-memorial` were
+  the only two without `assets/img/thumb/<id>-{450,900}.{jpg,webp}` — their
+  files are `sanchi-*` and `victoria-memorial-kolkata-*`, so the card builder's
+  `<id>-900.jpg` path 404'd. Generated both sizes in both formats, 3:2, matching
+  the other 22.
+
+**A test-harness trap worth remembering:** checking `naturalWidth > 0` on every
+card image reports failures that are not real. `loading="lazy"` leaves offscreen
+images unrequested by design, and a single-threaded `TCPServer` drops requests
+when 24 images load at once — the same page gave 0, 9 and 15 "broken" on
+successive runs. Verify a specific URL serves instead of counting.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
