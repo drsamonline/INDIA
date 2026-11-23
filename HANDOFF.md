@@ -234,11 +234,37 @@ building. Ranked by how far it is from reading as itself:
 | 6 | Mahabodhi | curved shikhara; the real spire is a straight tapering brick tower | todo |
 | 7 | India Gate / Gateway of India | both read plain: no inscription band, canopy, pools | todo |
 | 8 | Meenakshi | towers read as striped office blocks at distance | todo |
-| 9 | Statue of Unity | default view reads dark and small | todo |
+| 9 | Statue of Unity | **rebuilt this pass** — face sculpted into the head, one-shoulder shawl, legs and dhoti; still stylised in the body | partly |
 
 Clean: Taj, Qutub Minar, Charminar, Mysore Palace, Victoria Memorial,
 Mehrangarh, Rani ki Vav, Sanchi, Lotus, Shore, Konark, Amber, Jantar Mantar,
 Kandariya.
+
+---
+
+### 9. Statue of Unity — the figure rebuilt
+
+The user called this the worst model on the site, and was right: it read as a
+smooth bronze mannequin.
+
+| Fault | What was actually wrong |
+|---|---|
+| a blank egg for a face | every feature was placed at a **fixed z** while the head loft's front sits at z 6.4–7.7 by height, so the jaw and chin were buried inside the head and the eyes floated off it |
+| a mask of blobs (first fix) | a 21 m head is too big for stuck-on spheres — bulging cheeks, a bar across the brow, a slab of moustache |
+| rivets down the chest | five 1 m spheres standing 0.9 m proud: a jacket placket that read as buttons |
+| an open coat | the shawl wrapped **both** shoulders |
+| stick legs | 8.6 − 2.3v with no calf |
+| flat cloth | dhoti pleats 0.085 deep at the hem |
+
+Now: the face is **carved into the head surface** as a smooth displacement —
+nose ridge, brow, sunken sockets, cheeks, moustache, mouth line, chin — at 44×30
+resolution. The shawl is an uttariya over the left shoulder only, with folds that
+deepen as it hangs. Legs 9.6 − 2.4v with a calf, stance 8.5. Dhoti folds 0.15
+deep with a rolled hem band. Bronze is patinated (metalness 0.56), not brass.
+
+**Still not right:** the body is a smooth loft, so the kurta has no cloth breaks,
+the arms meet the shoulder in a step, and the hands are mittens. That is the next
+job on this page — drapery and anatomy, not another palette pass.
 
 ---
 

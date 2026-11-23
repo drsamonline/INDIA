@@ -87,8 +87,8 @@ export default {
       c.color.setHex(col); c.metalness = metal; c.roughness = rough;
       return c;
     };
-    const B = patina('bronze', 0xb08a52, 0.62, 0.46);    // the figure
-    const C = patina('bronze', 0xc49b62, 0.55, 0.40);    // the shawl, a shade lighter so it reads as cloth
+    const B = patina('bronze', 0xa8854e, 0.56, 0.52);    // the figure: patinated bronze, not brass
+    const C = patina('bronze', 0xb08a56, 0.50, 0.50);    // the shawl, a shade lighter so it reads as cloth
     const DK = 'dark';
     const H = 182, BASE = 58;              // figure height, plinth top
     const Y = (t) => BASE + H * t;
@@ -108,9 +108,9 @@ export default {
     };
 
     // torso: half-width, half-depth, forward offset of the section centre
-    const TA = [[0.38, 10.8], [0.47, 12.1], [0.53, 11.7], [0.58, 10.7], [0.64, 11.0],
-      [0.70, 11.6], [0.755, 12.7], [0.79, 14.8], [0.815, 17.2], [0.836, 16.8],
-      [0.852, 13.4], [0.862, 9.8], [0.872, 6.0]];
+    const TA = [[0.38, 11.4], [0.47, 12.8], [0.53, 12.3], [0.58, 11.4], [0.64, 11.8],
+      [0.70, 12.6], [0.755, 14.2], [0.79, 16.6], [0.815, 19.3], [0.836, 18.8],
+      [0.852, 14.6], [0.862, 10.4], [0.872, 6.2]];
     const TB = [[0.38, 9.6], [0.47, 10.6], [0.53, 10.4], [0.58, 10.0], [0.64, 10.3],
       [0.70, 10.6], [0.755, 11.0], [0.79, 11.4], [0.815, 11.4], [0.836, 10.8],
       [0.852, 9.4], [0.862, 8.2], [0.872, 5.4]];
@@ -122,18 +122,18 @@ export default {
        there is no tube and no joint — the radius varies continuously and
        the top of the sweep is buried in the shoulder. */
     const ARM = [ // t, x, z, radius
-      [0.860, 11.6, -0.6, 0.35],
-      [0.850, 15.6, -0.5, 2.5],
-      [0.835, 18.2, -0.3, 4.2],
-      [0.815, 19.8, -0.1, 5.8],
-      [0.790, 20.4, 0.3, 6.2],
-      [0.750, 19.7, 0.8, 6.0],
-      [0.700, 20.0, 1.4, 5.4],
-      [0.640, 19.9, 2.0, 5.2],
-      [0.560, 19.1, 2.5, 4.6],
-      [0.480, 18.3, 3.0, 4.2],
-      [0.430, 17.8, 3.3, 3.9],
-      [0.395, 17.3, 3.6, 3.5]
+      [0.860, 12.4, -0.6, 0.35],
+      [0.850, 17.0, -0.5, 2.6],
+      [0.835, 20.0, -0.3, 4.4],
+      [0.815, 21.8, -0.1, 6.0],
+      [0.790, 22.5, 0.3, 6.4],
+      [0.750, 21.8, 0.8, 6.2],
+      [0.700, 22.0, 1.4, 5.6],
+      [0.640, 21.8, 2.0, 5.4],
+      [0.560, 20.9, 2.5, 4.8],
+      [0.480, 20.0, 3.0, 4.4],
+      [0.430, 19.4, 3.3, 4.0],
+      [0.395, 18.8, 3.6, 3.6]
     ];
 
     /* ==================================================================== *
@@ -241,8 +241,8 @@ export default {
         for (let j = 0; j <= NUd; j++) {
           const a = (j / NUd) * Math.PI * 2;
           // pleats: eight folds down the front, deepening towards the hem
-          const pl = (0.020 + 0.085 * v) * Math.cos(8 * a + 0.4) +
-            (0.012 + 0.045 * v) * Math.cos(16 * a - 1.1);
+          const pl = (0.030 + 0.150 * v) * Math.cos(8 * a + 0.4) +
+            (0.018 + 0.075 * v) * Math.cos(16 * a - 1.1);
           const r = 1 + pl;
           const yy = Y(t) - dip * (0.9 + 0.7 * Math.cos(a));
           pos.push(Math.cos(a) * A * r, yy, Math.sin(a) * Bd * r);
@@ -263,6 +263,32 @@ export default {
       return g;
     };
     add(B, dhotiGeo(), 0, 0, 0);
+    // the hem: a band of rolled cloth at the bottom edge
+    {
+      const pos = [], uv = [], idx = [];
+      const N = 64;
+      for (let i = 0; i <= 3; i++) {
+        const t = 0.302 + i * 0.006;
+        const A = lerpTab(DH.map(([tt, a]) => [tt, a]), t);
+        const Bd = lerpTab(DH.map(([tt, a, b]) => [tt, b]), t);
+        for (let j = 0; j <= N; j++) {
+          const a = (j / N) * Math.PI * 2;
+          const rr = 1.02 + 0.02 * Math.cos(8 * a);
+          pos.push(Math.cos(a) * A * rr, Y(t), Math.sin(a) * Bd * rr);
+          uv.push(j / N, i / 3);
+        }
+      }
+      for (let i = 0; i < 3; i++) for (let j = 0; j < N; j++) {
+        const a = i * (N + 1) + j, b = a + N + 1;
+        idx.push(a, b, a + 1, a + 1, b, b + 1);
+      }
+      const g = new T3.BufferGeometry();
+      g.setAttribute('position', new T3.Float32BufferAttribute(pos, 3));
+      g.setAttribute('uv', new T3.Float32BufferAttribute(uv, 2));
+      g.setIndex(idx);
+      g.computeVertexNormals();
+      add(B, g, 0, 0, 0);
+    }
     // eight pleats standing proud of the dhoti's front
     for (let f = -4; f <= 4; f++) {
       if (f === 0) continue;
@@ -323,12 +349,6 @@ export default {
     add(B, band(0.567, 1.6, 0.8, B), 0, 0, 0);          // jacket hem
     add(B, band(0.838, 1.4, 0.8, B), 0, 0, 0);          // shoulder seam
     add(B, band(0.856, 2.2, 1.2, B, 26), 0, 0, 0);      // stand collar
-    // the placket, buttons down the front of the jacket
-    for (let i = 0; i < 5; i++) {
-      const t = 0.60 + i * 0.05;
-      const p = surf(t, Math.PI / 2);
-      add(C, sph(1.0, 6), 0, p[1], p[2] + 0.9, { sz: 0.5 });
-    }
     // the placket: a raised strip from the collar to the jacket hem
     {
       const pos = [], uv = [], idx = [];
@@ -358,17 +378,20 @@ export default {
     /* One patch swept on the body grid: the top edge runs round the
        shoulders, the bottom edge hangs to the waist at the front and stops
        high at the back, so the cloth reads as a draped uttariya. */
-    // how far the shawl hangs at a given bearing: long at the two front
-    // falls, short over the back
+    /* An uttariya is worn over one shoulder, not both. It goes over Patel's
+       left shoulder (+x), across the back and under the right arm; the right
+       shoulder stays bare. Wrapping both shoulders was what made the figure
+       read as a man in an open coat. */
+    const FALL = Math.PI / 2 - 0.50;      // the front-left fall
     const dropAt = (ang) => {
-      let d = Math.abs(((ang - Math.PI / 2) % (Math.PI * 2) + Math.PI * 3) % (Math.PI * 2) - Math.PI);
-      const k = Math.min(1, Math.max(0, (d - 0.34) / 1.16));
-      return 0.575 + (0.848 - 0.575) * (k * k * (3 - 2 * k));
+      const d = Math.abs(ang - FALL);
+      const k = Math.min(1, Math.max(0, d / 1.9));
+      return 0.845 - (0.845 - 0.60) * (1 - k * k * (3 - 2 * k));
     };
     const shawlGeo = (off, thick) => {
       const NUu = 52, NVv = 16;
       const pos = [], uv = [], idx = [];
-      const a0 = Math.PI / 2 + 0.34, a1 = Math.PI / 2 + Math.PI * 2 - 0.34;
+      const a0 = FALL, a1 = -2.40;
       for (let i = 0; i <= NVv; i++) {
         const v = i / NVv;
         for (let j = 0; j <= NUu; j++) {
@@ -404,7 +427,7 @@ export default {
     // the two front edges of the shawl, closing the cloth. These used to be
     // flat 1 m boards hanging beside the arms, which is what read as "flaps";
     // the fold now thins and curls inward as it falls.
-    for (const ang of [Math.PI / 2 + 0.34, Math.PI / 2 + Math.PI * 2 - 0.34]) {
+    for (const ang of [FALL, -2.40]) {
       const NVv = 14;
       const pos = [], idx = [], uv = [];
       for (let v = 0; v <= NVv; v++) {
@@ -436,13 +459,13 @@ export default {
     const legGeo = (sd) => {
       const NVl = 22, NUl = 22;
       const pos = [], uv = [], idx = [];
-      const cx = sd * 8.1;
+      const cx = sd * 8.5;
       for (let i = 0; i <= NVl; i++) {
         const v = i / NVl;
         const t = 0.375 - 0.33 * v;               // up inside the hem, down to the ankle
         // thicker than they were: at 182 m the legs are ~15 m across at the
         // thigh, and the old 7.1-2.1v taper read as two sticks under a skirt
-        const r = 8.6 - 2.3 * v + 1.5 * Math.sin(Math.PI * v * 1.05) * (1 - v);
+        const r = 9.6 - 2.4 * v + 2.0 * Math.sin(Math.PI * v * 1.08) * (1 - v * 0.5);
         for (let j = 0; j <= NUl; j++) {
           const a = (j / NUl) * Math.PI * 2;
           const rr = r * (1 + 0.05 * Math.cos(5 * a + sd));
@@ -532,41 +555,83 @@ export default {
 
     /* ---- the hands: fingers folded against the thighs -------------------- */
     [-1, 1].forEach((sd) => {
-      add(B, sph(3.6, 14), sd * 17.2, Y(0.383), 4.2, { sy: 1.25, sz: 0.72 });
+      add(B, sph(3.8, 14), sd * 18.7, Y(0.383), 4.2, { sy: 1.25, sz: 0.72 });
       for (let f = 0; f < 4; f++) {
-        add(B, cyl(0.9, 1.05, 5.4, 5), sd * (16.0 + f * 1.4), Y(0.368), 5.4, { rx: 0.05 });
+        add(B, cyl(0.95, 1.1, 5.6, 5), sd * (17.5 + f * 1.4), Y(0.368), 5.4, { rx: 0.05 });
       }
-      add(B, sph(1.5, 8), sd * 14.6, Y(0.392), 5.6, { sy: 1.4, sz: 0.6 });
+      add(B, sph(1.6, 8), sd * 16.0, Y(0.392), 5.6, { sy: 1.4, sz: 0.6 });
     });
 
     /* ---- the head, lofted from the neck up ------------------------------ */
+    // t, halfWidth, halfDepth, forward — hoisted so the face can be placed
+    // against the surface instead of at fixed depths inside it
+    // a full skull with a rounded crown; the first pass tapered to a point
+    // and the head read as a bullet
+    const HEAD_LV = [
+      [0.00, 4.6, 5.4, 0.2],
+      [0.10, 5.9, 7.5, 0.9],
+      [0.26, 7.0, 8.9, 1.0],
+      [0.44, 7.3, 9.2, 0.7],
+      [0.60, 7.2, 8.9, 0.3],
+      [0.75, 6.9, 8.0, 0.0],
+      [0.88, 6.1, 6.9, -0.2],
+      [0.95, 5.0, 5.6, -0.3],
+      [1.00, 3.6, 4.0, -0.4]
+    ];
+    /* The face is carved into the head surface, not assembled out of spheres.
+       Built from separate primitives it read as a mask of blobs — bulging
+       cheeks, a bar across the brow, a slab of moustache — because a 21 m head
+       is too big for stuck-on parts to blend. Here each feature is a smooth
+       displacement of the loft along its own height and bearing: a nose ridge,
+       brow, sunken eye sockets, cheeks, Patel's moustache, a mouth line, a chin. */
+    const faceBump = (t, a) => {
+      const ax = Math.cos(a), az = Math.sin(a);
+      const front = Math.max(0, az);
+      if (front < 0.12) return 0;
+      const fx = Math.abs(ax);
+      const g = (v, c, w) => { const q = (v - c) / w; return Math.exp(-q * q); };
+      const cap = (v, w) => Math.max(0, 1 - Math.min(1, v / w));
+      let d = 0;
+      d += 1.45 * g(t, 0.615, 0.060) * cap(fx, 0.17);          // the nose ridge
+      d += 1.00 * g(t, 0.710, 0.044) * cap(fx, 0.58);          // brow
+      d -= 0.80 * g(t, 0.658, 0.038) * g(fx, 0.30, 0.14);      // eye sockets
+      d += 0.45 * g(t, 0.505, 0.075) * g(fx, 0.46, 0.22);      // cheeks
+      d += 0.95 * g(t, 0.458, 0.034) * cap(fx, 0.46);          // moustache
+      d -= 0.30 * g(t, 0.372, 0.026) * cap(fx, 0.30);          // the mouth line
+      d += 0.50 * g(t, 0.258, 0.055) * cap(fx, 0.36);          // chin
+      return d * front;
+    };
     function headGeometry() {
-      const LEVELS = [
-        // t, halfWidth, halfDepth, forward
-        [0.00, 4.4, 5.2, 0.2],
-        [0.10, 6.0, 7.4, 0.9],
-        [0.26, 7.2, 8.8, 1.0],
-        [0.44, 7.6, 9.1, 0.7],
-        [0.60, 7.5, 8.8, 0.3],
-        [0.75, 6.9, 7.9, 0.0],
-        [0.88, 5.3, 6.1, -0.2],
-        [1.00, 2.7, 3.1, -0.4]
-      ];
-      const SEG = 24, HH = 21.5;
+      const SEG = 44, ROWS = 30, HH = 21.5;
+      const at = (f) => {
+        const L = HEAD_LV;
+        let i = 1;
+        while (i < L.length - 1 && L[i][0] < f) i++;
+        const a = L[i - 1], b = L[i];
+        const u = (f - a[0]) / (b[0] - a[0]);
+        return [a[1] + (b[1] - a[1]) * u, a[2] + (b[2] - a[2]) * u, a[3] + (b[3] - a[3]) * u];
+      };
       const pos = [], uv = [], idx = [];
-      for (let i = 0; i < LEVELS.length; i++) {
-        const [t, hw, hd, fw] = LEVELS[i];
+      for (let i = 0; i <= ROWS; i++) {
+        const t = i / ROWS;
+        const [hw, hd, fw] = at(t);
         for (let j = 0; j <= SEG; j++) {
           const a = (j / SEG) * Math.PI * 2;
           const cx = Math.cos(a), cz = Math.sin(a);
           const front = Math.max(0, cz);
-          const x = cx * hw;
-          const z = cz * hd * (1 - 0.26 * front * front) + fw * front;
+          let x = cx * hw;
+          let z = cz * hd * (1 - 0.26 * front * front) + fw * front;
+          const b = faceBump(t, a);
+          if (b !== 0) {
+            const len = Math.hypot(x, z) || 1;
+            x += (x / len) * b;
+            z += (z / len) * b;
+          }
           pos.push(x, t * HH, z);
           uv.push(j / SEG, t);
         }
       }
-      for (let i = 0; i < LEVELS.length - 1; i++) {
+      for (let i = 0; i < ROWS; i++) {
         for (let j = 0; j < SEG; j++) {
           const a = i * (SEG + 1) + j, b = a + SEG + 1;
           idx.push(a, b, a + 1, a + 1, b, b + 1);
@@ -579,25 +644,14 @@ export default {
       g.computeVertexNormals();
       return g;
     }
+
     const HY = Y(0.868) + 2.4;           // 219, crown at 240
     add(B, cyl(5.8, 8.4, 13.0, 16), 0, HY - 6.0, -0.4, { sz: 0.94 });   // neck
     add(B, headGeometry(), 0, HY, 0);
     const hh = (f) => HY + 21.5 * f;
-    // the face: brow, eyes, nose, moustache, chin, ears
-    add(B, sph(6.6, 16), 0, hh(0.42), 2.4, { sy: 0.62, sz: 0.95 });       // jaw
-    add(B, sph(3.7, 12), 0, hh(0.28), 5.6, { sy: 0.74, sz: 1.0 });        // chin
-    add(B, box(11.2, 1.5, 2.2), 0, hh(0.70), 7.0);                        // brow
-    add(DK, sph(1.5, 8), -3.4, hh(0.66), 7.6, { sy: 0.6 });               // eyes
-    add(DK, sph(1.5, 8), 3.4, hh(0.66), 7.6, { sy: 0.6 });
-    add(B, cone(1.8, 5.0, 8), 0, hh(0.56), 8.9, { rx: Math.PI / 2 });     // nose
-    add(B, box(9.8, 1.6, 1.9), 0, hh(0.44), 8.0, { rx: 0.12 });           // moustache
-    add(B, sph(1.5, 8), -4.7, hh(0.45), 7.5, { sx: 1.3, sy: 0.7 });
-    add(B, sph(1.5, 8), 4.7, hh(0.45), 7.5, { sx: 1.3, sy: 0.7 });
-    add(B, sph(3.1, 10), -4.9, hh(0.50), 5.5, { sy: 0.8 });               // cheekbones
-    add(B, sph(3.1, 10), 4.9, hh(0.50), 5.5, { sy: 0.8 });
-    [-1, 1].forEach((sd) => add(B, sph(2.5, 8), sd * 8.2, hh(0.56), -0.8, { sx: 0.55, sy: 1.3 }));
-    add(B, sph(7.8, 18), 0, hh(0.86), -0.9, { sy: 0.5, sz: 0.9 });        // hair
-    add(B, sph(2.5, 8), 0, hh(0.84), 3.4, { sy: 0.5 });
+    // the ears are the only feature the loft cannot carry, since they sit off
+    // the side of the head
+    [-1, 1].forEach((sd) => add(B, sph(1.9, 8), sd * 7.0, hh(0.56), -1.5, { sx: 0.42, sy: 1.3, sz: 0.8 }));
 
     /* ==================================================================== *
      * the plinth: 58 m of terrace, podium and platform
