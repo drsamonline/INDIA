@@ -14,7 +14,14 @@ page per monument plus a landing page that links them all.
 - **Licence:** CC BY-NC 4.0, author **Dr Sohil Momin**
 - **Head of main:** `d137cad`
 - **Working tree:** clean
-- **CI:** green on every push (`site` + `pages-build-deployment`)
+- **CI:** green on every push (`site` + `pages-build-deployment`). **Not**
+  `Build + deploy` (`build-apps.yml`): it has failed with `startup_failure`
+  since the `deliver:` push of 2026-11-23 15:48 — zero jobs, no logs. The call
+  is well formed (`drsamonline/app-builder/.github/workflows/build.yml@main`,
+  which is public and declares `workflow_call` with exactly these inputs), so
+  the refusal is at resolution: check the repo's Actions permission for
+  reusable workflows in Settings, or the annotation in the Actions tab. Not
+  caused by any change in this repo's pages.
 
 The user is Dr Sohil Momin. He works fast, says "go" to mean "continue the
 queue", and wants tables and bullets, not paragraphs. He checks the live site,
