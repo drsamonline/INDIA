@@ -231,7 +231,7 @@ building. Ranked by how far it is from reading as itself:
 | 3 | Golden Temple | **done** — the fault was the tank, not the shrine: distortion 0.9 made it a mirror of a pale sky | done |
 | 4 | Somnath | **done** — pale sandstone, sea visible again; shikhara still reads stepped | done |
 | 5 | Hawa Mahal | **done** — domed skyline on the top tier; Jaipur pink | done |
-| 6 | Mahabodhi | curved shikhara; the real spire is a straight tapering brick tower | todo |
+| 6 | Mahabodhi | **done** — the tower was 24.5 m wide on a 52 m height; it is 15.5 m | done |
 | 7 | India Gate / Gateway of India | both read plain: no inscription band, canopy, pools | todo |
 | 8 | Meenakshi | towers read as striped office blocks at distance | todo |
 | 9 | Statue of Unity | **rebuilt this pass** — face sculpted into the head, one-shoulder shawl, legs and dhoti; still stylised in the body | partly |
@@ -340,6 +340,22 @@ Two faults:
   **texture map multiplies the colour down by about half**. The clone is taken
   from `cream`, which has no map, so the hex is the colour you see.
   **Tinting a textured engine material will not give you the swatch.**
+
+---
+
+### 13. Mahabodhi — the tower was twice its real width
+
+The audit said "curved shikhara; the real spire is a straight tapering brick
+tower". The profile was already straight; the width was not. `S0` — the sikhara
+at its base — was **24.5 m**, which on a 52 m tower is a 1:2.1 ratio. The
+literature gives a 15 m base on 52 m, about 1:3.5, and the photographs agree:
+the tower springs at roughly half the width of the frieze storey below it.
+`DIMENSIONS.md` had 30 m marked "(photo)" against a literature figure of 15 m —
+the photo reading was of the *plinth*, not the shaft.
+
+At 15.5 m it reads as the slim brick tower it is. The horizontal bands had to
+come in with it: at w + 0.07 they jutted like shelves once the faces were
+narrower, so they are w + 0.02 and the bhumi-amalaka bands w + 0.11.
 
 ---
 

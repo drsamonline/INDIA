@@ -82,7 +82,11 @@ export default {
     const TOP = 52.0;     // finial tip
     const BW = 30.0;      // basement, square
     const FW = 27.5;      // frieze storey, square
-    const S0 = 24.5;      // sikhara at its base
+    // 15 m in the literature, and the photograph agrees: the tower springs at
+    // about half the width of the frieze storey below it. At 24.5 m it was
+    // twice as wide as the building, which is what made it read squat and
+    // bulging rather than the straight slim brick tower it is.
+    const S0 = 15.5;      // sikhara at its base
     const S1 = 7.6;       // sikhara at its neck
 
     /* the sikhara profile: straight-edged pyramidal, a slight swell at the
@@ -176,9 +180,9 @@ export default {
       const t = i / TIERS;
       const w = widthAt(t);
       const y = SH0 + t * (SH1 - SH0);
-      add(PL, box(w + 0.07, 0.11, w + 0.07), 0, y, 0);
+      add(PL, box(w + 0.02, 0.09, w + 0.02), 0, y, 0);
       if (i % 4 === 0) {
-        add(PW, box(w + 0.26, 0.22, w + 0.26), 0, y, 0);
+        add(PW, box(w + 0.11, 0.16, w + 0.11), 0, y, 0);
         for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
           add(PW, cyl(0.5, 0.5, 0.2, 10), sx * (w / 2 + 0.02), y + 0.1, sz * (w / 2 + 0.02));
         }

@@ -215,7 +215,7 @@ not at a corner — confirmed by the photograph and the nomination text.
 | Element | Real | Model | Source |
 |---|---|---|---|
 | Total height | 52 m (sources give 50, 52, 55) | 52.0 m | Wikipedia |
-| Base width | 15 m in the literature, ~28–30 m *(photo)* | 30.0 m *(photo)* | — |
+| Base width | 15 m in the literature | 15.5 m | Wikipedia |
 | Sikhara springing | ~10–11 m *(photo)* | 11.0 m | — |
 | Storeys | seven, marked by bhumi-amalakas | seven | ASI |
 | Corner shrines | four, panchayatana | four | — |
