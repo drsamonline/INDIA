@@ -71,6 +71,10 @@ export default {
     const ST = 'plaster';
     const SP = 'sandstoneBuff';
     const TR = 'ivory';
+    // The niche behind each figure was 'dark' (0x0f0c09), so every register
+    // read as a black stripe across a cream wall. A warm shadow lets the
+    // figures carry the wall instead.
+    const NICHE = (() => { const mm = ctx.mat('cream'); if (!mm || !mm.clone) return 'dark'; const c = mm.clone(); c.color.setHex(0x6a5138); return c; })();
     const OP = 'dark';
 
     /* ---- measured levels ------------------------------------------------ */
@@ -131,15 +135,27 @@ export default {
       add('gold', cone(0.12, 0.6, 6), cx, yy + 1.0, cz);
     };
 
-    /* a register of figures — the sculpture that covers these walls */
+    /* A register of figures — the sculpture that covers these walls. It was one
+       flat box per figure in two rows, which at any distance read as a dashed
+       line. A figure is seven pieces now: the niche it stands in, its pedestal,
+       a dhoti, a torso, two arms and a head. */
     const figures = (x, z, ry, y0, y1, n, key) => {
       const rows = 2, h = (y1 - y0) / rows;
+      const cs = Math.cos(ry), sn = Math.sin(ry);
+      const put = (k, geo, o, dy, out) =>
+        add(k, geo, x + cs * o + sn * out, y0 + dy, z - sn * o + cs * out, { ry });
       for (let r = 0; r < rows; r++) {
+        const base = y0 + h * r;
+        const fh = h * 0.88;
         for (let k = 0; k < n; k++) {
           const o = (k - (n - 1) / 2) * 1.02;
-          add(key, box(0.36, h * 0.6, 0.13),
-            x + Math.cos(ry) * o, y0 + h * (r + 0.5), z - Math.sin(ry) * o,
-            { ry });
+          put(NICHE, box(0.64, fh, 0.05), o, base + fh * 0.5, 0.02);         // the niche
+          put(key, box(0.56, 0.07, 0.30), o, base + 0.035, 0.10);             // pedestal
+          put(key, cyl(0.15, 0.21, fh * 0.44, 5), o, base + fh * 0.30, 0.11); // dhoti
+          put(key, cyl(0.20, 0.15, fh * 0.30, 5), o, base + fh * 0.62, 0.11); // torso
+          put(key, cyl(0.045, 0.055, fh * 0.30, 4), o - 0.17, base + fh * 0.60, 0.12);
+          put(key, cyl(0.045, 0.055, fh * 0.30, 4), o + 0.17, base + fh * 0.60, 0.12);
+          put(key, cyl(0.085, 0.10, fh * 0.13, 5), o, base + fh * 0.80, 0.11); // head
         }
       }
     };

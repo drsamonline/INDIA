@@ -112,6 +112,10 @@ height (20 m published vs ~14 m in the photograph).
 
 ## Open work
 
+> **Statue of Unity is out of scope for now.** The user is having it rebuilt by
+> another model alongside the Taj and will send the finished page. Do not touch
+> `statue-of-unity.js` or its page until that arrives.
+
 ### 1. ~~Taj night floodlights~~ — done and seen
 
 Nothing was resetting the clock. `?shot=` was read into `DEFAULTS.time`, but
