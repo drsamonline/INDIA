@@ -393,10 +393,17 @@ Two more pages read wrong on the fresh contact sheet:
   materials were literally named `sandstonePink` and `sandstoneRed`. They are
   lime plaster over rubble: pale warm ochre. Both are tinted off `cream` now.
 
-Still on the list: **Meenakshi's gopurams** read as striped office blocks at
-distance — the painted figure registers do not carry at 560 px. That needs the
-tier walls broken up (darker recess bands, more colour contrast), not another
-colour pass.
+**Meenakshi's gopurams** — done. They read as striped office blocks because the
+figures were 2.24 m tall and 1.06 m apart: **pencils on a shelf**. Every
+cross-section is widened about 1.5x (dhoti, torso, arms, head, crown, ledge) so
+a figure has a body, spacing came in to 1.06 m, and the cornice went from 22 %
+of each storey to 16 %. The cornices were also `cream` (0xe6d6b8) against ochre
+walls, so every storey was capped by a bright white band — they are a shade
+darker than the wall now and read as shadowed mouldings.
+
+688k triangles, boot 80-120 s. That is close to the ceiling: the page takes
+three attempts' worth of waiting under software rendering, and another tier's
+worth of jali would not boot at all.
 
 ---
 

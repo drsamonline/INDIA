@@ -85,7 +85,10 @@ export default {
        and a green, on ochre stucco. The old five stone greys read as stripes. */
     const FIG = ['red', 'yellow', 'blue', 'pinkPaint', 'teal', 'terracotta'];
     const CREAM = (() => { const mm = ctx.mat('sandstoneBuff'); if (!mm || !mm.clone) return 'sandstoneBuff'; const c = mm.clone(); c.color.setHex(0xd8b98e); return c; })();   // the ochre stucco of the storey walls
-    const CORN = 'cream';            // the pale moulded cornices between them
+    // The cornices were 'cream' (0xe6d6b8) while the walls are ochre, so every
+    // storey was capped by a bright white band and the tower read as a striped
+    // cake. A shade darker than the wall makes them read as shadowed mouldings.
+    const CORN = (() => { const mm = ctx.mat('cream'); if (!mm || !mm.clone) return 'cream'; const c = mm.clone(); c.color.setHex(0xbfa076); return c; })();
     // the recess the figure rows stand in: shadowed ochre, not black — a pure
     // black band read as a painted stripe across every storey
     const NICHE = (() => { const mm = ctx.mat('plaster'); if (!mm || !mm.clone) return 'dark'; const c = mm.clone(); c.color.setHex(0x3b2b21); return c; })();
@@ -119,7 +122,7 @@ export default {
 
       let w = W, d = D, y = BASEH;
       for (let i = 0; i < nT; i++) {
-        const bodyH = tierH * 0.78, cornH = tierH * 0.22;
+        const bodyH = tierH * 0.84, cornH = tierH * 0.16;
         /* sculpted wall */
         block(CREAM, w, bodyH, d, cx, y, cz, { ry });
         /* dense rows of stucco figures on all four faces. A figure is seven
@@ -131,7 +134,7 @@ export default {
            niche box per figure: same read, a fraction of the geometry. */
         const fh = bodyH * 0.68;
         const fy0 = y + bodyH * 0.15;
-        const sp = 1.10;   // dense: a real register almost touches, figure to figure
+        const sp = 1.06;   // dense: a real register almost touches, figure to figure
         const nL = Math.max(4, Math.round(w / sp));
         const nS = Math.max(3, Math.round(d / sp));
         const sL = w / nL, sS = d / nS;
@@ -147,13 +150,13 @@ export default {
             add(k, geo, px + lx * cs2 + lz * sn2, ly, pz - lx * sn2 + lz * cs2,
               Object.assign({ ry: ryF }, o));
           };
-          put(CREAM, box(0.64, 0.07, 0.46), 0, fy0 + 0.035, 0.08);                  // its ledge
-          put(key, cyl(0.17, 0.25, H * 0.30, 5), 0, fy0 + H * 0.21, 0.07);          // dhoti
-          put(key, cyl(0.20, 0.145, H * 0.32, 5), 0, fy0 + H * 0.52, 0.07);         // torso to shoulders
-          put('ivory', cyl(0.042, 0.05, H * 0.30, 4), -0.185, fy0 + H * 0.50, 0.08, { rz: 0.12 });
-          put('ivory', cyl(0.042, 0.05, H * 0.30, 4), 0.185, fy0 + H * 0.50, 0.08, { rz: -0.12 });
-          put('ivory', cyl(0.105, 0.115, H * 0.13, 5), 0, fy0 + H * 0.745, 0.06);   // head
-          put('gold', cyl(0.05, 0.09, H * 0.11, 5), 0, fy0 + H * 0.86, 0.05);       // crown
+          put(CREAM, box(0.96, 0.07, 0.52), 0, fy0 + 0.035, 0.09);                  // its ledge
+          put(key, cyl(0.26, 0.36, H * 0.30, 5), 0, fy0 + H * 0.21, 0.08);          // dhoti
+          put(key, cyl(0.30, 0.22, H * 0.32, 5), 0, fy0 + H * 0.52, 0.08);          // torso to shoulders
+          put('ivory', cyl(0.060, 0.075, H * 0.30, 4), -0.27, fy0 + H * 0.50, 0.09, { rz: 0.12 });
+          put('ivory', cyl(0.060, 0.075, H * 0.30, 4), 0.27, fy0 + H * 0.50, 0.09, { rz: -0.12 });
+          put('ivory', cyl(0.15, 0.16, H * 0.13, 5), 0, fy0 + H * 0.745, 0.07);     // head
+          put('gold', cyl(0.07, 0.13, H * 0.11, 5), 0, fy0 + H * 0.86, 0.06);       // crown
         };
         for (let j = 0; j < nL; j++) {
           const off = (j - (nL - 1) / 2) * sL;
