@@ -299,9 +299,39 @@ export default {
       add(light, box(10.2, 0.26, 0.22), 0, 35.1, s * (ATD / 2 + 0.1));
       add(light, box(10.2, 0.26, 0.22), 0, 32.1, s * (ATD / 2 + 0.1));
     });
-    for (let i = -7; i <= 7; i++) {
-      add(recess, box(0.14, 1.6, 0.05), i * 0.6, 33.6, ATD / 2 + 0.09);
-      add(recess, box(0.14, 1.6, 0.05), i * 0.6, 33.6, -ATD / 2 - 0.09);
+    /* the inscription: INDIA, as letterforms. It was fifteen vertical bars,
+       which read as a barcode across the attic rather than a word. */
+    {
+      const LH = 2.0, LW = 1.5, ST = 0.30, y0 = 33.6, gap = 2.05;
+      const glyph = (ch, cx) => {
+        const put = (x, y, bw, bh, rot) => {
+          [-1, 1].forEach((sd) => {
+            add(recess, box(bw, bh, 0.17), cx + x, y0 + y, sd * (ATD / 2 + 0.11),
+              rot ? { rz: rot } : {});
+          });
+        };
+        const hw = LW / 2, hh = LH / 2;
+        if (ch === 'I') put(0, 0, ST, LH);
+        if (ch === 'N') {
+          put(-hw, 0, ST, LH);
+          put(hw, 0, ST, LH);
+          put(0, 0, ST, Math.hypot(LW, LH) * 1.02, Math.atan2(LW, LH));
+        }
+        if (ch === 'D') {
+          put(-hw, 0, ST, LH);
+          put(hw, 0, ST, LH);
+          put(0, hh, LW, ST);
+          put(0, -hh, LW, ST);
+        }
+        if (ch === 'A') {
+          put(-hw * 0.62, 0, ST, LH * 1.16, -0.30);
+          put(hw * 0.62, 0, ST, LH * 1.16, 0.30);
+          put(0, -hh * 0.30, LW * 0.86, ST);
+        }
+      };
+      // the run reads right-to-left from the plaza: the gate's face looks the
+      // other way, so the letters are laid from +x to -x
+      ['I', 'N', 'D', 'I', 'A'].forEach((ch, i) => glyph(ch, (i - 2) * gap));
     }
     // a moulded base course and a recessed field, so the attic is not a blank slab
     add(light, box(ATW + 1.0, 0.34, ATD + 1.0), 0, 30.2, 0);

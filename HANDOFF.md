@@ -232,7 +232,7 @@ building. Ranked by how far it is from reading as itself:
 | 4 | Somnath | **done** — pale sandstone, sea visible again; shikhara still reads stepped | done |
 | 5 | Hawa Mahal | **done** — domed skyline on the top tier; Jaipur pink | done |
 | 6 | Mahabodhi | **done** — the tower was 24.5 m wide on a 52 m height; it is 15.5 m | done |
-| 7 | India Gate / Gateway of India | both read plain: no inscription band, canopy, pools | todo |
+| 7 | India Gate / Gateway of India | **done** — Gateway warm basalt + dome raised; India Gate's INDIA is letterforms | done |
 | 8 | Meenakshi | towers read as striped office blocks at distance | todo |
 | 9 | Statue of Unity | **rebuilt this pass** — face sculpted into the head, one-shoulder shawl, legs and dhoti; still stylised in the body | partly |
 
@@ -356,6 +356,23 @@ the photo reading was of the *plinth*, not the shaft.
 At 15.5 m it reads as the slim brick tower it is. The horizontal bands had to
 come in with it: at w + 0.07 they jutted like shelves once the faces were
 narrower, so they are w + 0.02 and the bhumi-amalaka bands w + 0.11.
+
+---
+
+### 14. India Gate and the Gateway of India
+
+**Gateway of India.** Two faults, one shared with Hawa Mahal: the masonry was
+cloned from `basaltDark`, a **textured** material, so the hex multiplied down by
+half and the gateway rendered grey instead of warm buff-brown basalt. Cloned
+from `cream` at 0xc9a878. And the 15 m dome's crown cleared the front parapet by
+1 m, so from the plaza the monument was a flat-topped block with four turrets
+and no dome — raised 3 m, apex ~25 m against 25.3 m in the sources.
+
+**India Gate.** The "INDIA" inscription was **fifteen vertical bars**, which
+read as a barcode across the attic. It is letterforms now — I, N, D, I, A built
+from boxes, in the recess colour so they read as incised. Verified from the home
+camera: it reads INDIA left to right there. Do not judge it from an arbitrary
+camera angle; two of my checks looked reversed because of where the camera was.
 
 ---
 
