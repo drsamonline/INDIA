@@ -648,6 +648,25 @@ on screen that said "unfinished".
 
 ---
 
+### 27. The shortcuts and the drawer — tested, and they work
+
+`H T A C R 1-9 Esc` are documented in the README and had never been exercised.
+They all work, and so does the history drawer (history, facts table, UNESCO ref).
+No fix was needed.
+
+Getting to that answer took three attempts, all of them my own error:
+
+- the first test read `document.body.classList.contains('cinematic')` — the
+  **Taj** page uses `cinematic`, engine pages use **`cinema`**
+- the second selected `aside` for the drawer, which matched the control panel
+- only after checking the handler did the page turn out to be fine all along
+
+`tools/check_ui.py` now asserts all six behaviours against a real page, so the
+selectors live in one place instead of in my head. That is the point of it: I
+got them wrong twice, and a test that encodes them cannot.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

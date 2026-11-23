@@ -86,6 +86,7 @@ tools/qa.py                 headless-Chromium render check
 tools/linkcheck.py          every internal reference resolves
 tools/audit_data.py         data + copy audit (structure, years, images, AI tells)
 tools/check_a11y.py         skip link, canvas semantics, drawer focus trap
+tools/check_ui.py           the documented keyboard shortcuts, exercised
 tools/framecheck.py         named views and tour stops frame their subject
 tools/tintcheck.py          flags material tints taken from textured bases
 tools/build_gallery.py      rebuilds docs/gallery.jpg from shots/audit
@@ -121,6 +122,7 @@ python3 tools/audit_data.py     # structure, years, image files, copy tells
 python3 tools/audit_data.py --links   # also HEAD every external link
 python3 tools/check_all.py      # render every page in headless Chromium
 python3 tools/check_a11y.py     # skip link, canvas semantics, drawer focus trap
+python3 tools/check_ui.py       # H T A C R and 1-9 actually do something
 python3 tools/framecheck.py     # every view and tour stop frames its subject
 python3 tools/tintcheck.py      # no material tinted off a textured base
 ```
