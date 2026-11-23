@@ -60,6 +60,27 @@ src = src.replace('id="glow" min="0" max="1.2" step="0.02" value="0.32"',
                   'id="glow" min="0" max="1.2" step="0.02" value="0.24"')
 src = src.replace("time: 17.35, cycle: false",
                   "time: (parseFloat(new URLSearchParams(location.search).get('shot')) || 17.35), cycle: false")
+# DEFAULTS alone does not move the clock: the #time range input carries
+# value="17.35" in the markup and bindRange() syncs state from the element, so
+# the slider has to be written before bindRange('time', ...) runs. This is why
+# ?shot=21.6 showed 17:21 and the night floodlights were never seen.
+src = src.replace("""const state = Object.assign({}, DEFAULTS);""",
+"""const state = Object.assign({}, DEFAULTS);
+/* ?shot=HH (or ?time=HH) sets the hour, and moves the slider that owns it.
+   Must run before bindRange('time', ...) reads the element. */
+(function applyShotParam() {
+  const q = new URLSearchParams(location.search);
+  const raw = q.has('shot') ? q.get('shot') : q.get('time');
+  if (raw === null || raw === '') return;
+  const h = parseFloat(raw);
+  if (!isFinite(h)) return;
+  const v = ((h % 24) + 24) % 24;
+  state.time = v;
+  DEFAULTS.time = v;
+  const el = document.getElementById('time');
+  if (el) el.value = String(v);
+  window.__tajShot = v;
+})();""", 1)
 # The Taj already uses the same Sky addon as the engine, but at turbidity 6 and
 # mie 0.004 — a much hazier atmosphere, which is what made it read brown. These
 # are the engine's values, so the two now share one sky.
@@ -75,10 +96,10 @@ src = src.replace("""  scene.add(keyLight);
   scene.add(keyLight.target);
   const tajFloods = [];
   [[-40, 14, 52], [40, 14, 52], [0, 12, 74], [-38, 11, -34], [38, 11, -34]].forEach((p) => {
-    const fl = new THREE.SpotLight(0xffc98a, 0, 240, 0.62, 0.55, 1.3);
+    const fl = new THREE.SpotLight(0xffc98a, 0, 240, 0.70, 0.55, 1.3);
     fl.position.set(p[0], p[1], p[2]);
-    fl.target.position.set(0, 17, 0);
-    fl.userData.base = 2600;
+    fl.target.position.set(0, 19, 0);
+    fl.userData.base = 130;
     scene.add(fl, fl.target);
     tajFloods.push(fl);
   });""")
@@ -88,6 +109,19 @@ src = src.replace("    starMat.opacity = nightFactor * 0.9 * (1 - weather.cover)
 # match the site's grade: the engine runs 0.52-0.62 exposure, a 0.9 bloom
 # threshold and a lighter glow, so the Taj sat brighter and hazier than the
 # other twenty-three pages
+# the time-of-day chip was hard-set to Dusk at boot, so ?shot=21.6 showed
+# "Dusk" lit while the clock read 21:36. Highlight whichever preset is nearest.
+src = src.replace("    timeSeg.set('dusk', false);",
+"""    (function () {
+      const map = { dawn: 6.3, noon: 12, dusk: 17.35, night: 22.5 };
+      let best = '', bd = 99;
+      Object.keys(map).forEach(function (k) {
+        const raw = Math.abs(state.time - map[k]);
+        const d = Math.min(raw, 24 - raw);
+        if (d < bd) { bd = d; best = k; }
+      });
+      timeSeg.set(bd < 1.5 ? best : '', false);
+    })();""", 1)
 src = src.replace('exposure: 0.72', 'exposure: 0.62')
 src = src.replace('glow: 0.32', 'glow: 0.24')
 src = src.replace('state.glow, 0.5, 0.85', 'state.glow, 0.5, 0.90')

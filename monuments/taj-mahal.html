@@ -813,6 +813,21 @@ const DEFAULTS = {
   autoWeather: false, weatherName: 'clear'
 };
 const state = Object.assign({}, DEFAULTS);
+/* ?shot=HH (or ?time=HH) sets the hour, and moves the slider that owns it.
+   Must run before bindRange('time', ...) reads the element. */
+(function applyShotParam() {
+  const q = new URLSearchParams(location.search);
+  const raw = q.has('shot') ? q.get('shot') : q.get('time');
+  if (raw === null || raw === '') return;
+  const h = parseFloat(raw);
+  if (!isFinite(h)) return;
+  const v = ((h % 24) + 24) % 24;
+  state.time = v;
+  DEFAULTS.time = v;
+  const el = document.getElementById('time');
+  if (el) el.value = String(v);
+  window.__tajShot = v;
+})();
 const WEATHER_PRESETS = {
   clear: { cover: 0.18, rain: 0, mist: 0, wind: 0.4 },
   mist: { cover: 0.45, rain: 0, mist: 0.85, wind: 0.2 },
@@ -892,10 +907,10 @@ function main() {
   scene.add(keyLight.target);
   const tajFloods = [];
   [[-40, 14, 52], [40, 14, 52], [0, 12, 74], [-38, 11, -34], [38, 11, -34]].forEach((p) => {
-    const fl = new THREE.SpotLight(0xffc98a, 0, 240, 0.62, 0.55, 1.3);
+    const fl = new THREE.SpotLight(0xffc98a, 0, 240, 0.70, 0.55, 1.3);
     fl.position.set(p[0], p[1], p[2]);
-    fl.target.position.set(0, 17, 0);
-    fl.userData.base = 2600;
+    fl.target.position.set(0, 19, 0);
+    fl.userData.base = 130;
     scene.add(fl, fl.target);
     tajFloods.push(fl);
   });
@@ -2558,7 +2573,16 @@ function main() {
     setCheck('grid', DEFAULTS.grid);
     applyWeatherPreset('clear', false);
     qualitySeg.set(DEFAULTS.quality, true);
-    timeSeg.set('dusk', false);
+    (function () {
+      const map = { dawn: 6.3, noon: 12, dusk: 17.35, night: 22.5 };
+      let best = '', bd = 99;
+      Object.keys(map).forEach(function (k) {
+        const raw = Math.abs(state.time - map[k]);
+        const d = Math.min(raw, 24 - raw);
+        if (d < bd) { bd = d; best = k; }
+      });
+      timeSeg.set(bd < 1.5 ? best : '', false);
+    })();
     state.motion = DEFAULTS.motion;
     updateMotionUI();
     goPreset('diorama', false);

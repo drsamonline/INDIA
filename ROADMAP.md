@@ -34,7 +34,7 @@ sky should come from the engine.
 | 1 | ~~Fog reduced and cooled~~ | done — 0.0016 tan to 0.0009 grey | ✅ |
 | 2 | ~~Grade aligned with the site~~ | done — exposure 0.62, glow 0.24, bloom 0.90 | ✅ |
 | 3 | **Port the engine's physical sky** | the Taj's gradient dome is the only place its light is behind the other pages | 1 session |
-| 4 | **Night floodlights** | the page has a night mode but not the amber floodlighting the others carry | 1 session |
+| 4 | ~~Night floodlights~~ | done — five spots at 130, angle 0.70, aimed at y 19; `?shot=` finally moves the clock | ✅ |
 | 5 | **Tone the charbagh** | the flower beds read as confetti dots; real parterres are ordered beds with a low hedge line | half session |
 | 6 | **Water and reflection** | the pool reflects a flat colour; the engine's water shader has distortion and a fresnel term | half session |
 

@@ -125,8 +125,26 @@ export default {
     }
 
     /* ---- the palace terrace -------------------------------------------- */
-    block('stone', 190, 4.0, 68, 0, 38, -47);
-    add(trim, box(191, 0.45, 69), 0, 42.0, -47);
+    // The private court behind the gate is carved out of the terrace, not
+    // roofed by it. Both the rock mass (y 38..42) and the marble capping
+    // (y 41.78..42.23) used to span the whole platform, so the court was a
+    // sealed slot and anything standing on its floor was invisible from every
+    // angle. They are laid as a frame around the court instead, which makes it
+    // an open sunken court about 0.8 m below the terrace, walled in stone.
+    const COURT = { x0: -11, x1: 11, z0: -49, z1: -15 };
+    function frameAround(key, X0, X1, Z0, Z1, yc, h) {
+      [
+        [X0, X1, Z0, COURT.z0],              // north of the court
+        [X0, X1, COURT.z1, Z1],              // south of it
+        [X0, COURT.x0, COURT.z0, COURT.z1],  // west
+        [COURT.x1, X1, COURT.z0, COURT.z1]   // east
+      ].forEach(([a, b, c, d]) => {
+        if (b - a < 0.01 || d - c < 0.01) return;
+        add(key, box(b - a, h, d - c), (a + b) / 2, yc, (c + d) / 2);
+      });
+    }
+    frameAround('stone', -95, 95, -81, -13, 40, 4.0);
+    frameAround(trim, -95.5, 95.5, -81.5, -12.5, 42.0, 0.45);
 
     /* ---- the facade range along the lake -------------------------------- */
     // two storeys of arcade with jharokhas, running the length of the terrace
@@ -197,14 +215,17 @@ export default {
     // a charbagh garden between them
     block('stone', 22, 3, 34, 0, 38, -32);
     add(trim, box(23, 0.4, 35), 0, 41, -32);
-    // NOTE: the charbagh beds were built here and removed again. The court is
-    // modelled as a roofed block — there is a stone mass from y 42 to 42.3
-    // spanning the whole court — so a garden on the floor at 41.34 is inside a
-    // sealed room and can never be seen. The court needs to be an open
-    // courtyard before a garden in it means anything.
+    // the charbagh: four quartered beds with clipped hedges, standing on the
+    // court floor in the open. The court was cut out of the terrace above (see
+    // frameAround), so these are visible from the palace views and the gate.
     add('marble', box(0.9, 0.2, 29), 0, 41.25, -32);
     add('marble', box(19, 0.2, 0.9), 0, 41.25, -32);
     add('water', box(5.4, 0.12, 3.6), 0, 41.32, -32);
+    [-1, 1].forEach((sx) => {
+      [-1, 1].forEach((sz) => {
+        ctx.parterre(sx * 5.2, -32 + sz * 7.6, 8.4, 13.0, { y: 41.36, h: 0.7, t: 0.42, cross: false, shrubs: 5 });
+      });
+    });
     // Jai Mandir
     block(stone, 15, 12, 18, -19.5, 42, -30);
     add(trim, box(16, 0.4, 19), -19.5, 54, -30);

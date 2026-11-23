@@ -112,26 +112,35 @@ height (20 m published vs ~14 m in the photograph).
 
 ## Open work
 
-### 1. Taj night floodlights — built, unverified
+### 1. ~~Taj night floodlights~~ — done and seen
 
-Five spotlights are in the page, intensity driven by the scene's own
-`nightFactor`. They have never been seen because **the page resets its hour
-after boot**: `?shot=21.6` is present in `location.search` yet the readout is
-17:21. Two patches to `DEFAULTS.time` and to `setRange('time', …)` both failed
-and were reverted. Something in the initialisation resets it after the call.
+Nothing was resetting the clock. `?shot=` was read into `DEFAULTS.time`, but
+`bindRange('time', …)` **syncs `state.time` from the `#time` input**, and that
+input carries `value="17.35"` in the markup — trap 5, exactly. The tour preset
+was never involved, and `window.__taj` already existed.
 
-Next step: find what writes `state.time` after boot (the tour preset
-"The Classic View" is a candidate), or expose a `window.__taj` handle.
+The fix in `build_taj.py` writes the parsed hour into the slider before
+`bindRange` runs. `?shot=21.6` now boots at 21:36, slider, readout and sky
+agreeing, and the five floods are visible at 130 / angle 0.70 / aimed at y 19
+(the original 2600 blew the marble to pure white — that was the first thing
+anyone saw of them).
 
-### 2. Amber Fort's court is modelled as a roofed block — a geometry error
+The time-of-day chip was hard-set to Dusk at boot; it now highlights the
+nearest preset.
 
-The private court has a stone mass from y 42 to 42.3 spanning x −112..−12,
-z −52..−12. It is a **roof**, so the court is a sealed room. The charbagh that
-was built on its floor at y 41.34 was invisible and has been removed with the
-reason recorded in the module.
+### 2. ~~Amber Fort's court~~ — carved open, charbagh restored
 
-The fix is geometry, not camera: cut the roof back to a frame and build the
-four ranges around an open courtyard. Then restore the parterre.
+The court was never roofed by the mesh the commit blamed. What covered it was
+the **palace terrace itself**: the rock mass `block('stone', 190, 4.0, 68, 0,
+38, -47)` and the marble capping `add(trim, box(191, 0.45, 69), 0, 42.0, -47)`
+both span the whole platform, so the court was a 40 cm slot between the floor
+at 41.4 and the capping at 41.78. The "x −112..−12" mass was the Jaleb Chowk
+paving, a different court.
+
+Both slabs are now laid as a frame around the court (x −11..11, z −49..−15),
+which makes it an open sunken court ~0.8 m below the terrace, walled in stone.
+The four beds are back at y 41.36 and were seen from two vantages: four green
+quarters, marble cross-paths, the basin at the centre.
 
 ### 3. The Lotus's grey band — explained, not a defect
 
@@ -175,7 +184,12 @@ These cost real time last session. All are true.
    Playwright script when a `?shot=` or `?look=` matters.
 7. **The engine's ambient is deliberately low.** Shadowed white surfaces go
    grey. That is the house style, not a bug.
-8. **Always render and look before committing.** Several changes in this
+8. **`block()` takes a BASE y; `add(box(...))` takes a CENTRE.** The engine
+   does `add(key, box(w,h,d), x, y + h/2, z)`. `tools/volumes.py` had this
+   backwards *and* ignored `add(box(...))` meshes entirely — which is how a
+   paving slab became a "roof" over the wrong court, and why five cameras at
+   Amber ended up inside walls. Both are fixed; trust it now.
+9. **Always render and look before committing.** Several changes in this
    session looked correct in code and wrong on screen, and vice versa.
 
 ---

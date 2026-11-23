@@ -19,6 +19,11 @@ import argparse, os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 CALL = re.compile(r"\bblock\(\s*(['\"]?)([A-Za-z_][\w]*)\1\s*,\s*([^)]*)\)")
+# add(key, box(w, h, d), x, y, z) — the other half of the geometry, and the half
+# that a block()-only reader is blind to. A paving slab written this way was
+# read as a roof over a court it never covered.
+ADDBOX = re.compile(
+    r"\badd\(\s*(['\"]?)([A-Za-z_][\w]*)\1\s*,\s*box\(\s*([^)]*?)\s*\)\s*,\s*([^)]*?)\s*\)")
 NUM = re.compile(r"^-?\d+(\.\d+)?$")
 
 
@@ -32,9 +37,27 @@ def parse(path):
             skipped += 1
             continue
         w, h, d, x, y, z = (float(a) for a in args[:6])
-        # block() is centred on (x, y, z) in this engine
+        # block(key, w, h, d, x, y, z) puts the BASE at y (the engine adds h/2),
+        # so y0 = y. Reading it as centred was wrong by half a height.
         boxes.append({
-            "key": key,
+            "key": key, "src": "block",
+            "x": x, "y": y, "z": z,
+            "x0": x - w / 2, "x1": x + w / 2,
+            "y0": y, "y1": y + h,
+            "z0": z - d / 2, "z1": z + d / 2,
+        })
+    for m in ADDBOX.finditer(src):
+        key = m.group(2)
+        dims = [a.strip() for a in m.group(3).split(",")]
+        pos = [a.strip() for a in m.group(4).split(",")]
+        if len(dims) < 3 or len(pos) < 3 or not all(NUM.match(a) for a in dims[:3] + pos[:3]):
+            skipped += 1
+            continue
+        w, h, d = (float(a) for a in dims[:3])
+        x, y, z = (float(a) for a in pos[:3])
+        # add() places a mesh CENTRED on (x, y, z)
+        boxes.append({
+            "key": key, "src": "add-box",
             "x": x, "y": y, "z": z,
             "x0": x - w / 2, "x1": x + w / 2,
             "y0": y - h / 2, "y1": y + h / 2,
@@ -56,7 +79,9 @@ def main():
     if not os.path.exists(path):
         sys.exit("no such module: " + path)
     boxes, skipped = parse(path)
-    print(f"{name}: {len(boxes)} literal block() calls, {skipped} built from variables (unreadable)")
+    nb = sum(1 for b in boxes if b["src"] == "block")
+    print(f"{name}: {nb} literal block() calls, {len(boxes) - nb} add(box(...)) meshes, "
+          f"{skipped} built from variables (unreadable)")
 
     if args.at:
         px, py, pz = (float(v) for v in args.at.split(","))
@@ -69,7 +94,8 @@ def main():
         for b in hits:
             print(f"  {b['key']:12s} x {b['x0']:7.1f}..{b['x1']:7.1f}"
                   f"  y {b['y0']:7.1f}..{b['y1']:7.1f}"
-                  f"  z {b['z0']:7.1f}..{b['z1']:7.1f}")
+                  f"  z {b['z0']:7.1f}..{b['z1']:7.1f}"
+                  f"  ({b['src']})")
 
     if args.column:
         px, pz = (float(v) for v in args.column.split(","))
@@ -83,7 +109,8 @@ def main():
             if prev is not None and b["y0"] > prev + 0.05:
                 print(f"    ---- open {prev:.1f} .. {b['y0']:.1f} ({b['y0'] - prev:.1f} m)")
             print(f"    {b['key']:12s} y {b['y0']:7.1f}..{b['y1']:7.1f}"
-                  f"   x {b['x0']:7.1f}..{b['x1']:7.1f}  z {b['z0']:7.1f}..{b['z1']:7.1f}")
+                  f"   x {b['x0']:7.1f}..{b['x1']:7.1f}  z {b['z0']:7.1f}..{b['z1']:7.1f}"
+                  f"  ({b['src']})")
             prev = b["y1"] if prev is None else max(prev, b["y1"])
         if prev is not None:
             print(f"    ---- open above {prev:.1f}")
