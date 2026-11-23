@@ -110,30 +110,34 @@ export default {
     // torso: half-width, half-depth, forward offset of the section centre
     const TA = [[0.38, 11.4], [0.47, 12.8], [0.53, 12.3], [0.58, 11.4], [0.64, 11.8],
       [0.70, 12.6], [0.755, 14.2], [0.79, 16.6], [0.815, 19.3], [0.836, 18.8],
-      [0.852, 14.6], [0.862, 10.4], [0.872, 6.2]];
+      [0.848, 16.8], [0.858, 13.4], [0.866, 9.8], [0.872, 6.2]];
     const TB = [[0.38, 9.6], [0.47, 10.6], [0.53, 10.4], [0.58, 10.0], [0.64, 10.3],
       [0.70, 10.6], [0.755, 11.0], [0.79, 11.4], [0.815, 11.4], [0.836, 10.8],
-      [0.852, 9.4], [0.862, 8.2], [0.872, 5.4]];
+      [0.848, 10.4], [0.858, 9.4], [0.866, 8.2], [0.872, 5.4]];
     const TZ = [[0.38, 0.6], [0.47, 0.8], [0.53, 0.6], [0.58, 0.4], [0.64, 0.3],
       [0.70, 0.0], [0.755, -0.3], [0.79, -0.5], [0.815, -0.6], [0.836, -0.6],
-      [0.852, -0.5], [0.872, -0.2]];
+      [0.848, -0.5], [0.858, -0.45], [0.866, -0.3], [0.872, -0.2]];
     /* the arm: one swept loft along a spine that starts inside the shoulder
        mass and runs down through the deltoid, the elbow and the wrist, so
        there is no tube and no joint — the radius varies continuously and
        the top of the sweep is buried in the shoulder. */
     const ARM = [ // t, x, z, radius
-      [0.860, 12.4, -0.6, 0.35],
-      [0.850, 17.0, -0.5, 2.6],
-      [0.835, 20.0, -0.3, 4.4],
-      [0.815, 21.8, -0.1, 6.0],
-      [0.790, 22.5, 0.3, 6.4],
-      [0.750, 21.8, 0.8, 6.2],
-      [0.700, 22.0, 1.4, 5.6],
-      [0.640, 21.8, 2.0, 5.4],
-      [0.560, 20.9, 2.5, 4.8],
-      [0.480, 20.0, 3.0, 4.4],
-      [0.430, 19.4, 3.3, 4.0],
-      [0.395, 18.8, 3.6, 3.6]
+      // x is chosen so the arm's OUTER edge (x + r) follows the shoulder line
+      // down to the wrist. Pushed out to x 22 the edge sat 8 m beyond the
+      // torso and the shoulder read as a cape; the arms hang close, as they do
+      // on the statue.
+      [0.868, 8.0, -0.6, 3.0],
+      [0.855, 11.2, -0.5, 4.6],
+      [0.838, 13.0, -0.3, 5.4],
+      [0.815, 13.6, -0.1, 6.0],
+      [0.790, 13.7, 0.3, 6.2],
+      [0.750, 13.7, 0.8, 6.0],
+      [0.700, 13.9, 1.4, 5.4],
+      [0.640, 14.1, 2.0, 5.2],
+      [0.560, 14.3, 2.5, 4.6],
+      [0.480, 14.4, 3.0, 4.2],
+      [0.430, 14.5, 3.3, 3.9],
+      [0.395, 14.6, 3.6, 3.5]
     ];
 
     /* ==================================================================== *
@@ -321,7 +325,9 @@ export default {
     // the waistband with its knot
     add(C, cyl(13.2, 13.6, 2.4, 36), 0, Y(0.566), 0, { sz: 0.82 });
     add(C, cyl(13.6, 13.2, 1.0, 36), 0, Y(0.553), 0, { sz: 0.82 });
-    for (let i = -1; i <= 1; i++) add(C, box(1.6, 1.4, 2.2), i * 3.8, Y(0.545), 10.6, { rz: 0.2 });
+    // the knot at the waist: one folded mass, not three cubes
+    add(C, sph(2.2, 10), 0, Y(0.552), 10.4, { sx: 1.5, sy: 0.75, sz: 0.7 });
+    add(C, box(2.4, 3.6, 1.2), 0, Y(0.520), 10.7, { rz: 0.12 });
 
     /* ---- the jacket: a hem band, a collar and a placket on the surface --- */
     const band = (t, h, off, key, seg = 40) => {
@@ -349,6 +355,38 @@ export default {
     add(B, band(0.567, 1.6, 0.8, B), 0, 0, 0);          // jacket hem
     add(B, band(0.838, 1.4, 0.8, B), 0, 0, 0);          // shoulder seam
     add(B, band(0.856, 2.2, 1.2, B, 26), 0, 0, 0);      // stand collar
+    /* the kurta's cloth: soft vertical folds from the hem to the shoulder
+       seam. Without them the torso is one smooth loft and reads as a mannequin
+       no matter what the head does. */
+    {
+      const ridge = (ang, off, wid) => {
+        const NL = 12, pos = [], uv = [], idx = [];
+        for (let i = 0; i <= NL; i++) {
+          const t = 0.578 + (0.836 - 0.578) * (i / NL);
+          const taper = Math.sin(Math.PI * (i / NL)) * 0.55 + 0.45;
+          for (let k = -1; k <= 1; k++) {
+            const p = surf(t, ang + k * wid);
+            const r0 = Math.hypot(p[0], p[2]) || 1;
+            const r = r0 + off * taper * (1 - Math.abs(k) * 0.75);
+            pos.push(p[0] / r0 * r, p[1], p[2] / r0 * r);
+            uv.push((k + 1) / 2, i / NL);
+          }
+        }
+        for (let i = 0; i < NL; i++) for (let k = 0; k < 2; k++) {
+          const a = i * 3 + k, b = a + 3;
+          idx.push(a, b, a + 1, a + 1, b, b + 1);
+        }
+        const g = new T3.BufferGeometry();
+        g.setAttribute('position', new T3.Float32BufferAttribute(pos, 3));
+        g.setAttribute('uv', new T3.Float32BufferAttribute(uv, 2));
+        g.setIndex(idx);
+        g.computeVertexNormals();
+        add(B, g, 0, 0, 0);
+      };
+      // two folds on the chest, two at the flanks, two at the back
+      [Math.PI / 2 - 0.62, Math.PI / 2 + 0.62, 0.55, Math.PI - 0.55, -1.05, 4.19]
+        .forEach((a) => ridge(a, 0.62, 0.055));
+    }
     // the placket: a raised strip from the collar to the jacket hem
     {
       const pos = [], uv = [], idx = [];
@@ -552,14 +590,27 @@ export default {
       return g;
     };
     [-1, 1].forEach((sd) => add(B, armGeo(sd), 0, 0, 0));
+    /* A deltoid sphere over the joint was tried here and read as a shoulder
+       pad — the shoulder is rounded by the torso's own profile instead, and by
+       starting the arm sweep inside the shoulder mass (see ARM). */
 
-    /* ---- the hands: fingers folded against the thighs -------------------- */
+    /* ---- the hands: a palm, four jointed fingers, a thumb ---------------- */
+    /* They were a ball with four loose cylinders beside it. At 182 m a hand is
+       about 9 m, so it is seen: palm, knuckles, a thumb set across it. */
     [-1, 1].forEach((sd) => {
-      add(B, sph(3.8, 14), sd * 18.7, Y(0.383), 4.2, { sy: 1.25, sz: 0.72 });
+      const hx = sd * 14.7, hy = Y(0.392), hz = 4.8;
+      add(B, sph(3.5, 14), hx, hy, hz, { sx: 0.72, sy: 1.05, sz: 1.15 });        // palm
+      add(B, sph(2.9, 12), hx, hy - 2.6, hz + 0.4, { sx: 0.66, sy: 0.7, sz: 1.05 }); // the heel of the hand
       for (let f = 0; f < 4; f++) {
-        add(B, cyl(0.95, 1.1, 5.6, 5), sd * (17.5 + f * 1.4), Y(0.368), 5.4, { rx: 0.05 });
+        const fx = hx + sd * (f - 1.5) * 1.55;
+        const len = 4.4 - Math.abs(f - 1.4) * 0.45;
+        // knuckle, then the finger, curling slightly towards the thigh
+        add(B, sph(0.92, 8), fx, hy - 3.5, hz + 1.1, { sy: 0.8 });
+        add(B, cyl(0.78, 0.92, len, 6), fx, hy - 3.5 - len * 0.5, hz + 1.5, { rx: 0.16 });
+        add(B, cyl(0.66, 0.78, len * 0.55, 6), fx, hy - 3.5 - len * 1.02, hz + 2.1, { rx: 0.42 });
       }
-      add(B, sph(1.6, 8), sd * 16.0, Y(0.392), 5.6, { sy: 1.4, sz: 0.6 });
+      add(B, cyl(0.95, 1.15, 4.2, 6), hx - sd * 3.1, hy - 1.4, hz + 1.6, { rx: 0.5, rz: sd * 0.55 });  // thumb
+      add(B, sph(0.95, 8), hx - sd * 3.7, hy - 3.1, hz + 3.2, { sy: 0.9 });
     });
 
     /* ---- the head, lofted from the neck up ------------------------------ */

@@ -262,9 +262,26 @@ resolution. The shawl is an uttariya over the left shoulder only, with folds tha
 deepen as it hangs. Legs 9.6 − 2.4v with a calf, stance 8.5. Dhoti folds 0.15
 deep with a rolled hem band. Bronze is patinated (metalness 0.56), not brass.
 
-**Still not right:** the body is a smooth loft, so the kurta has no cloth breaks,
-the arms meet the shoulder in a step, and the hands are mittens. That is the next
-job on this page — drapery and anatomy, not another palette pass.
+**Drapery and anatomy pass (same session):**
+
+- the arms are separate swept tubes, and their spine had been pushed out to
+  x 22 — the arm's outer edge sat **8 m beyond the shoulder line**, which is
+  what made the shoulder read as a cape. The spine now keeps `x + r` on the
+  shoulder line down to the wrist, so the arms hang close as they do on the
+  statue
+- a deltoid sphere over the joint was tried and **cut again**: it read as a
+  shoulder pad. The shoulder is rounded by the torso's own profile, which
+  dropped 4.2 m in 2.9 m and stepped
+- six soft vertical folds down the kurta (0.62 m proud, tapering at both ends)
+- the hands were a ball with four loose cylinders beside it; now a palm, heel,
+  four jointed fingers and a thumb
+- the waist knot was three cubes, now one folded mass
+
+**Still not right:** the head sits slightly small on a long neck, and the
+shoulder-to-arm junction is a union of two surfaces rather than one blend — it
+holds at the site's viewing distances but not at 6 m. A single field that fuses
+torso and arms (the `smin` in the module is currently dead code) is the honest
+fix if this page is revisited.
 
 ---
 
