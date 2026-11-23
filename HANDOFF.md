@@ -41,8 +41,10 @@ against `data/monuments.json`; a full rebuild produces no diff.
 
 **Latest run (§29):** the Statue of Unity figure rebuilt against the turnaround
 the user supplied — shawl over both shoulders, dhoti wrapped to the ankles,
-sandals, hair rim, buttons, cuffs. 41k → 50k triangles, boot 65 s, 0 errors,
-`audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` 0 new, `check_a11y` ok.
+sandals, hair rim, buttons, cuffs; then a drapery and face pass (diagonal folds,
+a pinch under the shoulder, a shoulder-riding top edge, stronger features).
+41k → 51k triangles, boot 65 s, 0 errors, `audit_data` 0, `linkcheck` 26 pages,
+`tintcheck --ci` 0 new, `check_a11y` ok.
 
 **Known soft spots, judged acceptable:** India Gate's attic is squat (block
 width is unpublished, the model's 37 m is photo-derived); Shore Temple and
@@ -766,10 +768,21 @@ Technique worth keeping:
 - **Folds have to be metres deep to read.** 0.6 m of ripple on a 182 m figure is
   invisible; the gathers are 1 m and up.
 
-Still not right: the shawl's front falls hang as two stiff panels rather than
-falling in folds, the skirt reads a little like a tutu at the front, and the face
-is a displacement, not a portrait. 50k triangles, boot 65 s under software
-rendering.
+**Second pass, same session — drapery and face.** Folds that only vary with the
+bearing stand up as vertical ribs and the shawl reads as a corrugated cone; they
+now shift phase as they fall, so they run on the diagonal. The cloth pinches in
+under the shoulder where it takes its own weight, swells over the shoulder bone,
+and its top edge rides the shoulder line (t 0.856 at the collar down to 0.80 at
+the shoulder point) — at one constant t it cut across the shoulders and showed
+as a flat plate round the neck. Rows are bunched at the top for the same reason.
+The face's big forms were pushed (nose 1.95, sockets −0.85, brow 0.95) because
+at the page's own face view — 122 m — the shallow version read as a blank head;
+the fine detail stays for the close look.
+
+Still not right: the shawl's front falls hang as two panels rather than falling
+in folds, the skirt reads a little like a tutu at the front, and the face is a
+displacement, not a portrait — the eyes have no lids and the mouth is a groove.
+51k triangles, boot 65 s under software rendering.
 
 ---
 

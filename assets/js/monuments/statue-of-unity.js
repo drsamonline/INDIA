@@ -300,16 +300,16 @@ export default {
       // the cloth rolls under at the edge, so the silhouette curves instead
       // of ending in a shelf with a hard corner
       const tuck = v > 0.86 ? 1 - 0.11 * Math.pow((v - 0.86) / 0.14, 1.4) : 1;
-      const pl = (0.030 + 0.150 * v) * Math.cos(8 * a + 0.4) +
-        (0.018 + 0.075 * v) * Math.cos(16 * a - 1.1) +
-        0.040 * v * Math.cos(3 * a - 0.6);
+      const pl = (0.035 + 0.190 * v) * Math.cos(8 * a + 0.4 + 1.5 * v) +
+        (0.020 + 0.090 * v) * Math.cos(16 * a - 1.1 - 2.2 * v) +
+        0.055 * v * Math.cos(3 * a - 0.6);
       const r = tuck * (1 + pl);
       // the hem is not level: it dips at the front and at the sides
       const dip = v > 0.94 ? (v - 0.94) / 0.06 : 0;
       // the hem follows the pleats, so the edge is scalloped rather than a cut
       // line round a cylinder
       const yy = Y(t) - dip * (0.9 + 0.7 * Math.cos(a)) -
-        1.2 * Math.pow(v, 4) * Math.cos(8 * a + 0.4);
+        1.8 * Math.pow(v, 4) * Math.cos(8 * a + 0.4 + 1.5 * v);
       return [Math.cos(a) * A * r, yy, Math.sin(a) * Bd * r];
     };
     const dhotiGeo = () => {
@@ -356,7 +356,7 @@ export default {
           const a = ang + k * 0.035;
           const p = skirtPt(v, a);
           const r0 = Math.hypot(p[0], p[2]) || 1;
-          const r = r0 * (1 + 0.085 * v * (1 - Math.abs(k) * 0.6));
+          const r = r0 * (1 + 0.055 * v * (1 - Math.abs(k) * 0.6));
           pos.push(p[0] / r0 * r, p[1] - (v > 0.95 ? 0.6 : 0), p[2] / r0 * r);
           uv.push((k + 1) / 2, v);
         }
@@ -474,7 +474,12 @@ export default {
       const d = Math.abs(a - b) % (Math.PI * 2);
       return d > Math.PI ? Math.PI * 2 - d : d;
     };
-    const halfOpen = (v) => 0.40 + 0.62 * v;        // the front opening, radians
+    // the front opening, in radians; the small wave keeps the two front edges
+    // from reading as straight lapels
+    const halfOpen = (v) => 0.40 + 0.62 * v + 0.035 * Math.sin(v * 4.2);
+    // the top edge of the cloth rides the shoulder: higher at the collar,
+    // lower out over the arms
+    const topAt = (ang) => 0.856 - 0.056 * Math.pow(Math.abs(Math.cos(ang)), 2);
     // where the cloth ends, per bearing: lowest at the back, a little higher
     // over the arms, higher again at the two front falls
     const hemAt = (ang) => {
@@ -493,15 +498,27 @@ export default {
         return c * c * c * c;
       };
       const side = Math.max(lobe(0), lobe(Math.PI));
-      return 1.2 + 1.8 * v + side * (0.8 + 9.4 * v);
+      // a shawl is not a cone: it pulls in under the shoulder where the cloth
+      // takes the weight, then stands out again at the hem
+      const pinch = 0.85 * Math.exp(-Math.pow((v - 0.52) / 0.20, 2));
+      // and it swells over the shoulder bone before it falls away
+      const shoulder = 1.1 * Math.exp(-Math.pow((v - 0.12) / 0.10, 2)) * side;
+      return 1.2 + 1.8 * v - pinch + shoulder + side * (0.8 + 9.4 * v);
     };
     // the folds of the cloth, deepening as it hangs
+    /* The folds shift phase as they fall, so they run on the diagonal from the
+       shoulder to the hem the way a hanging cloth does; folds that only vary
+       with the bearing stand up as vertical ribs and the shawl reads as a
+       corrugated cone. */
     const shawlFold = (ang, v) => {
-      const amp = 0.25 + 3.1 * v * v;
-      return amp * (0.62 * Math.cos(4.6 * ang + 1.2) + 0.38 * Math.cos(2.2 * ang - 0.7));
+      const amp = 0.30 + 3.4 * Math.pow(v, 1.7);
+      return amp * (0.52 * Math.cos(4.6 * ang + 2.6 * v + 1.2) +
+        0.30 * Math.cos(2.2 * ang - 1.7 * v - 0.7) +
+        0.18 * Math.cos(9.1 * ang + 4.2 * v + 0.3));
     };
     const shawlPt = (ang, v, extra) => {
-      const t = 0.868 + (hemAt(ang) - 0.868) * v;
+      const t0 = topAt(ang);
+      const t = t0 + (hemAt(ang) - t0) * v;
       const p = surf(t, ang);
       const r = Math.hypot(p[0], p[2]) + standOff(ang, v) + shawlFold(ang, v) + extra;
       return [Math.cos(ang) * r, p[1], Math.sin(ang) * r];
@@ -515,10 +532,10 @@ export default {
       return t * t * (3 - 2 * t);
     };
     const shawlGeo = (thick) => {
-      const NUu = 76, NVv = 20;
+      const NUu = 76, NVv = 24;
       const pos = [], uv = [], idx = [];
       for (let i = 0; i <= NVv; i++) {
-        const v = i / NVv, h = halfOpen(v);
+        const v = Math.pow(i / NVv, 1.55), h = halfOpen(v);
         const a0 = FRONT + h, a1 = FRONT - h + Math.PI * 2;
         for (let j = 0; j <= NUu; j++) {
           const u = j / NUu, ang = a0 + (a1 - a0) * u;
@@ -557,7 +574,7 @@ export default {
         return pts;
       };
       tubeAlong(edge(1), 1.15, 7, C);         // the rolled hem
-      tubeAlong(edge(0), 0.85, 6, C);         // the roll at the collar
+      tubeAlong(edge(0), 0.70, 6, C);         // the roll at the collar
       // and the two front falls, closed with a roll of their own
       [1, -1].forEach((sd) => {
         const pts = [];
@@ -765,8 +782,8 @@ export default {
        in a flat ring. */
     const HEAD_LV = [
       [0.00, 5.3, 5.7, 0.2],
-      [0.10, 6.8, 8.0, 0.9],
-      [0.26, 8.1, 9.4, 1.0],
+      [0.10, 6.2, 7.6, 0.9],
+      [0.26, 7.4, 8.9, 1.0],
       [0.44, 8.5, 9.8, 0.7],
       [0.60, 8.4, 9.4, 0.3],
       [0.75, 8.0, 8.5, 0.0],
@@ -792,18 +809,27 @@ export default {
       // nose ridge a fin
       const win = (v, w) => Math.exp(-Math.pow(v / w, 4));
       let d = 0;
-      d += 1.35 * g(t, 0.612, 0.062) * win(fx, 0.20);          // the nose ridge
-      d += 0.85 * g(t, 0.706, 0.048) * win(fx, 0.62);          // brow
-      d -= 0.75 * g(t, 0.655, 0.040) * g(fx, 0.29, 0.16);      // eye sockets
-      d += 0.22 * g(t, 0.652, 0.026) * g(fx, 0.26, 0.09);      // the eyes themselves
-      d += 0.45 * g(t, 0.500, 0.078) * g(fx, 0.48, 0.24);      // cheeks
+      d += 1.95 * g(t, 0.612, 0.062) * win(fx, 0.155);         // the nose ridge
+      d += 0.95 * g(t, 0.706, 0.048) * win(fx, 0.62);          // brow
+      d -= 0.85 * g(t, 0.655, 0.040) * g(fx, 0.26, 0.13);      // eye sockets
+      d += 0.30 * g(t, 0.652, 0.026) * g(fx, 0.25, 0.085);     // the eyes themselves
+      d += 0.34 * g(t, 0.500, 0.078) * g(fx, 0.48, 0.24);      // cheeks
       // Patel is clean-shaven: the old 0.95 m moustache bump put a slab of
       // bronze on the upper lip. What is there is a philtrum and the folds
       // that run from the nose past the mouth, which is what ages the face.
-      d -= 0.20 * g(t, 0.450, 0.030) * win(fx, 0.46);          // the upper lip
-      d -= 0.26 * g(t, 0.370, 0.026) * win(fx, 0.34);          // the mouth line
-      d += 0.34 * g(t, 0.398, 0.075) * g(fx, 0.60, 0.16);      // the jowls
-      d += 0.48 * g(t, 0.255, 0.058) * win(fx, 0.40);          // chin
+      d -= 0.15 * g(t, 0.450, 0.030) * win(fx, 0.46);          // the upper lip
+      d -= 0.35 * g(t, 0.370, 0.026) * win(fx, 0.34);          // the mouth line
+      d += 0.26 * g(t, 0.398, 0.075) * g(fx, 0.60, 0.16);      // the jowls
+      d += 0.55 * g(t, 0.255, 0.058) * win(fx, 0.40);          // chin
+      // the nose has wings and a shadow under them, the mouth has two lips and
+      // a philtrum, and the face carries the folds of a man in his seventies
+      d += 0.26 * g(t, 0.583, 0.030) * g(fx, 0.135, 0.060);    // the wings of the nose
+      d -= 0.16 * g(t, 0.570, 0.022) * g(fx, 0.12, 0.050);     // under them
+      d -= 0.11 * g(t, 0.412, 0.030) * win(fx, 0.07);          // the philtrum
+      d += 0.14 * g(t, 0.344, 0.024) * win(fx, 0.26);          // the lower lip
+      d -= 0.15 * g(t, 0.470, 0.058) * g(fx, 0.34, 0.10);      // nasolabial folds
+      d -= 0.09 * g(t, 0.698, 0.030) * win(fx, 0.05);          // a frown between the brows
+      d -= 0.07 * g(t, 0.762, 0.020) * win(fx, 0.50);          // and one across the forehead
       return d * front;
     };
     /* Patel was bald on the crown with short hair at the sides and the back.
@@ -869,7 +895,7 @@ export default {
     }
 
     const HY = Y(0.868) + 2.4;           // 219, crown at 240
-    add(B, cyl(5.8, 8.4, 13.0, 16), 0, HY - 6.0, -0.4, { sz: 0.94 });   // neck
+    add(B, cyl(5.6, 7.4, 13.0, 16), 0, HY - 6.0, -0.4, { sz: 0.94 });   // neck
     add(B, headGeometry(), 0, HY, 0);
     const hh = (f) => HY + 21.5 * f;
     // the ears are the only feature the loft cannot carry, since they sit off
