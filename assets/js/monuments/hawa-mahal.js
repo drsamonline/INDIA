@@ -62,6 +62,16 @@ export default {
   ],
 
   build(ctx) {
+    /* Jaipur pink is a dusty rose, not brick. The engine's sandstonePink takes
+       a warm texture on top, so the tint is set lighter and pinker than the
+       swatch or the screen comes out terracotta. */
+    const PINK = (() => {
+      const mm = ctx.mat('cream');   // untextured: a textured base multiplies the tint down
+      if (!mm || !mm.clone) return 'sandstonePink';
+      const c = mm.clone();
+      c.color.setHex(0xd98f78);
+      return c;
+    })();
     const T3 = ctx.THREE;
     const { add, box, cyl, sph, cone, dome, arch, archFrame, block, col, lathe } = ctx;
     const TAU = Math.PI * 2;
@@ -87,14 +97,14 @@ export default {
        =================================================================== */
     const nBase = 9;
     const baseZ = bow(0) + 0.0;
-    block('sandstonePink', W0, T0, 1.4, 0, 0.34, baseZ - 0.7);
+    block(PINK, W0, T0, 1.4, 0, 0.34, baseZ - 0.7);
     add('white', box(W0 + 0.3, 0.16, 1.7), 0, 0.42, baseZ - 0.7);
     add('white', box(W0 + 0.4, 0.20, 1.8), 0, T0 + 0.26, baseZ - 0.7);
     for (let i = 0; i < nBase; i++) {
       const x = (i - (nBase - 1) / 2) * (W0 / nBase);
       const z = bow(x);
       // shallow recess, closed by a lattice panel — no black void
-      add('sandstonePink', arch(1.30, 2.02, 0.10), x, 0.52, z + 0.14);
+      add(PINK, arch(1.30, 2.02, 0.10), x, 0.52, z + 0.14);
       add('jaliWhite', arch(1.14, 1.86, 0.05), x, 0.56, z + 0.34);
       add('white', archFrame(1.66, 2.42, 0.15, 0.14), x, 0.50, z + 0.30);
       add('white', box(1.30, 0.10, 0.22), x, 0.44, z + 0.36);
@@ -114,7 +124,7 @@ export default {
     function cornice(x, y, z, w, ry, withDome = true) {
       const g = lathe([[w * 0.50, 0], [w * 0.50, 0.03], [w * 0.475, 0.075],
         [w * 0.40, 0.125], [w * 0.28, 0.165], [w * 0.10, 0.19], [0.012, 0.20]], 12);
-      add('sandstonePink', g, x, y, z, { sz: 0.66, ry });
+      add(PINK, g, x, y, z, { sz: 0.66, ry });
       add('white', cyl(w * 0.515, w * 0.515, 0.045, 12), x, y + 0.005, z, { sz: 0.66 });
       // the small fluted dome and finial that crown each casement
       if (withDome) {
@@ -130,7 +140,7 @@ export default {
       const bw = T.w / T.bays;
 
       // the wall of the tier, behind the jharokhas
-      block('sandstonePink', T.w, TH, 1.5, 0, y, T.z - 1.05);
+      block(PINK, T.w, TH, 1.5, 0, y, T.z - 1.05);
       // white string courses top and bottom
       add('white', box(T.w + 0.5, 0.16, 1.9), 0, y + TH - 0.02, T.z - 0.55);
       add('white', box(T.w + 0.3, 0.12, 1.7), 0, y + 0.06, T.z - 0.62);
@@ -142,7 +152,7 @@ export default {
         const ry = Math.atan(bowR(x)) * 0.8;
 
         // projecting casement, one room deep
-        add('sandstonePink', box(bw * 0.88, TH * 0.64, 0.55), x, y + TH * 0.34, z + 0.22, { ry });
+        add(PINK, box(bw * 0.88, TH * 0.64, 0.55), x, y + TH * 0.34, z + 0.22, { ry });
         add('white', box(bw * 0.94, 0.09, 0.66), x, y + 0.10, z + 0.26, { ry });
 
         // arched, pierced screen under a white surround
@@ -160,11 +170,29 @@ export default {
       [-1, 1].forEach((s) => {
         const x = s * (T.w / 2 + 0.22);
         const z = T.z + bow(x) * 0.85;
-        add('sandstonePink', cyl(0.34, 0.40, TH * 0.55, 8), x, y + TH * 0.36, z);
+        add(PINK, cyl(0.34, 0.40, TH * 0.55, 8), x, y + TH * 0.36, z);
         add('white', cyl(0.44, 0.44, 0.07, 10), x, y + TH * 0.62, z);
         add('white', dome(0.40, 0.44, 12), x, y + TH * 0.64, z);
         add('gold', sph(0.055, 6), x, y + TH * 0.64 + 0.50, z);
       });
+    }
+
+    /* ---- the crown of the pyramid --------------------------------------
+       The top of the screen is not a flat parapet: a bangaldar cornice runs
+       the full width of the fifth tier and a row of domed chhatris sits on
+       it, which is what gives Hawa Mahal its stepped, domed skyline. */
+    {
+      const topTier = tiers[3];
+      const ty = T0 + 4 * TH - TH * 0.42;   // on the parapet of the top tier
+      const n = 5;
+      for (let i = 0; i < n; i++) {
+        const x = (i - (n - 1) / 2) * (topTier.w / (n - 0.2));
+        const z = topTier.z + bow(x) * 0.85;
+        add(PINK, cyl(0.36, 0.42, 0.62, 8), x, ty + 0.34, z);
+        add('white', cyl(0.47, 0.47, 0.08, 10), x, ty + 0.62, z);
+        add('white', dome(0.42, 0.46, 12), x, ty + 0.64, z);
+        add('gold', sph(0.055, 6), x, ty + 0.64 + 0.52, z);
+      }
     }
 
     /* ===================================================================
@@ -174,9 +202,9 @@ export default {
     const cw = 3.3;
     // the central bay of the top tier is carried up a little higher, under a
     // wide bangaldar cornice — the crown of the pyramid, not a dome
-    block('sandstonePink', cw, 1.35, 1.8, 0, cy - 0.35, -0.9);
+    block(PINK, cw, 1.35, 1.8, 0, cy - 0.35, -0.9);
     add('white', box(cw + 0.22, 0.10, 1.9), 0, cy + 0.92, -0.9);
-    add('sandstonePink', arch(cw * 0.62, 1.30, 0.10), 0, cy - 0.20, -0.10);
+    add(PINK, arch(cw * 0.62, 1.30, 0.10), 0, cy - 0.20, -0.10);
     add('jaliWhite', arch(cw * 0.50, 1.18, 0.05), 0, cy - 0.14, 0.02);
     add('white', archFrame(cw * 0.74, 1.50, 0.09, 0.09), 0, cy - 0.20, -0.02);
     cornice(0, cy + 0.96, -0.10, cw * 0.92, 0, false);
@@ -190,24 +218,24 @@ export default {
        the plain rear: one room deep, blank wall, crenellated parapet
        =================================================================== */
     const rearZ = -1.4 - DEPTH + 1.2;
-    block('sandstonePink', W0, H - 1.2, 0.9, 0, 0, rearZ - 0.9);
+    block(PINK, W0, H - 1.2, 0.9, 0, 0, rearZ - 0.9);
     add('white', box(W0 + 0.2, 0.14, 1.1), 0, H - 1.2, rearZ - 0.9);
     // crenellations along the rear parapet
     for (let i = 0; i < 22; i++) {
       const x = -W0 / 2 + 0.5 + i * (W0 - 1) / 21;
-      add('sandstonePink', box(0.46, 0.55, 0.5), x, H - 1.06, rearZ - 0.9);
+      add(PINK, box(0.46, 0.55, 0.5), x, H - 1.06, rearZ - 0.9);
     }
     // the side returns of the screen, closing it off
     [-1, 1].forEach((s) => {
-      block('sandstonePink', 1.2, H - 0.6, DEPTH, s * (W0 / 2 + 0.6), 0, rearZ + 1.6);
+      block(PINK, 1.2, H - 0.6, DEPTH, s * (W0 / 2 + 0.6), 0, rearZ + 1.6);
     });
 
     /* ---- the City Palace wall running on either side of the screen ------- */
     [-1, 1].forEach((s) => {
-      block('sandstonePink', 9.0, 6.4, 2.6, s * (W0 / 2 + 5.2), 0, rearZ + 1.5);
+      block(PINK, 9.0, 6.4, 2.6, s * (W0 / 2 + 5.2), 0, rearZ + 1.5);
       add('white', box(9.2, 0.16, 2.8), s * (W0 / 2 + 5.2), 6.4, rearZ + 1.5);
       for (let i = 0; i < 8; i++) {
-        add('sandstonePink', box(0.42, 0.5, 0.5),
+        add(PINK, box(0.42, 0.5, 0.5),
           s * (W0 / 2 + 1.4 + i * 1.05), 6.56, rearZ + 1.5);
       }
       // shallow niches so the flank is not a blank slab
@@ -218,9 +246,9 @@ export default {
     });
     // corner pavilion at the right end of the screen, as in the east elevation
     (function corner(x, z) {
-      block('sandstonePink', 3.0, 12.0, 3.0, x, 0, z);
+      block(PINK, 3.0, 12.0, 3.0, x, 0, z);
       add('white', box(3.3, 0.18, 3.3), x, 12.0, z);
-      add('sandstonePink', cyl(1.05, 1.15, 0.9, 8), x, 12.2, z);
+      add(PINK, cyl(1.05, 1.15, 0.9, 8), x, 12.2, z);
       add('white', dome(1.05, 1.0, 14), x, 13.1, z);
       add('gold', sph(0.10, 6), x, 14.2, z);
       add('gold', cyl(0.02, 0.02, 0.7, 4), x, 14.4, z);

@@ -230,7 +230,7 @@ building. Ranked by how far it is from reading as itself:
 | 2 | Basilica of Bom Jesus | **symmetric** facade with the bell tower hidden at the rear | **done** — one tall tower at the front right, as the church actually stands |
 | 3 | Golden Temple | **done** — the fault was the tank, not the shrine: distortion 0.9 made it a mirror of a pale sky | done |
 | 4 | Somnath | **done** — pale sandstone, sea visible again; shikhara still reads stepped | done |
-| 5 | Hawa Mahal | flat parapet; needs the curved cornice and five domed chhatris | todo |
+| 5 | Hawa Mahal | **done** — domed skyline on the top tier; Jaipur pink | done |
 | 6 | Mahabodhi | curved shikhara; the real spire is a straight tapering brick tower | todo |
 | 7 | India Gate / Gateway of India | both read plain: no inscription band, canopy, pools | todo |
 | 8 | Meenakshi | towers read as striped office blocks at distance | todo |
@@ -323,6 +323,23 @@ Two faults, and one of them is a trap worth keeping:
 Still wrong: the shikhara's silhouette. It is a curvilinear lathe with
 urushringas, but the horizontal ribs and the corner offsets make it read as a
 stepped pyramid rather than the smooth tapering tower at Somnath.
+
+---
+
+### 12. Hawa Mahal — a domed skyline, and a colour that would not change
+
+Two faults:
+
+- **A flat top.** The screen ended in a plain parapet. Five domed chhatris now
+  stand along the parapet of the top tier, which is what gives Hawa Mahal its
+  stepped, domed skyline. A fifth full jali tier was tried first and **broke the
+  boot** — 953 pierced screens is already near the limit, another tier's worth
+  never reached `dataset.boot`.
+- **Brick red, not Jaipur pink.** Two passes at the tint changed nothing, and
+  the reason is worth keeping: the tint was cloned from `sandstonePink`, whose
+  **texture map multiplies the colour down by about half**. The clone is taken
+  from `cream`, which has no map, so the hex is the colour you see.
+  **Tinting a textured engine material will not give you the swatch.**
 
 ---
 
