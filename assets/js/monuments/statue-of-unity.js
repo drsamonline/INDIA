@@ -49,17 +49,17 @@ export default {
     {
       title: 'The Iron Man', deva: 'लौह पुरुष',
       text: 'Vallabhbhai Patel, born in 1875, was India\u2019s first Deputy Prime Minister and Home Minister. He brought more than five hundred princely states into the new union, which earned him the name Iron Man, and the Bharat Ratna in 1991.',
-      pos: [130, 150, 215], target: [0, 112, 0], time: 12
+      pos: [165, 160, 290], target: [0, 148, 0], time: 12
     },
     {
       title: 'The Walking Pose', deva: 'चलती मुद्रा',
       text: 'Ram V. Sutar modelled him mid-stride, in dhoti and shawl, walking forward. The skin is about 1,700 tonnes of bronze in 565 large panels, over a concrete and steel core built by Larsen & Toubro between 2013 and 2018.',
-      pos: [96, 150, 150], target: [0, 118, 0], time: 11.4
+      pos: [165, 160, 290], target: [0, 148, 0], time: 11.4
     },
     {
       title: 'The Viewing Gallery', deva: 'दर्शन दीर्घा',
       text: 'A gallery sits inside the chest at about 153 metres, holding two hundred visitors at a time. From its windows the Sardar Sarovar dam and the Vindhya and Satpura hills lie along the horizon.',
-      pos: [60, 170, 110], target: [0, 155, 0], time: 9.6
+      pos: [150, 175, 265], target: [0, 150, 0], time: 9.6
     },
     {
       title: 'Sadhu Bet', deva: 'साधु बेट',

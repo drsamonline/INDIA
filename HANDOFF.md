@@ -530,6 +530,12 @@ already exist here.
 - a **'The face' view** at [0, 221, 122] → [0, 213, 0], so the sculpted face can
   actually be looked at — the page had no way to see it
 
+**Found while checking the new stops:** the tour cameras stood 120-180 m from a
+182 m figure, and at fov 40 that frames 90-130 m vertically — so every stop was
+a bronze wall with the head cut off. All the figure stops now sit ~330 m out,
+centred on y 148 (the figure spans 58-240), which is the distance that fits 182 m
+in the frame. Render a tour stop before believing it.
+
 Two things to keep in mind for the next file that arrives: it is worth rendering
 someone else's page at *its own* presets before judging it, and a pasted page
 dropped into `monuments/` for a look must be deleted again — `linkcheck.py`
