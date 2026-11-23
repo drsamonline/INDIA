@@ -12,13 +12,40 @@ page per monument plus a landing page that links them all.
 - **Repo:** `https://github.com/drsamonline/INDIA` (public, branch `main`)
 - **Live:** `https://drsamonline.github.io/INDIA/` (GitHub Pages)
 - **Licence:** CC BY-NC 4.0, author **Dr Sohil Momin**
-- **Head of main:** `055f083` for the code; this file is the tip of `main`
+- **Head of main:** `ee26dbf`
 - **Working tree:** clean
-- **Commits in the last session:** 71, then 2 more (Taj clock + floods, Amber court)
+- **CI:** green on every push (`site` + `pages-build-deployment`)
 
 The user is Dr Sohil Momin. He works fast, says "go" to mean "continue the
 queue", and wants tables and bullets, not paragraphs. He checks the live site,
 so **deploys must be cache-busted** (they are — see below).
+
+---
+
+## State of play
+
+Read this before anything else. Everything below it is a log.
+
+**Verified across this run:** all 24 pages have booted clean with no console
+errors and been framed by eye;
+`audit_data` 0 errors; `linkcheck` 26 pages resolve; `check_a11y` 0 failing;
+`tintcheck --ci` 0 new; keyboard shortcuts and the history drawer exercised;
+mobile (390x844) checked on two pages; landing page, credits and README checked
+against `data/monuments.json`; a full rebuild produces no diff.
+
+**Open work — one item:**
+
+| Item | Why it is open |
+|---|---|
+| Statue of Unity is not a portrait | It is a good procedural figure with a sculpted face, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
+
+**Known soft spots, judged acceptable:** India Gate's attic is squat (block
+width is unpublished, the model's 37 m is photo-derived); Shore Temple and
+Konark read dark, which is what granite and weathered khondalite do.
+
+**Do not re-chase:** the Lotus's grey band (engine ambient by design), the
+`framecheck` flags on detail views (a "Carving" view is meant to be close), and
+any "broken image" count taken from a browser (see §24).
 
 ---
 
@@ -57,7 +84,15 @@ python3 tools/check_all.py --only <id> --size 900x600 --out shots
 python3 tools/check_a11y.py --only <id>
 python3 tools/volumes.py <id> --column x,z    # what occupies a vertical column
 python3 tools/volumes.py <id> --at x,y,z      # what contains a point
+python3 tools/tintcheck.py --ci      # no NEW tint taken from a textured base
+python3 tools/framecheck.py          # do views and tour stops frame their subject
+python3 tools/check_ui.py --only <id> # the documented keyboard shortcuts
+python3 tools/build_gallery.py       # rebuild docs/gallery.jpg from shots/audit
 ```
+
+CI runs the rebuild, the staleness check, `linkcheck`, `audit_data --strict` and
+`tintcheck --ci` on every push; the PR job also boots two pages, runs `check_a11y`
+and `check_ui`. Reproduce those locally before pushing.
 
 Rendering needs `pip install playwright`; Chromium is at `/usr/local/bin/chromium`.
 The Taj takes 90–140 s to boot under software rendering — allow for it.
@@ -110,7 +145,10 @@ height (20 m published vs ~14 m in the photograph).
 
 ---
 
-## Open work
+## Work log — what was done, and why
+
+Most items below are closed; the heading they sit under used to say "open work",
+which stopped being true around item 4. Skim the titles, read the ones you need.
 
 > **Statue of Unity — the other model's page was reviewed and rejected.** It
 > arrived as a self-contained Taj-style scene (142 KB, three.js from a CDN). Its
