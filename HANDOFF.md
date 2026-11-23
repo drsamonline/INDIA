@@ -46,7 +46,13 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§31):** the Lotus petals rebuilt as doubly-curved shells with a
+**Latest run (§32):** Qutb Minar's inscription bands — six on the first storey,
+two each on the second and third, one on the fourth — rebuilt as projecting
+courses carrying a connected row of raised letters, one geometry per band. The
+script is **naskh, not Kufic**; the roadmap had it wrong. 91k → 102k triangles,
+boot 54 s, `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` 0 new.
+
+**Previous run (§31):** the Lotus petals rebuilt as doubly-curved shells with a
 keel, a cupping flank, a turned-out rim and a thin edge; the entrance leaves arc
 over and droop. 56k → 71k triangles, boot 67 s, `audit_data` 0, `linkcheck`
 26 pages, `tintcheck --ci` 0 new.
@@ -858,6 +864,42 @@ building are quite the same.
 
 `tools/check_a11y.py` on this page was not re-run (the sandbox's per-command
 budget); the change is geometry only.
+
+---
+
+### 32. Qutb Minar — an inscription band, and a correction to the brief
+
+The roadmap's first Tier 2 item, and it carried a factual error: the bands are
+**naskh**, a cursive hand, not the angular Kufic the roadmap named. Wikipedia
+("inscribed in naskh"), Archnet ("Nakshi inscriptions") and the six Quranic
+bands on storey 1 all agree. `DIMENSIONS.md` now records the count and the
+script with a source per row.
+
+What was there was a ring of identical 0.30 m blocks at 0.62 m spacing: a dashed
+line round the shaft, which is what "the marble is colour, not inscription"
+meant. What is there now:
+
+| Was | Now |
+|---|---|
+| a ring of identical blocks | a connected row of letters: a baseline stroke running into the next glyph, a stem of varying height, a loop or a dot above, an occasional descender |
+| an even grid | an advance that varies per glyph, seeded per band so no two bands repeat round the tower |
+| nine bands in the wrong places | six on storey 1, two each on storeys 2 and 3, one on storey 4 |
+| one geometry item per block (hundreds per band) | one geometry item per band |
+
+**Two things learned the hard way here.** An even row of separate stems is a
+picket fence whatever colour you make it — writing has to be connected, so the
+baseline stroke between glyphs is what turns the row into a script. And the
+first attempt put light letters on a dark ground; carved lettering is dark
+lettering in a light course, so the ink and the ground were the wrong way round.
+
+**And the trap bit a seventh time.** The ink was first cloned off
+`sandstoneBuff` — a textured base — so it rendered at half the hex and
+`tintcheck --ci` failed on it, after the commit was written. It is off `cream`
+now, at 0x4a3a2c. The check did its job; the lesson is to run it before
+committing, not after.
+
+Still soft: the bands stand a little proud of the fluting, where the real ones
+are flush, and the letters are a rhythm rather than a text.
 
 ---
 

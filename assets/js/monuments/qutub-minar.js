@@ -161,6 +161,18 @@ export default {
        =================================================================== */
     // band maps: [from, to, key] in normalised storey height
     const red = 'sandstoneRed', buf = 'sandstoneBuff', mar = 'marble';
+    // the ground of an inscription band, a shade under the stone so the letters
+    // stand in a shadowed panel rather than on a painted stripe
+    // cloned from `cream`, which carries no texture map: a tint off a textured
+    // base is multiplied down by about half and renders at half the hex (trap
+    // in §12 — this is its seventh victim)
+    const SHADOW = (() => {
+      const mm = ctx.mat('cream');
+      if (!mm || !mm.clone) return 'dark';
+      const c = mm.clone();
+      c.color.setHex(0x4a3a2c);
+      return c;
+    })();
     const bands = [
       // storey 1 — red sandstone with broad inlaid marble bands low down
       [[0.00, 0.035, mar], [0.035, 0.075, red], [0.075, 0.105, mar],
@@ -186,6 +198,69 @@ export default {
       { flutes: 1, kind: 'plain', amp: 0 }
     ];
 
+    /* ---- one inscription band --------------------------------------------
+       A projecting ring carrying a row of raised letters, all of it ONE
+       geometry: the boot time is spent on geometry items, not on triangles
+       (§30). The letters are not a script — no one reads them at this size —
+       but they are written rather than stamped: stems of uneven height on a
+       baseline, with loops, dots and the occasional descender, seeded so the
+       band does not repeat round the tower. */
+    function inscriptionBand(r, yMid, bh, seed, keyLetter, keyGround) {
+      const pos = [], uv = [], idx = [];
+      let x = seed * 7919 + 104729;
+      const rnd = () => {
+        x = (x * 9301 + 49297) % 233280;
+        return x / 233280;
+      };
+      const box3 = (cx, cy, cz, w, hh, d, ry) => {
+        const base = pos.length / 3;
+        const c = Math.cos(ry), s2 = Math.sin(ry);
+        for (let k = 0; k < 8; k++) {
+          const lx = (k & 1 ? 1 : -1) * w / 2;
+          const ly = (k & 2 ? 1 : -1) * hh / 2;
+          const lz = (k & 4 ? 1 : -1) * d / 2;
+          pos.push(cx + lx * c + lz * s2, cy + ly, cz - lx * s2 + lz * c);
+          uv.push(k & 1, (k & 2) ? 1 : 0);
+        }
+        const f = [[0, 1, 3], [0, 3, 2], [4, 6, 7], [4, 7, 5], [0, 4, 5], [0, 5, 1],
+          [2, 3, 7], [2, 7, 6], [0, 2, 6], [0, 6, 4], [1, 5, 7], [1, 7, 3]];
+        for (const t of f) idx.push(base + t[0], base + t[1], base + t[2]);
+      };
+      // the ground of the panel, and its two edge mouldings
+      add(keyLetter, cyl(r, r, bh, 80), 0, yMid, 0);
+      add(keyLetter, cyl(r + 0.03, r + 0.03, bh * 0.07, 80), 0, yMid - bh * 0.46, 0);
+      add(keyLetter, cyl(r + 0.03, r + 0.03, bh * 0.07, 80), 0, yMid + bh * 0.46, 0);
+      /* The letters. Writing is connected: an even row of separate stems is a
+         picket fence whatever its colour, so each glyph is a baseline stroke
+         that runs into the next, with a stem, a loop or a dot above it and the
+         occasional descender, at an advance that varies like a hand. */
+      const rr = r + 0.04;
+      let ang = 0;
+      while (ang < TAU - 0.05) {
+        const w = 0.30 + rnd() * 0.40;          // the advance, in metres
+        const da = w / rr;
+        if (ang + da > TAU) break;
+        const a = ang + da / 2;
+        const cx = Math.cos(a) * rr, cz = Math.sin(a) * rr;
+        const ry = -(a + Math.PI / 2);
+        const tx = Math.cos(ry), tz = -Math.sin(ry);
+        const put = (ox, oy, ww, hh, dd) => box3(cx + ox * tx, yMid + oy, cz + ox * tz, ww, hh, dd, ry);
+        put(0, -bh * 0.24, w * 1.25, bh * 0.11, 0.08);            // the baseline, joining
+        const stemH = bh * (0.28 + rnd() * 0.55);
+        put((rnd() - 0.5) * w * 0.35, -bh * 0.18 + stemH / 2, 0.13, stemH, 0.08);
+        if (rnd() < 0.40) put(0, -bh * 0.18 + stemH + bh * 0.05, 0.24, bh * 0.12, 0.08);
+        if (rnd() < 0.32) put((rnd() - 0.5) * w * 0.5, bh * 0.28, 0.09, 0.09, 0.08);
+        if (rnd() < 0.20) put(0, -bh * 0.38, 0.12, bh * 0.18, 0.07);
+        ang += da;
+      }
+      const g = new T3.BufferGeometry();
+      g.setAttribute('position', new T3.Float32BufferAttribute(pos, 3));
+      g.setAttribute('uv', new T3.Float32BufferAttribute(uv, 2));
+      g.setIndex(idx);
+      g.computeVertexNormals();
+      add(keyGround, g, 0, 0, 0);
+    }
+
     let y = PLINTH_H;
     for (let si = 0; si < 5; si++) {
       const s = storeys[si], h = H[si];
@@ -195,21 +270,21 @@ export default {
           dB + (dT - dB) * a, dB + (dT - dB) * b,
           s.flutes, s.kind, key, s.amp, 0, 0, si === 0 ? 'sandstonePink' : null);
       }
-      // the Kufic bands: a ring of relief blocks at the marble courses, which
-      // in the real tower carry an inscription band running round the shaft
-      if (si < 4) {
-        const courses = si === 0 ? 3 : 2;
-        for (let c = 0; c < courses; c++) {
-          const t = 0.30 + c * 0.16;
-          const yy = y + h * t;
-          const rr = (dB + (dT - dB) * t) / 2 + 0.05;
-          const nb = Math.max(20, Math.round(TAU * rr / 0.62));
-          for (let q = 0; q < nb; q++) {
-            const a = (q / nb) * TAU;
-            add(si < 2 ? mar : red, box(0.30, h * 0.075, 0.10),
-              Math.cos(a) * rr, yy, Math.sin(a) * rr, { ry: -a + Math.PI / 2 });
-          }
-        }
+      /* the inscription bands. The first storey carries six, the second and
+         third two each, the fourth one — all of them cut in naskh, a cursive
+         hand, not the angular Kufic the roadmap assumed (see DIMENSIONS.md).
+         At 72 m nobody reads a letter, but a band has to have the rhythm of
+         writing: a baseline, stems of uneven height, loops and dots above the
+         line. What was here was a ring of identical blocks, which reads as a
+         dashed line. */
+      const nBands = si === 0 ? 6 : (si < 3 ? 2 : (si === 3 ? 1 : 0));
+      for (let c = 0; c < nBands; c++) {
+        const t = si === 0 ? 0.10 + c * 0.145 : (c === 0 ? 0.30 : 0.68);
+        const rMid = (dB + (dT - dB) * t) / 2;
+        // stand the band clear of the flutes it crosses
+        inscriptionBand(rMid * (1 + s.amp) + 0.02, y + h * t,
+          h * (si === 0 ? 0.035 : 0.032), si * 11 + c * 3 + 1,
+          si === 0 ? mar : red, SHADOW);
       }
       // plain keel moulding at the foot of each storey
       add(buf, cyl(dB / 2 + 0.14, dB / 2 + 0.14, 0.22, 48), 0, y + 0.11, 0);

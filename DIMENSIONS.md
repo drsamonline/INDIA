@@ -23,6 +23,8 @@ reference photograph in `assets/img/` rather than taken from a survey.
 | Fluting | angular + round alternating, storey 1 | built flute by flute | ASI |
 | Balconies | 4, on muqarnas corbels | 4, +1.75 / +1.55 / +1.30 / +1.05 m | — |
 | Alai Minar stump | 25 m | 25 m | ASI |
+| Inscription bands | 6 on storey 1, 2 each on storeys 2 and 3, 1 on storey 4 | 6 / 2 / 2 / 1, 1.0 m deep | Wikipedia (suras II 255–60, LIX 22–23, XLVIII 1–6, the names of Ghiyath al-Din and Mu'izz al-Din); Archnet |
+| Script | **naskh**, a cursive hand — not Kufic | naskh rhythm: baseline, stems of uneven height, loops, dots | Wikipedia ("inscribed in naskh"); Archnet ("Nakshi inscriptions") |
 
 ## Hawa Mahal
 

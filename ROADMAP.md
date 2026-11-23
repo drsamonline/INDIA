@@ -80,7 +80,7 @@ from the code.
 
 | Monument | Missing |
 |---|---|
-| **Qutb Minar** | carved Kufic bands; the marble is colour, not inscription. Needs `carvedBand` |
+| ~~**Qutb Minar**~~ | **done** — the bands were a ring of identical blocks, which reads as a dashed line. Six on storey 1, two each on storeys 2 and 3, one on 4, each a projecting course carrying a connected row of raised letters (baseline, uneven stems, loops, dots), one geometry per band. **The script is naskh, not Kufic** — the roadmap had it wrong |
 | **Charminar** | stucco ornament reduced to frames and discs; needs `jali` and `carvedBand` |
 | **Hawa Mahal** | the jharokhas are one casement per bay against 953 real ones; needs `jali` at density |
 | **Konark** | wheels have flat spokes; the 24 need carved rims and hubs |
