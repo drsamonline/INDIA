@@ -616,6 +616,21 @@ measurement disagrees with the files on disk, doubt the measurement.
 
 ---
 
+### 25. Mobile, verified
+
+Every render in this session was landscape until now. Checked 390x844 on
+Charminar and Konark: the header collapses to a bar, the monument frames
+correctly, the control panel collapses below the fold and there is no horizontal
+overflow, and the tour card sits above the bottom edge with its controls
+reachable. The README's claims about phones hold.
+
+Two notes for whoever repeats this: `#panel` sits at y 852 in an 844-high
+viewport when closed, so "below the viewport" is correct, not a bug; and the tour
+card's id is not `#tour-card` on the engine pages, so select it by its visible
+text or class rather than assuming the Taj's id.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

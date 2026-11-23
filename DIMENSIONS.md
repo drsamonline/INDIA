@@ -92,6 +92,7 @@ monument would force a 63 m façade, which the photograph rules out.
 | Onion dome | not published; 0.48 of the façade *(photo)* | 5.9 m dia, 1.85 m high | — |
 | Amrit Sarovar | 148.5 × 154.5 m, 5.1 m deep | same | — |
 | Causeway | 61.6 × 6.4 m (202 × 21 ft) | 64 × 6.4 m | — |
+| Parikrama wings | two storeys of arcade *(photo)* | 12.4 m to the cornice | — |
 
 The 40 m / 67 m figures sometimes quoted are **feet**, not metres.
 
