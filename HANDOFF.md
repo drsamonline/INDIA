@@ -46,7 +46,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§36):** Kandariya's shikhara — the urushringas rebuilt as
+**Latest run (§37):** CSMT's menagerie — the beasts were 0.85 m on a 26 m
+skyline and the same cream as the wall, so they vanished. Now 3× the size on a
+darker stone, and the spandrel pair at 2.2×. 67k triangles, boot 37 s,
+`audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
+
+**Previous run (§36):** Kandariya's shikhara — the urushringas rebuilt as
 miniatures of the tower on its own profile, five rows up each corner instead of
 four overlapping cones; the courses are the tower's own stone instead of warm
 trim. 62k → 67k triangles, boot 40 s, `audit_data` 0, `linkcheck` 26 pages,
@@ -1029,6 +1034,31 @@ placed.
 
 Still soft: the figure registers read as dark slots at the home distance, and
 the mandapa roofs' corner spirelets are thin pins.
+
+---
+
+### 37. CSMT — the menagerie was there and invisible
+
+The roadmap said the carved animals were absent. They were not: `beast()` builds
+a lion, peacock, monkey, elephant and snake from primitives and put one on every
+gable apex and a pair in the great arch's spandrels. They were 0.85 m tall on a
+26 m building, in the wall's own cream — four pixels at the home view, the same
+tone as the sky behind them.
+
+| Was | Now |
+|---|---|
+| 0.85 m on the gable apexes | 3.0× — a 2.5 m animal, which is what the building has |
+| 1.0× in the spandrels | 2.2× |
+| the wall's cream | a shade darker (0x6a5f4d off `cream`), because weathered stone reads darker and that contrast *is* the silhouette |
+
+Two things worth keeping. **A detail can be modelled, correct and still absent** —
+the question to ask of every ornament is not "is it there" but "at what size, in
+what tone, against what background". And a sub-metre ornament on a 26 m facade
+needs to be three times bigger than instinct says; the instinct scales to the
+building, the eye does not.
+
+Still soft: the beasts are silhouettes at the home distance and only resolve at
+about 15 m; the arcade's capitals are plain.
 
 ---
 

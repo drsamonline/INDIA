@@ -85,7 +85,7 @@ from the code.
 | ~~**Hawa Mahal**~~ | **done** — a bay was 1.4 m wide against the building's sub-metre, so the screen read as a row of shopfronts. Bays 13/11/9/6 → 19/16/12/8 (55 casements), each screen cut 3×5 instead of 3×4, and the base arcade 9 → 13 arches |
 | ~~**Konark**~~ | **done** — the wheels were rebuilt in an earlier pass (tapered spokes, medallions, lotus hub, beaded rim); the gap was the **deul**, which was a stack of axis-aligned boxes that read as a concrete bunker. It now steps in on a taper, carries corner buttresses and carved registers of blind arches, and its broken crown is a continuous ragged mass |
 | ~~**Kandariya**~~ | **done** — the figures were rebuilt as seven-piece sculpture in an earlier pass; what was wrong was the **shikhara**. Its urushringas were straight cones three times taller than wide, four overlapping up each corner, so the tower read as a string of beads down the edge. Each is now a miniature of the tower with the same curvilinear profile, five rows climbing each corner and one pair on each face of the lower three |
-| **CSMT** | the carved menagerie — peacocks, monkeys, lions, snakes — is absent |
+| ~~**CSMT**~~ | **done** — the menagerie existed but was 0.85 m on a 26 m skyline, four pixels at the home view, and the same cream as the wall behind it. Now 3× the size on a darker stone, so the gable apexes carry their animals as silhouettes against the sky |
 | **Mahabodhi** | the seated Buddha in each niche is a recess; the railing lacks coping and medallions |
 | **Basilica** | the altars, the casket chapel and the painted ceiling do not exist; the tour admits it |
 | **Rani ki Vav** | 292 pillars built, 226 survive, 216 modelled — but the wall figures are flat |
