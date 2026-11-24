@@ -84,7 +84,7 @@ from the code.
 | ~~**Charminar**~~ | **done** — the stucco was frames and discs on bare plaster. Now a lotus-petal fringe under all three cornices and round every minaret balcony, rows of blind arches in the spandrels, and two concentric hood moulds round each great arch, whose edge was a raw cut through the pierced wall |
 | ~~**Hawa Mahal**~~ | **done** — a bay was 1.4 m wide against the building's sub-metre, so the screen read as a row of shopfronts. Bays 13/11/9/6 → 19/16/12/8 (55 casements), each screen cut 3×5 instead of 3×4, and the base arcade 9 → 13 arches |
 | ~~**Konark**~~ | **done** — the wheels were rebuilt in an earlier pass (tapered spokes, medallions, lotus hub, beaded rim); the gap was the **deul**, which was a stack of axis-aligned boxes that read as a concrete bunker. It now steps in on a taper, carries corner buttresses and carved registers of blind arches, and its broken crown is a continuous ragged mass |
-| **Kandariya** | 870 sculptures suggested by two registers of blocks; needs instanced relief |
+| ~~**Kandariya**~~ | **done** — the figures were rebuilt as seven-piece sculpture in an earlier pass; what was wrong was the **shikhara**. Its urushringas were straight cones three times taller than wide, four overlapping up each corner, so the tower read as a string of beads down the edge. Each is now a miniature of the tower with the same curvilinear profile, five rows climbing each corner and one pair on each face of the lower three |
 | **CSMT** | the carved menagerie — peacocks, monkeys, lions, snakes — is absent |
 | **Mahabodhi** | the seated Buddha in each niche is a recess; the railing lacks coping and medallions |
 | **Basilica** | the altars, the casket chapel and the painted ceiling do not exist; the tour admits it |

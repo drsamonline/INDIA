@@ -102,15 +102,22 @@ export default {
     const sw = (t) => SH0W * profAt(PROF, t);
 
     /* a miniature shikhara: the urushringa that clusters the corners */
+    /* An urushringa is a miniature of the tower it clusters round: the same
+       curvilinear profile, four ribs and a finial. Built as a straight cone
+       three times as tall as it was wide, four of them overlapping up each
+       corner, they read as a string of beads down the edge of the shikhara —
+       which is exactly what the tower looked like. */
     const mini = (cx, cz, y, w, h, key) => {
-      const N = 6, pts = [];
+      const N = 12, pts = [];
+      const p0 = profAt(PROF, 0) || 1;
       for (let i = 0; i <= N; i++) {
         const t = i / N;
-        pts.push([(w / Math.SQRT2) * (1 - 0.78 * t), y + t * h]);
+        pts.push([(w / Math.SQRT2) * (profAt(PROF, t) / p0), y + t * h]);
       }
       add(key, lathe(pts, 4), cx, 0, cz, { ry: PI / 4 });
-      add(key, cyl(w * 0.34, w * 0.42, h * 0.1, 8), cx, y + h * 0.95, cz);
-      add('gold', cone(w * 0.1, h * 0.3, 6), cx, y + h * 1.15, cz);
+      // the amalaka and finial: stone, with only a point of gold
+      add(key, cyl(w * 0.30, w * 0.34, h * 0.06, 8), cx, y + h * 0.99, cz);
+      add(key, cone(w * 0.13, h * 0.14, 6), cx, y + h * 1.06, cz);
     };
 
     /* a phamsana roof: stepped courses with a spirelet at each corner */
@@ -260,24 +267,30 @@ export default {
     const TIERS = 22;
     for (let i = 1; i < TIERS; i++) {
       const t = i / TIERS, w = sw(t), y = VAR + t * (SH1 - VAR);
-      add(SP, box(w + 0.06, 0.1, w + 0.06), 0, y, gz);
+      // the courses are the tower's own stone: in the warm trim colour they
+      // read as painted orange dashes across the shikhara
+      add(ST, box(w + 0.06, 0.1, w + 0.06), 0, y, gz);
     }
-    // four rows of urushringas climbing the corners
-    for (let r = 0; r < 4; r++) {
-      const t = 0.06 + r * 0.17;
+    /* Five rows of urushringas climbing the corners, each row shorter and
+       narrower than the one below, so the corner reads as a cluster of spires
+       rather than a stack of rings. */
+    for (let r = 0; r < 5; r++) {
+      const t = 0.05 + r * 0.155;
       const w = sw(t), y = VAR + t * (SH1 - VAR);
       for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-        mini(sx * (w / 2 - w * 0.13), gz + sz * (w / 2 - w * 0.13), y - 1.1,
-          w * 0.3, w * 0.95, ST);
+        mini(sx * (w / 2 - w * 0.11), gz + sz * (w / 2 - w * 0.11), y - 0.5,
+          w * 0.26, w * 0.44, ST);
       }
-      // and a pair on each face, between the corner clusters
-      for (let f = 0; f < 4; f++) {
-        const a = (f / 4) * PI * 2;
-        [-0.26, 0.26].forEach((o) => {
-          const px = Math.cos(a) * (w / 2 - w * 0.06) - Math.sin(a) * o * w;
-          const pz = gz + Math.sin(a) * (w / 2 - w * 0.06) + Math.cos(a) * o * w;
-          mini(px, pz, y - 1.0, w * 0.24, w * 0.8, ST);
-        });
+      // one pair on each face, on the lower rows only
+      if (r < 3) {
+        for (let f = 0; f < 4; f++) {
+          const a = (f / 4) * PI * 2;
+          [-0.24, 0.24].forEach((o) => {
+            const px = Math.cos(a) * (w / 2 - w * 0.05) - Math.sin(a) * o * w;
+            const pz = gz + Math.sin(a) * (w / 2 - w * 0.05) + Math.cos(a) * o * w;
+            mini(px, pz, y - 0.4, w * 0.20, w * 0.34, ST);
+          });
+        }
       }
     }
     // the central lata of each face, and the two flanking ones

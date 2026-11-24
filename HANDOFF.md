@@ -46,7 +46,13 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§35):** Konark's deul — the ruined tower stump rebuilt on a
+**Latest run (§36):** Kandariya's shikhara — the urushringas rebuilt as
+miniatures of the tower on its own profile, five rows up each corner instead of
+four overlapping cones; the courses are the tower's own stone instead of warm
+trim. 62k → 67k triangles, boot 40 s, `audit_data` 0, `linkcheck` 26 pages,
+`tintcheck --ci` clean.
+
+**Previous run (§35):** Konark's deul — the ruined tower stump rebuilt on a
 taper, with corner buttresses, carved registers of blind arches on each face and
 a continuous ragged crown. 96k → 101k triangles, boot 45 s, `audit_data` 0,
 `linkcheck` 26 pages, `tintcheck --ci` clean.
@@ -999,6 +1005,30 @@ file.
 
 Still soft: the deul's registers sit in a deep shadow so the field reads almost
 black, and its plan is still square where the real one is star-shaped.
+
+---
+
+### 36. Kandariya — the shikhara was a string of beads
+
+The roadmap asked for the 870 sculptures. Those had already been rebuilt as
+seven-piece figures in warm-shadowed niches, and they read correctly. What was
+wrong was the tower they sit on.
+
+| Was | Now |
+|---|---|
+| each urushringa a straight cone, 1 : 3 wide to tall | a miniature of the tower: the same curvilinear profile, an amalaka and a stone finial |
+| four of them overlapping up each corner | five rows climbing each corner, each shorter and narrower than the one below |
+| eight more on every face, every row | one pair on each face, on the lower three rows only |
+| a gold cone on every one of them | stone, so the gold no longer draws a necklace of points |
+| 22 courses in the warm trim colour | in the tower's own stone — as trim they read as painted orange dashes across the shikhara |
+
+The lesson generalises: a subsidiary element has to be a *scaled copy of the
+thing it clusters round*, not a simplified stand-in. A cone is not a small
+shikhara, and forty of them read as a row of beads however carefully they are
+placed.
+
+Still soft: the figure registers read as dark slots at the home distance, and
+the mandapa roofs' corner spirelets are thin pins.
 
 ---
 
