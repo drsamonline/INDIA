@@ -286,12 +286,47 @@ export default {
       const t = Math.max(Math.abs(bx), Math.abs(bz));
       add('marble', cyl(0.15, 0.19, 1.0, 5), bx / t * 10.4, 34.9, bz / t * 10.4);
     }
-    // four allegorical groups (Art, Architecture, Justice, Charity)
-    for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
-      block('marble', 2.4, 1.5, 1.8, sx * 8.2, 34.9, sz * 8.2, { ry: Math.atan2(sz, sx) });
-      add('marble', sph(0.66, 8), sx * 8.2, 37.0, sz * 8.2);
-      add('marble', box(0.45, 1.1, 0.45), sx * 8.2, 36.4, sz * 8.2, { rz: 0.3 });
-    }
+    /* Four allegorical groups — Art, Architecture, Justice, Charity — at the
+       corners of the drum. Each was a sphere on a box with one arm: a lump. A
+       seated figure is a pedestal, a robe, a torso, a head, an attribute and a
+       companion, and at this height the attribute is the whole of what tells
+       one from another. */
+    const allegory = (x, z, ry, kind) => {
+      const c = Math.cos(ry), sn = Math.sin(ry);
+      const at = (lx, lz) => [x + lx * c + lz * sn, z - lx * sn + lz * c];
+      block('marble', 2.6, 1.4, 2.0, x, 34.9, z, { ry });
+      // the seated figure: robe, torso, head
+      add('marble', cyl(0.72, 0.98, 1.35, 12), x, 36.95, z);
+      add('marble', cyl(0.42, 0.56, 0.85, 10), x, 37.95, z);
+      add('marble', sph(0.34, 10), x, 38.70, z);
+      // an arm reaching to its attribute
+      const [ax, az] = at(0.55, 0.16);
+      add('marble', cyl(0.13, 0.17, 0.85, 6), ax, 38.05, az, { rz: -0.5 });
+      // the attribute: a tablet, a set square, a sword or a child
+      const [px, pz] = at(0.95, 0.30);
+      if (kind === 'art') {                        // a palette and brush
+        add('marbleWarm', cyl(0.34, 0.34, 0.10, 10), px, 37.35, pz, { rx: PI / 2, rz: 0.2 });
+        add('marble', cyl(0.05, 0.05, 0.55, 5), px + 0.30, 37.70, pz, { rz: 0.5 });
+      } else if (kind === 'architecture') {        // a set square and a column
+        add('marble', box(0.55, 0.10, 0.10), px, 37.20, pz, { rz: 0.6 });
+        add('marble', box(0.10, 0.55, 0.10), px + 0.16, 37.20, pz, { rz: 0.6 });
+        add('marbleWarm', cyl(0.16, 0.18, 0.90, 8), px - 0.30, 37.40, pz);
+      } else if (kind === 'justice') {             // a sword, upright, and scales
+        add('marble', box(0.09, 1.10, 0.09), px, 37.65, pz);
+        add('marble', box(0.44, 0.08, 0.08), px, 37.20, pz);
+        add('marbleWarm', box(0.50, 0.05, 0.05), px - 0.42, 37.55, pz);
+        add('marble', sph(0.10, 6), px - 0.66, 37.50, pz);
+      } else {                                     // charity: a child at her knee
+        add('marble', cyl(0.22, 0.30, 0.60, 8), px, 37.05, pz);
+        add('marble', sph(0.19, 8), px, 37.45, pz);
+      }
+      // a small attendant figure behind
+      const [bx, bz] = at(-0.85, -0.25);
+      add('marble', cyl(0.24, 0.34, 1.15, 8), bx, 36.60, bz);
+      add('marble', sph(0.20, 8), bx, 37.30, bz);
+    };
+    [['art', -1, -1], ['architecture', 1, -1], ['justice', -1, 1], ['charity', 1, 1]]
+      .forEach(([k, sx, sz]) => allegory(sx * 8.2, sz * 8.2, Math.atan2(sz, sx), k));
     // the drum that carries the dome
     add('marble', cyl(DR, DR + 0.55, ATT - 34.9, 20), 0, 34.9, 0);
     for (let i = 0; i < 10; i++) {
@@ -337,21 +372,41 @@ export default {
     })();
 
     (function angel(y0) {
-      // the bronze figure is 4.88 m tall, wings spread, one arm raised
-      add('bronze', cone(1.05, 1.5, 10), 0, y0 + 0.75, 0);        // robe hem
-      add('bronze', cyl(0.62, 1.0, 1.9, 10), 0, y0 + 1.45, 0);    // body
-      add('bronze', cyl(0.36, 0.5, 0.55, 8), 0, y0 + 2.95, 0);    // shoulders
-      add('bronze', sph(0.42, 10), 0, y0 + 3.72, 0);              // head
-      for (const s of [-1, 1]) {
-        add('bronze', box(0.2, 1.6, 0.2), s * 0.55, y0 + 3.4, 0.16, { rz: s * 0.62 });
+      /* The bronze Victory is 4.88 m tall, wings spread, one arm raised with a
+         wreath. It was a cone, three cylinders and four flat slabs — a
+         silhouette. At the distance the dome is seen from, what identifies it
+         is the outline: the sweep of the wings and the raised arm. So the wings
+         are five overlapping feathers a side on a swept leading edge, and the
+         robe is lofted with folds rather than turned as a cone. */
+      add('bronze', ctx.lathe([[0.62, 0], [0.88, 0.45], [0.74, 1.0], [0.56, 1.55],
+        [0.46, 2.0], [0.40, 2.25]], 14), 0, y0, 0);                       // the robe
+      for (let i = 0; i < 7; i++) {
+        const a = (i / 7) * PI * 2;
+        add('bronze', box(0.15, 1.5, 0.09), Math.cos(a) * 0.70, y0 + 0.80, Math.sin(a) * 0.70,
+          { ry: -a, rz: Math.cos(a) * 0.09 });                            // its folds
       }
-      // wings swept up and back, ~2.9 m span
+      add('bronze', cyl(0.30, 0.44, 0.95, 10), 0, y0 + 2.25, 0);          // the torso
+      add('bronze', cyl(0.18, 0.26, 0.26, 8), 0, y0 + 2.80, 0);           // the neck
+      add('bronze', sph(0.27, 10), 0, y0 + 3.08, 0);                      // the head
+      // the raised arm, and the wreath it holds up
+      add('bronze', cyl(0.10, 0.13, 0.95, 6), 0.34, y0 + 3.05, 0.04, { rz: -0.55 });
+      add('bronze', cyl(0.08, 0.11, 0.60, 6), 0.66, y0 + 3.55, 0.06, { rz: -1.00 });
+      add('gold', torus(0.17, 0.05, 6, 12), 0.86, y0 + 3.92, 0.08, { rx: 0.35 });
+      // the arm that hangs, holding the drapery
+      add('bronze', cyl(0.10, 0.13, 1.0, 6), -0.36, y0 + 2.55, 0.02, { rz: 0.26 });
+      // wings: five feathers a side on a swept leading edge, longest at the top
       for (const s of [-1, 1]) {
-        add('bronze', box(2.5, 1.5, 0.14), s * 1.25, y0 + 3.35, -0.4, { rz: s * 0.36, ry: s * 0.34 });
-        add('bronze', box(1.7, 0.8, 0.12), s * 2.25, y0 + 2.5, -0.55, { rz: s * 0.66, ry: s * 0.34 });
+        for (let i = 0; i < 5; i++) {
+          const t = i / 4;
+          const len = 2.75 - t * 1.10;
+          add('bronze', box(len, 0.30 - t * 0.11, 0.09),
+            s * (0.50 + (len / 2) * 0.92), y0 + 2.62 + t * 1.05, -0.18 - t * 0.50,
+            { rz: s * (0.30 + t * 0.16), ry: s * 0.30 });
+        }
+        add('bronze', box(1.45, 0.22, 0.13), s * 1.00, y0 + 3.62, -0.06, { rz: s * 0.50, ry: s * 0.30 });
       }
-      // trailing drapery
-      add('bronze', box(0.9, 1.3, 0.12), 0.2, y0 + 1.1, -0.55, { rz: 0.16 });
+      // the drapery trailing off the left arm
+      add('bronze', box(0.65, 1.35, 0.10), 0.16, y0 + 1.25, -0.58, { rz: 0.14 });
     })(LANT);
 
     /* ================= the four corner towers ================= */

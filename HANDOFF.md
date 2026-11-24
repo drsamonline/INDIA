@@ -46,7 +46,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§41):** Mysore's arches — a cusped multifoil shape now drives both
+**Latest run (§42):** Victoria Memorial — the Angel of Victory rebuilt (lofted
+robe with folds, raised arm with a wreath, five feathers a side), and the four
+allegorical groups as seated figures with attributes. 69k → 74k triangles, boot
+43 s, `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
+
+**Previous run (§41):** Mysore's arches — a cusped multifoil shape now drives both
 the openings and their frames (five lobes on the big arches, three or four on
 the smaller ones). 85k → 166k triangles, boot 79 s, `audit_data` 0, `linkcheck`
 26 pages, `tintcheck --ci` clean.
@@ -1170,6 +1175,26 @@ most expensive polish item so far and the page still boots in 79 s.
 Still soft: the amber glazing behind each bay is a plain rectangle, so at a
 distance an opening reads as a window with a cusped transom rather than as a
 cusped arch with a shaded gallery behind it.
+
+---
+
+### 42. Victoria Memorial — the Angel, and what an attribute is for
+
+The bronze Victory on the dome was a cone, three cylinders, a sphere and four
+flat slabs: a silhouette, which is what the roadmap said. It is 4.88 m on a 60 m
+dome, so the outline is all there is to see.
+
+| Was | Now |
+|---|---|
+| a cone for the robe | a lofted robe with seven folds |
+| four flat slabs for wings | five overlapping feathers a side on a swept leading edge, longest at the top |
+| two thin arms | one arm raised holding a gold wreath, one hanging with the drapery |
+
+The four allegorical groups were a sphere on a box with one arm each. They are
+seated figures now, and each carries **the thing that names it**: a palette for
+Art, a set square and a column for Architecture, a sword and scales for Justice,
+a child at the knee for Charity. At 38 m up, an allegory without its attribute is
+a woman on a plinth.
 
 ---
 

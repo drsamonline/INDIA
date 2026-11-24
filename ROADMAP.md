@@ -97,7 +97,7 @@ from the code.
 | **Golden Temple** | the gold reads matte; needs an anisotropic or env-mapped gold, not a flat key |
 | ~~**Sanchi**~~ | **done** — the vedika had posts and three rails and nothing over them, so it read as a fence of sticks. A continuous coping course now runs the top of both railings, with a lotus boss on every third post |
 | **Shore Temple** | the second shrine's tier count is disputed; the porch is a barrel vault without carving |
-| **Victoria Memorial** | the Angel is a silhouette; the allegorical panels are plain |
+| ~~**Victoria Memorial**~~ | **done** — the Angel was a cone, three cylinders and four flat slabs. It is now a lofted robe with folds, a torso, a head, one arm raised holding a gold wreath, and five overlapping feathers a side on a swept leading edge. The four allegorical groups are seated figures with their attributes — palette, set square and column, sword and scales, a child |
 | ~~**Mysore**~~ | **done** — every bay carried a plain round head. A cusped multifoil shape now drives both the openings and their frames, five lobes on the big arches and three or four on the smaller ones |
 | **India Gate** | the 74,187 names are suggested by fine bands, not legible |
 | **Amber Fort** | the hill and lake are compressed; the 12 km wall network is 490 m of representative runs |
