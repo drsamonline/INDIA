@@ -46,7 +46,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§45):** Jantar Mantar's quadrants — moved out of the vertical
+**Latest run (§46):** the Golden Temple's gold — a small emissive stands in for
+the sky the gold leaf would be reflecting, with the dome tuned apart from the
+trims. 152k triangles, boot 91 s, `audit_data` 0, `linkcheck` 26 pages,
+`tintcheck --ci` clean.
+
+**Previous run (§45):** Jantar Mantar's quadrants — moved out of the vertical
 plane into the plane of the equator, centred on D on the hypotenuse, 2.84 m
 thick along the plane's normal. 51k triangles, boot 33 s, `audit_data` 0,
 `linkcheck` 26 pages, `tintcheck --ci` clean.
@@ -1278,6 +1283,26 @@ gnomon and run out to the graduated edge.
 Still short: the massing is approximate. The real quadrant walls descend to the
 pit floor along their whole length and carry a graduated marble scale on the arc;
 this one hovers at D's height on its outer side, and the scale is a thin band.
+
+---
+
+### 46. Golden Temple — the gold, and a cheat that is written down
+
+Gold leaf is about 95 per cent reflective, so it looks bright from every angle:
+what the eye sees is the whole sky, not the key light. A metal in this engine has
+no environment to reflect — the sky is drawn, not sampled — so lowering the
+metalness and brightening the hex (done in an earlier pass) still left it matte.
+That is why the roadmap kept flagging it.
+
+| Was | Now |
+|---|---|
+| metalness 0.72, roughness 0.30, bright hex | metalness 0.70, roughness 0.30, plus an emissive of 0x2e1f08 at 0.55 |
+| the dome and the trims on the same material | the dome and leaf on their own: 0.62 / 0.34, emissive 0x4a3208 at 0.75 |
+
+**It is a cheat and the code says so.** The emissive stands in for the sky the
+gold would be reflecting. The real fix is an environment map in the engine, which
+is one change and reaches every metal on the site — gold, bronze, copper, the
+Lotus's grey band (§3). Until then this is the only lever a page has.
 
 ---
 

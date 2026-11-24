@@ -79,15 +79,28 @@ export default {
     /* The engine's gold is metalness 1.0, and a metal with only a weak
        environment map to reflect renders dark and flat — which is why the gold
        read matte. Less metal, a little more roughness, a brighter hex. */
-    const gilt = (base, col, metal, rough) => {
+    /* Gold leaf is about 95 per cent reflective, so it looks bright from every
+       angle: what you see is the whole sky, not the key light. A metal in this
+       engine has no environment to reflect — the sky is drawn, not sampled — so
+       lowering the metalness and brightening the hex still left it matte, which
+       is what the roadmap kept seeing.
+
+       The honest workaround is a small emissive: it stands in for the sky the
+       gold would be reflecting. It is a cheat, and it is the only one available
+       without an environment map in the engine. */
+    const gilt = (base, col, metal, rough, emis, emisI) => {
       const mm = ctx.mat(base);
       if (!mm || !mm.clone) return base;
       const c = mm.clone();
       c.color.setHex(col); c.metalness = metal; c.roughness = rough;
+      if (ctx.THREE && c.emissive && emis !== undefined) {
+        c.emissive = new ctx.THREE.Color(emis);
+        c.emissiveIntensity = emisI === undefined ? 0.6 : emisI;
+      }
       return c;
     };
-    const GD = gilt('gold', 0xe0b04e, 0.72, 0.30);
-    const GDL = gilt('goldLeaf', 0xf7cd6b, 0.66, 0.26);
+    const GD = gilt('gold', 0xe0b04e, 0.70, 0.30, 0x2e1f08, 0.55);   // the trims
+    const GDL = gilt('goldLeaf', 0xf7cd6b, 0.62, 0.34, 0x4a3208, 0.75);  // dome and leaf
     const PI = Math.PI;
 
     /* ---------- measured plan ------------------------------------------- */
