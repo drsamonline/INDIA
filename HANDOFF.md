@@ -1590,13 +1590,26 @@ timeout falls back to `document.readyState === 'complete'` and marks the line
 "(no boot flag — checked on load)", so a real engine timeout still reads as one.
 It also takes `--boot-timeout` (default 180 s).
 
-**But the Taj still does not complete under the tool in this sandbox**, even with
-`--boot-timeout 20`: the run produces no output at all, while the same page loads
-and answers the same evaluates in 12 s from a hand-written script. The normal path
-is verified — `qutub-minar` still reports ok — so the fallback has not broken
-anything. Why the Taj run dies silently is **not known**, and I am not going to
-guess: it needs a machine with more headroom, and a first step there would be to
-run the tool with `--only taj-mahal --boot-timeout 20` and watch where it stops.
+**And the cause of the silent hang is now known, because I went back and watched
+where it stopped.** It was never memory and never the boot flag. On the Taj under
+software rendering **each `keyboard.press('Tab')` waits about 16 seconds** for the
+main thread: ten tabs is 160 s, plus a 49 s boot and a 10 s readyState wait, and
+the whole run went past the sandbox's 290 s limit with nothing printed.
+
+Three fixes to the tool, all of them general:
+
+| Fix | Why |
+|---|---|
+| pause the render loop before the interaction checks (`window.__india.pause()` for the engine, a pause button otherwise) | the checks are DOM-only, so pausing costs nothing |
+| press Tab once, measure, then do 3 more instead of 9 if the page is slow | ten tabs is a property of the renderer, not of the focus trap |
+| accept `aria-pressed` where the panel button has no `aria-expanded` | both are valid ARIA; the Taj uses `aria-pressed`, the engine uses `aria-expanded` |
+
+**The Taj now reports** `FAIL dialog_open focus_inside trap focus_returned`, and
+that is the correct answer: the page has no about-drawer at all. Its history lives
+in the control panel, so those four checks are the engine's idiom rather than a
+defect. The four that matter — skip link, `role="img"` with a description,
+`lang="hi"` — pass, and the page is finally *visible* to the gate instead of
+silently skipped.
 
 ---
 

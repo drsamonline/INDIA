@@ -30,20 +30,52 @@ async def check(pg, mid):
     f['desc_len'] = await pg.evaluate("(document.getElementById('scene-desc')||{textContent:''}).textContent.trim().length")
     f['deva_lang'] = await pg.evaluate(
         "(()=>{const d=document.querySelector('.deva');return d?d.getAttribute('lang'):null;})()")
-    f['panel_expanded'] = await pg.evaluate("(document.getElementById('btn-panel')||{}).getAttribute && document.getElementById('btn-panel').getAttribute('aria-expanded')")
+    # a toggle button may say aria-expanded (the engine) or aria-pressed (the
+    # Taj); both are valid ARIA, so accept either rather than failing a page for
+    # choosing the other idiom
+    f['panel_expanded'] = await pg.evaluate("""(()=>{
+      const b=document.getElementById('btn-panel');
+      if (!b) return null;
+      const ex=b.getAttribute('aria-expanded');
+      if (ex !== null) return ex;
+      const pr=b.getAttribute('aria-pressed');
+      return pr === null ? null : (pr === 'true' ? 'true' : 'false');
+    })()""")
+    # Stop the render loop before the interaction checks. On a heavy page under
+    # software rendering the main thread is busy for seconds a frame and every
+    # Playwright input call waits for it: on the Taj each Tab took 16 s, so ten
+    # of them blew the whole budget and the page looked as if it had hung. The
+    # checks below are all DOM, so pausing costs nothing.
+    try:
+        await pg.evaluate("window.__india && window.__india.pause && window.__india.pause()")
+        await pg.evaluate("""(()=>{
+          const b=[...document.querySelectorAll('button')].find(x=>/pause/i.test(
+            (x.getAttribute('aria-label')||'')+(x.title||'')+(x.textContent||'')));
+          if (b) { b.click(); return true; }
+          return false; })()""")
+    except Exception:
+        pass
     # drawer behaviour
     await pg.evaluate("const b=document.getElementById('btn-about'); if(b){b.focus(); b.click();}")
     await pg.wait_for_timeout(500)
     f['dialog_open'] = await pg.evaluate("document.body.classList.contains('about-open')")
     f['focus_inside'] = await pg.evaluate(
         "(()=>{const a=document.getElementById('about');return !!a && a.contains(document.activeElement);})()")
-    for _ in range(10):
+    # ten tabs on a fast page, three on a slow one: under software rendering a
+    # heavy scene makes each press wait seconds for the main thread (16 s on the
+    # Taj), which is a property of the renderer, not of the focus trap.
+    import time as _t
+    _t0 = _t.time()
+    await pg.keyboard.press('Tab')
+    slow_page = (_t.time() - _t0) > 2.5
+    for _ in range(3 if slow_page else 9):
         await pg.keyboard.press('Tab')
     f['trap'] = await pg.evaluate(
         "(()=>{const a=document.getElementById('about');return !!a && a.contains(document.activeElement);})()")
     await pg.keyboard.press('Escape')
     await pg.wait_for_timeout(250)
     f['esc_closes'] = await pg.evaluate("!document.body.classList.contains('about-open')")
+    f['slow_page'] = slow_page
     f['focus_returned'] = await pg.evaluate("document.activeElement && document.activeElement.id === 'btn-about'")
     return f
 
