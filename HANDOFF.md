@@ -1432,6 +1432,12 @@ its history lives in the control panel. That is a UI convention difference, not 
 accessibility defect, and the four that matter on that page — skip link,
 `role="img"` with a description, `lang="hi"` — pass.
 
+**And the same pass at a phone viewport, 390 × 844**, because the contract should
+hold where most people will read it: **23 of 24 ok again**, the Taj again failing
+only the four drawer checks. Both logs are in `shots/` (`a11y-all-380x430.log`,
+`a11y-all-390x844.log`), so the state of the site is in the repo rather than in a
+transcript.
+
 ---
 
 ### 51. A per-frame PMREM, which I put there myself
