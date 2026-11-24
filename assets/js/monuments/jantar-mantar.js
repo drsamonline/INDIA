@@ -201,32 +201,74 @@ export default {
       }
     }
 
-    // the two quadrants: radius 15.15 m, 2.84 wide, tops falling from the
-    // gnomon to the pit floor on a quarter of a circle
-    const QR = 15.15, QW = 2.84, QH = QR * Math.cos(LAT);   // 13.5 m of rise
-    [-1, 1].forEach((s) => {
-      const pts = [[s * (ST / 2 + 0.02), -PIT + QH]];
-      for (let i = 1; i <= 28; i++) {
-        const a = (i / 28) * Math.PI / 2;
-        pts.push([s * (ST / 2 + 0.02 + (QR - ST / 2) * Math.sin(a)), -PIT + QH * Math.cos(a)]);
+    /* the two quadrants. The sources are explicit: the quadrant arcs lie
+       **in the plane of the equator**, not in a vertical plane, and the centre
+       of both arcs is a point D on the gnomon's hypotenuse; each quadrant is a
+       quarter circle of radius 15.15 m and the two together form a semicircle
+       (UNESCO nomination 1338; jantarmantar.org; Kaye 1918 via the Jaipur
+       survey paper).
+
+       What was here was two half-discs standing in vertical planes facing
+       north and south: an equatorial circle projected vertically, which is
+       both the wrong plane and the wrong figure. */
+    const QR = 15.15;                 // the documented radius
+    const QD = 10.0;                  // D, on the hypotenuse, 10 m above the pit floor
+    const yD = -PIT + QD;
+    const zD = zFoot - (QD / SH) * SB;
+    // the two directions of the equatorial plane: east, and the in-meridian
+    // direction perpendicular to the axis (north and up)
+    const eUp = [0, Math.cos(LAT), -Math.sin(LAT)];      // (y, z): up and north
+    const band = (side) => {
+      const pos = [], uv = [], idx = [];
+      const NA = 26, NR = 3;
+      const r0 = 1.9, r1 = QR;             // from the gnomon out to the graduated edge
+      for (let i = 0; i <= NA; i++) {
+        const th = (i / NA) * (Math.PI / 2);
+        // from straight down (-eUp) round to east (side * x)
+        const cy = -eUp[0] * Math.cos(th), cz = -eUp[1] * Math.cos(th);
+        const sx = side * Math.sin(th);
+        for (let k = 0; k <= NR; k++) {
+          const r = r0 + (r1 - r0) * (k / NR);
+          pos.push(sx * r, yD + cy * r, zD + cz * r);
+          uv.push(i / NA, k / NR);
+        }
       }
-      pts.push([s * QR, -PIT]);
-      pts.push([s * QR, -PIT - 0.4]);
-      pts.push([s * (ST / 2 + 0.02), -PIT - 0.4]);
-      add(BODY, profX(pts, QW), 0, 0, CZ + SB / 2 - QW / 2);
-      // a narrow marble band along the graduated edge
-      for (let i = 0; i < 28; i++) {
-        const p0 = pts[i], p1 = pts[i + 1];
-        const dxx = p1[0] - p0[0], dyy = p1[1] - p0[1];
-        const l = Math.hypot(dxx, dyy);
-        add(SCALE, box(l * 1.15, 0.16, QW + 0.14), (p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2 + 0.08,
-          CZ + SB / 2 - QW / 2, { rz: Math.atan2(dyy, dxx) });
+      for (let i = 0; i < NA; i++) {
+        for (let k = 0; k < NR; k++) {
+          const a = i * (NR + 1) + k, b = a + NR + 1;
+          if (side > 0) idx.push(a, b, a + 1, a + 1, b, b + 1);
+          else idx.push(a, a + 1, b, a + 1, b + 1, b);
+        }
       }
-      for (let i = 1; i < 24; i++) {
-        const a = (i / 24) * Math.PI / 2;
-        const x = s * (ST / 2 + (QR - ST / 2) * Math.sin(a));
-        const y = -PIT + QH * Math.cos(a);
-        add(SCALE, box(0.26, 0.1, QW + 0.24), x, y + 0.08, CZ + SB / 2 - QW / 2);
+      const g = new T3.BufferGeometry();
+      g.setAttribute('position', new T3.Float32BufferAttribute(pos, 3));
+      g.setAttribute('uv', new T3.Float32BufferAttribute(uv, 2));
+      g.setIndex(idx);
+      g.computeVertexNormals();
+      return g;
+    };
+    [-1, 1].forEach((side) => {
+      // the masonry band, given thickness by a second skin below it
+      /* The wall is 2.84 m thick, measured along the plane's normal — which is
+         the axis, not the vertical. Offset in y it came out as a sheet. */
+      const g = band(side);
+      add(BODY, g, 0, 0, 0);
+      const g2 = g.clone();
+      g2.translate(0, Math.sin(LAT) * 2.84, -Math.cos(LAT) * 2.84);
+      add(BODY2, g2, 0, 0, 0);
+      // the graduated marble edge at the full radius, and its ticks
+      const NA = 26;
+      for (let i = 0; i < NA; i++) {
+        const t0 = (i / NA) * (Math.PI / 2), t1 = ((i + 1) / NA) * (Math.PI / 2);
+        const p0 = [-eUp[0] * Math.cos(t0), -eUp[1] * Math.cos(t0)];
+        const p1 = [-eUp[0] * Math.cos(t1), -eUp[1] * Math.cos(t1)];
+        const x0 = side * Math.sin(t0), x1 = side * Math.sin(t1);
+        const A = [x0 * QR, yD + p0[0] * QR, zD + p0[1] * QR];
+        const B = [x1 * QR, yD + p1[0] * QR, zD + p1[1] * QR];
+        const mid = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2 + 0.06, (A[2] + B[2]) / 2];
+        const len = Math.hypot(B[0] - A[0], B[1] - A[1], B[2] - A[2]);
+        add(SCALE, box(len * 1.2, 0.16, 0.5), mid[0], mid[1], mid[2],
+          { ry: Math.atan2(-(B[2] - A[2]), B[0] - A[0]), rz: Math.atan2(B[1] - A[1], Math.hypot(B[0] - A[0], B[2] - A[2])) });
       }
     });
 

@@ -46,7 +46,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§44):** India Gate's names — twenty-four ruled lines a pier face
+**Latest run (§45):** Jantar Mantar's quadrants — moved out of the vertical
+plane into the plane of the equator, centred on D on the hypotenuse, 2.84 m
+thick along the plane's normal. 51k triangles, boot 33 s, `audit_data` 0,
+`linkcheck` 26 pages, `tintcheck --ci` clean.
+
+**Previous run (§44):** India Gate's names — twenty-four ruled lines a pier face
 became rows of lettering, one geometry a face. 45k → 66k triangles, boot 37 s,
 `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
 
@@ -1239,6 +1244,40 @@ words, read as lettering — and nobody can read either, which is the point.
 
 Cost: 21k triangles for four faces, because every stroke is a box and there are
 eighteen rows a face. It is one geometry an item, so the boot barely moved.
+
+---
+
+### 45. Jantar Mantar — the quadrants are in the equatorial plane
+
+The roadmap said the quadrant arcs were "a vertical projection of an equatorial
+plane". The research settled what they actually are, and it is neither of those
+phrasings:
+
+- **The quadrant arcs lie in the plane of the equator** — a plane tilted at
+  (90° − latitude) to the horizontal, containing the east–west line. Not a
+  vertical plane, which is what the page had: two half-discs standing up, facing
+  north and south.
+- **The centre of both arcs is a point D on the gnomon's hypotenuse**, and each
+  quadrant is a quarter circle of radius 15.15 m; the two together form a
+  semicircle. (UNESCO nomination 1338 gives radius 15.15 ± 0.01 m, 2.84 m wide;
+  jantarmantar.org: "a pair of quadrants on either side, lying parallel to the
+  plane of the equator"; Kaye 1918 as quoted in the Jaipur survey paper: "on
+  either side of the gnomon is a quadrant of a circle parallel to the plane of
+  the equator".)
+
+What is built now: a fan of radius 15.15 m per side in that tilted plane,
+centred at D (10 m up the hypotenuse, which puts the arc's low end on the pit
+floor and its high end at the apex — the two figures agree to within a metre),
+2.84 m thick **along the plane's normal**, which is the axis, not the vertical.
+
+**Two mistakes worth recording.** Offsetting the second skin in y instead of
+along the plane's normal made the wall a sheet. And starting the fan at
+`R − 6.2` left it floating 7 m clear of the gnomon; it has to start at the
+gnomon and run out to the graduated edge.
+
+Still short: the massing is approximate. The real quadrant walls descend to the
+pit floor along their whole length and carry a graduated marble scale on the arc;
+this one hovers at D's height on its outer side, and the scale is a thin band.
 
 ---
 

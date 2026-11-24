@@ -101,7 +101,7 @@ from the code.
 | ~~**Mysore**~~ | **done** — every bay carried a plain round head. A cusped multifoil shape now drives both the openings and their frames, five lobes on the big arches and three or four on the smaller ones |
 | ~~**India Gate**~~ | **done** — the names were twenty-four ruled lines a face, which read as moulding. Each pier face now carries rows of short strokes of uneven width with word breaks, in one geometry a face: not legible, but a wall of names rather than a ruled panel |
 | **Amber Fort** | the hill and lake are compressed; the 12 km wall network is 490 m of representative runs |
-| **Jantar Mantar** | the quadrant arcs are a vertical projection of an equatorial plane, not the true tilted geometry |
+| ~~**Jantar Mantar**~~ | **partly done** — the quadrants were two half-discs standing in vertical planes. They are now arcs of radius 15.15 m **in the plane of the equator**, centred on D on the hypotenuse, 2.84 m thick along the plane's normal, the pair forming a semicircle, as the sources describe. The massing is still approximate: the real wall descends to the pit floor and this one does not |
 
 ### Tier 4 — done (4)
 
