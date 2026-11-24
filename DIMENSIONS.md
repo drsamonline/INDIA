@@ -167,7 +167,7 @@ literature; the model uses the 34.27 m reading.
 |---|---|---|---|
 | Main vimana | 18 m (60 ft) over five talas | 18.0 m, 5 talas | ASI |
 | Main plinth | 15.2 m square (50 ft) | 15.2 m | ASI |
-| Second shrine | about half the height, three tiers | 9.6 m, 3 talas | ASI |
+| Second shrine | about half the height; **tier count disputed** (3 or 5) | 9.6 m, 3 talas | ASI; the dispute is noted in ROADMAP and not resolved here |
 | Third shrine | no superstructure | flat roof | ASI |
 | Nandi row | on the boundary wall | 11 facing the sea | ASI |
 

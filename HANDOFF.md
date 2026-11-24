@@ -46,7 +46,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§42):** Victoria Memorial — the Angel of Victory rebuilt (lofted
+**Latest run (§43):** the Shore Temple's porch — the bare barrel vault now
+carries seven kudu faces, a pilaster band at each end and three ridge stupis.
+30k triangles, boot 37 s, `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci`
+clean.
+
+**Previous run (§42):** Victoria Memorial — the Angel of Victory rebuilt (lofted
 robe with folds, raised arm with a wreath, five feathers a side), and the four
 allegorical groups as seated figures with attributes. 69k → 74k triangles, boot
 43 s, `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
@@ -1195,6 +1200,25 @@ seated figures now, and each carries **the thing that names it**: a palette for
 Art, a set square and a column for Architecture, a sword and scales for Justice,
 a child at the knee for Charity. At 38 m up, an allegory without its attribute is
 a woman on a plinth.
+
+---
+
+### 43. Shore Temple — the porch, and a dispute left alone
+
+The shala roof over the east porch was a bare half-cylinder: the one thing on the
+temple that read as a shed.
+
+| Added | Where |
+|---|---|
+| seven kudu dormer faces | down the front slope of the vault, on its curve |
+| a pilaster band | at each end of the vault |
+| three stupis | along the ridge, the middle one taller |
+
+The second half of the roadmap line — "the second shrine's tier count is
+disputed" — is **not** something to fix. `DIMENSIONS.md` now says so explicitly,
+with both readings (three or five) and the note that it is not resolved here.
+Where the literature disagrees, the model picks one and says which; it does not
+average them into a number nobody published.
 
 ---
 

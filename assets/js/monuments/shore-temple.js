@@ -241,6 +241,34 @@ export default {
     add('stone', box(6.5, 0.22, 4.1), 0, 2.82, 14.9);
     add('dark', box(1.85, 2.15, 0.28), 0, 1.08, 16.82);
     add('stone', box(2.45, 0.3, 0.38), 0, 2.32, 16.87);
+    /* The vault carries carving, not just a barrel: a row of kudu dormer faces
+       down its front slope, a band of pilasters at each end, and three stupis
+       along the ridge. A plain half-cylinder over a porch is the one thing on
+       this temple that reads as a shed. */
+    {
+      const vy = 2.9, vr = 1.78, vz = 14.9;
+      const th = 0.95;                        // bearing of the kudu row
+      const ky = vy + Math.cos(th) * vr, kz = vz + Math.sin(th) * vr;
+      for (let i = 0; i < 7; i++) {
+        const x = (i - 3) * 0.82;
+        add('stone', box(0.52, 0.62, 0.14), x, ky, kz, { rx: -(Math.PI / 2 - th) });
+        add('dark', box(0.32, 0.40, 0.10), x, ky + 0.02, kz + 0.06, { rx: -(Math.PI / 2 - th) });
+      }
+      // a pilaster band at each end of the vault
+      for (const s2 of [-1, 1]) {
+        for (let i = 0; i < 4; i++) {
+          const a = 0.35 + i * 0.42;
+          add('stone', box(0.16, 0.5, 0.16), s2 * 3.02, vy + Math.cos(a) * vr,
+            vz + Math.sin(a) * vr * 0.98, { rx: -(Math.PI / 2 - a) });
+        }
+      }
+      // three stupis along the ridge, the middle one taller
+      for (const [x, sc] of [[-2.1, 0.8], [0, 1.0], [2.1, 0.8]]) {
+        add('granite', cyl(0.26 * sc, 0.32 * sc, 0.34 * sc, 8), x, vy + vr + 0.15, vz);
+        add('granite', sph(0.22 * sc, 8), x, vy + vr + 0.42 * sc, vz);
+        add('gold', sph(0.11 * sc, 6), x, vy + vr + 0.62 * sc, vz);
+      }
+    }
     add('granite', box(0.5, 0.42, 0.5), 0, 4.7, 14.9);
     add('gold', sph(0.13, 6), 0, 5.05, 14.9);
 
