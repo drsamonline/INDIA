@@ -1499,6 +1499,37 @@ engine's water shader has distortion and a fresnel term — half a session).
 
 ---
 
+### 54. Item 6 was already done — the fourth stale brief
+
+The roadmap's Taj item 6 read "the pool reflects a flat colour; the engine's water
+shader has distortion and a fresnel term". It does not reflect a flat colour. The
+source scene has had three.js's `Water` all along:
+
+```js
+waterMesh = new Water(new THREE.PlaneGeometry(6.6, 32.4), {
+  textureWidth: 1024, textureHeight: 1024, waterNormals: waterNormals,
+  sunDirection: ..., waterColor: 0x0e3d38, distortionScale: state.ripple,
+  clipBias: 0.0004, fog: true });
+```
+
+That is a mirror render target, distortion and the fresnel term — the thing the
+brief asked for. There is also a `MeshStandardMaterial` fallback wired to the
+"Live water reflections" toggle. **Nothing to change**, so nothing was changed.
+
+**This is the fourth stale brief this run**: Konark's wheels (§35), CSMT's
+menagerie (§37), Kandariya's sculptures (§36) and now this. Each was written
+before a session that then did the work, and each cost a diagnosis to discover.
+The rule that follows is cheap: **read the source before implementing the brief**,
+and if it is already there, say so and move on rather than inventing a change to
+justify the entry.
+
+**What I did not verify:** how the pool reads at the tour's own "Charbagh"
+viewpoint. I judged it from the default view, where the pool is a narrow strip at
+the edge of frame and the control panel covers part of it. A Taj render costs
+three and a half minutes under software rendering.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
