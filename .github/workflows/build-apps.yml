@@ -29,7 +29,14 @@ concurrency:
 
 jobs:
   app:
-    uses: drsamonline/app-builder/.github/workflows/build.yml@main
+    # PINNED, NOT @main. A caller that names a moving branch has to have GitHub
+    # resolve that branch when the run starts, and when that resolution does not
+    # happen the run dies at startup with ZERO jobs, no log and no check run --
+    # which is exactly what this repo did on 2026-11-24 (05:51Z and 05:58Z). The
+    # content is not the difference: build.yml at this sha is byte-identical to
+    # main today. Every app repo already pins the sha, and every one of them is
+    # green; the four still on @main are the four with startup_failures.
+    uses: drsamonline/app-builder/.github/workflows/build.yml@85949b5b7ef6a47a40731cc01e8c2cd65ceeda4c
     with:
       app_name: INDIA
       app_src: docs/play
