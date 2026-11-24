@@ -1453,6 +1453,22 @@ cost.
 
 ---
 
+### 52. You cannot measure frame time here
+
+I tried to put a number on the §51 fix — sample `requestAnimationFrame` deltas
+while a weather change eases, on the page that was slow.
+
+It does not work in this sandbox. Under swiftshader the callbacks arrive **seconds
+apart**: Meenakshi reported a median delta of 7,516 ms and the Golden Temple
+4,600 ms, with one sample in a 1.2 s window. That is rAF throttling, not the
+renderer, and it makes the measurement meaningless.
+
+**The proxy is boot time**, which does respond: Meenakshi with `?shot=11` went
+from over 180 s to 49.8 s once the per-frame PMREM was gone. If a frame-time
+number is ever needed, it has to come from a real browser on real hardware.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
