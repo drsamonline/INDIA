@@ -101,6 +101,7 @@ export default {
     const soffit = tint('plaster', 0x8f7861);         // shaded passage vault
     const coffer = tint('plaster', 0x735f4e);
     const recess = tint('plaster', 0xe0c5a6);
+    const letters = tint('plaster', 0xc9a882);       // the cut lettering, a shade under
     const plinth = tint('plaster', 0xd9a882);   // red Bharatpur stone base
 
     /* ---------------------------------------------------------- dimensions */
@@ -223,6 +224,45 @@ export default {
     add(light2, box(W + 0.5, 0.2, D + 0.5), 0, SPRING + 0.16, 0);
     add(light, box(W + 0.7, 1.1, D + 0.7), 0, BASE + 0.55, 0);              // base moulding
 
+    /* ---------------------------------------- the names, cut as lettering ----
+       74,187 names are cut into the piers. At this scale none of them can be
+       read, but the wall should look like a wall of names: rows of short
+       strokes of uneven width with word breaks, in one geometry per panel.
+       What was there was twenty-four ruled lines a face, which reads as
+       moulding, not as inscription. */
+    const namePanel = (w, h, rows, pitch, key) => {
+      const pos = [], uv = [], idx = [];
+      const box3 = (cx, cy, cz, bw, bh, bd) => {
+        const base = pos.length / 3;
+        for (let k = 0; k < 8; k++) {
+          pos.push(cx + (k & 1 ? 1 : -1) * bw / 2, cy + (k & 2 ? 1 : -1) * bh / 2,
+            cz + (k & 4 ? 1 : -1) * bd / 2);
+          uv.push(k & 1, (k & 2) ? 1 : 0);
+        }
+        const f = [[0, 1, 3], [0, 3, 2], [4, 6, 7], [4, 7, 5], [0, 4, 5], [0, 5, 1],
+          [2, 3, 7], [2, 7, 6], [0, 2, 6], [0, 6, 4], [1, 5, 7], [1, 7, 3]];
+        for (const t of f) idx.push(base + t[0], base + t[1], base + t[2]);
+      };
+      const rh = h / rows;
+      for (let r = 0; r < rows; r++) {
+        const y = (r + 0.5) * rh;
+        let x = -w / 2 + pitch * 0.5;
+        while (x < w / 2 - pitch * 0.5) {
+          const bw = pitch * (0.42 + ((r * 7 + Math.round(x * 10)) % 5) * 0.06);
+          box3(x, y, 0, bw, rh * 0.52, 0.07);
+          x += pitch;
+          // a word break every so often
+          if (((r * 3 + Math.round(x * 7)) % 11) === 0) x += pitch * 0.7;
+        }
+      }
+      const g = new T3.BufferGeometry();
+      g.setAttribute("position", new T3.Float32BufferAttribute(pos, 3));
+      g.setAttribute("uv", new T3.Float32BufferAttribute(uv, 2));
+      g.setIndex(idx);
+      g.computeVertexNormals();
+      return g;
+    };
+
     /* ------------------------------------- piers: pilasters, setback, panels */
     [-1, 1].forEach((s) => {
       [AW / 2 + 1.0, W / 2 - 1.0].forEach((x) => {
@@ -239,12 +279,12 @@ export default {
       add(recess, box(PIER - 5.6, HWALL - 14.0, 0.1), cx, BASE + 1.4 + (HWALL - 14.0) / 2, -D / 2 - 0.03);
       add(recess, box(0.1, HWALL - 14.0, PIER - 5.6), W / 2 + 0.03, BASE + 1.4 + (HWALL - 14.0) / 2, cx);
       add(recess, box(0.1, HWALL - 14.0, PIER - 5.6), -W / 2 - 0.03, BASE + 1.4 + (HWALL - 14.0) / 2, cx);
-      // fine bands of names
-      for (let i = 0; i < 24; i++) {
-        const y = BASE + 1.9 + i * 0.45;
-        add(recess, box(PIER - 6.4, 0.05, 0.05), cx, y, D / 2 + 0.09);
-        add(recess, box(PIER - 6.4, 0.05, 0.05), cx, y, -D / 2 - 0.09);
-      }
+      // the names, as rows of lettering on each of the four pier faces
+      const panel = () => namePanel(PIER - 6.4, HWALL - 14.0, 18, 0.34, letters);
+      add(letters, panel(), cx, BASE + 1.4, D / 2 + 0.07);
+      add(letters, panel(), cx, BASE + 1.4, -D / 2 - 0.07, { ry: Math.PI });
+      add(letters, panel(), W / 2 + 0.07, BASE + 1.4, cx, { ry: Math.PI / 2 });
+      add(letters, panel(), -W / 2 - 0.07, BASE + 1.4, cx, { ry: -Math.PI / 2 });
       // a setback, stepped in as the pier rises
       add(light, box(1.3, HWALL - 6.4, 0.5), s * (W / 2 - 2.6), BASE + 1.1 + (HWALL - 6.4) / 2, D / 2 + 0.2);
       add(light, box(1.3, HWALL - 6.4, 0.5), s * (W / 2 - 2.6), BASE + 1.1 + (HWALL - 6.4) / 2, -D / 2 - 0.2);

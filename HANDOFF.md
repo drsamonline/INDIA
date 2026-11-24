@@ -46,7 +46,11 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§43):** the Shore Temple's porch — the bare barrel vault now
+**Latest run (§44):** India Gate's names — twenty-four ruled lines a pier face
+became rows of lettering, one geometry a face. 45k → 66k triangles, boot 37 s,
+`audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
+
+**Previous run (§43):** the Shore Temple's porch — the bare barrel vault now
 carries seven kudu faces, a pilaster band at each end and three ridge stupis.
 30k triangles, boot 37 s, `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci`
 clean.
@@ -1219,6 +1223,22 @@ disputed" — is **not** something to fix. `DIMENSIONS.md` now says so explicitl
 with both readings (three or five) and the note that it is not resolved here.
 Where the literature disagrees, the model picks one and says which; it does not
 average them into a number nobody published.
+
+---
+
+### 44. India Gate — a wall of names, not a ruled panel
+
+74,187 names are cut into the piers. The page had twenty-four ruled lines a
+face, which reads as moulding. Each face now carries a `namePanel`: rows of
+short strokes of uneven width with word breaks, every panel one geometry.
+
+The rule this settles, and it is the same one as the Qutb Minar bands (§32):
+**text at this scale is a texture, and a texture has to be irregular.** Evenly
+ruled lines read as a machined groove; strokes of varying width, broken into
+words, read as lettering — and nobody can read either, which is the point.
+
+Cost: 21k triangles for four faces, because every stroke is a box and there are
+eighteen rows a face. It is one geometry an item, so the boot barely moved.
 
 ---
 
