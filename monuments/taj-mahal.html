@@ -1606,18 +1606,52 @@ function main() {
       add('trunk', cyl(0.12, 0.16, 1.1, 8), p[0], 0.65, p[1], {});
       add('cypress', sph(1.05, 12), p[0], 1.75, p[1], { sy: 0.85 });
     });
-    const fGeo = new THREE.SphereGeometry(0.09, 6, 5);
-    flowerMesh = new THREE.InstancedMesh(fGeo, MAT.flower, 300);
+    const fGeo = new THREE.SphereGeometry(0.075, 6, 5);
+    /* The charbagh was 300 flowers scattered at random across four lawns in five
+       random colours: at any distance it read as confetti, which is the one thing
+       a Mughal parterre is not. A charbagh is ordered — each quadrant divided
+       into beds, every bed edged with its own low hedge, and the planting in
+       rows of one colour a bed. */
+    const bedCols = [new THREE.Color(0xb8354a), new THREE.Color(0xd07a26),
+      new THREE.Color(0xe6dcc4), new THREE.Color(0x8b2f5c)];
+    const beds = [];
+    quads.forEach(function (q) {
+      const cx = q[0], cz = q[1], w = q[2], d = q[3];
+      const nx = 3, nz = 4;
+      const bw = (w - 1.6) / nx, bd = (d - 1.6) / nz;
+      for (let ix = 0; ix < nx; ix++) {
+        for (let iz = 0; iz < nz; iz++) {
+          const bx = cx - (w - 1.6) / 2 + bw * (ix + 0.5);
+          const bz = cz - (d - 1.6) / 2 + bd * (iz + 0.5);
+          beds.push([bx, bz, bw, bd, (ix + iz * 2) % bedCols.length]);
+          add('hedge', box(bw - 0.18, 0.15, 0.09), bx, 0.095, bz - bd / 2 + 0.05, {});
+          add('hedge', box(bw - 0.18, 0.15, 0.09), bx, 0.095, bz + bd / 2 - 0.05, {});
+          add('hedge', box(0.09, 0.15, bd - 0.18), bx - bw / 2 + 0.05, 0.095, bz, {});
+          add('hedge', box(0.09, 0.15, bd - 0.18), bx + bw / 2 - 0.05, 0.095, bz, {});
+        }
+      }
+    });
+    const PER = 16;
+    flowerMesh = new THREE.InstancedMesh(fGeo, MAT.flower, beds.length * PER);
     const fm = new THREE.Matrix4();
-    const fPalette = [new THREE.Color(0xff4f9a), new THREE.Color(0xffb03a), new THREE.Color(0xf4ecdd), new THREE.Color(0xe8442e), new THREE.Color(0xd96f9e)];
-    for (let i = 0; i < 300; i++) {
-      const q = quads[i % 4];
-      const x = q[0] + (Math.random() - 0.5) * (q[2] - 1.2);
-      const z = q[1] + (Math.random() - 0.5) * (q[3] - 1.2);
-      fm.makeTranslation(x, 0.22, z);
-      flowerMesh.setMatrixAt(i, fm);
-      flowerMesh.setColorAt(i, fPalette[Math.floor(Math.random() * fPalette.length)]);
-    }
+    let fi = 0;
+    beds.forEach(function (b) {
+      const col = bedCols[b[4]];
+      const nx2 = Math.max(2, Math.round(Math.sqrt(PER * b[2] / b[3])));
+      const nz2 = Math.max(2, Math.ceil(PER / nx2));
+      for (let ix = 0; ix < nx2; ix++) {
+        for (let iz = 0; iz < nz2; iz++) {
+          if (fi >= flowerMesh.count) break;
+          const x = b[0] + ((ix + 0.5) / nx2 - 0.5) * (b[2] - 0.6);
+          const z = b[1] + ((iz + 0.5) / nz2 - 0.5) * (b[3] - 0.6);
+          fm.makeTranslation(x, 0.19, z);
+          flowerMesh.setMatrixAt(fi, fm);
+          flowerMesh.setColorAt(fi, col);
+          fi++;
+        }
+      }
+    });
+    flowerMesh.count = fi;
     flowerMesh.instanceMatrix.needsUpdate = true;
     if (flowerMesh.instanceColor) flowerMesh.instanceColor.needsUpdate = true;
     scene.add(flowerMesh);

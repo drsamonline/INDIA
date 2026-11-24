@@ -46,7 +46,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§49):** the statue's head — a fuller occiput, a narrower jaw, a lid
+**Latest run (§53):** the Taj's charbagh — 300 randomly scattered flowers became
+48 beds, each edged with its own low hedge and planted in rows of one colour.
+Taj Part 1 item 5 of 6. `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci`
+clean.
+
+**Previous run (§49):** the statue's head — a fuller occiput, a narrower jaw, a lid
 and a crease over each eye, a nose that ends in a tip, hollows under the cheekbone
 and at the temples, a crease under the lower lip, and a helix rim on each ear. It
 is not a portrait and will not become one in this code. 51.3k triangles, boot
@@ -1466,6 +1471,31 @@ renderer, and it makes the measurement meaningless.
 **The proxy is boot time**, which does respond: Meenakshi with `?shot=11` went
 from over 180 s to 49.8 s once the per-frame PMREM was gone. If a frame-time
 number is ever needed, it has to come from a real browser on real hardware.
+
+---
+
+### 53. The Taj's charbagh was confetti
+
+The roadmap's Part 1 had three items left, and I had been reading Tier 4 — "done"
+— as the whole Taj. It is not: the Taj has its own six-item list.
+
+Item 5: the garden was **300 flowers scattered at random** across four lawns in
+five random colours. At any distance that is confetti, which is the one thing a
+Mughal parterre is not.
+
+Now: each quadrant is divided into twelve beds, every bed edged with its own low
+hedge, and the planting is a lattice of one colour a bed — four colours cycling
+across the beds. 48 beds, 16 plants each, `flowerMesh.count` set to what was
+actually placed.
+
+It is a **string replacement in `tools/build_taj.py`**, like every other Taj edit:
+the source scene at `tools/source/taj-mahal.original.html` is untouched. The
+replacement carries an `assert src.count(OLD) == 1` — a replace that silently
+finds nothing is the trap this file has hit before.
+
+**Still open on the Taj:** item 3 (port the engine's physical sky into the Taj's
+own renderer — one session) and item 6 (the pool reflects a flat colour; the
+engine's water shader has distortion and a fresnel term — half a session).
 
 ---
 
