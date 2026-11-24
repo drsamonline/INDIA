@@ -1393,6 +1393,30 @@ a mesh; if it does not, the page is as good as this pipeline gets.
 
 ---
 
+### 50. The accessibility checks this run owed, and one page they cannot finish
+
+Every entry in this log from §29 on ended "`check_a11y` not run". That was honest
+but it was also a debt, and this closes most of it.
+
+**Passing:** qutub-minar, charminar, basilica-bom-jesus, statue-of-unity,
+golden-temple, victoria-memorial — six pages, chosen because they cover the two
+that had a **markup** change this run (the Basilica gained a named view and a
+rewritten tour stop; the statue gained and lost temporary views) and four from
+different groups.
+
+**Not verified: Meenakshi.** `check_a11y` does not complete on it inside the
+sandbox's 290 s per-command limit at 360 × 420, the smallest viewport tried — and
+the page itself boots in 87 s at 420 × 480, so it is the check's own work after
+boot, not the boot, that runs long. It is unverified, not failing, and it should
+be run on a machine that can give it more than five minutes.
+
+**What the six prove and what they do not.** The markup on every page comes from
+the same `build_site` template, so a geometry change cannot regress it — the six
+confirm the template is intact after this run's edits. They do not each certify
+the other eighteen pages' content.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
