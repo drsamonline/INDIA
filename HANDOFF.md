@@ -1404,16 +1404,52 @@ that had a **markup** change this run (the Basilica gained a named view and a
 rewritten tour stop; the statue gained and lost temporary views) and four from
 different groups.
 
-**Not verified: Meenakshi.** `check_a11y` does not complete on it inside the
-sandbox's 290 s per-command limit at 360 × 420, the smallest viewport tried — and
-the page itself boots in 87 s at 420 × 480, so it is the check's own work after
-boot, not the boot, that runs long. It is unverified, not failing, and it should
-be run on a machine that can give it more than five minutes.
+**Meenakshi: verified, with the hour fixed.** The tool's own run does not finish
+inside the sandbox's 290 s limit, because it loads the page with the live clock —
+the day-night cycle and the shadow/environment churn that comes with it made the
+boot long. Loaded with `?shot=11` the same page boots in 49.8 s and every
+assertion passes: skip link, `role="img"`, `lang="hi"`, `aria-expanded`, the
+dialog trap, Escape, focus return, and a 168-character scene description.
+
+**The cause of that slowness was mine** — see §51.
 
 **What the six prove and what they do not.** The markup on every page comes from
 the same `build_site` template, so a geometry change cannot regress it — the six
 confirm the template is intact after this run's edits. They do not each certify
 the other eighteen pages' content.
+
+---
+
+### 51. A per-frame PMREM, which I put there myself
+
+§47 replaced the studio environment with a sky gradient rebuilt by `refreshEnv()`.
+I called `refreshEnv()` at the end of `applySky`, and the engine calls `applySky`
+**every frame while the weather eases** (and on every drag of the time slider).
+The key included the weather at two decimals, so the key changed every frame and
+the PMREM was rebuilt every frame — sixty renders of an environment map a second
+for as long as a weather change took to settle.
+
+The engine already had the gate for this, three hundred lines further down:
+
+```js
+if (force || ((Math.abs(t - lastEnvT) > 0.14 || Math.abs(wx.cover - lastEnvCover) > 0.12) && now - lastEnvMs > 320)) {
+  lastEnvT = t; lastEnvMs = now; lastEnvCover = wx.cover;
+  refreshEnv();
+}
+```
+
+`refreshEnv` was a stub, and the gate was calling it all along. My job was to fill
+in the stub, not to add a second call site. Fixed: the direct call is gone, the
+gate does the work, and `refreshEnv` also throttles itself on the wall clock at
+400 ms as a belt.
+
+**The general lesson, and it is the third time this run:** before adding a call,
+look for the place the engine already intends to make it. `refreshEnv` had a stub,
+a gate, and three `lastEnv*` variables waiting — a design that says *call me here*.
+
+**How it was found:** the Meenakshi accessibility check would not finish. The
+symptom was a slow page, not an error, which is exactly the shape of a per-frame
+cost.
 
 ---
 

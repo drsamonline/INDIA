@@ -1267,10 +1267,17 @@ export function boot(mon) {
        with the sun painted in at its true bearing. */
     let lastEnvKey = '';
     function refreshEnv() {
-      const key = Math.round(state.time * 4) / 4 + '|' + wx.cover.toFixed(2) +
-        '|' + wx.rain.toFixed(2) + '|' + wx.mist.toFixed(2);
+      /* Throttled on the wall clock as well as the key: weather easing calls
+         applySky every frame, so a key that includes the weather rebuilt the
+         PMREM sixty times a second while a weather change settled — and the
+         same on every drag of the time slider. 400 ms is invisible and cheap. */
+      const nowMs = performance.now();
+      const key = Math.round(state.time * 4) / 4 + '|' + wx.cover.toFixed(1) +
+        '|' + wx.rain.toFixed(1) + '|' + wx.mist.toFixed(1);
       if (key === lastEnvKey) return;
+      if (nowMs - lastEnvMs < 400) return;
       lastEnvKey = key;
+      lastEnvMs = nowMs;
       try {
         const W = 64, H = 32;
         const cv = document.createElement('canvas');
@@ -1332,7 +1339,9 @@ export function boot(mon) {
       hemi.intensity = ((0.02 + 0.15 * dayFactor) * (1 - 0.35 * wx.cover) + 0.07 * wx.cover)
         * (mon.hemiScale !== undefined ? mon.hemiScale : 1);
       scene.environmentIntensity = (0.06 + 0.30 * dayFactor) * (1 - 0.30 * wx.cover) * (1 - 0.2 * wx.rain);
-      refreshEnv();
+      /* the environment is rebuilt further down, by the gate that was always
+         there — calling refreshEnv() here bypassed it and rebuilt the PMREM on
+         every frame of a weather change */
       rimLight.intensity = (0.18 + 0.34 * dayFactor) * dim;
       if (elev > 0) {
         keyLight.position.copy(sunDir).multiplyScalar(190).add(keyLight.target.position);
