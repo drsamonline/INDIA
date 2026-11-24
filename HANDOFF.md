@@ -46,7 +46,11 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§39):** the Basilica's interior — the nave hollowed, a boarded
+**Latest run (§40):** Sanchi's vedika — a continuous coping course over both
+railings, and a lotus boss on every third post. 51k → 63k triangles, boot 51 s,
+`audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
+
+**Previous run (§39):** the Basilica's interior — the nave hollowed, a boarded
 ceiling, the gilded retable, two side altars, the casket chapel and pews, plus
 an Interior view and a rewritten tour stop. 28k triangles, boot 45 s,
 `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
@@ -1120,6 +1124,24 @@ Three things cost time and are worth keeping:
 
 Still soft: the pews read as dark silhouettes, the ceiling's outer boards are
 dim, and the chancel beyond the east wall is not modelled.
+
+---
+
+### 40. Sanchi — the railing had no coping
+
+First Tier 3 item taken, and a small one. The vedika had posts and three rails
+and nothing over them: at any distance it read as a fence of sticks with a gap
+above it, when the top of Sanchi's railing is a continuous course of rounded
+coping stones in every photograph.
+
+| Added | Where |
+|---|---|
+| a coping course (two courses: the stone, then its plaster cap) | the full length of both railings, broken at the four gateways like the rails |
+| a lotus boss on every third post | both railings |
+
+The same vocabulary as the Mahabodhi vedika (§38) and the Charminar frieze
+(§33): a railing is posts, rails **and** a coping, and it is the coping that
+makes it read as a wall of stone rather than a fence.
 
 ---
 

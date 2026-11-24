@@ -95,7 +95,7 @@ from the code.
 | Monument | Polish |
 |---|---|
 | **Golden Temple** | the gold reads matte; needs an anisotropic or env-mapped gold, not a flat key |
-| **Sanchi** | vedika posts and rails simplified; no coping stones or medallions |
+| ~~**Sanchi**~~ | **done** — the vedika had posts and three rails and nothing over them, so it read as a fence of sticks. A continuous coping course now runs the top of both railings, with a lotus boss on every third post |
 | **Shore Temple** | the second shrine's tier count is disputed; the porch is a barrel vault without carving |
 | **Victoria Memorial** | the Angel is a silhouette; the allegorical panels are plain |
 | **Mysore** | the verandah arches are pointed, not the cusped multifoil of the real building |

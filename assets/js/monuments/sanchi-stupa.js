@@ -166,8 +166,13 @@ export default {
         if (skip(a)) continue;
         add('granite', box(0.28, h, 0.28), Math.cos(a) * r, y + h / 2, Math.sin(a) * r, { ry: -a });
         add('granite', box(0.42, 0.13, 0.42), Math.cos(a) * r, y + h + 0.06, Math.sin(a) * r, { ry: -a });
+        // a lotus boss on every third post: the vedika is carved, not a fence
+        if (i % 3 === 0) {
+          add('plaster', sph(0.17, 8), Math.cos(a) * (r + 0.16), y + h * 0.55,
+            Math.sin(a) * (r + 0.16), { sz: 0.4 });
+        }
       }
-      // three rails, broken at the gateways
+      // three rails and the coping course, broken at the gateways
       for (const rh of [h * 0.3, h * 0.62, h * 0.95]) {
         for (let i = 0; i < segs; i++) {
           const a0 = (i / segs) * PI * 2, a1 = ((i + 1) / segs) * PI * 2;
@@ -176,6 +181,19 @@ export default {
           const len = 2 * r * Math.sin((a1 - a0) / 2) + 0.03;
           add('granite', box(len, 0.15, 0.18), Math.cos(am) * r, y + rh, Math.sin(am) * r, { ry: -am + PI / 2 });
         }
+      }
+      /* The coping: a continuous course of rounded stones over the posts. It is
+         the top of the railing in every photograph of Sanchi, and without it the
+         vedika reads as a line of sticks with a gap above them. */
+      for (let i = 0; i < segs; i++) {
+        const a0 = (i / segs) * PI * 2, a1 = ((i + 1) / segs) * PI * 2;
+        const am = (a0 + a1) / 2;
+        if (skip(am)) continue;
+        const len = 2 * r * Math.sin((a1 - a0) / 2) + 0.06;
+        add('granite', box(len, 0.26, 0.34), Math.cos(am) * r, y + h + 0.20, Math.sin(am) * r,
+          { ry: -am + PI / 2 });
+        add('plaster', box(len, 0.06, 0.38), Math.cos(am) * r, y + h + 0.35, Math.sin(am) * r,
+          { ry: -am + PI / 2 });
       }
     }
     const gates = [PI / 2, 0, -PI / 2, PI];
