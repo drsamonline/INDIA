@@ -1259,7 +1259,54 @@ export function boot(mon) {
       const e = THREE.MathUtils.degToRad(elevDeg), a = THREE.MathUtils.degToRad(azDeg);
       return out.set(Math.sin(a) * Math.cos(e), Math.sin(e), Math.cos(a) * Math.cos(e));
     }
-    function refreshEnv() { /* environment is a fixed studio map now */ }
+    /* A sky environment, rebuilt when the hour moves on.
+       The studio room gave marble and gold a neutral specular response, but
+       gold leaf reflects the *sky* — a grey room is why the gold on the Golden
+       Temple read matte however the material was tuned (§46). One small
+       equirectangular gradient, drawn from the same colours the sky shader uses,
+       with the sun painted in at its true bearing. */
+    let lastEnvKey = '';
+    function refreshEnv() {
+      const key = Math.round(state.time * 4) / 4 + '|' + wx.cover.toFixed(2) +
+        '|' + wx.rain.toFixed(2) + '|' + wx.mist.toFixed(2);
+      if (key === lastEnvKey) return;
+      lastEnvKey = key;
+      try {
+        const W = 64, H = 32;
+        const cv = document.createElement('canvas');
+        cv.width = W; cv.height = H;
+        const c2 = cv.getContext('2d');
+        const zen = new THREE.Color().copy(fogCol).lerp(new THREE.Color(0x2a4a78),
+          clamp(dayFactor, 0.10, 1) * 0.55);
+        const grd = c2.createLinearGradient(0, 0, 0, H);
+        grd.addColorStop(0.00, '#' + zen.getHexString());
+        grd.addColorStop(0.46, '#' + fogCol.getHexString());
+        grd.addColorStop(0.50, '#' + fogCol.clone().lerp(new THREE.Color(0x6d6350), 0.55).getHexString());
+        grd.addColorStop(1.00, '#' + new THREE.Color(0x3b352a).lerp(fogCol, 0.25).getHexString());
+        c2.fillStyle = grd;
+        c2.fillRect(0, 0, W, H);
+        // the sun (or the moon), at its bearing
+        const eDeg = Math.asin(THREE.MathUtils.clamp((elev > 0 ? sunDir : moonDir).y, -1, 1)) * 180 / Math.PI;
+        const aDeg = Math.atan2((elev > 0 ? sunDir : moonDir).x, (elev > 0 ? sunDir : moonDir).z) * 180 / Math.PI;
+        const u = ((aDeg / 360) + 0.5) * W, v = (0.5 - eDeg / 180) * H;
+        const rad = Math.max(1.4, W * 0.035);
+        const sg = c2.createRadialGradient(u, v, 0, u, v, rad * 3);
+        const sunC = elev > 0 ? '#fff4d8' : '#cfd8f0';
+        sg.addColorStop(0, sunC);
+        sg.addColorStop(0.35, elev > 0 ? 'rgba(255,226,170,0.55)' : 'rgba(190,205,240,0.35)');
+        sg.addColorStop(1, 'rgba(255,255,255,0)');
+        c2.fillStyle = sg;
+        c2.beginPath(); c2.arc(u, v, rad * 3, 0, Math.PI * 2); c2.fill();
+        const tex = new THREE.CanvasTexture(cv);
+        tex.mapping = THREE.EquirectangularReflectionMapping;
+        tex.colorSpace = THREE.SRGBColorSpace;
+        const rt = pmrem.fromEquirectangular(tex);
+        if (roomEnvTexture && roomEnvTexture.dispose) roomEnvTexture.dispose();
+        roomEnvTexture = rt.texture;
+        scene.environment = rt.texture;
+        tex.dispose();
+      } catch (e) { /* keep whatever environment is already set */ }
+    }
     let lastShadowT = -99;
     function applySky(t, force) {
       const elev = Math.sin(((t - 6) / 12) * Math.PI) * 62;
@@ -1284,7 +1331,8 @@ export function boot(mon) {
       // scale has to be applied here or it is lost on the first frame
       hemi.intensity = ((0.02 + 0.15 * dayFactor) * (1 - 0.35 * wx.cover) + 0.07 * wx.cover)
         * (mon.hemiScale !== undefined ? mon.hemiScale : 1);
-      scene.environmentIntensity = (0.05 + 0.24 * dayFactor) * (1 - 0.30 * wx.cover) * (1 - 0.2 * wx.rain);
+      scene.environmentIntensity = (0.06 + 0.30 * dayFactor) * (1 - 0.30 * wx.cover) * (1 - 0.2 * wx.rain);
+      refreshEnv();
       rimLight.intensity = (0.18 + 0.34 * dayFactor) * dim;
       if (elev > 0) {
         keyLight.position.copy(sunDir).multiplyScalar(190).add(keyLight.target.position);

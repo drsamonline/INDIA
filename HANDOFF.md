@@ -46,7 +46,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§46):** the Golden Temple's gold — a small emissive stands in for
+**Latest run (§47):** the engine's environment — the fixed studio room is
+replaced by a sky gradient with the sun painted in at its true bearing, rebuilt
+as the hour moves. Verified on three pages and at two times of day. Engine-wide
+change; `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
+
+**Previous run (§46):** the Golden Temple's gold — a small emissive stands in for
 the sky the gold leaf would be reflecting, with the dome tuned apart from the
 trims. 152k triangles, boot 91 s, `audit_data` 0, `linkcheck` 26 pages,
 `tintcheck --ci` clean.
@@ -1303,6 +1308,32 @@ That is why the roadmap kept flagging it.
 gold would be reflecting. The real fix is an environment map in the engine, which
 is one change and reaches every metal on the site — gold, bronze, copper, the
 Lotus's grey band (§3). Until then this is the only lever a page has.
+
+---
+
+### 47. The engine now reflects the sky
+
+The Golden Temple's gold (§46) was matte because the engine's environment was a
+fixed `RoomEnvironment` — a neutral grey studio. Gold leaf reflects the *sky*, so
+the fix was never in the material.
+
+`refreshEnv()` was a stub with the comment "environment is a fixed studio map
+now". It is a function now: it draws a 64 × 32 equirectangular gradient from the
+same colours the sky shader uses — zenith, horizon at `fogCol`, ground — paints
+the sun (or moon) in at its true bearing and elevation, and runs it through the
+existing `PMREMGenerator`. It rebuilds only when the quarter-hour or the weather
+changes, so the cost is four small PMREMs an hour.
+
+`scene.environmentIntensity` went from `0.05 + 0.24·day` to `0.06 + 0.30·day`,
+because a sky gradient is dimmer than a studio room.
+
+**Verified** on three pages — the Golden Temple at noon and at dusk, India Gate at
+noon — with no console errors and no visible regression. It is a global change:
+every material with an `envMapIntensity` now reflects the sky, and the metal
+palette (gold, goldLeaf, bronze, copper) will look different on all 24 pages.
+
+**Consequence:** the Golden Temple's emissive cheat can be dialled back the next
+time that page is touched. It is still there, and it is still a cheat.
 
 ---
 
