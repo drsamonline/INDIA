@@ -58,6 +58,8 @@ async def main():
     ap.add_argument('--only', nargs='*', default=['qutub-minar', 'golden-temple'])
     ap.add_argument('--width', type=int, default=1100)
     ap.add_argument('--height', type=int, default=700)
+    ap.add_argument('--boot-timeout', type=int, default=180,
+                    help='seconds to wait for dataset.boot (the Taj never sets it)')
     args = ap.parse_args()
 
     failures = 0
@@ -71,13 +73,23 @@ async def main():
             page.on('pageerror', lambda e: errs.append(str(e)[:160]))
             url = 'file://' + os.path.join(ROOT, 'monuments', mid + '.html')
             await page.goto(url, wait_until='load', timeout=60000)
+            booted = True
             try:
-                await page.wait_for_function("document.documentElement.dataset.boot==='ok'", timeout=180000)
+                await page.wait_for_function("document.documentElement.dataset.boot==='ok'", timeout=args.boot_timeout * 1000)
             except Exception:
-                print(f'{mid:24s} FAIL  never booted')
-                failures += 1
-                await page.close()
-                continue
+                # The Taj is not on the engine and never sets dataset.boot, which
+                # meant this check silently skipped the one page that was outside
+                # the contract. Fall back to the document being loaded, and say
+                # which pages were checked that way so a real engine timeout is
+                # still visible as one.
+                booted = False
+                try:
+                    await page.wait_for_function("document.readyState==='complete'", timeout=30000)
+                except Exception:
+                    print(f'{mid:24s} FAIL  never booted')
+                    failures += 1
+                    await page.close()
+                    continue
             f = await check(page, mid)
             bad = [k for k, v in EXPECT.items() if f.get(k) != v]
             if f.get('desc_len', 0) < 40:
@@ -85,7 +97,8 @@ async def main():
             if errs:
                 bad.append('pageerror')
             status = 'ok  ' if not bad else 'FAIL'
-            print(f'{mid:24s} {status} ' + (' '.join(bad) if bad else ''))
+            note = '' if booted else '  (no boot flag — checked on load)'
+            print(f'{mid:24s} {status} ' + (' '.join(bad) if bad else '') + note)
             failures += 1 if bad else 0
             await page.close()
         await b.close()

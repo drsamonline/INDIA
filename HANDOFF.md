@@ -1585,9 +1585,18 @@ on the panel button, the focus trap, Escape, focus return. The Taj's panel is a
 persistent sidebar rather than a modal, so the engine's model does not map onto
 it; that is a design question, not a markup omission.
 
-**And the tool still cannot check this page.** `check_a11y` should be taught to
-fall back to `load` when `dataset.boot` never appears, or the Taj will stay
-outside the gate.
+**The tool now has the fallback** — `check_a11y` waits for `dataset.boot`, and on
+timeout falls back to `document.readyState === 'complete'` and marks the line
+"(no boot flag — checked on load)", so a real engine timeout still reads as one.
+It also takes `--boot-timeout` (default 180 s).
+
+**But the Taj still does not complete under the tool in this sandbox**, even with
+`--boot-timeout 20`: the run produces no output at all, while the same page loads
+and answers the same evaluates in 12 s from a hand-written script. The normal path
+is verified — `qutub-minar` still reports ok — so the fallback has not broken
+anything. Why the Taj run dies silently is **not known**, and I am not going to
+guess: it needs a machine with more headroom, and a first step there would be to
+run the tool with `--only taj-mahal --boot-timeout 20` and watch where it stops.
 
 ---
 
