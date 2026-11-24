@@ -46,7 +46,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§33):** Charminar's stucco ornament — a lotus-petal fringe under
+**Latest run (§34):** Hawa Mahal's facade — bays 13/11/9/6 → 19/16/12/8 (55
+casements, each screen cut 3×5), base arcade 9 → 13 arches. 78k → 105k
+triangles, boot 45 s, `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci`
+clean.
+
+**Previous run (§33):** Charminar's stucco ornament — a lotus-petal fringe under
 the three cornices and round every minaret balcony, blind-arch rows in the
 spandrels, and two hood moulds round each great arch. 80k → 87k triangles, boot
 50 s, `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
@@ -934,6 +939,29 @@ centre.
 Still soft: the archivolt has no petal fringe of its own (the real ones do), the
 spandrel rows are three niches where the building has many, and the plaster
 itself is still one flat colour.
+
+---
+
+### 34. Hawa Mahal — the bay was twice as wide as the building's
+
+The roadmap's complaint was "one casement per bay against 953 real ones". The
+count was not the fault; the bay width was. A 1.4 m bay gave each jharokha a
+shopfront, and no amount of lattice inside it makes a row of shopfronts read as
+a honeycomb.
+
+| Was | Now |
+|---|---|
+| bays 13 / 11 / 9 / 6 (1.4 m each) | 19 / 16 / 12 / 8 (0.95 m each), 55 casements |
+| each screen cut 3 × 4 | 3 × 5 — fifteen cells a screen, 825 across the facade |
+| base arcade 9 arches | 13, at the same spacing as the tiers above |
+
+The screens are `ctx.jali` extrusions cached by shape, so the extra bays cost
+geometry items, not new geometries: 78k → 105k triangles and the boot *did not*
+get slower (45 s). That is the same lesson as §30 in the other direction — the
+cheap thing to add here was density, because the panel was already one item.
+
+Not modelled: the 953 count is for the whole facade's latticework, and this is
+one face with 825 cells; the side and rear wings are plain walls.
 
 ---
 

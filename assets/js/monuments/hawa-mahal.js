@@ -95,7 +95,7 @@ export default {
     /* ===================================================================
        tier 0 — the solid base wall with its row of plain arches
        =================================================================== */
-    const nBase = 9;
+    const nBase = 13;
     const baseZ = bow(0) + 0.0;
     block(PINK, W0, T0, 1.4, 0, 0.34, baseZ - 0.7);
     add('white', box(W0 + 0.3, 0.16, 1.7), 0, 0.42, baseZ - 0.7);
@@ -113,11 +113,15 @@ export default {
     /* ===================================================================
        the four jharokha tiers
        =================================================================== */
+    /* The facade is a honeycomb: the jharokhas are narrow — a bay is under a
+       metre wide, so a tier of 18 m carries nineteen of them, not thirteen.
+       With the wide bays the screen read as a row of shopfronts; at this
+       spacing it reads as the lattice the building is famous for. */
     const tiers = [
-      { w: 18.0, bays: 13, z: -0.30 },
-      { w: 14.6, bays: 11, z: -0.62 },
-      { w: 11.6, bays: 9, z: -0.94 },
-      { w: 8.6, bays: 6, z: -1.26 }
+      { w: 18.0, bays: 19, z: -0.30 },
+      { w: 14.6, bays: 16, z: -0.62 },
+      { w: 11.6, bays: 12, z: -0.94 },
+      { w: 8.6, bays: 8, z: -1.26 }
     ];
 
     // one bangaldar cornice: a curved Bengali roof, wider than it is deep
@@ -156,7 +160,7 @@ export default {
         add('white', box(bw * 0.94, 0.09, 0.66), x, y + 0.10, z + 0.26, { ry });
 
         // arched, pierced screen under a white surround
-        add('jaliWhite', ctx.jali(bw * 0.74, TH * 0.50, { cols: 3, rows: 4, bar: 0.05, depth: 0.07, shape: 'arch' }), x, y + TH * 0.14, z + 0.50, { ry });
+        add('jaliWhite', ctx.jali(bw * 0.74, TH * 0.50, { cols: 3, rows: 5, bar: 0.045, depth: 0.07, shape: 'arch' }), x, y + TH * 0.14, z + 0.50, { ry });
         add('white', archFrame(bw * 0.84, TH * 0.57, 0.05, 0.08), x, y + TH * 0.11, z + 0.48, { ry });
         // a second, small pierced panel on the wall above the casement
         add('jaliWhite', arch(bw * 0.30, TH * 0.15, 0.05), x, y + TH * 0.70, zw, { ry });

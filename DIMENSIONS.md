@@ -35,7 +35,7 @@ reference photograph in `assets/img/` rather than taken from a survey.
 | Depth | one room, ~6 m | 6.0 m | Wikipedia |
 | Storeys | 5, stepping back | 5 | Wikipedia |
 | Tier widths | pyramid | 21 / 18 / 14.6 / 11.6 / 8.6 m | derived |
-| Openings | 953 jharokhas | 87 modelled | Wikipedia |
+| Openings | 953 jharokhas, decorated with latticework | 55 casements on the four tiers, each screen cut with 15 cells (825 cells), + 13 base arches | Wikipedia |
 | Dome | none | none | — |
 
 ## Charminar

@@ -82,7 +82,7 @@ from the code.
 |---|---|
 | ~~**Qutb Minar**~~ | **done** — the bands were a ring of identical blocks, which reads as a dashed line. Six on storey 1, two each on storeys 2 and 3, one on 4, each a projecting course carrying a connected row of raised letters (baseline, uneven stems, loops, dots), one geometry per band. **The script is naskh, not Kufic** — the roadmap had it wrong |
 | ~~**Charminar**~~ | **done** — the stucco was frames and discs on bare plaster. Now a lotus-petal fringe under all three cornices and round every minaret balcony, rows of blind arches in the spandrels, and two concentric hood moulds round each great arch, whose edge was a raw cut through the pierced wall |
-| **Hawa Mahal** | the jharokhas are one casement per bay against 953 real ones; needs `jali` at density |
+| ~~**Hawa Mahal**~~ | **done** — a bay was 1.4 m wide against the building's sub-metre, so the screen read as a row of shopfronts. Bays 13/11/9/6 → 19/16/12/8 (55 casements), each screen cut 3×5 instead of 3×4, and the base arcade 9 → 13 arches |
 | **Konark** | wheels have flat spokes; the 24 need carved rims and hubs |
 | **Kandariya** | 870 sculptures suggested by two registers of blocks; needs instanced relief |
 | **CSMT** | the carved menagerie — peacocks, monkeys, lions, snakes — is absent |
