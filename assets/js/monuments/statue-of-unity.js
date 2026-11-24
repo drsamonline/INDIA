@@ -781,16 +781,16 @@ export default {
        cheekbones as it is tall. The crown closes to a point instead of ending
        in a flat ring. */
     const HEAD_LV = [
-      [0.00, 5.3, 5.7, 0.2],
-      [0.10, 6.2, 7.6, 0.9],
-      [0.26, 7.4, 8.9, 1.0],
-      [0.44, 8.5, 9.8, 0.7],
-      [0.60, 8.4, 9.4, 0.3],
-      [0.75, 8.0, 8.5, 0.0],
-      [0.88, 7.1, 7.3, -0.2],
-      [0.94, 6.0, 6.2, -0.3],
-      [0.975, 4.6, 4.8, -0.35],
-      [1.00, 2.2, 2.4, -0.40]
+      [0.00, 5.1, 5.6, 0.2],
+      [0.10, 5.9, 7.7, 0.9],
+      [0.26, 7.1, 9.2, 1.0],
+      [0.44, 8.4, 10.0, 0.7],
+      [0.60, 8.5, 9.7, 0.3],
+      [0.75, 8.1, 8.7, 0.0],
+      [0.88, 7.2, 7.4, -0.2],
+      [0.94, 6.1, 6.2, -0.3],
+      [0.975, 4.7, 4.9, -0.35],
+      [1.00, 2.3, 2.5, -0.40]
     ];
     /* The face is carved into the head surface, not assembled out of spheres.
        Built from separate primitives it read as a mask of blobs — bulging
@@ -830,6 +830,16 @@ export default {
       d -= 0.15 * g(t, 0.470, 0.058) * g(fx, 0.34, 0.10);      // nasolabial folds
       d -= 0.09 * g(t, 0.698, 0.030) * win(fx, 0.05);          // a frown between the brows
       d -= 0.07 * g(t, 0.762, 0.020) * win(fx, 0.50);          // and one across the forehead
+      /* The features that were still missing at close range: a lid over each
+         eye and a crease under it, a nose that ends in a tip rather than fading
+         out, hollows under the cheekbones and at the temples, and a crease under
+         the lower lip. Without them the face reads as a mask of bulges. */
+      d += 0.15 * g(t, 0.669, 0.013) * g(fx, 0.25, 0.075);     // the upper lid
+      d -= 0.08 * g(t, 0.638, 0.011) * g(fx, 0.25, 0.075);     // and the crease below it
+      d += 0.22 * g(t, 0.596, 0.016) * win(fx, 0.085);         // the tip of the nose
+      d -= 0.10 * g(t, 0.560, 0.040) * g(fx, 0.62, 0.13);      // hollow under the cheekbone
+      d -= 0.09 * g(t, 0.740, 0.042) * g(fx, 0.80, 0.11);      // the temples
+      d -= 0.07 * g(t, 0.306, 0.018) * win(fx, 0.44);          // the crease under the lip
       return d * front;
     };
     /* Patel was bald on the crown with short hair at the sides and the back.
@@ -900,7 +910,12 @@ export default {
     const hh = (f) => HY + 21.5 * f;
     // the ears are the only feature the loft cannot carry, since they sit off
     // the side of the head
-    [-1, 1].forEach((sd) => add(B, sph(2.0, 8), sd * 8.3, hh(0.55), -1.5, { sx: 0.42, sy: 1.25, sz: 0.8 }));
+    [-1, 1].forEach((sd) => {
+      add(B, sph(2.0, 8), sd * 8.3, hh(0.55), -1.5, { sx: 0.42, sy: 1.25, sz: 0.8 });
+      // the helix: a rim round the outside of the ear, and a lobe at the bottom
+      add(B, torus(1.55, 0.30, 5, 10), sd * 8.6, hh(0.56), -1.5, { ry: Math.PI / 2, rz: sd * 0.12 });
+      add(B, sph(0.62, 7), sd * 8.5, hh(0.475), -1.5, { sx: 0.5, sy: 0.9, sz: 0.8 });
+    });
 
     /* ==================================================================== *
      * the plinth: 58 m of terrace, podium and platform

@@ -46,10 +46,15 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§47):** the engine's environment — the fixed studio room is
-replaced by a sky gradient with the sun painted in at its true bearing, rebuilt
-as the hour moves. Verified on three pages and at two times of day. Engine-wide
-change; `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
+**Latest run (§49):** the statue's head — a fuller occiput, a narrower jaw, a lid
+and a crease over each eye, a nose that ends in a tip, hollows under the cheekbone
+and at the temples, a crease under the lower lip, and a helix rim on each ear. It
+is not a portrait and will not become one in this code. 51.3k triangles, boot
+32 s, `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
+
+**Previous run (§47–48):** the engine's environment is now a sky gradient rather
+than a fixed studio room, verified across all 24 pages with the new
+`tools/contact_sheet.py`.
 
 **Previous run (§46):** the Golden Temple's gold — a small emissive stands in for
 the sky the gold leaf would be reflecting, with the dome tuned apart from the
@@ -1357,6 +1362,34 @@ Two notes from the sweep:
 - **The contact sheet is the tool to reach for after any engine change** — the
   environment, the light rig, a shared material, a tone-mapping tweak. Six
   images beats twenty-four renders.
+
+---
+
+### 49. The statue's head — and the end of what this code can do
+
+Another pass at the face, and the last one that is worth making in code.
+
+| Added | Why |
+|---|---|
+| a fuller occiput, a narrower jaw | the skull was a rounded box; a head is not symmetric front to back |
+| a lid over each eye, and a crease under it | the eyes were shallow dents |
+| a nose that ends in a tip | the ridge faded out instead of finishing |
+| hollows under the cheekbone and at the temples | the middle of the face was one convex mass |
+| a crease under the lower lip | the chin was a bulge with no boundary |
+| a helix rim and a lobe on each ear | the ears were pads |
+
+At the page's own face view — 122 m from a 21.5 m head — it now reads as a bald,
+stern, older man's head with a brow, a nose, a mouth and a jaw, and the hairline
+does the work it did before. That is the ceiling.
+
+**It is not a portrait and will not become one.** Every one of the 870-odd
+sculptures on Kandariya's walls and every figure on the statue's registers is a
+gesture; a face that has to be *this man* needs geometry that was sculpted, not
+sampled from a field of gaussian bumps. The five model listings the user sent at
+the start of this run are the answer, and three of them are paid.
+
+Do not spend another session on this face. If the portrait matters, buy or build
+a mesh; if it does not, the page is as good as this pipeline gets.
 
 ---
 
