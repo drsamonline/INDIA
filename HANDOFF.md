@@ -46,7 +46,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§34):** Hawa Mahal's facade — bays 13/11/9/6 → 19/16/12/8 (55
+**Latest run (§35):** Konark's deul — the ruined tower stump rebuilt on a
+taper, with corner buttresses, carved registers of blind arches on each face and
+a continuous ragged crown. 96k → 101k triangles, boot 45 s, `audit_data` 0,
+`linkcheck` 26 pages, `tintcheck --ci` clean.
+
+**Previous run (§34):** Hawa Mahal's facade — bays 13/11/9/6 → 19/16/12/8 (55
 casements, each screen cut 3×5), base arcade 9 → 13 arches. 78k → 105k
 triangles, boot 45 s, `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci`
 clean.
@@ -84,7 +89,9 @@ a pinch under the shoulder, a shoulder-riding top edge, stronger features).
 width is unpublished, the model's 37 m is photo-derived); Shore Temple and
 Konark read dark, which is what granite and weathered khondalite do.
 
-**Do not re-chase:** the Lotus's grey band (engine ambient by design), the
+**Do not re-chase:** **the flock of dark specks in the sky is the engine's
+birds** (they cost two renders at Konark, §35); the Lotus's grey band (engine
+ambient by design), the
 `framecheck` flags on detail views (a "Carving" view is meant to be close), and
 any "broken image" count taken from a browser (see §24).
 
@@ -962,6 +969,36 @@ cheap thing to add here was density, because the panel was already one item.
 
 Not modelled: the 953 count is for the whole facade's latticework, and this is
 one face with 825 cells; the side and rear wings are plain walls.
+
+---
+
+### 35. Konark — the deul, and two hours lost to the birds
+
+The roadmap asked for the wheels. The wheels were already right: an earlier pass
+gave them tapered spokes, mid-span medallions, a twelve-petal lotus hub and a
+beaded rim, and they read correctly at 6 m. What was wrong was the **deul**, the
+collapsed main tower, which was a stack of axis-aligned boxes with a few
+scattered blocks on top — a concrete bunker beside a fine jagamohana.
+
+| Was | Now |
+|---|---|
+| boxes of the same width, stepping in abruptly | six courses that step in on a taper (30 m → 11 m), each with a string course at the step |
+| nothing at the corners | a buttress on each corner of every course |
+| fourteen small relief boxes on two faces | a register of eleven blind arches on each long face of the four lower courses |
+| scattered blocks for the broken crown | a continuous ragged crown — spaced apart, the blocks read as specks against the sky |
+
+**`carvedBand` puts its motifs on local +z.** Called without `ry`, the band on a
+−z face buries its arches inside the wall and leaves only the dark field showing
+— which is why the first attempt at the registers rendered as black slots. Pass
+the face's own rotation.
+
+**And the specks I chased through two renders were the engine's birds.** They
+have been in every Konark render since the first, they are not mine, and they
+are supposed to be there. Added to the do-not-re-chase list at the top of this
+file.
+
+Still soft: the deul's registers sit in a deep shadow so the field reads almost
+black, and its plan is still square where the real one is star-shaped.
 
 ---
 

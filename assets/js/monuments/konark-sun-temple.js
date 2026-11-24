@@ -264,42 +264,52 @@ export default {
       [0.06, 3.7]], 16), 0, AMALA + 0.6, JZ);
     add('gold', cone(0.24, 0.85, 8), 0, KAL + 0.3, JZ);
 
-    /* ---------- the broken deul behind: a rough, collapsed mass -------- */
+    /* ---------- the broken deul behind ----------------------------------
+       The deul is the collapsed tower. What survives is the foot of a mass
+       that tapered to sixty-one metres, so its courses step in as they rise,
+       its corners carry buttresses, and its faces carry the same carved
+       registers as the hall in front of it. Built as a stack of axis-aligned
+       boxes it read as a concrete bunker: the taper, the buttresses and the
+       courses are the whole of what makes it a tower stump. */
     const DZ = -22;
     block('grey', 30.4, 1.0, 30.4, 0, TOP, DZ);
-    block(PALE, 30.0, 5.4, 30.0, 0, TOP + 1.0, DZ);
-    block('grey', 30.4, 0.4, 30.4, 0, TOP + 4.2, DZ);
-    block('grey', 30.4, 0.4, 30.4, 0, TOP + 6.4, DZ);
-    block(PALE, 29.6, 6.4, 29.6, 0, TOP + 6.8, DZ);
-    // offset upper masses, each smaller and shifted, as if fallen in on itself
-    block(PALE, 24.0, 4.4, 23.0, -0.8, TOP + 13.2, DZ + 0.6);
-    block(PALE, 16.5, 3.8, 15.5, 1.4, TOP + 17.6, DZ - 1.2);
-    block(GREY, 10.0, 2.6, 9.0, -1.2, TOP + 21.4, DZ + 1.0);
-    // masonry courses, shallow and irregular
-    for (let i = 0; i < 10; i++) {
-      const y = TOP + 1.8 + i * 2.0;
-      const w = y < TOP + 7 ? 30.2 : (y < TOP + 13 ? 24.2 : 16.7);
-      const cz = y < TOP + 7 ? DZ : (y < TOP + 13 ? DZ + 0.6 : DZ - 1.2);
-      block('grey', w, 0.2, w * 0.96, 0, y, cz);
+    {
+      const stepH = [5.0, 4.4, 3.8, 3.2, 2.6, 2.0];
+      const stepX = [0, -0.5, -1.0, -1.5, -2.0, -2.4];
+      let w = 30.0, y = TOP + 1.0;
+      for (let i2 = 0; i2 < stepH.length; i2++) {
+        const h = stepH[i2], dx = stepX[i2], dz = w * 0.97;
+        block(i2 % 2 ? 'grey' : PALE, w, h, dz, dx, y, DZ);
+        // corner buttresses: a vertical rhythm, and what a ruined tower has
+        for (const [sx, sz] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) {
+          block(PALE, 1.5, h, 1.5, dx + sx * (w / 2 - 0.6), y, DZ + sz * (dz / 2 - 0.6));
+        }
+        // a carved register of blind arches on the two long faces
+        if (i2 < 4) {
+          [-1, 1].forEach((sz) => {
+            // carvedBand puts its motifs on local +z, so the face's own
+            // rotation has to be passed or the -z face buries them in the wall
+            ctx.carvedBand(PALE, w * 0.62, h * 0.26, dx, y + h * 0.50,
+              DZ + sz * (dz / 2 + 0.16),
+              { n: 11, motif: 'arch', depth: 0.40, back: 'grey', ry: sz > 0 ? 0 : Math.PI });
+          });
+        }
+        // a string course at each step, so the courses read as courses
+        block('grey', w + 0.5, 0.24, dz + 0.5, dx, y + h - 0.24, DZ);
+        y += h;
+        w *= 0.86;
+      }
+      // the ragged crown, set on the last step
+      /* The broken crown. Its blocks have to touch: spaced apart they are a
+         scatter of specks against the sky at any distance the site is viewed
+         from, which is exactly how they read before. */
+      const jag = [[3.8, 3.4], [2.2, 2.0], [4.4, 3.8], [2.6, 2.4], [3.2, 3.0],
+        [1.8, 2.2], [4.0, 3.2]];
+      block(PALE, w * 1.05, 1.4, w * 1.0, -2.4, y, DZ);
+      jag.forEach(([h, d], i3) => {
+        block(PALE, 4.6, h, d + 2.4, -2.4 + (i3 - 3) * 1.55, y + 1.4, DZ);
+      });
     }
-    // carved reliefs on the lower courses
-    for (let i = 0; i < 7; i++) {
-      const t2 = -12 + i * 4;
-      add('grey', box(1.7, 2.4, 0.28), t2, TOP + 3.4, DZ + 15.1);
-      add('grey', box(1.7, 2.4, 0.28), t2, TOP + 3.4, DZ - 15.1);
-    }
-    // jagged broken crown
-    const jag = [[-4.6, 3.6, 1.8], [-1.8, 2.2, 2.6], [1.0, 4.6, 1.3], [3.2, 2.8, 2.2],
-      [5.0, 1.6, 3.0], [-3.2, 2.4, 2.8], [2.4, 1.4, 3.4], [0.2, 5.4, 1.1]];
-    block(PALE, 10.4, 1.6, 9.4, -0.6, TOP + 23.4, DZ + 0.4);
-    jag.forEach(([x, h, d], i) => {
-      const zz = DZ + ((i % 2) ? 1.2 : -1.4);
-      block(PALE, 3.2 + (i % 3) * 0.8, h, d + 1.4, x, TOP + 24.8, zz);
-      block('grey', 3.4 + (i % 3) * 0.8, 0.18, d + 1.6, x, TOP + 24.8 + h, zz);
-    });
-    // slumped shoulders of masonry
-    block(GREY, 7.0, 8.0, 9.0, -13.5, TOP + 1.0, DZ - 9.0, { rx: 0.22, rz: -0.18 });
-    block(GREY, 6.0, 5.0, 7.0, 13.5, TOP + 1.0, DZ + 6.0, { rz: 0.16 });
     // fallen blocks heaped around its foot
     for (let i = 0; i < 34; i++) {
       const a = (i / 34) * PI * 2;
