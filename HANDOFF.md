@@ -1327,13 +1327,36 @@ changes, so the cost is four small PMREMs an hour.
 `scene.environmentIntensity` went from `0.05 + 0.24·day` to `0.06 + 0.30·day`,
 because a sky gradient is dimmer than a studio room.
 
-**Verified** on three pages — the Golden Temple at noon and at dusk, India Gate at
-noon — with no console errors and no visible regression. It is a global change:
-every material with an `envMapIntensity` now reflects the sky, and the metal
-palette (gold, goldLeaf, bronze, copper) will look different on all 24 pages.
+**Verified on all 24 pages** in a sweep the next session ran: four pages a sheet
+with the new `tools/contact_sheet.py`, seven sheets, every page booting with no
+console errors and no black, washed-out or otherwise regressed render. The Taj is
+a separate renderer and is unaffected. What the sweep shows is what the change was
+for: Mysore's and Meenakshi's gold finials now carry a highlight, the statue's
+bronze has life in it, and Amber's water reflects the sky.
 
 **Consequence:** the Golden Temple's emissive cheat can be dialled back the next
 time that page is touched. It is still there, and it is still a cheat.
+
+---
+
+### 48. The sweep after the environment change
+
+A global change needs a global look, and one render at a time is too slow to do
+it honestly. `tools/contact_sheet.py` renders four pages into a 2 × 2 sheet —
+seven sheets, about seven minutes — and every page was checked that way after
+§47.
+
+Result: **no regressions.** All 24 boot, none is black or washed out, and the
+metals are visibly better: gold finials on Mysore and Meenakshi, the statue's
+bronze, Amber's water.
+
+Two notes from the sweep:
+
+- **The Taj is not on the engine.** It has its own renderer and its own UI, so the
+  environment change does not touch it. Its page still boots and looks unchanged.
+- **The contact sheet is the tool to reach for after any engine change** — the
+  environment, the light rig, a shared material, a tone-mapping tweak. Six
+  images beats twenty-four renders.
 
 ---
 
