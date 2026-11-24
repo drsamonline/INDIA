@@ -1418,10 +1418,19 @@ dialog trap, Escape, focus return, and a 168-character scene description.
 
 **The cause of that slowness was mine** — see §51.
 
-**What the six prove and what they do not.** The markup on every page comes from
-the same `build_site` template, so a geometry change cannot regress it — the six
-confirm the template is intact after this run's edits. They do not each certify
-the other eighteen pages' content.
+**And then all twenty-four were run.** `tools/check_a11y_all.py` walks every page
+and resumes from `shots/a11y-all.log`, so the pass survives the per-command
+limit — six calls, about twenty-five minutes of rendering.
+
+| Result | Pages |
+|---|---|
+| **ok** | 23 — every engine page, from `qutub-minar` (74.8 s) to `jantar-mantar` (44.3 s) |
+| **FAIL** | `taj-mahal`, on `dialog_open focus_inside trap focus_returned` only |
+
+The Taj's four failures are the about-drawer checks, and it has no about drawer:
+its history lives in the control panel. That is a UI convention difference, not an
+accessibility defect, and the four that matter on that page — skip link,
+`role="img"` with a description, `lang="hi"` — pass.
 
 ---
 

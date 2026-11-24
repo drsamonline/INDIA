@@ -1,0 +1,24 @@
+taj-mahal taj-mahal                FAIL dialog_open focus_inside trap focus_returned  (no boot flag)
+qutub-minar qutub-minar              ok    74.8s -
+hawa-mahal hawa-mahal               ok    62.2s -
+charminar charminar                ok    54.3s -
+gateway-of-india gateway-of-india         ok    66.7s -
+india-gate india-gate               ok    49.7s -
+mysore-palace mysore-palace            ok    87.6s -
+golden-temple golden-temple            ok    77.2s -
+konark-sun-temple konark-sun-temple        ok    55.1s -
+sanchi-stupa sanchi-stupa             ok    67.0s -
+victoria-memorial victoria-memorial        ok    57.9s -
+meenakshi-temple meenakshi-temple         ok   111.3s -
+lotus-temple lotus-temple             ok    83.0s -
+shore-temple shore-temple             ok    69.1s -
+rani-ki-vav rani-ki-vav              ok    90.7s -
+amber-fort amber-fort               ok    59.7s -
+csmt-mumbai csmt-mumbai              ok    51.1s -
+mahabodhi-temple mahabodhi-temple         ok    51.1s -
+statue-of-unity statue-of-unity          ok    48.2s -
+kandariya-mahadeva kandariya-mahadeva       ok    51.5s -
+basilica-bom-jesus basilica-bom-jesus       ok    64.8s -
+mehrangarh-fort mehrangarh-fort          ok    53.5s -
+jantar-mantar jantar-mantar            ok    44.3s -
+somnath-temple somnath-temple           ok    59.3s -
