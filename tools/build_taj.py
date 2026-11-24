@@ -48,6 +48,36 @@ src = src.replace('haze: 0.0016', 'haze: 0.0009')
 src = src.replace('FogExp2(0xe8c39a', 'FogExp2(0xdcd3c2')
 src = src.replace('value="0.0016"', 'value="0.0009"')
 
+# the Taj page predates the site's accessibility contract: no skip link, no
+# role="img" and description on the canvas, no lang on the Devanagari. The other
+# 23 pages get all three from the engine; this one has its own markup.
+assert src.count('<body>') == 1
+src = src.replace('<body>', """<body>
+<a class="skip-link" href="#app">Skip to the scene</a>""")
+assert src.count('<div id="app" aria-label="Taj Mahal 3D scene"></div>') == 1
+src = src.replace('<div id="app" aria-label="Taj Mahal 3D scene"></div>',
+                  '<div id="app" role="img" aria-label="Taj Mahal 3D scene" '
+                  'aria-describedby="scene-desc"></div>\n'
+                  '<p id="scene-desc" class="sr-only">A three-dimensional model of the Taj Mahal at Agra: '
+                  'the white marble mausoleum with its great dome and four minarets, seen across the '
+                  'charbagh garden and its reflecting pool.</p>')
+assert src.count('<span class="deva panel-deva">') == 1
+src = src.replace('<span class="deva panel-deva">', '<span class="deva panel-deva" lang="hi">')
+assert src.count('<span class="deva" id="tour-deva">') == 1
+src = src.replace('<span class="deva" id="tour-deva">', '<span class="deva" id="tour-deva" lang="hi">')
+# the loader's Devanagari line, which the contract missed on the first pass
+assert src.count('<div class="load-deva deva">') == 1
+src = src.replace('<div class="load-deva deva">', '<div class="load-deva deva" lang="hi">')
+# the two rules the contract needs: a skip link that only appears on focus, and
+# a description that is available to a screen reader but not on screen
+assert src.count('</style>') >= 1
+src = src.replace('</style>', """.skip-link{position:absolute;left:-9999px;top:0;z-index:9999;padding:10px 16px;
+  background:#14161f;color:#ffd75e;border-radius:0 0 8px 0;font:600 13px/1 system-ui,sans-serif}
+.skip-link:focus{left:0}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
+</style>""", 1)
+
 # the charbagh was 300 randomly scattered flowers — confetti. A parterre is
 # ordered beds, each edged with its own hedge, planted in rows of one colour.
 OLD_FLOWERS = 'const fGeo = new THREE.SphereGeometry(0.09, 6, 5);\n    flowerMesh = new THREE.InstancedMesh(fGeo, MAT.flower, 300);\n    const fm = new THREE.Matrix4();\n    const fPalette = [new THREE.Color(0xff4f9a), new THREE.Color(0xffb03a), new THREE.Color(0xf4ecdd), new THREE.Color(0xe8442e), new THREE.Color(0xd96f9e)];\n    for (let i = 0; i < 300; i++) {\n      const q = quads[i % 4];\n      const x = q[0] + (Math.random() - 0.5) * (q[2] - 1.2);\n      const z = q[1] + (Math.random() - 0.5) * (q[3] - 1.2);\n      fm.makeTranslation(x, 0.22, z);\n      flowerMesh.setMatrixAt(i, fm);\n      flowerMesh.setColorAt(i, fPalette[Math.floor(Math.random() * fPalette.length)]);\n    }\n    flowerMesh.instanceMatrix.needsUpdate = true;\n    if (flowerMesh.instanceColor) flowerMesh.instanceColor.needsUpdate = true;\n    scene.add(flowerMesh);'

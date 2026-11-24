@@ -1562,6 +1562,35 @@ brief asked for.
 
 ---
 
+### 56. The Taj was outside the accessibility contract
+
+`check_a11y` cannot even be run against the Taj: the tool waits for
+`document.documentElement.dataset.boot === 'ok'`, and that page never sets it,
+because it is not on the engine. That hid a simpler fact — the Taj was the one
+page of twenty-four that did not meet the site's own contract.
+
+| Missing | Now |
+|---|---|
+| a skip link | `<a class="skip-link" href="#app">` before the scene, first in tab order, visible only on focus |
+| `role="img"` and a description on the canvas | `role="img"` plus `aria-describedby="scene-desc"` and a 174-character description |
+| `lang="hi"` on the Devanagari | all three `.deva` elements, including the loader's and the tour title's |
+
+Added as string replacements in `tools/build_taj.py`, each with an `assert
+src.count(...) == 1`, and verified by evaluating the built page: `role: img`,
+`described: true`, `desc_len: 174`, `skip_first: true`, `all_hi: true`, no JS
+errors, and a render that still looks right.
+
+**What is deliberately not done:** the engine's dialog contract — `aria-expanded`
+on the panel button, the focus trap, Escape, focus return. The Taj's panel is a
+persistent sidebar rather than a modal, so the engine's model does not map onto
+it; that is a design question, not a markup omission.
+
+**And the tool still cannot check this page.** `check_a11y` should be taught to
+fall back to `load` when `dataset.boot` never appears, or the Taj will stay
+outside the gate.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
