@@ -64,7 +64,7 @@ export default {
   ],
 
   build(ctx) {
-    const { add, box, cyl, sph, cone, dome, onion, arch, archFrame, block, col, torus, lathe } = ctx;
+    const { add, box, cyl, sph, cone, dome, onion, arch, archFrame, block, col, torus, lathe , THREE } = ctx;
     const PI = Math.PI;
 
     const PL = 'plaster';          // the plastered brick surface
@@ -119,6 +119,9 @@ export default {
         }
         add(STN, box(2 * X, 0.3, 0.34), 0, TER + h * 0.44, z);
         add(STN, box(2 * X, 0.3, 0.34), 0, TER + h * 0.78, z);
+        // a continuous coping over the posts: without it the railing reads as
+        // a fence rather than as a wall of stone
+        add(STN, box(2 * X + 0.7, 0.24, 0.86), 0, TER + h + 0.22, z);
       };
       const runZ = (x) => {
         for (let i = 0; i <= 21; i++) {
@@ -129,6 +132,7 @@ export default {
         }
         add(STN, box(0.34, 0.3, Z1 - Z0), x, TER + h * 0.44, (Z0 + Z1) / 2);
         add(STN, box(0.34, 0.3, Z1 - Z0), x, TER + h * 0.78, (Z0 + Z1) / 2);
+        add(STN, box(0.86, 0.24, Z1 - Z0 + 0.7), x, TER + h + 0.22, (Z0 + Z1) / 2);
       };
       runX(Z1); runX(Z0); runZ(-X); runZ(X);
     })();
@@ -210,7 +214,43 @@ export default {
       ridge(a + PI / 4, 0.16, PL, 0.46);  // the corner, at the diagonal
     }
 
-    // niches: vertical columns of Buddha images up every face
+    /* Niches: three columns of seated Buddhas up every face. The niche used to
+       be a black box — a dash of shadow up the tower — when what the tower is
+       covered in is images of the Buddha, each in its own recess. A figure is
+       three tapered prisms (crossed legs, body, head) and a whole row of three
+       is ONE geometry: the boot time is spent on geometry items, not on
+       triangles (§30). */
+    const buddhaRow = (n, span, hy, key) => {
+      const pos = [], uv = [], idx = [];
+      const prism = (cx0, y0, y1, r0, r1, seg) => {
+        const base = pos.length / 3;
+        for (let k = 0; k <= 1; k++) {
+          const r = k ? r1 : r0, yy = k ? y1 : y0;
+          for (let j = 0; j < seg; j++) {
+            const a = (j / seg) * PI * 2 + PI / 4;
+            pos.push(cx0 + Math.cos(a) * r, yy, Math.sin(a) * r * 0.6 + 0.02);
+            uv.push(j / seg, k);
+          }
+        }
+        for (let j = 0; j < seg; j++) {
+          const a = base + j, b = base + ((j + 1) % seg);
+          idx.push(a, b, a + seg, b, b + seg, a + seg);
+        }
+      };
+      for (let i = 0; i < n; i++) {
+        const x = (i - (n - 1) / 2) * span;
+        prism(x, 0, hy * 0.44, hy * 0.30, hy * 0.22, 4);          // the crossed legs
+        prism(x, hy * 0.42, hy * 0.80, hy * 0.20, hy * 0.13, 4);  // the body
+        prism(x, hy * 0.78, hy * 0.93, hy * 0.10, hy * 0.09, 6);  // the head
+      }
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+      g.setIndex(idx);
+      g.computeVertexNormals();
+      return g;
+    };
+
     for (let i = 2; i < TIERS - 2; i++) {
       const t = (i + 0.5) / TIERS;
       const w = widthAt(t);
@@ -223,6 +263,9 @@ export default {
           const pz = Math.sin(a) * (w / 2 + 0.06) + Math.cos(a) * o * w;
           add(OP, box(0.34, hy, 0.1), px, y, pz, { ry: PI / 2 - a });
         });
+        // the images themselves, standing in the recesses
+        const cx = Math.cos(a) * (w / 2 + 0.12), cz = Math.sin(a) * (w / 2 + 0.12);
+        add(SB, buddhaRow(3, w * 0.3, hy * 0.92, SB), cx, y + hy * 0.04, cz, { ry: PI / 2 - a });
       }
     }
 

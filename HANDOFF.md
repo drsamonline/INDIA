@@ -46,7 +46,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§37):** CSMT's menagerie — the beasts were 0.85 m on a 26 m
+**Latest run (§38):** Mahabodhi's niches — a seated Buddha in each recess, three
+to a row as one geometry; and a continuous coping on the vedika railing. 52k →
+60k triangles, boot 40 s, `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci`
+clean.
+
+**Previous run (§37):** CSMT's menagerie — the beasts were 0.85 m on a 26 m
 skyline and the same cream as the wall, so they vanished. Now 3× the size on a
 darker stone, and the spandrel pair at 2.2×. 67k triangles, boot 37 s,
 `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
@@ -1059,6 +1064,29 @@ building, the eye does not.
 
 Still soft: the beasts are silhouettes at the home distance and only resolve at
 about 15 m; the arcade's capitals are plain.
+
+---
+
+### 38. Mahabodhi — the niches hold images, and a silent no-boot
+
+The tower is covered in niches holding images of the Buddha; each niche here was
+a black box, so the faces read as three columns of dashes.
+
+| Was | Now |
+|---|---|
+| a black box per niche | a seated Buddha in the recess — crossed legs, body, head, three tapered prisms — with the box left behind it as shadow |
+| one item per niche (120 of them) | one merged geometry per row of three, so the count barely moves |
+| a fence of posts round the site | a continuous coping over the vedika, which is what makes it a wall of stone |
+
+**The no-boot.** `buddhaRow` was written with `new T3.BufferGeometry()`, copying
+the idiom from the other modules — but this module never destructured `T3` or
+`THREE` from `ctx`. The result was a page that never reached `dataset.boot`, with
+**no console error at all**: the engine catches the build's exception and shows
+its own failure state. That is trap 2's cousin, and the fix is to check the
+destructure line before writing a new geometry helper. `THREE` is bound now.
+
+Still soft: the figure fills its recess but the lower half sits in shadow, so at
+the home distance a niche reads as a dark slot with a pale head in it.
 
 ---
 

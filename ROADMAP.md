@@ -86,7 +86,7 @@ from the code.
 | ~~**Konark**~~ | **done** — the wheels were rebuilt in an earlier pass (tapered spokes, medallions, lotus hub, beaded rim); the gap was the **deul**, which was a stack of axis-aligned boxes that read as a concrete bunker. It now steps in on a taper, carries corner buttresses and carved registers of blind arches, and its broken crown is a continuous ragged mass |
 | ~~**Kandariya**~~ | **done** — the figures were rebuilt as seven-piece sculpture in an earlier pass; what was wrong was the **shikhara**. Its urushringas were straight cones three times taller than wide, four overlapping up each corner, so the tower read as a string of beads down the edge. Each is now a miniature of the tower with the same curvilinear profile, five rows climbing each corner and one pair on each face of the lower three |
 | ~~**CSMT**~~ | **done** — the menagerie existed but was 0.85 m on a 26 m skyline, four pixels at the home view, and the same cream as the wall behind it. Now 3× the size on a darker stone, so the gable apexes carry their animals as silhouettes against the sky |
-| **Mahabodhi** | the seated Buddha in each niche is a recess; the railing lacks coping and medallions |
+| ~~**Mahabodhi**~~ | **done** — the niches were black boxes: a dash of shadow up the tower. Each now holds a seated Buddha (three tapered prisms, one geometry per row of three), and the vedika has a continuous coping instead of a fence of posts |
 | **Basilica** | the altars, the casket chapel and the painted ceiling do not exist; the tour admits it |
 | **Rani ki Vav** | 292 pillars built, 226 survive, 216 modelled — but the wall figures are flat |
 
