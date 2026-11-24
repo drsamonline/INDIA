@@ -33,7 +33,7 @@ sky should come from the engine.
 |---|---|---|---|
 | 1 | ~~Fog reduced and cooled~~ | done — 0.0016 tan to 0.0009 grey | ✅ |
 | 2 | ~~Grade aligned with the site~~ | done — exposure 0.62, glow 0.24, bloom 0.90 | ✅ |
-| 3 | **Port the engine's physical sky** | the Taj's gradient dome is the only place its light is behind the other pages | 1 session |
+| 3 | ~~Port the engine's physical sky~~ | **already in the source** — the scene imports `Sky` from the vendored addons and drives `rayleigh`, `turbidity`, `mieCoefficient`, `mieDirectionalG` and `sunPosition` from its own clock, the same shader the engine runs. There is no gradient dome. The brief compared renders, not code | ✅ |
 | 4 | ~~Night floodlights~~ | done — five spots at 130, angle 0.70, aimed at y 19; `?shot=` finally moves the clock | ✅ |
 | 5 | ~~Tone the charbagh~~ | done — 300 random flowers became 48 beds, each edged with its own low hedge and planted in rows of one colour (§53) | ✅ |
 | 6 | ~~Water and reflection~~ | **already done in the source** — the pool is three.js's `Water` (mirror render target 1024², `distortionScale: state.ripple`, `clipBias`, fog, `waterColor 0x0e3d38`), with a `MeshStandardMaterial` fallback behind the "Live water reflections" toggle. The brief was stale; nothing to change | ✅ |

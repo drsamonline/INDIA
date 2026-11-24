@@ -1530,6 +1530,38 @@ three and a half minutes under software rendering.
 
 ---
 
+### 55. The Taj's Part 1 list is closed, and two of its six were never open
+
+Item 3 asked for the engine's physical sky to be ported into the Taj, on the
+grounds that "the Taj's gradient dome is the only place its light is behind the
+other pages". There is no gradient dome. The source scene has:
+
+```js
+const sky = new Sky();
+sky.scale.setScalar(4000);
+const skyU = sky.material.uniforms;
+skyU.turbidity.value = 6; skyU.rayleigh.value = 2;
+skyU.mieCoefficient.value = 0.004; skyU.mieDirectionalG.value = 0.85;
+```
+
+and its `applySky(t)` drives `sunPosition`, `rayleigh`, `turbidity` and
+`mieCoefficient` from its own clock — the same shader, the same uniforms, the same
+physics as the engine. It also builds its own PMREM environment from that sky.
+
+**So the Taj's six-item list closes as: 1, 2, 4, 5 done; 3 and 6 were already
+implemented in the source.** Two of six briefs were written against a *render*
+rather than the *code*: the Taj looked flatter and its water looked flatter than
+the engine's pages, and both diagnoses were wrong about the cause.
+
+That is the fifth and sixth stale brief of this run (Konark §35, Kandariya §36,
+CSMT §37, water §54, sky here). The pattern is now clear enough to name: **the
+briefs were written from appearances.** An appearance can be caused by the code,
+by the light, by the grade, or by a bug — and only reading the source tells you
+which. Every one of the six cost a diagnosis; none of them needed the change the
+brief asked for.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
