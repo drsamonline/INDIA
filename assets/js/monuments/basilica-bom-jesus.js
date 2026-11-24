@@ -33,6 +33,7 @@ export default {
     { name: 'Facade', pos: [11, 14, 43], target: [0, 12, 0] },
     { name: 'Portal', pos: [0, 6, 26], target: [0, 7, 1] },
     { name: 'Nave', pos: [34, 20, 20], target: [0, 11, -16] },
+    { name: 'Interior', pos: [0, 4.2, -3.4], target: [0, 7, -49.2] },
     { name: 'From the square', pos: [-46, 14, 40], target: [0, 13, -2] }
   ],
   tour: [
@@ -53,7 +54,7 @@ export default {
     },
     {
       title: 'The Casket', deva: 'अवशेष',
-      text: 'The chapel behind these walls holds the silver casket of St Francis Xavier, the Jesuit missionary who died off the China coast in 1552; his relics are displayed every ten years. The interior, with its gilded altars and painted ceiling, is not modelled here.',
+      text: 'Inside, a barrel vault boarded and painted over the nave runs to a gilded retable, and the chapel on the north side holds the silver casket of St Francis Xavier, the Jesuit missionary who died off the China coast in 1552. His relics are displayed every ten years.',
       pos: [26, 12, 18], target: [0, 10, -6], time: 10.6
     },
     {
@@ -125,7 +126,162 @@ export default {
     const ZF = 0.6;                     // the facade plane
     const ZB = ZF - NL;                 // the east end
     const NZC = (ZF + ZB) / 2;
-    block(LT, NW, NH - Y0, NL, 0, Y0, NZC);
+    /* The nave was one solid block, so there was no interior at all and the
+       tour admitted it. It is hollow now: two long walls, an east wall, a
+       barrel vault over the whole width, and the fittings the church is known
+       for — the gilded retable, the side altars, the casket chapel and the
+       painted ceiling. */
+    const WT = 1.2;                       // wall thickness
+    const IX = NW / 2 - WT / 2;           // centreline of each long wall
+    const IZ0 = ZF - WT, IZ1 = ZB + WT;   // inner faces of the end walls
+    block('stone', NW - 2 * WT, 0.5, NL - 2 * WT, 0, Y0, NZC);      // the floor
+    [-1, 1].forEach((sd) => block(LT, WT, NH - Y0, NL, sd * IX, Y0, NZC));
+    block(LT, NW, NH - Y0, WT, 0, Y0, ZB + WT / 2);                 // east wall
+    block(LT, NW, NH - Y0, WT, 0, Y0, ZF - WT / 2);                 // west wall
+    // the chancel arch through the east wall
+    add(DK, ctx.arch(9.0, 12.0, WT + 0.2), 0, Y0 + 0.5, ZB + WT / 2);
+    add(BA, ctx.archFrame(10.2, 12.8, 0.4, 0.5), 0, Y0 + 0.5, ZB + WT / 2 + 0.2);
+
+    /* ---- the barrel vault, and its painted panels ----------------------- */
+    const VDS = (() => {                       // laterite, lit from inside
+      const mm = ctx.mat('cream');
+      if (!mm || !mm.clone) return 'cream';
+      const c = mm.clone();
+      c.side = ctx.THREE.DoubleSide;
+      c.color.setHex(0xd8bb8c);
+      // a point light cannot reach a 55 m vault, and a light hung under it faces
+      // away from the surface it is meant to light: the painted ceiling is
+      // self-lit, which is how it reads through the door of the real church
+      if (ctx.THREE && c.emissive) {
+        c.emissive = new ctx.THREE.Color(0x8a6f4a);
+        c.emissiveIntensity = 1.0;
+      }
+      c.needsUpdate = true;
+      return c;
+    })();
+    /* A boarded ceiling in two slopes meeting at a shallow ridge. The barrel
+       vault was a rotated open cylinder, and from inside the crown of it never
+       drew — a band of nothing down the middle of the nave. Two boards cannot
+       miss: there is no back face to get wrong. */
+    const VY = NH - 1.0;                       // the eaves of the ceiling
+    const VRIDGE = NH + 1.4;
+    const cAng = Math.atan2(VRIDGE - VY, IX);
+    const cLen = Math.hypot(IX, VRIDGE - VY);
+    [-1, 1].forEach((sd) => {
+      add(VDS, box(cLen + 0.4, 0.30, NL - 2 * WT), sd * IX / 2,
+        (VY + VRIDGE) / 2, NZC, { rz: sd * cAng });
+    });
+    add(VDS, box(0.6, 0.4, NL - 2 * WT), 0, VRIDGE - 0.1, NZC);
+    // painted panels: the ceiling of the nave is boarded and painted, not bare
+    const PAINT = (() => {
+      const mm = ctx.mat('cream');
+      if (!mm || !mm.clone) return 'cream';
+      const c = mm.clone();
+      c.color.setHex(0xc9a06a);
+      return c;
+    })();
+    for (let i = -6; i <= 6; i++) {
+      const z = NZC + i * (NL - 2 * WT) / 13.5;
+      add(BA, box(0.5, 0.34, 0.6), 0, VRIDGE - 0.34, z);        // a rib across the ridge
+      for (const sd of [-1, 1]) {
+        add(BA, box(0.45, 0.30, 0.55), sd * IX * 0.45, VY + (VRIDGE - VY) * 0.55 - 0.3, z);
+        add(PAINT, box(cLen * 0.42, 0.06, 3.6), sd * IX * 0.52,
+          VY + (VRIDGE - VY) * 0.48 - 0.34, z + 1.6, { rz: sd * cAng });
+      }
+    }
+
+    /* ---- the gilded retable at the east end ----------------------------- */
+    (function retable() {
+      const z0 = ZB + WT + 0.1;
+      block(BA, 13.0, 0.9, 3.2, 0, Y0 + 0.5, z0 + 1.6);          // the predella
+      block(BA, 11.0, 1.2, 2.4, 0, Y0 + 1.4, z0 + 1.2);
+      // four gilt columns carrying an entablature and a broken pediment
+      for (const x of [-4.4, -1.5, 1.5, 4.4]) {
+        add('gold', ctx.cyl(0.42, 0.46, 6.4, 10), x, Y0 + 2.6, z0 + 0.9);
+        add('gold', ctx.cyl(0.58, 0.58, 0.36, 10), x, Y0 + 9.0, z0 + 0.9);
+      }
+      add('gold', box(10.4, 0.7, 1.1), 0, Y0 + 9.6, z0 + 0.9);    // entablature
+      add('gold', box(9.0, 0.5, 0.9), 0, Y0 + 10.2, z0 + 0.9);
+      // the centre panel: a gilt frame round a dark painting
+      add(DK, box(3.4, 4.6, 0.2), 0, Y0 + 6.4, z0 + 0.5);
+      add('gold', box(4.0, 5.2, 0.16), 0, Y0 + 6.4, z0 + 0.42);
+      // tabernacle and its crown
+      add('gold', box(2.2, 2.0, 1.4), 0, Y0 + 2.5, z0 + 1.6);
+      add('gold', ctx.dome(1.0, 1.2, 12), 0, Y0 + 3.5, z0 + 1.6);
+      add('gold', ctx.cone(0.24, 0.9, 6), 0, Y0 + 4.9, z0 + 1.6);
+    })();
+
+    /* ---- the two side altars -------------------------------------------- */
+    [-1, 1].forEach((sd) => {
+      const z = NZC + sd * 6.0;
+      const x = sd * (IX - 0.4);
+      block(BA, 0.9, 0.7, 4.6, x - sd * 0.5, Y0 + 0.5, z);
+      add('gold', box(0.7, 0.5, 3.4), x - sd * 0.9, Y0 + 1.4, z);
+      add(DK, box(0.2, 2.6, 2.0), x - sd * 1.05, Y0 + 3.0, z);
+      add('gold', box(0.16, 3.0, 2.4), x - sd * 1.12, Y0 + 3.0, z);
+      for (const o of [-1.5, 1.5]) {
+        add('gold', ctx.cyl(0.20, 0.22, 2.6, 8), x - sd * 0.95, Y0 + 1.6, z + o);
+      }
+    });
+
+    /* ---- the chapel of the relics, on the north flank ------------------- */
+    (function casket() {
+      const x = -(IX - 1.6), z = NZC - 9;
+      block(BA, 3.4, 1.5, 5.0, x - 0.4, Y0 + 0.5, z);             // the platform
+      add('stone', ctx.cyl(0.9, 0.9, 0.9, 8), x - 0.4, Y0 + 2.6, z);
+      // the silver casket, in its glass case
+      add('gold', box(2.0, 0.9, 1.2), x - 0.4, Y0 + 3.4, z);
+      add('plasterWhite', box(1.8, 0.2, 1.0), x - 0.4, Y0 + 3.95, z);
+      add('glass', box(2.6, 2.4, 1.8), x - 0.4, Y0 + 3.6, z);
+      // a lamp and a pair of candles in front of it
+      add('gold', ctx.cyl(0.10, 0.10, 0.8, 6), x + 0.6, Y0 + 2.4, z + 1.6);
+      add('gold', ctx.sph(0.16, 8), x + 0.6, Y0 + 2.9, z + 1.6);
+    })();
+
+    /* ---- pews ----------------------------------------------------------- */
+    for (let i = 0; i < 9; i++) {
+      const z = NZC + 12 - i * 2.6;
+      [-1, 1].forEach((sd) => {
+        add(BA, box(5.4, 0.16, 0.7), sd * 3.4, Y0 + 1.5, z);
+        add(BA, box(5.4, 1.0, 0.14), sd * 3.4, Y0 + 2.0, z - 0.34);
+        add(BA, box(0.14, 1.0, 0.7), sd * 3.4 - 2.6, Y0 + 2.0, z);
+        add(BA, box(0.14, 1.0, 0.7), sd * 3.4 + 2.6, Y0 + 2.0, z);
+      });
+    }
+    // light for the interior: without it the nave is a black box
+    // uplights on the vault, and one downlight on the floor: a light hung under
+    // the vault faces away from the surface it is meant to light
+    /* The engine's floods are spotlights that only switch on towards dusk, so a
+       midday interior gets the ambient alone and renders as a black box. The
+       inner faces are lined with a faintly self-lit plaster instead: at this
+       scale that is what the light off lime-washed walls looks like, and it
+       touches nothing on the outside. */
+    const INNER = (() => {
+      const mm = ctx.mat('cream');
+      if (!mm || !mm.clone) return 'cream';
+      const c = mm.clone();
+      c.color.setHex(0xd6c6a8);
+      if (ctx.THREE && c.emissive) {
+        c.emissive = new ctx.THREE.Color(0x6a5940);
+        c.emissiveIntensity = 1.0;
+      }
+      return c;
+    })();
+    [-1, 1].forEach((sd) => {
+      add(INNER, box(0.06, NH - Y0 - 1.0, NL - 2 * WT), sd * (IX - WT / 2 - 0.03),
+        Y0 + (NH - Y0 - 1.0) / 2, NZC);
+    });
+    add(INNER, box(NW - 2 * WT, 0.05, NL - 2 * WT), 0, Y0 + 0.52, NZC);
+    add(INNER, box(NW - 2 * WT, NH - Y0 - 1.0, 0.06), 0, Y0 + (NH - Y0 - 1.0) / 2, ZB + WT + 0.03);
+
+    // A 55 m interior needs candle-power on the scale of the exterior floods,
+    // not the 1000 the first attempt used: at that intensity the nave rendered
+    // as a black box with a lit altar.
+    ctx.light({ pos: [0, NH - 3, NZC + 16], target: [0, Y0 + 2, NZC + 8], color: 0xffe6c0, intensity: 5200, distance: 120 });
+    ctx.light({ pos: [0, NH - 3, NZC - 2], target: [0, Y0 + 2, NZC - 8], color: 0xffe6c0, intensity: 5200, distance: 120 });
+    ctx.light({ pos: [0, NH - 3, NZC - 18], target: [0, Y0 + 3, NZC - 24], color: 0xffd9a8, intensity: 4200, distance: 110 });
+    ctx.light({ pos: [0, Y0 + 4, ZB + 8], target: [0, Y0 + 7, ZB + 1], color: 0xffe0b0, intensity: 2600, distance: 60 });
+    ctx.light({ pos: [0, Y0 + 3, NZC + 4], target: [0, NH - 1, NZC - 4], color: 0xfff0d8, intensity: 1800, distance: 80 });
     block(BA, NW + 0.5, 0.5, NL + 0.3, 0, Y0, NZC);          // plinth course
     block(BA, NW + 1.0, 0.7, NL + 0.7, 0, NH - 0.7, NZC);    // eaves cornice
     // the projecting gallery that runs along both long sides

@@ -46,7 +46,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§38):** Mahabodhi's niches — a seated Buddha in each recess, three
+**Latest run (§39):** the Basilica's interior — the nave hollowed, a boarded
+ceiling, the gilded retable, two side altars, the casket chapel and pews, plus
+an Interior view and a rewritten tour stop. 28k triangles, boot 45 s,
+`audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
+
+**Previous run (§38):** Mahabodhi's niches — a seated Buddha in each recess, three
 to a row as one geometry; and a continuous coping on the vedika railing. 52k →
 60k triangles, boot 40 s, `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci`
 clean.
@@ -1087,6 +1092,34 @@ destructure line before writing a new geometry helper. `THREE` is bound now.
 
 Still soft: the figure fills its recess but the lower half sits in shadow, so at
 the home distance a niche reads as a dark slot with a pale head in it.
+
+---
+
+### 39. The Basilica — an interior, and why lights did nothing
+
+The tour used to say "the interior, with its gilded altars and painted ceiling,
+is not modelled here". It is now: the nave was one solid block and is hollow,
+with two long walls, an east wall pierced by a chancel arch, a boarded ceiling,
+the gilded retable at the east end, two side altars, the chapel of the relics
+with its casket under glass, pews, and a named **Interior** view.
+
+Three things cost time and are worth keeping:
+
+- **`ctx.light` is not a light.** Every light spec becomes a *SpotLight* whose
+  intensity ramps with the time of day — they are floods, and at midday they are
+  off. Raising the interior lights from 1,100 to 5,200 changed nothing at all,
+  which is the tell: when a change has *no* effect on the render, the value is
+  not being read.
+- **A rotated open cylinder does not make a vault.** `cyl(r, r, len, 26, true)`
+  with `rx: π/2` gave two lit flanks and a band of nothing down the crown. Two
+  sloped boards cannot miss — there is no back face to get wrong.
+- **A midday interior is lit by ambient alone**, and the engine's ambient is
+  deliberately low (§7). The inner faces are lined with faintly self-lit plaster
+  instead, which touches nothing outside and is what light off lime-washed walls
+  looks like at this scale.
+
+Still soft: the pews read as dark silhouettes, the ceiling's outer boards are
+dim, and the chancel beyond the east wall is not modelled.
 
 ---
 

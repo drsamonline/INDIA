@@ -87,7 +87,7 @@ from the code.
 | ~~**Kandariya**~~ | **done** — the figures were rebuilt as seven-piece sculpture in an earlier pass; what was wrong was the **shikhara**. Its urushringas were straight cones three times taller than wide, four overlapping up each corner, so the tower read as a string of beads down the edge. Each is now a miniature of the tower with the same curvilinear profile, five rows climbing each corner and one pair on each face of the lower three |
 | ~~**CSMT**~~ | **done** — the menagerie existed but was 0.85 m on a 26 m skyline, four pixels at the home view, and the same cream as the wall behind it. Now 3× the size on a darker stone, so the gable apexes carry their animals as silhouettes against the sky |
 | ~~**Mahabodhi**~~ | **done** — the niches were black boxes: a dash of shadow up the tower. Each now holds a seated Buddha (three tapered prisms, one geometry per row of three), and the vedika has a continuous coping instead of a fence of posts |
-| **Basilica** | the altars, the casket chapel and the painted ceiling do not exist; the tour admits it |
+| ~~**Basilica**~~ | **done** — the nave was one solid block. It is hollow now: two walls, an east wall with a chancel arch, a boarded ceiling, the gilded retable, two side altars, the casket chapel with its silver casket under glass, and pews, with a named Interior view. The tour no longer apologises |
 | **Rani ki Vav** | 292 pillars built, 226 survive, 216 modelled — but the wall figures are flat |
 
 ### Tier 3 — close to right, needs polish (8)
