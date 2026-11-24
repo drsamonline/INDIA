@@ -46,7 +46,12 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§40):** Sanchi's vedika — a continuous coping course over both
+**Latest run (§41):** Mysore's arches — a cusped multifoil shape now drives both
+the openings and their frames (five lobes on the big arches, three or four on
+the smaller ones). 85k → 166k triangles, boot 79 s, `audit_data` 0, `linkcheck`
+26 pages, `tintcheck --ci` clean.
+
+**Previous run (§40):** Sanchi's vedika — a continuous coping course over both
 railings, and a lotus boss on every third post. 51k → 63k triangles, boot 51 s,
 `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci` clean.
 
@@ -1142,6 +1147,29 @@ coping stones in every photograph.
 The same vocabulary as the Mahabodhi vedika (§38) and the Charminar frieze
 (§33): a railing is posts, rails **and** a coping, and it is the coping that
 makes it read as a wall of stone rather than a fence.
+
+---
+
+### 41. Mysore — cusped arches, and why semicircular lobes failed
+
+Every bay of the palace carried a plain round head; the real verandah is cusped
+on every bay. A local `cuspedShape(w, h, n)` now drives both the openings in the
+pierced panel and their frames.
+
+**The first attempt was worse than what it replaced.** Each lobe was a
+semicircle of radius `w/2n`, which on a 6 m opening with five lobes is 0.6 m —
+so the head was 0.6 m deep on a 6.6 m arch and every opening came out a
+rectangle with a scalloped fringe over it. A multifoil head has to be a third of
+the opening's height, and that means the lobes are **pointed**: each one is two
+quadratic curves meeting at an apex, not a semicircle.
+
+The cost is triangles — 85k → 166k, because every hole in every pierced panel is
+now a many-segment path, and there are four faces on three storeys. It is the
+most expensive polish item so far and the page still boots in 79 s.
+
+Still soft: the amber glazing behind each bay is a plain rectangle, so at a
+distance an opening reads as a window with a cusped transom rather than as a
+cusped arch with a shaded gallery behind it.
 
 ---
 

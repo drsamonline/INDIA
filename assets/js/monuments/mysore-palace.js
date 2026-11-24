@@ -115,9 +115,36 @@ export default {
     const PZD = PZ - HZ, PZC = (HZ + PZ) / 2;
 
     /* --------------------------------------------------------- cheap frames */
+    /* A cusped multifoil arch: the head is a row of small semicircular lobes
+       whose junctions make the cusps, which is the arch of the real palace's
+       verandah on every bay. A plain round head is the difference between a
+       colonial verandah and this building. */
+    const lobesFor = (w) => (w > 4.5 ? 5 : (w > 3.0 ? 4 : 3));
+    /* The lobes are pointed, not semicircular: with semicircular lobes the head
+       is only half a lobe deep (0.6 m on a 6 m opening) and the arch reads as a
+       rectangle with a scalloped fringe. Each lobe here is two curves meeting at
+       a point, over a head a third of the opening's height. */
+    const cuspedShape = (w, h, n) => {
+      const sh = new T3.Shape();
+      const hw = w / 2;
+      const H = Math.min(h * 0.34, w * 0.34);        // depth of the head
+      const hs = Math.max(0.2, h - H);               // the springing line
+      const lw = w / n;                              // one lobe's chord
+      sh.moveTo(-hw, 0);
+      sh.lineTo(-hw, hs);
+      for (let i = 0; i < n; i++) {
+        const cx0 = -hw + lw * (i + 0.5);
+        sh.quadraticCurveTo(cx0 - lw * 0.30, hs + H * 0.92, cx0, hs + H);
+        sh.quadraticCurveTo(cx0 + lw * 0.30, hs + H * 0.92, cx0 + lw * 0.5, hs);
+      }
+      sh.lineTo(hw, 0);
+      sh.closePath();
+      return sh;
+    };
     function frame(w, h, thick, depth) {
-      const outer = ctx.archShape(w, h, 0.5);
-      const inner = ctx.archShape(Math.max(w - thick * 2, 0.3), Math.max(h - thick * 1.1, 0.3), 0.5);
+      const outer = cuspedShape(w, h, lobesFor(w));
+      const inner = cuspedShape(Math.max(w - thick * 2, 0.3), Math.max(h - thick * 1.1, 0.3),
+        lobesFor(w - thick * 2));
       const pts = inner.getPoints(7).map((p) => new T3.Vector2(p.x, p.y + thick * 0.6));
       outer.holes.push(new T3.Path(pts));
       return new T3.ExtrudeGeometry(outer, { depth, bevelEnabled: false, curveSegments: 3 });
@@ -126,7 +153,7 @@ export default {
       const s = new T3.Shape();
       s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(w / 2, h); s.lineTo(-w / 2, h); s.closePath();
       for (const o of holes) {
-        const a = ctx.archShape(o.w, o.h, 0.5);
+        const a = cuspedShape(o.w, o.h, lobesFor(o.w));
         const pts = a.getPoints(9).map((p) => new T3.Vector2(p.x + o.x, p.y + (o.y || 0)));
         s.holes.push(new T3.Path(pts));
       }
