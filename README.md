@@ -1,5 +1,11 @@
 # INDIA — monuments in code
 
+<!-- shot:start -->
+
+![Screenshot](docs/shot.png)
+
+<!-- shot:end -->
+
 **Twenty-four Indian monuments, rebuilt as live 3D miniatures in the browser.** No photographs in the models, no downloaded meshes, no build step: every dome, bracket and lattice screen is generated from code with [three.js](https://threejs.org), lit by a physical sky, and paired with the history behind it.
 
 [![Licence: CC BY-NC 4.0](https://img.shields.io/badge/licence-CC%20BY--NC%204.0-e8873a?style=flat-square)](LICENSE)
