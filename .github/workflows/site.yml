@@ -39,7 +39,11 @@ jobs:
 
   render:
     name: render a page in a headless browser
-    if: github.event_name == 'pull_request'
+    # This job held the accessibility gate, the render check and the keyboard
+    # checks, and it only ran on pull requests — which this repository does not
+    # open. Every push to main therefore skipped all three, and the workflow
+    # looked green in seventeen seconds because it had only done the static
+    # checks. It runs on push now; that is the only way the gate is a gate.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
