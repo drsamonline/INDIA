@@ -423,6 +423,32 @@ source rather than rendering.
 
 ---
 
+### 65. Measuring all twenty-four, and what the measurement can say
+
+`tools/measure.py --all` was run over every page: 24 renders, about forty minutes.
+The results are in `DIMENSIONS.md` as a new table, with the bounding-box height
+beside the tallest single mesh.
+
+**The tool measures the box, not the building.** Everything the page draws that is
+not sky, terrain or weather goes into it, so a fort on a rock reads as 135 m
+(Mehrangarh, +276 per cent), a stepwell below grade reads as 53 m (Rani ki Vav,
++96), and a flag mast adds 10 m (Somnath, +23). Fourteen of the twenty-four are
+within 12 per cent, and in almost every one of those the note in the table names
+the plinth or parapet that accounts for the difference.
+
+**Three are unexplained** and are marked as such rather than adjusted: Konark
++48 per cent, CSMT +28, the Basilica +31. All three stand on flat ground with no
+mast, rock or well to account for it — so either the model is too tall or the
+published figure measures a different thing. Adjusting a model to satisfy a
+measurement whose scope is unsettled is exactly how the Shore Temple's tier count
+got averaged; they are recorded, not "fixed".
+
+**The lesson about the tool:** `tallest single mesh` and `bounding box` answer
+different questions, and neither answers "is the building the right height" on its
+own. A calliper that reports a number is not the same as a check.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

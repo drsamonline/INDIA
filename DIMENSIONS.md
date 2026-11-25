@@ -385,3 +385,51 @@ UNESCO nomination dossiers and ICOMOS evaluations, the relevant Wikipedia
 articles, and the survey literature (Kaye 1918 for Jantar Mantar, Swarup 1910
 for Konark, Peña et al. for the Qutb Minar section). Dimensions marked
 *(photo)* were scaled from the reference photograph in `assets/img/`.*
+
+## Measured, all twenty-four
+
+`tools/measure.py` loads each page, walks the scene and reports the world-space
+extent of everything that is not sky, ground or weather. Run over all 24 on
+2026-11-26, comparing the **bounding-box height** with the published figure in the
+tables above, and the **tallest single mesh** beside it — the two differ wherever a
+building is assembled from separate pieces.
+
+| Monument | Real | Box height | Δ | Tallest mesh | What the box includes |
+|---|---|---|---|---|---|
+| [Taj Mahal](monuments/taj-mahal.html) | 73.0 | **75.1** | +3% | 69.8 | — |
+| [Qutub Minar](monuments/qutub-minar.html) | 72.5 | **73.9** | +2% | 72.5 | — |
+| [Hawa Mahal](monuments/hawa-mahal.html) | 15.0 | **16.8** | +12% | 16.2 | the plinth and parapet |
+| [Charminar](monuments/charminar.html) | 56.0 | **56.0** | +0% | 54.5 | — |
+| [Gateway Of India](monuments/gateway-of-india.html) | 26.0 | **28.6** | +10% | 28.1 | the plinth and steps |
+| [India Gate](monuments/india-gate.html) | 42.4 | **42.1** | -1% | 42.1 | — |
+| [Mysore Palace](monuments/mysore-palace.html) | 44.8 | **43.3** | -3% | 33.4 | — |
+| [Golden Temple](monuments/golden-temple.html) | 16.5 | **28.9** | +75% | 27.9 | the shrine is 16.5 m; the box includes the surrounding buildings and the gate |
+| [Konark Sun Temple](monuments/konark-sun-temple.html) | 30.0 | **44.4** | +48% | 42.7 | **unexplained** — the deul is 30 m; 44.4 needs a look |
+| [Sanchi Stupa](monuments/sanchi-stupa.html) | 16.5 | **22.7** | +38% | 22.1 | the railing and toranas stand above the dome |
+| [Victoria Memorial](monuments/victoria-memorial.html) | 56.0 | **62.4** | +11% | 59.1 | the plinth and the Angel above the dome |
+| [Meenakshi Temple](monuments/meenakshi-temple.html) | 51.9 | **55.7** | +7% | 54.8 | the plinth and the gopuram finials |
+| [Lotus Temple](monuments/lotus-temple.html) | 34.0 | **37.8** | +11% | 34.0 | the plinth and the pools' kerbs |
+| [Shore Temple](monuments/shore-temple.html) | 18.0 | **19.7** | +9% | 18.8 | the plinth |
+| [Rani Ki Vav](monuments/rani-ki-vav.html) | 27.0 | **52.9** | +96% | 36.3 | a stepwell: the box spans the top terrace to the well floor |
+| [Amber Fort](monuments/amber-fort.html) | 52.0 | **79.8** | +53% | 75.2 | the hill the palace stands on |
+| [Csmt Mumbai](monuments/csmt-mumbai.html) | 48.8 | **62.3** | +28% | 56.7 | **unexplained** — 48.8 is to the dome; the box is 62.3 |
+| [Mahabodhi Temple](monuments/mahabodhi-temple.html) | 52.0 | **57.2** | +10% | 52.5 | the plinth and the tower's finial |
+| [Statue Of Unity](monuments/statue-of-unity.html) | 240.0 | **249.9** | +4% | 180.8 | statue 182 m on a 58 m plinth; the box spans both |
+| [Kandariya Mahadeva](monuments/kandariya-mahadeva.html) | 31.0 | **33.0** | +6% | 31.9 | the plinth |
+| [Basilica Bom Jesus](monuments/basilica-bom-jesus.html) | 25.0 | **32.8** | +31% | 32.8 | **unexplained** — 25 m is the facade; the box is 32.8 |
+| [Mehrangarh Fort](monuments/mehrangarh-fort.html) | 36.0 | **135.3** | +276% | 129.6 | the rock the fort stands on, ~100 m |
+| [Jantar Mantar](monuments/jantar-mantar.html) | 27.0 | **27.4** | +1% | 27.1 | — |
+| [Somnath Temple](monuments/somnath-temple.html) | 50.0 | **61.3** | +23% | 60.9 | the flag mast |
+
+**Read this table carefully.** The box is not the building: it is everything the
+page draws that is not sky, terrain or weather, so a fort on a rock, a stepwell
+below grade, a flag mast or a plinth all read as height. Where the note names the
+extra object, the model is not wrong — the measurement is measuring more than the
+published figure.
+
+**Three are unexplained and worth a look:** Konark at +48 per cent, CSMT at +28,
+and the Basilica at +31. Each is a building on flat ground with no mast, rock or
+well to account for the difference, so either the model is too tall or the
+published figure measures something else. They are marked rather than adjusted,
+because adjusting a model to satisfy a measurement whose scope is not settled is
+how the second shrine's tier count got averaged in the first place.
