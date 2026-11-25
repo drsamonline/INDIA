@@ -40,7 +40,10 @@ def main():
 
     fails = []
     with sync_playwright() as p:
-        b = p.chromium.launch(executable_path='/usr/local/bin/chromium',
+        # CHROME_PATH, like every other tool here: on CI the browser is wherever
+        # playwright put it, and hard-coding this path failed the job the first
+        # time these browser steps were allowed to run at all
+        b = p.chromium.launch(executable_path=os.environ.get('CHROME_PATH', '/usr/local/bin/chromium'),
                               args=['--no-sandbox', '--disable-dev-shm-usage',
                                     '--use-angle=swiftshader', '--enable-unsafe-swiftshader'])
         pg = b.new_page(viewport={'width': 1000, 'height': 700})
