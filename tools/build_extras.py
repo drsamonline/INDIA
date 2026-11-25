@@ -31,7 +31,8 @@ open(os.path.join(ROOT, '404.html'), 'w', encoding='utf-8').write("""<!DOCTYPE h
 <link rel="stylesheet" href="/INDIA/assets/css/site.css">
 </head>
 <body>
-<main class="wrap" style="min-height:70vh;display:flex;flex-direction:column;justify-content:center;padding-top:12vh">
+<a class="skip-link" href="#main">Skip to the content</a>
+<main class="wrap" id="main" tabindex="-1" style="min-height:70vh;display:flex;flex-direction:column;justify-content:center;padding-top:12vh">
   <p class="eyebrow">404</p>
   <h1 style="font-size:clamp(34px,6vw,68px);margin:10px 0 14px">This page has not been built.</h1>
   <p style="max-width:52ch;color:var(--ink-2)">The atlas holds twenty-four monuments. Whatever you were looking for is not one of them, or the address has a typo.</p>

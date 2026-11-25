@@ -62,5 +62,7 @@ jobs:
         run: python3 tools/check_all.py --only qutub-minar golden-temple --out shots
       - name: Check the accessibility contract
         run: python3 tools/check_a11y.py --only qutub-minar
+      - name: Check the landing, credits and 404 pages
+        run: python3 tools/check_a11y.py --root
       - name: Exercise the documented keyboard shortcuts
         run: python3 tools/check_ui.py --only qutub-minar

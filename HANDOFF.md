@@ -350,6 +350,29 @@ asked for, and it made the site's own front door ambiguous.
 
 ---
 
+### 62. The three pages nobody was checking
+
+The accessibility gate has always walked `monuments/*.html`. It never looked at
+`index.html`, `credits.html` or `404.html` — the pages a visitor meets first. They
+had one `h1` each, a `<main>`, `lang="en"` and alt text on every image, but **no
+skip link**, which the other twenty-four pages have all had for weeks.
+
+Fixed, and now gated:
+
+- a skip link on all three, first in tab order, visible on focus, pointing at a
+  `main` with `tabindex="-1"` so the jump actually moves focus
+- `check_a11y.py --root` — a separate check for pages that are not monuments:
+  skip link present and first, exactly one `h1`, a `main` landmark, the skip
+  link's target existing, alt on every image, and a `lang`
+- CI runs it in `site.yml` alongside the monument check
+
+All three pass at 1200 wide and at 390 × 844.
+
+**Why it was missed:** the tool's URL was built as `monuments/<id>.html`, so a
+root page could not be expressed. The fix was a second mode, not a parameter.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
