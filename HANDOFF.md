@@ -317,6 +317,36 @@ module file, so its credit lives only in the JSON and the credits table.
 
 ---
 
+### 61. The app apparatus is gone — this is a website
+
+A previous session added a second front door for an app that was never released as
+an app. All of it is removed:
+
+| Removed | What it was |
+|---|---|
+| `.github/workflows/build-apps.yml` | built a portable EXE and a signed APK from `docs/play`, published a rolling `app-latest` release, and deployed `docs/` |
+| `docs/index.html` | an app landing page with `.exe` and `.apk` download buttons and a "live demo" link to `/play/` |
+| `docs/play/index.html` | a copy of the atlas at a second URL, with its own canonical tag pointing at `/play/` |
+| `docs/robots.txt`, `docs/sitemap.xml` | stale copies that listed `/play/` |
+| the `app-latest` release | the published EXE, APK and Linux binary, and its tag |
+
+**The atlas was never moved.** It has been at the repository root all along, and
+Pages has been serving `main` / (root) the whole time — `index.html`, `credits.html`,
+`404.html` and `monuments/`. The app material was *additional*, published under
+`/docs/`, which is why the site looked as if it had a landing page and a `/play/`
+path.
+
+`docs/` now holds only what is referenced: `WORKLOG.md` and the three images
+(`gallery.jpg`, `preview.jpg`, `shot.png`). Deployment is GitHub's own
+`pages-build-deployment`, which is what the site needs: static files, no build.
+
+**If anyone proposes an app again**, the reason to say no is in this repository's
+own history: the pipeline had to be patched four times in one day to stay green
+(`0d1b330`, `7a84f07`, `4842ea6`, `51292ce`), it published an artefact nobody
+asked for, and it made the site's own front door ambiguous.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
