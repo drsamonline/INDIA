@@ -34,6 +34,8 @@ jobs:
         run: python3 tools/linkcheck.py
       - name: Audit the data file
         run: python3 tools/audit_data.py --strict
+      - name: Every page's home view frames its building
+        run: python3 tools/framecheck.py
       - name: No material tinted off a textured base
         run: python3 tools/tintcheck.py --ci
 

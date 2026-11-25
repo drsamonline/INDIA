@@ -396,6 +396,33 @@ is worse than a red one, because it is counted as evidence.
 
 ---
 
+### 64. framecheck was a report, not a check
+
+`framecheck.py` compared every named view and tour stop against the building's full
+height, so every detail view "failed" — a view called *Flag*, *Portal*, *Carving*
+or *The Iron Pillar* is meant to be close — and it returned 0 whatever it found.
+120 cameras flagged, no signal, nobody able to act on it.
+
+Now it checks what the tool was for: **the home camera must frame the building**,
+because that is what the page opens on and what the gallery and social card show.
+Detail views are listed only when they frame under a quarter of the building, and
+labelled *close-up* rather than as a fault — several of them are looking at
+something that is not the building at all (the Iron Pillar, the bodhi tree).
+
+| Verdict | Meaning | Fails CI |
+|---|---|---|
+| home SHORT | the page opens cropped | **yes** |
+| close-up | a detail view, or a view of another object | no |
+
+**Result on the current site: 0 home cameras fail.** Four detail views are listed
+for a glance: Qutb's *Crown* and *Iron Pillar*, Charminar's *Crossing*, Mahabodhi's
+*Bodhi Tree*. All four are what they say they are.
+
+It runs in `site.yml` now, on push, and takes a second because it reads the module
+source rather than rendering.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

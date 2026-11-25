@@ -75,20 +75,35 @@ def main():
             rows.append(('tour: ' + name, p, t))
         if not rows:
             continue
+        # the home camera is the one that must show the building: it is what the
+        # page opens on, what the gallery and the social card use. Detail views
+        # are meant to be close — the old check flagged every one of them and
+        # returned zero either way, which is a report nobody can act on.
+        home = re.search(r"home:\s*\{\s*pos:\s*\[([^\]]+)\]\s*,\s*target:\s*\[([^\]]+)\]", src)
+        if home:
+            hp = [float(x) for x in home.group(1).split(',')]
+            ht = [float(x) for x in home.group(2).split(',')]
+            hd = math.dist(hp, ht)
+            hext = 2 * hd * math.tan(math.radians(fov / 2))
+            if hext < height * 1.25 * (1 - a.tol):
+                bad += 1
+                print(f'{mid}  (fov {fov:g}, height {height} m)')
+                print(f'   {"home":44s} d={hd:6.0f} m  frames {hext:5.0f} m  of {height:5.1f}  SHORT')
         out = []
         for name, p, t in rows:
             d = math.dist(p, t)
             ext = 2 * d * math.tan(math.radians(fov / 2))
-            need = height * 1.25   # perspective and an upward look eat the margin
-            short = ext < need * (1 - a.tol)
-            if short:
-                bad += 1
-                out.append(f'   {name:44s} d={d:6.0f} m  frames {ext:5.0f} m  of {height:5.1f}  SHORT')
+            # a detail view is allowed to frame a quarter of the building. Below
+            # that it is usually looking at something that is not the building —
+            # the Iron Pillar, the bodhi tree, a crossing — so this is listed for
+            # a human to glance at, not counted as a failure
+            if ext < height * 0.25:
+                out.append(f'   {name:44s} d={d:6.0f} m  frames {ext:5.0f} m  of {height:5.1f}  close-up')
         if out:
-            print(f'{mid}  (fov {fov:g}, height {height} m)')
+            print(f'{mid}  (fov {fov:g}, height {height} m) — detail views, expected:')
             print('\n'.join(out))
-    print(f'\n{bad} camera(s) frame less than the building.')
-    return 0
+    print(f'\n{bad} home camera(s) frame less than the building.')
+    return 1 if bad else 0
 
 
 if __name__ == '__main__':
