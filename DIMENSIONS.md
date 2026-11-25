@@ -308,6 +308,45 @@ than the 1.8652 ha the nomination records.
 
 ---
 
+## Taj Mahal
+
+The Taj is the one page whose geometry is not this project's: it is the original
+single-file scene, adapted by `tools/build_taj.py`. Its figures are therefore the
+scene's own, and the scale below is derived rather than authored — 1 scene unit
+= 57.0 m / 17.0 units = **3.353 m**, taken from the tomb's own side, which the
+scene draws as 17 units across.
+
+| Element | Real | Model | Source |
+|---|---|---|---|
+| Total height to finial | **73 m** (240 ft) | 69.9 m | Britannica; the 74 m reading is "above garden level" and 58 m on UNESCO's Japanese description measures the dome from a different base — see below |
+| Plinth | 95.5 m square, 6–7 m high | **70.4 × 67.1 m**, 6.7 m high | Wikipedia 95.5 m; Britannica 95 m; the model's plinth is 26 per cent small against the tomb |
+| Tomb body | 57 m square, corners chamfered | 57.0 m square, 3.6 u chamfer | Wikipedia; by definition of the scale |
+| Body height to roof | pishtaq 33 m | 31.5 m | Wikipedia |
+| Dome | 23 m on a 12 m drum; outer shell 44.4 m on the state site's measure | 21.5 m on a 7.0 m drum | Wikipedia; tajmahal.gov.in (44.4 m outer, 24.35 m inner) |
+| Finial | 9.6 m, gilded | 9.1 m | Wikipedia |
+| Minarets | more than 40 m; 42 m; 137 ft ≈ 41.8 m | 43.6 m | Wikipedia; Britannica; tajmahal.gov.in |
+| Charbagh | 300 m square, four quadrants | compressed — the whole complex is ~32 u ≈ 107 m deep | Wikipedia |
+
+**Where the sources disagree, and what was chosen.** The building's height has no
+settled figure. Britannica gives 240 ft (73 m) to the tip of the finial and names
+that datum; the same entry's 243 ft (74 m) is "above garden level"; the state site
+gives an outer dome of 44.4 m without naming a base; and UNESCO's Japanese
+description gives the central dome as 58 m, credited to a Japanese federation
+rather than to a survey. Only Britannica names both a base and an end point, so
+**73 m to the finial** is the reading used here, and the model's 69.9 m is recorded
+as 4 per cent short rather than adjusted to fit.
+
+**The plinth is the one real discrepancy.** In the scene the plinth is 21 × 20
+units against a 17-unit tomb, a ratio of 1.24; the real ratio is 95.5 / 57 = 1.68.
+That makes the model's platform noticeably tight under the mausoleum. It was not
+changed: the deck, the water channel, the charbagh quads and the tour viewpoints
+are all keyed to the plinth's footprint, and widening it by a third would move
+every one of them. Recorded rather than silently corrected.
+
+**Not to scale by design:** the garden. The scene compresses the 300 m charbagh
+into about 107 m so that the tomb fills the frame, which is why the charbagh's
+proportions read tighter than a plan does.
+
 ## Disputed figures
 
 These are the dimensions where the sources genuinely disagree and the model
