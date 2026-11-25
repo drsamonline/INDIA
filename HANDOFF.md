@@ -46,7 +46,15 @@ against `data/monuments.json`; a full rebuild produces no diff.
 |---|---|
 | Statue of Unity is not a portrait | The costume and the proportions now follow the supplied turnaround (§29), but the face is still a displacement carved into a loft, not a likeness of Patel. More passes over the same code will not close that; it needs sculpted mesh data, which this pipeline does not do. The Taj is the only page with that depth and it is a 159 KB single scene. |
 
-**Latest run (§53):** the Taj's charbagh — 300 randomly scattered flowers became
+**Latest run (§57–58):** the engine is instrumented (a phase timeline, and a
+`?perf` readout on the page) and the numbers say the site is **not** slow: about
+3 s of page work, of which 2 s is texture generation — the rest of a 24 s headless
+"boot" is rAF throttling. Removing the start-up studio environment saves ~0.7 s a
+page, and it exposed that **`refreshEnv` had never run** (a `ReferenceError`
+swallowed by an empty catch), so the sky environment shipped in §47 was never
+active. Both fixed; `__dbg.scene.environment` is real on every page now.
+
+**Previous run (§53):** the Taj's charbagh — 300 randomly scattered flowers became
 48 beds, each edged with its own low hedge and planted in rows of one colour.
 Taj Part 1 item 5 of 6. `audit_data` 0, `linkcheck` 26 pages, `tintcheck --ci`
 clean.
