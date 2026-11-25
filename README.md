@@ -98,6 +98,11 @@ tools/tintcheck.py          flags material tints taken from textured bases (--ci
 tools/build_gallery.py      rebuilds docs/gallery.jpg from shots/audit
 tools/build_extras.py       robots.txt, sitemap.xml, 404.html
 tools/MONUMENT-CONTRACT.md  how to write a new monument module
+tools/check_a11y_all.py     the a11y gate over every page, resumably, per viewport
+tools/contact_sheet.py      four pages to one image, for checking a global change
+HANDOFF.md                  the brief: state of play, traps, working method
+docs/WORKLOG.md             the history: one numbered section per piece of work
+ROADMAP.md, DIMENSIONS.md   what is left, and measured-vs-model for each monument
 ```
 
 A monument module exports an object with its camera, colours and a `build(ctx)` function. `ctx` supplies primitives (box, cylinder, lathe, dome, arch), composite helpers (arcade, chhatri, railing, tree, person), a palette of forty materials — marble, sandstone, basalt, gold, jali screens — and the scene's floodlights. Everything a module adds is merged by material when it returns.
