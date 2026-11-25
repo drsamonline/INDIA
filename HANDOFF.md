@@ -373,6 +373,29 @@ root page could not be expressed. The fix was a second mode, not a parameter.
 
 ---
 
+### 63. The browser job had never run, and three tools were never exercised
+
+Adding the root-page check meant watching CI, which is how this came out:
+
+**`site.yml`'s `render` job had `if: github.event_name == 'pull_request'`.** This
+repository pushes straight to main and opens no pull requests, so the job — which
+holds the accessibility gate, the render check and the keyboard-shortcut check —
+**never ran**. The workflow reported success in seventeen seconds having done only
+the static checks. Every "CI is green" in this log meant "the static checks pass".
+
+It runs on push now, and the first real run failed at once: `check_ui.py`
+hard-coded `/usr/local/bin/chromium` while every other tool reads `CHROME_PATH`, so
+the keyboard check died on a path that exists only in the dev sandbox. Fixed.
+
+**The gate is live, and it passes:** boot two pages, the accessibility contract,
+the landing/credits/404 pages, and 6/6 keyboard shortcuts — all green on push, not
+on a pull request that never comes.
+
+**The lesson is about verification theatre.** A green tick on a job that is skipped
+is worse than a red one, because it is counted as evidence.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
