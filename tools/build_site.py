@@ -122,6 +122,11 @@ def build_index(monuments):
     out = out.replace('__COUNTWORD__', words.get(len(monuments), str(len(monuments))))
     out = out.replace('__STATES__', str(len({m['state'] for m in monuments})))
     out = out.replace('__COUNT__', str(len(monuments)))
+    # how many models sit at each fidelity level, counted rather than claimed
+    lv = [(m.get('fidelity') or {}).get('level', 'approximate') for m in monuments]
+    out = out.replace('__NMEASURED__', str(lv.count('measured')))
+    out = out.replace('__NAPPROX__', str(lv.count('approximate')))
+    out = out.replace('__NSTUDY__', str(lv.count('study')))
     out = out.replace('__FIRSTNAME__', esc(monuments[0]['name']))
     out = out.replace('__FIRSTID__', monuments[0]['id'])
     out = out.replace('__FIRSTIMG__', monuments[0]['image']['src'])

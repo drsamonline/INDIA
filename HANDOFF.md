@@ -298,7 +298,10 @@ Each carries a one-line reason naming what the model *lacks*, not what it has:
 is not a portrait of Sardar Patel", "the menagerie is modelled at three times its
 true scale, because at 0.85 m it was invisible".
 
-**Where it shows:** the About drawer of every monument (a level pill, the reason,
+**Where it shows:** the landing page has a section of its own — "Help build these
+models better", in the nav as *Contribute* and in the footer — with the three
+counts, the credit deal in one paragraph, and a list of the five models where work
+would show first. Then: the About drawer of every monument (a level pill, the reason,
 and "Nobody has improved this model yet — if you do, your name and a link go
 here"); `credits.html` §2, which lists all 24 with level, reason and an "Improved
 by" column; and a `FIDELITY:` header comment in all 23 module files, so the credit

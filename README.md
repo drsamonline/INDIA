@@ -6,6 +6,14 @@
 
 <!-- shot:end -->
 
+**Help build these models better.** Most of them are approximations and some are
+rough: every monument carries a level — *measured*, *approximate* or *study* — and
+the level says what it actually is. If you improve one, **your name and a link go
+on the site and inside the model** — on the monument's page, on its row of the
+[credits page](https://drsamonline.github.io/INDIA/credits.html#improve), and in
+the header comment of its module file. No copyright assignment, nothing to sign.
+[CONTRIBUTING.md](CONTRIBUTING.md) has the deal and the list of what is weakest.
+
 **Twenty-four Indian monuments, rebuilt as live 3D miniatures in the browser.** No photographs in the models, no downloaded meshes, no build step: every dome, bracket and lattice screen is generated from code with [three.js](https://threejs.org), lit by a physical sky, and paired with the history behind it.
 
 [![Licence: CC BY-NC 4.0](https://img.shields.io/badge/licence-CC%20BY--NC%204.0-e8873a?style=flat-square)](LICENSE)
