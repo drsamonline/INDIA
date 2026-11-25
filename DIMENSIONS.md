@@ -8,6 +8,21 @@ Where a published dimension is disputed, both readings are given and the one
 the model uses is marked. Figures marked *(photo)* were scaled from the
 reference photograph in `assets/img/` rather than taken from a survey.
 
+The **Model** column was written from each module's constants and, until now,
+never checked against the geometry that actually gets drawn. `tools/measure.py`
+does that check: it loads the page, walks the scene and reports the world-space
+extent of everything that is not sky, ground or weather. Three spot checks, taken
+off the built mesh:
+
+| Monument | Model column | Measured | |
+|---|---|---|---|
+| Qutb Minar | 72.5 m | **72.5 m** | exact |
+| India Gate | 42 m | **42.1 m** | 0.1 m |
+| Taj Mahal | 69.9 m | **69.8 m** | 0.1 m, and it confirms the 3.353 m scale |
+
+The remaining tables have not been measured this way; the tool takes one monument
+at a time and the numbers above are what a reader can rely on so far.
+
 ---
 
 ## Qutb Minar
