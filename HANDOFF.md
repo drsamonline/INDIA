@@ -1690,6 +1690,26 @@ Also fixed: `tools/contact_sheet.py` called its own coroutine without
 
 ---
 
+### 59. Two stale branches, and why they were deleted
+
+Checked on 2026-11-25 before deleting anything:
+
+| Branch | Head | What it held | Verdict |
+|---|---|---|---|
+| `fix/grant-actions-write` | `4842ea6` | three commits granting `actions: write`, pinning the reusable workflow to a full SHA, and using the caller shape that is green | **already in main** — `build-apps.yml` is byte-identical (`7418071f…`) to main's, landed by another route as `51292ce` |
+| `fix/regenerate-taj-page` | `6b0efc3` | a 22 November snapshot: the Mehrangarh and Basilica rebuilds, and a regeneration of a stale `taj-mahal.html` | **strictly older** — no merge base with main, **0 files added**, **134 deleted**, 66 reverted. Its one fix is superseded by every Taj build since |
+
+Both were deleted from the remote on 2026-11-25 at the owner's instruction. The
+SHAs are recorded here so nothing is lost if either is ever wanted: a deleted
+branch's commits stay reachable on GitHub by SHA for a while, and these two are
+described well enough above to rebuild if they are not.
+
+**What made the decision easy:** `git diff --name-status main <branch>` showed
+**no `A` rows** on the Taj branch. A branch that adds nothing and deletes 134 files
+is not a candidate for merging, whatever its commits say.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
