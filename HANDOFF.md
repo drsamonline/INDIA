@@ -1628,6 +1628,60 @@ silently skipped.
 
 ---
 
+### 57. Measuring the boot, and what it said
+
+I had been calling the site slow on the strength of the a11y timings. That was a
+guess. The engine now records a phase timeline and the numbers are these
+(`?perf` shows them on the page; `window.__india.stats()` returns them):
+
+| Phase | jantar-mantar | meenakshi |
+|---|---|---|
+| materials and textures | 0.62 s | — |
+| sky, ground, env | 0.95 s | — |
+| geometry build | 0.52 s | 1.7 s |
+| to the 88% mark | 2.2 s | — |
+| first frame (shader compile) | 0.93 s | 1.9 s |
+| steady frame | 6 ms | 7 ms |
+
+**The render loop is fast and the build is fast.** What looked like a 24–39 s
+boot is mostly **headless rAF throttling**: the page marks itself ready after
+three frames, and under swiftshader in headless a frame callback can arrive 2.6–7
+seconds apart. The page's own work is about **3 s**, of which 2 s is texture
+generation that any device pays.
+
+So the earlier claim — "Meenakshi and the Taj are slow, the site needs
+optimising" — was **wrong**, and the measurement is what says so.
+
+### 58. The sky environment never ran, and a catch-all hid it
+
+One real optimisation came out of the measurement: the studio `RoomEnvironment`
+was PMREM'd at start-up and then replaced by `refreshEnv()` on the first frame —
+about 0.7 s of every page's boot spent building something that was thrown away.
+Removing it exposed something worse.
+
+**`refreshEnv()` had never executed successfully.** It referenced `elev`, which is
+local to `applySky`, so every call threw `ReferenceError: elev is not defined` —
+into a `catch { }` that kept the previous environment. So §47's claim that the
+engine reflects the sky was **false**: the studio map was doing all the work, and
+my verification (looking at a render) could not tell the two apart because both
+give metals *something* to reflect.
+
+Two fixes and a lesson:
+
+- `elev` is recomputed inside `refreshEnv`; `scene.environment` is now a sky
+  gradient with the sun at its true bearing, and `__dbg.scene.environment` is
+  truthy on every page (verified on two).
+- the empty `catch` now warns to the console. **An empty catch turned a hard
+  failure into a silent one for two commits.**
+- a redundant 400 ms wall-clock throttle inside `refreshEnv` also had to go: the
+  caller stamps `lastEnvMs` immediately before calling, so the guard blocked the
+  very first build.
+
+Also fixed: `tools/contact_sheet.py` called its own coroutine without
+`asyncio.run`, so it had never worked from the command line either.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

@@ -74,7 +74,7 @@ def main():
     if not ids:
         data = json.load(open(os.path.join(ROOT, 'data', 'monuments.json')))
         ids = [m['id'] for m in (data['monuments'] if isinstance(data, dict) else data)]
-    rows, sheet = shoot(ids, w, h, args.time)
+    rows, sheet = asyncio.run(shoot(ids, w, h, args.time))
     sheet.save(args.out)
     for mid, _path, tris, secs, errs in rows:
         print('%-24s %-8s %5.1fs %s' % (mid, tris, secs, errs))

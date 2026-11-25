@@ -13,7 +13,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { Sky } from 'three/addons/objects/Sky.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { Water } from 'three/addons/objects/Water.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -885,6 +884,8 @@ export function boot(mon) {
   const setProgress = (pct, msg) => {
     bootFill.style.width = Math.min(100, pct) + '%';
     if (msg) bootStatus.textContent = msg;
+    // a phase timeline, so a slow boot can be attributed rather than guessed at
+    perf.marks.push([Math.round(performance.now()), pct, (msg || '').slice(0, 24)]);
   };
 
   /* ---------------- state ---------------- */
@@ -920,6 +921,7 @@ export function boot(mon) {
   const clock = new THREE.Clock();
   let lampFactor = 0, dayFactor = 1, nightFactor = 0;
   const sunDir = new THREE.Vector3(), moonDir = new THREE.Vector3(), tmpA = new THREE.Color(), tmpB = new THREE.Color();
+  const perf = { build: 0, boot: 0, frame: 0, frames: [], marks: [] };
   let skyU, pmrem, envScene, envRT = null, roomEnvTexture = null, lastEnvT = -99, lastEnvMs = 0, lastEnvCover = -1;
   const T = {}, M = {};
   let builder = null, meshCount = 0, tris = 0;
@@ -988,13 +990,11 @@ export function boot(mon) {
     pmrem = new THREE.PMREMGenerator(renderer);
     pmrem.compileEquirectangularShader();
     envScene = new THREE.Scene();
-    // a neutral studio environment gives marble, gold and stone believable
-    // specular response, the way the Littlest Tokyo diorama is lit
-    try {
-      const roomRT = pmrem.fromScene(new RoomEnvironment(), 0.04);
-      scene.environment = roomRT.texture;
-      roomEnvTexture = roomRT.texture;
-    } catch (e) { console.warn('studio environment unavailable', e); }
+    /* No studio environment at start-up. It cost about a second of every page's
+       boot to PMREM a RoomEnvironment, and refreshEnv() replaces it with the sky
+       on the first frame anyway — the studio map was built and then thrown away.
+       applySky() runs before the loop now, so the sky environment exists from the
+       first frame. */
 
     /* lights */
     keyLight = new THREE.DirectionalLight(0xfff3e0, 2.6);
@@ -1219,9 +1219,14 @@ export function boot(mon) {
     builder = new Builder(scene, M, T, mon.seed || 5);
     const ctx = makeCtx(builder, mon, scene, T, M);
     if (typeof mon.build !== 'function') throw new Error('monument module has no build()');
+    const tBuild0 = performance.now();
     mon.build(ctx);
     setProgress(78, 'Polishing the detail…');
     const meshes = builder.finalize();
+    /* how long the scene took to *construct*, as against how long it takes to
+       draw. The two are different problems: build cost is real on any hardware,
+       draw cost under software rendering is not. */
+    perf.build = Math.round(performance.now() - tBuild0);
     meshCount = meshes.length;
     tris = meshes.reduce((n, m) => n + (m.geometry.attributes.position ? m.geometry.attributes.position.count / 3 : 0), 0);
 
@@ -1271,13 +1276,15 @@ export function boot(mon) {
          applySky every frame, so a key that includes the weather rebuilt the
          PMREM sixty times a second while a weather change settled — and the
          same on every drag of the time slider. 400 ms is invisible and cheap. */
-      const nowMs = performance.now();
+      /* The caller is the gate in applySky, which already throttles to 320 ms and
+         to a change of 0.14 h or 0.12 cover. A second wall-clock guard here is
+         not only redundant, it blocks the very first call: the gate stamps
+         lastEnvMs immediately before calling, so nowMs - lastEnvMs was 0 and the
+         environment was never built at all. */
       const key = Math.round(state.time * 4) / 4 + '|' + wx.cover.toFixed(1) +
         '|' + wx.rain.toFixed(1) + '|' + wx.mist.toFixed(1);
       if (key === lastEnvKey) return;
-      if (nowMs - lastEnvMs < 400) return;
       lastEnvKey = key;
-      lastEnvMs = nowMs;
       try {
         const W = 64, H = 32;
         const cv = document.createElement('canvas');
@@ -1292,7 +1299,10 @@ export function boot(mon) {
         grd.addColorStop(1.00, '#' + new THREE.Color(0x3b352a).lerp(fogCol, 0.25).getHexString());
         c2.fillStyle = grd;
         c2.fillRect(0, 0, W, H);
-        // the sun (or the moon), at its bearing
+        // the sun (or the moon), at its bearing. `elev` is local to applySky, so
+        // it is recomputed here: referring to it threw a ReferenceError that the
+        // catch below swallowed, and the environment was never built at all.
+        const elev = Math.sin(((state.time - 6) / 12) * Math.PI) * 62;
         const eDeg = Math.asin(THREE.MathUtils.clamp((elev > 0 ? sunDir : moonDir).y, -1, 1)) * 180 / Math.PI;
         const aDeg = Math.atan2((elev > 0 ? sunDir : moonDir).x, (elev > 0 ? sunDir : moonDir).z) * 180 / Math.PI;
         const u = ((aDeg / 360) + 0.5) * W, v = (0.5 - eDeg / 180) * H;
@@ -1312,7 +1322,7 @@ export function boot(mon) {
         roomEnvTexture = rt.texture;
         scene.environment = rt.texture;
         tex.dispose();
-      } catch (e) { /* keep whatever environment is already set */ }
+      } catch (e) { console.warn('environment build failed', e); }
     }
     let lastShadowT = -99;
     function applySky(t, force) {
@@ -1666,28 +1676,55 @@ export function boot(mon) {
 
       stepTween(now);
       controls.update();
+      const f0 = performance.now();
       composer.render();
+      perf.frame = performance.now() - f0;
+      if (frame < 4) perf.frames.push(Math.round(perf.frame));
       frame++;
 
       if (!ready && frame > 2) {
         ready = true;
+        perf.boot = Math.round(performance.now());
         body.classList.add('ready');
         setProgress(100, 'Ready');
         setTimeout(() => { bootEl.style.display = 'none'; }, 700);
         document.documentElement.dataset.boot = 'ok';
       }
-      if (frame === 1) applySky(state.time, true);
     };
+    // before the first frame, not during it: this builds the environment too
+    applySky(state.time, true);
     renderer.setAnimationLoop(loopFn);
 
+    /* ---------------- ?perf readout ----------------
+       The boot numbers above are measured, not guessed, but they are measured
+       under whatever renderer the page happens to get. A phone with a real GPU
+       is a different machine, so the page can show its own figures: add ?perf
+       to the URL and read build, boot, frame time and triangles off the corner. */
+    if (new URLSearchParams(location.search).has('perf')) {
+      const el = document.createElement('div');
+      el.id = 'perf-hud';
+      el.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:9999;padding:6px 9px;' +
+        'background:rgba(10,12,18,.86);color:#ffd75e;border-radius:6px;' +
+        'font:600 11px/1.5 ui-monospace,monospace;pointer-events:none;white-space:pre';
+      document.body.appendChild(el);
+      const tick = () => {
+        el.textContent = 'build ' + perf.build + ' ms · boot ' + perf.boot + ' ms\n' +
+          'frame ' + Math.round(perf.frame) + ' ms · ' + Math.round(tris).toLocaleString() + ' tris';
+        setTimeout(tick, 700);
+      };
+      tick();
+    }
+
     /* ---------------- QA hooks ---------------- */
-    window.__dbg = { sky, skyU, bloomPass, composer, keyLight, hemi, scene, renderer, camera, sunSprite, moonSprite };
+    window.__dbg = { sky, skyU, bloomPass, composer, keyLight, hemi, scene, renderer, camera, sunSprite, moonSprite, refreshEnv };
     window.__india = {
       state, scene, camera, renderer, controls, mon, views,
       stats: () => ({
         meshes: meshCount, triangles: Math.round(tris),
         calls: renderer.info.render.calls, geometries: renderer.info.memory.geometries,
-        textures: renderer.info.memory.textures, boot: document.documentElement.dataset.boot || ''
+        textures: renderer.info.memory.textures, boot: document.documentElement.dataset.boot || '',
+        buildMs: perf.build, bootMs: perf.boot, frameMs: Math.round(perf.frame),
+        firstFrames: perf.frames, marks: perf.marks
       }),
       goView, tourGo, setWeather, setTime: (v) => { state.time = v; applySky(v, true); },
       pause: () => { renderer.setAnimationLoop(null); composer.render(); },
