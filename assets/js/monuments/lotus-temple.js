@@ -1,3 +1,6 @@
+/* FIDELITY: study — The petals are doubly-curved shells; the hall and the interior are deliberately simplified.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Lotus Temple — New Delhi · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

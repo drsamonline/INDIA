@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — The deul is a tapered stump; the wheels and the surviving porch are the detailed parts.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Konark Sun Temple — Odisha · procedural miniature
    The chariot of Surya: a high plinth with 24 carved wheels, seven rearing
    horses, the surviving jagamohana under its stepped roof, and the broken deul.

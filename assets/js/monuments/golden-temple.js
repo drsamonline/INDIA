@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — The gold carries a small emissive standing in for an environment map (HANDOFF §46); the interior is not modelled.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Golden Temple (Harmandir Sahib) — Amritsar · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

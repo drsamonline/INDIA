@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — Cusped arches generated locally; the durbar hall and the interior are not modelled.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Mysore Palace — Mysuru · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

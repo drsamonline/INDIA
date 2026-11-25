@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — The menagerie is modelled at three times its true scale, because at 0.85 m it was invisible.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Chhatrapati Shivaji Maharaj Terminus — Mumbai · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

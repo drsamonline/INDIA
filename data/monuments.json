@@ -67,7 +67,12 @@
   },
   "accent": "#d9a441",
   "accent2": "#f0a868",
-  "year": 1632
+  "year": 1632,
+  "fidelity": {
+   "level": "approximate",
+   "note": "Geometry and sky are the original scene's; the plinth is 26 per cent small against the tomb (DIMENSIONS.md)."
+  },
+  "contributors": []
  },
  {
   "id": "qutub-minar",
@@ -137,7 +142,12 @@
   },
   "accent": "#d9a441",
   "accent2": "#f0a868",
-  "year": 1199
+  "year": 1199,
+  "fidelity": {
+   "level": "measured",
+   "note": "Dimensions from the ASI survey; the inscription bands are carved in a naskh rhythm, not transcribed."
+  },
+  "contributors": []
  },
  {
   "id": "hawa-mahal",
@@ -207,7 +217,12 @@
   },
   "accent": "#e0895f",
   "accent2": "#f3b48a",
-  "year": 1799
+  "year": 1799,
+  "fidelity": {
+   "level": "approximate",
+   "note": "Bays at 19/16/12/8 and a 0.95 m module; the jali cells are 3 by 5, a suggestion of the real screens."
+  },
+  "contributors": []
  },
  {
   "id": "charminar",
@@ -277,7 +292,12 @@
   },
   "accent": "#c8a26a",
   "accent2": "#e8c48a",
-  "year": 1591
+  "year": 1591,
+  "fidelity": {
+   "level": "approximate",
+   "note": "Stucco fringes and spandrel rows are modelled; the interior is not."
+  },
+  "contributors": []
  },
  {
   "id": "gateway-of-india",
@@ -347,7 +367,12 @@
   },
   "accent": "#9aa8b4",
   "accent2": "#c8d6e0",
-  "year": 1913
+  "year": 1913,
+  "fidelity": {
+   "level": "approximate",
+   "note": "Massing and the great arch; the sculpture groups on the facade are absent."
+  },
+  "contributors": []
  },
  {
   "id": "india-gate",
@@ -417,7 +442,12 @@
   },
   "accent": "#c98a5a",
   "accent2": "#e8b07a",
-  "year": 1921
+  "year": 1921,
+  "fidelity": {
+   "level": "measured",
+   "note": "42 m, checked off the built mesh; the names are lettering strokes, not legible text."
+  },
+  "contributors": []
  },
  {
   "id": "mysore-palace",
@@ -487,7 +517,12 @@
   },
   "accent": "#d4a24c",
   "accent2": "#f0c878",
-  "year": 1897
+  "year": 1897,
+  "fidelity": {
+   "level": "approximate",
+   "note": "Cusped arches generated locally; the durbar hall and the interior are not modelled."
+  },
+  "contributors": []
  },
  {
   "id": "golden-temple",
@@ -557,7 +592,12 @@
   },
   "accent": "#e0b64a",
   "accent2": "#ffe08a",
-  "year": 1577
+  "year": 1577,
+  "fidelity": {
+   "level": "approximate",
+   "note": "The gold carries a small emissive standing in for an environment map (HANDOFF §46); the interior is not modelled."
+  },
+  "contributors": []
  },
  {
   "id": "konark-sun-temple",
@@ -627,7 +667,12 @@
   },
   "accent": "#b8865a",
   "accent2": "#dcae82",
-  "year": 1250
+  "year": 1250,
+  "fidelity": {
+   "level": "approximate",
+   "note": "The deul is a tapered stump; the wheels and the surviving porch are the detailed parts."
+  },
+  "contributors": []
  },
  {
   "id": "sanchi-stupa",
@@ -697,7 +742,12 @@
   },
   "accent": "#b8a888",
   "accent2": "#d8c8a8",
-  "year": -250
+  "year": -250,
+  "fidelity": {
+   "level": "approximate",
+   "note": "The vedika carries a continuous coping; the toranas are simplified."
+  },
+  "contributors": []
  },
  {
   "id": "victoria-memorial",
@@ -767,7 +817,12 @@
   },
   "accent": "#d8d2c4",
   "accent2": "#f0e8d8",
-  "year": 1906
+  "year": 1906,
+  "fidelity": {
+   "level": "approximate",
+   "note": "The Angel and four allegorical groups are modelled; the rest of the sculpture is not."
+  },
+  "contributors": []
  },
  {
   "id": "meenakshi-temple",
@@ -837,7 +892,12 @@
   },
   "accent": "#d4544a",
   "accent2": "#f08a6a",
-  "year": 1200
+  "year": 1200,
+  "fidelity": {
+   "level": "approximate",
+   "note": "All gopurams come from one generator; the figure registers are suggested, not carved individually."
+  },
+  "contributors": []
  },
  {
   "id": "lotus-temple",
@@ -903,7 +963,12 @@
    "src": "assets/img/lotus-temple.jpg"
   },
   "accent": "#d8d2c4",
-  "accent2": "#f0e8d8"
+  "accent2": "#f0e8d8",
+  "fidelity": {
+   "level": "study",
+   "note": "The petals are doubly-curved shells; the hall and the interior are deliberately simplified."
+  },
+  "contributors": []
  },
  {
   "id": "shore-temple",
@@ -973,7 +1038,12 @@
    "src": "assets/img/shore-temple.jpg"
   },
   "accent": "#b0a48c",
-  "accent2": "#d0c4a8"
+  "accent2": "#d0c4a8",
+  "fidelity": {
+   "level": "approximate",
+   "note": "Seven kudu faces on the porch; the second shrine's tier count is disputed between sources."
+  },
+  "contributors": []
  },
  {
   "id": "rani-ki-vav",
@@ -1043,7 +1113,12 @@
    "src": "assets/img/rani-ki-vav.jpg"
   },
   "accent": "#c8a06a",
-  "accent2": "#e0c090"
+  "accent2": "#e0c090",
+  "fidelity": {
+   "level": "approximate",
+   "note": "Seven levels of terrace; the carved panels are suggested rather than cut."
+  },
+  "contributors": []
  },
  {
   "id": "amber-fort",
@@ -1113,7 +1188,12 @@
    "src": "assets/img/amber-fort.jpg"
   },
   "accent": "#d8a86a",
-  "accent2": "#f0c890"
+  "accent2": "#f0c890",
+  "fidelity": {
+   "level": "approximate",
+   "note": "The 12 km wall network is 490 m of representative runs, and the palace is compressed."
+  },
+  "contributors": []
  },
  {
   "id": "csmt-mumbai",
@@ -1183,7 +1263,12 @@
    "src": "assets/img/csmt-mumbai.jpg"
   },
   "accent": "#c07a52",
-  "accent2": "#e0a878"
+  "accent2": "#e0a878",
+  "fidelity": {
+   "level": "approximate",
+   "note": "The menagerie is modelled at three times its true scale, because at 0.85 m it was invisible."
+  },
+  "contributors": []
  },
  {
   "id": "mahabodhi-temple",
@@ -1253,7 +1338,12 @@
    "src": "assets/img/mahabodhi-temple.jpg"
   },
   "accent": "#c8b49a",
-  "accent2": "#e8d8c0"
+  "accent2": "#e8d8c0",
+  "fidelity": {
+   "level": "approximate",
+   "note": "A seated Buddha in every niche, one geometry per row of three; the bodhi tree is simplified."
+  },
+  "contributors": []
  },
  {
   "id": "statue-of-unity",
@@ -1319,7 +1409,12 @@
    "src": "assets/img/statue-of-unity.jpg"
   },
   "accent": "#b8b2a4",
-  "accent2": "#d8d2c4"
+  "accent2": "#d8d2c4",
+  "fidelity": {
+   "level": "study",
+   "note": "The figure is procedural and is not a portrait of Sardar Patel; the head is as far as this pipeline goes (HANDOFF §49)."
+  },
+  "contributors": []
  },
  {
   "id": "kandariya-mahadeva",
@@ -1389,7 +1484,12 @@
    "src": "assets/img/kandariya-mahadeva.jpg"
   },
   "accent": "#c9a878",
-  "accent2": "#e0c49a"
+  "accent2": "#e0c49a",
+  "fidelity": {
+   "level": "approximate",
+   "note": "Urushringas are miniatures on the tower's own profile; the 870 sculptures are suggested."
+  },
+  "contributors": []
  },
  {
   "id": "basilica-bom-jesus",
@@ -1459,7 +1559,12 @@
    "src": "assets/img/basilica-bom-jesus.jpg"
   },
   "accent": "#c0a68c",
-  "accent2": "#e0cdb8"
+  "accent2": "#e0cdb8",
+  "fidelity": {
+   "level": "approximate",
+   "note": "The interior is hollowed with a retable and two side altars; the facade sculpture is suggested."
+  },
+  "contributors": []
  },
  {
   "id": "mehrangarh-fort",
@@ -1529,7 +1634,12 @@
    "src": "assets/img/mehrangarh-fort.jpg"
   },
   "accent": "#c08a5a",
-  "accent2": "#e0b088"
+  "accent2": "#e0b088",
+  "fidelity": {
+   "level": "approximate",
+   "note": "Rock, continuous ramparts and the palace; the blue city below is a suggestion."
+  },
+  "contributors": []
  },
  {
   "id": "jantar-mantar",
@@ -1599,7 +1709,12 @@
    "src": "assets/img/jantar-mantar.jpg"
   },
   "accent": "#d8c8a8",
-  "accent2": "#f0e4c8"
+  "accent2": "#f0e4c8",
+  "fidelity": {
+   "level": "approximate",
+   "note": "The quadrants lie in the plane of the equator; the massing is approximate and the graduated scale is a thin band (HANDOFF §45)."
+  },
+  "contributors": []
  },
  {
   "id": "somnath-temple",
@@ -1669,6 +1784,11 @@
    "src": "assets/img/somnath-temple.jpg"
   },
   "accent": "#d0b890",
-  "accent2": "#e8d0b0"
+  "accent2": "#e8d0b0",
+  "fidelity": {
+   "level": "approximate",
+   "note": "Massing and the shikhara; the carving is not modelled."
+  },
+  "contributors": []
  }
 ]

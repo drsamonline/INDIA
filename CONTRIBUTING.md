@@ -1,45 +1,78 @@
-# Contributing
+# Contributing — and being credited
 
-Contributions are welcome — a corrected date, a better photograph, a sharper
-model, a fixed bug.
+Most of the models in this atlas are approximations, and some are rough. They were
+built by one person from published dimensions and photographs, not surveyed. If
+you improve one, **your name and a link go on the credits page and inside the
+model itself** — that is the deal, and there is nothing else to sign.
 
-## Before you start
+## What the levels mean
 
-- Read `tools/MONUMENT-CONTRACT.md` if you are adding or changing a monument.
-- Every monument is data plus one module: an entry in `data/monuments.json`
-  and a file in `assets/js/monuments/<id>.js`. The pages are generated —
-  never edit `monuments/*.html` or `index.html` by hand.
-- Run `python3 tools/build_site.py` after changing data, then
-  `python3 tools/check_all.py --only <id>` to confirm the page still boots.
+| Level | Means |
+|---|---|
+| **measured** | dimensions taken from a published survey and checked against the built geometry |
+| **approximate** | the right massing and proportions, with the ornament simplified or suggested |
+| **study** | a deliberate simplification, not an attempt at a reconstruction |
 
-## Facts
+Every monument's level and its reason are in `data/monuments.json` under
+`fidelity`, shown in the About drawer of its page, and listed on
+[the credits page](credits.html#improve). `DIMENSIONS.md` has the
+measured-versus-model table for all 24, with the sources.
 
-Historical claims must be traceable to the Wikipedia article named in the
-monument's entry, or to a UNESCO record. If you correct a fact, say where the
-correction comes from in the pull request.
+## How to improve one
 
-## Photographs
+1. **Pick one monument.** One model per pull request, so the credit is unambiguous.
+2. **Say where the dimensions came from.** A survey, an ASI or UNESCO record, a
+   measured drawing, a photograph with its scale — name it. Where sources
+   disagree, pick a reading and say which; `DIMENSIONS.md` already records several
+   such disputes rather than averaging them.
+3. **Edit only that monument's module** — `assets/js/monuments/<id>.js` — or, for
+   the Taj, `tools/build_taj.py`. The source scene at
+   `tools/source/taj-mahal.original.html` is never edited.
+4. **Run the checks** and paste the result in the pull request:
+   ```
+   python3 tools/build_site.py
+   python3 tools/audit_data.py --strict
+   python3 tools/linkcheck.py
+   python3 tools/tintcheck.py --ci
+   python3 tools/measure.py <id>          # if you changed a dimension
+   ```
+5. **Say what you changed and what you did not.** "The plinth is now 95.5 m
+   square; the minarets are untouched" is the shape of a good message.
 
-Any new photograph must be on Wikimedia Commons under a CC0, CC BY, CC BY-SA
-or public-domain licence. Add the file name, photographer, licence and licence
-URL to the monument's entry in `data/monuments.json`; `credits.html` and
-`NOTICE` are generated from it. Do not add images under the GFDL or a
-non-commercial licence.
+## How the credit works
 
-## Code style
+When your change is merged, three things happen, and they all carry your name:
 
-- ES modules, no build step, no framework, no new dependencies.
-- Two-space indent, single quotes, semicolons, `const` by default.
-- Keep the engine's public surface in `monument-engine.js` and the geometry in
-  the monument modules.
-- No external network calls at runtime.
+| Where | What is added |
+|---|---|
+| `data/monuments.json` | your entry in that monument's `contributors` array: `{"name": "...", "url": "https://..."}` |
+| the monument's page | an "Improved by *your name*" line in its About drawer, linking to your URL |
+| `assets/js/monuments/<id>.js` | the same name and link in the module's header comment, so the credit travels with the code |
+| `credits.html` | your name in that monument's row of the fidelity table |
 
-## Licence of contributions
+If you would rather not be named, say so and the change goes in without a credit
+line. If you would rather be named without a link, leave `url` out.
 
-By opening a pull request you agree that your code and models are contributed
-under CC BY-NC 4.0 — the licence the rest of the atlas uses — and that any text
-you add may be adapted and published under CC BY-SA 4.0.
+## What is genuinely wanted
 
-## Reporting a security issue
+The list below is what the record already admits is weak, taken from the
+`fidelity` notes and `HANDOFF.md`. It is a starting point, not a limit:
 
-See `SECURITY.md`. Do not open a public issue for a live vulnerability.
+- **The Statue of Unity's figure** is procedural and is not a portrait. It needs a
+  sculpted mesh; that is a modelling job, not a tweak.
+- **The Taj's plinth** is 26 per cent small against the tomb, and everything else
+  on that page is keyed to its footprint.
+- **Meenakshi's gopurams** all come from one generator; the figure registers are
+  suggested rather than carved.
+- **Konark's deul** is a tapered stump; the wheels and the porch carry the detail.
+- **CSMT's menagerie** is modelled at three times its true scale so that it reads
+  at all — the honest fix is more geometry, not more scale.
+- **Jantar Mantar's quadrants** have the right geometry in the right plane, but the
+  graduated scale on the arc is a thin band rather than a scale.
+
+## Licence
+
+Contributions are accepted under the same
+[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) licence as the rest
+of the atlas: attribution to you and to this project, no commercial use. You keep
+your copyright — this is a licence, not an assignment.

@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — Urushringas are miniatures on the tower's own profile; the 870 sculptures are suggested.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Kandariya Mahadeva — Khajuraho · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

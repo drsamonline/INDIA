@@ -1,3 +1,6 @@
+/* FIDELITY: measured — 42 m, checked off the built mesh; the names are lettering strokes, not legible text.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* India Gate — New Delhi · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

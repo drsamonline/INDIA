@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — Stucco fringes and spandrel rows are modelled; the interior is not.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Charminar — Hyderabad · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

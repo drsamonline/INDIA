@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — Rock, continuous ramparts and the palace; the blue city below is a suggestion.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Mehrangarh — Jodhpur · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

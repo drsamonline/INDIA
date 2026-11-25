@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — The 12 km wall network is 490 m of representative runs, and the palace is compressed.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Amber Fort — Amer, Rajasthan · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

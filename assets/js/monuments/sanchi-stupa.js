@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — The vedika carries a continuous coping; the toranas are simplified.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Sanchi Stupa — Madhya Pradesh · procedural miniature
    The Great Stupa: hemispherical dome on a drum, square harmika, triple chatra,
    stone vedika railings and four carved toranas on a hilltop terrace.

@@ -182,6 +182,13 @@ body.about-open .about-card{transform:none}
 .nextup a:hover{color:#fff}
 .nextup .deva{font-size:11px;color:var(--accent-2)}
 .credit{font-size:9.5px;line-height:1.7;color:var(--muted);border-top:1px solid var(--line-soft);margin-top:18px;padding-top:12px}
+/* how faithful the model is, and who improved it */
+.fidelity{border:1px solid var(--line-soft);border-radius:8px;padding:10px 12px;margin:16px 0 0;background:rgba(255,255,255,.02)}
+.fid-level{display:inline-block;font:600 9px/1 'JetBrains Mono',monospace;letter-spacing:.10em;text-transform:uppercase;
+  color:#0f1116;background:var(--accent);border-radius:4px;padding:4px 7px;margin-bottom:7px}
+.fid-note{display:block;font-size:11px;line-height:1.65;color:var(--text);opacity:.82}
+.fid-people{margin-top:7px;font-size:10.5px;line-height:1.6;color:var(--muted)}
+.fid-people a{color:var(--accent-2)}
 .credit a{color:#cfc6b2}
 .about-close{position:sticky;top:0;float:right;margin:-6px -8px 0 12px}
 

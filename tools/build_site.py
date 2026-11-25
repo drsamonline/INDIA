@@ -36,7 +36,8 @@ def esc(s):
 
 def page_data(m):
     keys = ('name', 'deva', 'place', 'state', 'era', 'period', 'style', 'unesco',
-            'wikipedia', 'history', 'facts', 'links', 'image')
+            'wikipedia', 'history', 'facts', 'links', 'image',
+            'fidelity', 'contributors')   # the honesty block and its credits
     d = {k: m.get(k) for k in keys}
     return json.dumps(d, ensure_ascii=False)
 
@@ -149,7 +150,21 @@ def build_credits(monuments):
         <td><a href="{esc(licurl)}" rel="noopener" target="_blank">{esc(lic)}</a></td>
         <td><a href="{esc(im.get('page', '#'))}" rel="noopener" target="_blank">Commons file</a></td>
       </tr>""")
-    out = tpl.replace('<!--ROWS-->', '\n'.join(rows))
+    fidrows = []
+    for m in monuments:
+        f = m.get('fidelity') or {}
+        people = [c for c in (m.get('contributors') or []) if c.get('name')]
+        who = ', '.join(
+            f'<a href="{esc(c["url"])}" target="_blank" rel="noopener">{esc(c["name"])}</a>'
+            if c.get('url') else esc(c['name']) for c in people) or '<span class="muted">—</span>'
+        fidrows.append(f"""      <tr>
+        <td><a href="monuments/{m['id']}.html">{esc(m['name'])}</a></td>
+        <td><span class="fid-pill fid-{esc(f.get('level', 'approximate'))}">{esc(f.get('level', 'approximate'))}</span></td>
+        <td>{esc(f.get('note', ''))}</td>
+        <td>{who}</td>
+      </tr>""")
+    out = tpl.replace('<!--FIDROWS-->', '\n'.join(fidrows))
+    out = out.replace('<!--ROWS-->', '\n'.join(rows))
     words = {12: 'Twelve', 13: 'Thirteen', 14: 'Fourteen', 15: 'Fifteen', 16: 'Sixteen', 17: 'Seventeen',
              18: 'Eighteen', 19: 'Nineteen', 20: 'Twenty', 21: 'Twenty-one', 22: 'Twenty-two', 23: 'Twenty-three',
              24: 'Twenty-four'}

@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — The interior is hollowed with a retable and two side altars; the facade sculpture is suggested.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Basilica of Bom Jesus — Old Goa · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

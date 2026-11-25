@@ -1,3 +1,6 @@
+/* FIDELITY: study — The figure is procedural and is not a portrait of Sardar Patel; the head is as far as this pipeline goes (HANDOFF §49).
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Statue of Unity — Kevadia, Gujarat · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

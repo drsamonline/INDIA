@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — All gopurams come from one generator; the figure registers are suggested, not carved individually.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Meenakshi Amman Temple — Madurai · procedural miniature
    Dravidian temple city: painted gopurams, Golden Lotus tank, pillared halls.
    Author: Dr Sohil Momin · CC BY-NC 4.0

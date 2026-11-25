@@ -27,6 +27,14 @@
   .back{display:inline-flex;align-items:center;gap:7px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;color:var(--ink-2);margin-bottom:22px}
   .back svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.7}
   @media (max-width:720px){.doc table{font-size:11px}.doc th,.doc td{padding:9px 6px}}
+  /* the fidelity level of each model, and who improved it */
+  .fid-table td:nth-child(2){white-space:nowrap}
+  .fid-pill{display:inline-block;font:600 9px/1 'JetBrains Mono',monospace;letter-spacing:.09em;
+    text-transform:uppercase;padding:4px 7px;border-radius:4px;border:1px solid currentColor}
+  .fid-measured{color:#79c96e}
+  .fid-approximate{color:#f0a868}
+  .fid-study{color:#a8a293}
+  @media (max-width:720px){.fid-table td:nth-child(3){font-size:11px}}
 </style>
 </head>
 <body>
@@ -52,7 +60,165 @@
   <h2>1 · The models</h2>
   <p>All 24 3D models are generated at runtime from code — no downloaded meshes, no photogrammetry, no image textures. They are written by <b>Dr Sohil Momin</b> and released under the <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial 4.0 International Licence</a>. You may copy, modify and redistribute them with credit to him and a link to the licence; you may not use them commercially.</p>
 
-  <h2>2 · Photographs</h2>
+  <h2 id="improve">2 · Improving these models — and being honest about them</h2>
+  <p><b>Most of these models are approximations, and some are rough.</b> They are built from published dimensions and photographs by one person, not surveyed, and the table below says what each one actually is. Three levels are used:</p>
+  <ul>
+    <li><b>measured</b> — dimensions taken from a published survey and checked against the built geometry.</li>
+    <li><b>approximate</b> — the right massing and proportions, with the ornament simplified or suggested.</li>
+    <li><b>study</b> — a deliberate simplification, not an attempt at a reconstruction.</li>
+  </ul>
+  <p><b>If you improve a model, your name and a link go on this page and in the model itself.</b> That is the deal, and it is the whole deal: open a pull request that changes one monument, say what you changed and where you got the dimensions, and your name is added to that monument's row here, to its entry in <code>data/monuments.json</code>, and to the header comment of its module file — so the credit travels with the code and shows on the page. There is no copyright assignment, no contributor licence agreement, and nothing to sign. <a href="https://github.com/drsamonline/INDIA/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md</a> has the details.</p>
+  <table class="fid-table">
+    <thead><tr><th>Monument</th><th>Level</th><th>What it is, and what it lacks</th><th>Improved by</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><a href="monuments/taj-mahal.html">Taj Mahal</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>Geometry and sky are the original scene&#x27;s; the plinth is 26 per cent small against the tomb (DIMENSIONS.md).</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/qutub-minar.html">Qutb Minar</a></td>
+        <td><span class="fid-pill fid-measured">measured</span></td>
+        <td>Dimensions from the ASI survey; the inscription bands are carved in a naskh rhythm, not transcribed.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/hawa-mahal.html">Hawa Mahal</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>Bays at 19/16/12/8 and a 0.95 m module; the jali cells are 3 by 5, a suggestion of the real screens.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/charminar.html">Charminar</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>Stucco fringes and spandrel rows are modelled; the interior is not.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/gateway-of-india.html">Gateway of India</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>Massing and the great arch; the sculpture groups on the facade are absent.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/india-gate.html">India Gate</a></td>
+        <td><span class="fid-pill fid-measured">measured</span></td>
+        <td>42 m, checked off the built mesh; the names are lettering strokes, not legible text.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/mysore-palace.html">Mysore Palace</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>Cusped arches generated locally; the durbar hall and the interior are not modelled.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/golden-temple.html">Golden Temple</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>The gold carries a small emissive standing in for an environment map (HANDOFF §46); the interior is not modelled.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/konark-sun-temple.html">Konark Sun Temple</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>The deul is a tapered stump; the wheels and the surviving porch are the detailed parts.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/sanchi-stupa.html">Sanchi Stupa</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>The vedika carries a continuous coping; the toranas are simplified.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/victoria-memorial.html">Victoria Memorial</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>The Angel and four allegorical groups are modelled; the rest of the sculpture is not.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/meenakshi-temple.html">Meenakshi Temple</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>All gopurams come from one generator; the figure registers are suggested, not carved individually.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/lotus-temple.html">Lotus Temple</a></td>
+        <td><span class="fid-pill fid-study">study</span></td>
+        <td>The petals are doubly-curved shells; the hall and the interior are deliberately simplified.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/shore-temple.html">Shore Temple</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>Seven kudu faces on the porch; the second shrine&#x27;s tier count is disputed between sources.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/rani-ki-vav.html">Rani ki Vav</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>Seven levels of terrace; the carved panels are suggested rather than cut.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/amber-fort.html">Amber Fort</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>The 12 km wall network is 490 m of representative runs, and the palace is compressed.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/csmt-mumbai.html">CSMT, Mumbai</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>The menagerie is modelled at three times its true scale, because at 0.85 m it was invisible.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/mahabodhi-temple.html">Mahabodhi Temple</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>A seated Buddha in every niche, one geometry per row of three; the bodhi tree is simplified.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/statue-of-unity.html">Statue of Unity</a></td>
+        <td><span class="fid-pill fid-study">study</span></td>
+        <td>The figure is procedural and is not a portrait of Sardar Patel; the head is as far as this pipeline goes (HANDOFF §49).</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/kandariya-mahadeva.html">Kandariya Mahadeva</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>Urushringas are miniatures on the tower&#x27;s own profile; the 870 sculptures are suggested.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/basilica-bom-jesus.html">Basilica of Bom Jesus</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>The interior is hollowed with a retable and two side altars; the facade sculpture is suggested.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/mehrangarh-fort.html">Mehrangarh</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>Rock, continuous ramparts and the palace; the blue city below is a suggestion.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/jantar-mantar.html">Jantar Mantar</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>The quadrants lie in the plane of the equator; the massing is approximate and the graduated scale is a thin band (HANDOFF §45).</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+      <tr>
+        <td><a href="monuments/somnath-temple.html">Somnath Temple</a></td>
+        <td><span class="fid-pill fid-approximate">approximate</span></td>
+        <td>Massing and the shikhara; the carving is not modelled.</td>
+        <td><span class="muted">—</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3 · Photographs</h2>
   <p>Each monument page uses one photograph, the lead image of its Wikipedia article, served from Wikimedia Commons. The table below gives the photographer, the licence and a link to the original file, where the full licence text and the machine-readable attribution live.</p>
   <table>
     <thead><tr><th>Monument</th><th>Photographer</th><th>Licence</th><th>Source</th></tr></thead>
@@ -205,7 +371,7 @@
   </table>
   <p class="muted">Images have been resized for the web; no other alteration was made. Where a licence requires share-alike, the resized file is offered under the same licence as the original.</p>
 
-  <h2>3 · Text</h2>
+  <h2>4 · Text</h2>
   <p>The history, dates and figures on each monument page are adapted from the English Wikipedia article for that monument, which is published under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>. The adapted text on this site is offered under the same licence. Each page links directly to its source article.</p>
   <ul>
     <li><a href="https://en.wikipedia.org/wiki/Taj_Mahal" target="_blank" rel="noopener">Taj Mahal</a> · <a href="https://en.wikipedia.org/wiki/Qutb_Minar" target="_blank" rel="noopener">Qutb Minar</a> · <a href="https://en.wikipedia.org/wiki/Hawa_Mahal" target="_blank" rel="noopener">Hawa Mahal</a> · <a href="https://en.wikipedia.org/wiki/Charminar" target="_blank" rel="noopener">Charminar</a></li>
@@ -214,14 +380,14 @@
   </ul>
   <p>UNESCO World Heritage records, one per inscribed monument: <a href="https://whc.unesco.org/en/list/252/" target="_blank" rel="noopener">Taj Mahal (252)</a>, <a href="https://whc.unesco.org/en/list/233/" target="_blank" rel="noopener">Qutb Minar (233)</a>, <a href="https://whc.unesco.org/en/list/1605/" target="_blank" rel="noopener">Jaipur City (1605)</a>, <a href="https://whc.unesco.org/en/list/249/" target="_blank" rel="noopener">Mahabalipuram (249)</a>, <a href="https://whc.unesco.org/en/list/246/" target="_blank" rel="noopener">Konark (246)</a>, <a href="https://whc.unesco.org/en/list/524/" target="_blank" rel="noopener">Sanchi (524)</a>, <a href="https://whc.unesco.org/en/list/240/" target="_blank" rel="noopener">Khajuraho (240)</a>, <a href="https://whc.unesco.org/en/list/922/" target="_blank" rel="noopener">Rani ki Vav (922)</a>, <a href="https://whc.unesco.org/en/list/247/" target="_blank" rel="noopener">Hill Forts of Rajasthan (247)</a>, <a href="https://whc.unesco.org/en/list/945/" target="_blank" rel="noopener">CSMT (945)</a>, <a href="https://whc.unesco.org/en/list/234/" target="_blank" rel="noopener">Churches of Goa (234)</a>, <a href="https://whc.unesco.org/en/list/1338/" target="_blank" rel="noopener">Jantar Mantar (1338)</a>, <a href="https://whc.unesco.org/en/list/1056/" target="_blank" rel="noopener">Mahabodhi (1056)</a>.</p>
 
-  <h2>4 · Software</h2>
+  <h2>5 · Software</h2>
   <ul>
     <li><a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> r169 — MIT licence. The renderer, the physical sky, the water and the post-processing passes all come from it.</li>
     <li>OrbitControls, Sky, Water, EffectComposer, UnrealBloomPass, OutputPass and BufferGeometryUtils are part of three.js and are vendored in <code>assets/vendor/three</code>.</li>
     <li>No other JavaScript libraries are used. The site has no build step and runs from any static file server.</li>
   </ul>
 
-  <h2>5 · Typefaces</h2>
+  <h2>6 · Typefaces</h2>
   <p>Three typefaces are self-hosted as WOFF2, all under the <a href="https://openfontlicense.org/" target="_blank" rel="noopener">SIL Open Font License 1.1</a>:</p>
   <ul>
     <li><b>Cormorant Garamond</b> by Christian Thalmann — display serif.</li>
@@ -229,7 +395,7 @@
     <li><b>Noto Sans Devanagari</b> by Google — Devanagari names of the monuments.</li>
   </ul>
 
-  <h2>6 · Third-party notice</h2>
+  <h2>7 · Third-party notice</h2>
   <p>Every work bundled here that is not original to this repository is listed with its licence in <a href="https://github.com/drsamonline/INDIA/blob/main/NOTICE" target="_blank" rel="noopener">NOTICE</a>: the 24 photographs, the Wikipedia text, three.js and the three typefaces. One photograph, the Gateway of India by A.Savin, is under the Free Art Licence rather than a Creative Commons licence; NOTICE says so and links the licence text.</p>
 
   <h2>7 · Measured dimensions</h2>

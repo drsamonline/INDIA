@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — Bays at 19/16/12/8 and a 0.95 m module; the jali cells are 3 by 5, a suggestion of the real screens.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Hawa Mahal — Jaipur · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

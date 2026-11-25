@@ -1786,12 +1786,26 @@ export function boot(mon) {
         <br>Model and code by <b>Dr Sohil Momin</b>, licensed
         <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>.
       </div>` : '';
+    /* How faithful this model is, and who improved it. The atlas is honest about
+       the level of modelling rather than implying every page is a survey: the
+       level and its reason come from data/monuments.json, and any contributor
+       named there is linked. */
+    const fid = meta.fidelity || {};
+    const people = (meta.contributors || []).filter((c) => c && c.name);
+    const fidBlock = fid.level ? `<div class="fidelity">
+        <span class="fid-level">${esc(fid.level)}</span>
+        <span class="fid-note">${esc(fid.note || '')}</span>
+        ${people.length
+          ? `<div class="fid-people">Improved by ${people.map((c) =>
+              c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.name)}</a>` : esc(c.name)).join(', ')}.</div>`
+          : `<div class="fid-people">Nobody has improved this model yet. If you do, your name and a link go here — see <a href="credits.html#improve">credits</a>.</div>`}
+      </div>` : '';
     const INDEX = window.INDIA_INDEX || [];
     const i = INDEX.findIndex((x) => x.id === mon.id);
     const nextUp = i >= 0 && INDEX.length > 1
       ? `<div class="nextup"><span>Next in the atlas</span><a href="${esc(INDEX[(i + 1) % INDEX.length].id)}.html">${esc(INDEX[(i + 1) % INDEX.length].name)} <span class="deva">${esc(INDEX[(i + 1) % INDEX.length].deva || '')}</span> →</a></div>`
       : '';
-    el.innerHTML = `${paras}${facts ? `<dl class="facts">${facts}</dl>` : ''}<div class="links">${links}</div>${nextUp}${credit}`;
+    el.innerHTML = `${paras}${facts ? `<dl class="facts">${facts}</dl>` : ''}${fidBlock}<div class="links">${links}</div>${nextUp}${credit}`;
   }
 
   function makeCtx(b, mon, scene, T, M) {

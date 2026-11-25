@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — Massing and the great arch; the sculpture groups on the facade are absent.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Gateway of India — Mumbai · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

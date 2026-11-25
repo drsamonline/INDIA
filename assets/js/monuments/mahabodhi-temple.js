@@ -1,3 +1,6 @@
+/* FIDELITY: approximate — A seated Buddha in every niche, one geometry per row of three; the bodhi tree is simplified.
+   Improved by: (nobody yet). If you improve this model, add your name and
+   a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Mahabodhi Temple — Bodh Gaya · procedural miniature
    Author: Dr Sohil Momin · CC BY-NC 4.0
 

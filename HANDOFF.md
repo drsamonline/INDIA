@@ -279,6 +279,44 @@ used to live here and grew to eighty per cent of this file.
 Read it before starting anything that sounds familiar: six of those sections record
 briefs that asked for work already in the code.
 
+### 60. The site now says how good each model is, and offers credit
+
+The owner's instruction: the site must state clearly that anyone improving a model
+gets their name and a link, on the website and in the model, so the level of
+modelling can be honest.
+
+**Three levels, in `data/monuments.json` as `fidelity`:**
+
+| Level | Means | Count |
+|---|---|---|
+| measured | dimensions from a published survey, checked against the built geometry | 2 — Qutb Minar, India Gate |
+| approximate | right massing and proportions, ornament simplified or suggested | 20 |
+| study | a deliberate simplification, not a reconstruction | 2 — Lotus Temple, Statue of Unity |
+
+Each carries a one-line reason naming what the model *lacks*, not what it has:
+"the plinth is 26 per cent small against the tomb", "the figure is procedural and
+is not a portrait of Sardar Patel", "the menagerie is modelled at three times its
+true scale, because at 0.85 m it was invisible".
+
+**Where it shows:** the About drawer of every monument (a level pill, the reason,
+and "Nobody has improved this model yet — if you do, your name and a link go
+here"); `credits.html` §2, which lists all 24 with level, reason and an "Improved
+by" column; and a `FIDELITY:` header comment in all 23 module files, so the credit
+travels with the code. `CONTRIBUTING.md` states the deal in full: one monument per
+pull request, name the source, three places the credit appears, no CLA, licence
+CC BY-NC 4.0, copyright stays with the contributor.
+
+**The credit is wired, not promised.** `contributors` is an array per monument;
+adding `{"name": "...", "url": "..."}` puts a linked name in the drawer, in the
+credits row, and the module header is the third place. Nothing else has to change.
+
+**Two things this exposed:** `page_data()` in `build_site.py` whitelists the keys
+that reach the page, so a new field in `monuments.json` is invisible until it is
+added there — the fidelity block did not render until it was. And the Taj has no
+module file, so its credit lives only in the JSON and the credits table.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
