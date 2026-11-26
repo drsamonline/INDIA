@@ -4,7 +4,7 @@
    ========================================================================== */
 :root{
   --paper:#f7f0e4; --paper-2:#efe5d4; --ink:#191411; --ink-2:#4a3d31;
-  --muted:#7d6f60; --saffron:#d4761f; --marigold:#e3a13a; --terracotta:#a8442c;
+  --muted:#6b5e50;      /* 4.30:1 on --paper was a shade short of AA; this is 5.0:1 */ --saffron:#d4761f; --marigold:#e3a13a; --terracotta:#a8442c;
   --indigo:#1b2740; --teal:#1a6a62; --rose:#b4506a;
   --line:rgba(25,20,17,.14); --line-soft:rgba(25,20,17,.08);
   --serif:'Cormorant Garamond','Iowan Old Style',Georgia,serif;
@@ -134,7 +134,7 @@ section{position:relative;scroll-margin-top:80px}
 .intro-text + .intro-text{margin-top:16px}
 .principles{display:grid;gap:2px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:14px;overflow:hidden}
 .principle{background:var(--paper);padding:18px 20px;display:grid;grid-template-columns:34px 1fr;gap:14px}
-.principle b{font-family:var(--serif);font-size:19px;color:var(--marigold);line-height:1.2}
+.principle b{font-family:var(--serif);font-size:19px;color:var(--terracotta);line-height:1.2}
 .principle h3{font-size:15px;margin-bottom:3px}
 .principle p{font-size:12px;line-height:1.6;color:var(--muted)}
 
@@ -298,9 +298,9 @@ main:focus{outline:none}
 /* the fidelity level on each card, so the atlas is honest where people browse */
 .fid-mini{display:inline-block;margin-left:8px;font:600 8px/1 var(--mono,monospace);letter-spacing:.10em;
   text-transform:uppercase;padding:3px 5px;border-radius:3px;border:1px solid currentColor;vertical-align:1px}
-.fid-mini.fid-measured{color:#3f7a52}
-.fid-mini.fid-approximate{color:#a9702a}
-.fid-mini.fid-study{color:#8a8478}
+.fid-mini.fid-measured{color:#2f6b42}
+.fid-mini.fid-approximate{color:#8a5518}
+.fid-mini.fid-study{color:#635d52}
 .card:hover .fid-mini{opacity:.9}
 
 .cards-note{max-width:64ch;margin:0 0 22px;font-size:13px;line-height:1.7;color:var(--ink);opacity:.72}

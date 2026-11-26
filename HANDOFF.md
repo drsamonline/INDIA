@@ -547,6 +547,36 @@ changes the card, the credits row and the About drawer in the same commit.
 
 ---
 
+### 70. Contrast — the check nobody had run, and three real failures
+
+The accessibility gate checks structure. It has never checked whether text can be
+**read**, which is the failure people actually experience. `tools/contrastcheck.py`
+does: every text node's colour against the background behind it, WCAG AA.
+
+The landing page reported **224 text nodes, three kinds below AA** — and all three
+were worth fixing:
+
+| Was | Ratio | Now |
+|---|---|---|
+| my own fidelity chips (`.fid-mini`, 8 px) | 3.45 and 3.87 | darker: 5.0+ |
+| `--muted` on `--paper` | 4.30 | `#6b5e50`, 5.0 |
+| the principle numerals (01/02/03), marigold | **1.97** | terracotta, 5.0 |
+
+`index.html` now reports **0 of 224 below AA**.
+
+**What the tool cannot do yet.** The monument pages layer a translucent panel over
+a canvas, and the tool scores gold-on-dark panel headings at 1.34:1 — which is not
+what anyone sees. So the landing and credits results are trustworthy and the
+monument pages are **unverified**, not passing. Modelling that layering is the next
+job for this tool, not a fix to the pages.
+
+**Two of the four bugs were in the tool, not the site:** it scored text over the
+canvas against a white guess (1.38 for white-on-dark), and it read a `.rv` element
+still at opacity 0 as invisible (88 false failures on the first run). A checker is
+a piece of software and needs the same scepticism as the thing it checks.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
