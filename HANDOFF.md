@@ -489,9 +489,16 @@ The tool now reports `top`, `base` and `box`, and all 24 were re-measured:
 | Kandariya | +6% | **0%** |
 
 The five that remain outside 12 per cent are a rock, a hill, a railing, a belfry and
-a flag mast — each named in the table. **One real shortfall survives: Jantar
-Mantar's gnomon reaches 23.7 m where the Samrat Yantra is 27 m**, and it is
-recorded as a job rather than quietly fixed.
+a flag mast — each named in the table.
+
+**And the "one real shortfall" I then reported was wrong too.** I said Jantar
+Mantar's gnomon reached 23.7 m where the Samrat Yantra is 27 m. The 27 m is the
+popular "88 ft" figure; this file's own table has recorded 22.62 m from the pit
+floor and 19.12 m above ground since the first session, and 23.7 m is that summit
+under its chhatri. The model is within a fifth of a metre. **Every discrepancy in
+this table was the table's, not the model's** — which is the strongest argument for
+the rule that a number from a tool is not a measurement until you know what it
+measures.
 
 **The lesson, which is the same one twice in two days:** a number from a tool is not
 a measurement until you know what the tool is measuring. `box` and `top` differ by

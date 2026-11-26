@@ -425,7 +425,7 @@ y = 0, so that figure is directly comparable with a published height. Run over a
 | [Kandariya Mahadeva](monuments/kandariya-mahadeva.html) | 31.0 | **31.0** | +0% | — |
 | [Basilica Bom Jesus](monuments/basilica-bom-jesus.html) | 25.0 | **32.8** | +31% | the belfry at the rear, which the façade figures exclude |
 | [Mehrangarh Fort](monuments/mehrangarh-fort.html) | 36.0 | **131.3** | +265% | the rock, ~95 m of it |
-| [Jantar Mantar](monuments/jantar-mantar.html) | 27.0 | **23.7** | -12% | **3.3 m short** — the Samrat Yantra gnomon is 27 m and the model reaches 23.7 |
+| [Jantar Mantar](monuments/jantar-mantar.html) | 23.5 | **23.7** | +1% | — the summit is 19.12 m and the chhatri takes it to 23.5; the popular "27 m" is not a height above ground |
 | [Somnath Temple](monuments/somnath-temple.html) | 50.0 | **61.3** | +23% | the flag mast |
 
 **Sixteen of twenty-four are within 12 per cent, and CSMT is the reason this table
@@ -436,10 +436,14 @@ stone is at **53.3 m**, which is 0.5 m from the dome's apex plus the Statue of
 Progress. The model was right; the measurement was wrong.
 
 The five that remain outside 12 per cent are each a thing that is not the building:
-a rock, a hill, a railing, a belfry, a flag mast. **One is a real shortfall:
-Jantar Mantar's gnomon reaches 23.7 m where the Samrat Yantra is 27 m.** It is
-recorded rather than quietly corrected, and it is a small job for whoever takes the
-next pass at that page.
+a rock, a hill, a railing, a belfry, a flag mast.
+
+**Jantar Mantar was flagged as a sixth and is not one.** The height table carried
+the popular "27 m / 88 ft" figure for the Samrat Yantra; this file's own table has
+said 22.62 m from the pit floor and 19.12 m above ground since the first session,
+and the model's 23.7 m is that summit under its chhatri. The model is within a
+fifth of a metre of the measured building, and the flagged shortfall was the table's
+again.
 ## Disputed figures
 
 These are the dimensions where the sources genuinely disagree and the model

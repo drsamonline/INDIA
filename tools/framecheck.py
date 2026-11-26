@@ -29,7 +29,9 @@ H = {
     'csmt-mumbai': 53.8,          # 48.8 m to the dome's apex + the 5 m Statue of Progress
     'mahabodhi-temple': 52, 'statue-of-unity': 240,
     'kandariya-mahadeva': 31, 'basilica-bom-jesus': 25, 'mehrangarh-fort': 36,
-    'jantar-mantar': 27, 'somnath-temple': 50,
+    # the summit is 19.12 m above ground and carries a chhatri; the popular
+    # "27 m / 88 ft" figure is not a height above ground — see DIMENSIONS.md
+    'jantar-mantar': 23.5, 'somnath-temple': 50,
     # the basilica's façade is 61 ft (18.6 m); 24 m is the other published reading
 }
 
