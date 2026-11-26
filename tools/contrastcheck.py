@@ -21,12 +21,13 @@ canvas, photograph, gradient, translucent panel.
 
 Reports WCAG 2.1 AA: 4.5:1 for normal text, 3:1 for large (24 px, or 18.66 px bold).
 
-**Known limit.** On the monument pages the tool reports a `.deva` and a `.panel-sub`
-at 1.20 and 2.03 on Qutb Minar. Both are wrong for what a reader sees: the panel
-header is gold on #212c, about 6.2:1, and a crop of the rendered header confirms it.
-The tool is picking up a second element of the same class — most likely the tour
-card's Devanagari title — while it sits over the canvas. Until that is pinned down,
-**trust the landing and credits results and treat the two monument readings as open.**
+**It found a real one that I had dismissed.** On Qutb Minar it reported a `.deva` at
+1.20 and a subtitle at 2.03; I assumed the tool was wrong because the *panel* header
+is legible. `--debug` showed the element was not in the panel but in
+`header#topbar` — the title block, sitting straight on bright sky with no scrim at
+all. A crop of the render confirmed it: gold on pale grey, barely readable at noon.
+Both were fixed by giving the title block a scrim, and the tool now reports 0 below
+AA on the pages it checks.
 
 Requires: pip install playwright pillow, and a Chromium (CHROME_PATH env var).
 """
@@ -63,7 +64,13 @@ COLLECT = """() => {
     out.push({ text: text.slice(0, 38), r: [r.left, r.top, r.width, r.height],
                color: [c.r, c.g, c.b], alpha: c.a * op,
                size: parseFloat(cs.fontSize), weight: +cs.fontWeight || 400,
-               tag: el.tagName.toLowerCase() + (el.className ? '.' + String(el.className).split(' ')[0] : '') });
+               tag: el.tagName.toLowerCase() + (el.className ? '.' + String(el.className).split(' ')[0] : ''),
+               where: (() => { const p = []; let n = el;
+                 for (let i = 0; i < 4 && n && n !== document.body; i++) {
+                   p.push(n.tagName.toLowerCase() + (n.id ? '#' + n.id : '') +
+                          (n.className ? '.' + String(n.className).split(' ')[0] : ''));
+                   n = n.parentElement; }
+                 return p.join(' < '); })() });
   });
   return out;
 }"""
@@ -144,8 +151,8 @@ async def main(pages, width, height, verbose):
                 rt = ratio(fg, bg)
                 need = 3.0 if (n['size'] >= 24 or (n['size'] >= 18.66 and n['weight'] >= 700)) else 4.5
                 if verbose and n['tag'].startswith(DEBUG):
-                    print('      debug %-16s fg=%s a=%.2f bg=%s ratio=%.2f' % (
-                        n['tag'], n['color'], n['alpha'], [round(v) for v in bg], rt))
+                    print('      debug %-16s fg=%s a=%.2f bg=%s ratio=%.2f  @ %s' % (
+                        n['tag'], n['color'], n['alpha'], [round(v) for v in bg], rt, n['where']))
                 if rt < need:
                     fails.append((rt, need, n))
             fails.sort(key=lambda t: t[0])

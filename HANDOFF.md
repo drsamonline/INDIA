@@ -587,8 +587,19 @@ output prints *two* `.panel-deva` nodes — one at 0.85 opacity over the dark pa
 (6.23:1) and one at full opacity over `[156,170,175]`, which is sky. The second is
 most likely the tour card's Devanagari title, measured while it sits over the canvas.
 
-**So: the page is fine, the tool has a second-element problem, and it is recorded
-rather than papered over.** Two genuine fixes came out of the chase anyway — the
+**Then I looked at the element the tool actually named, and it was right.**
+`--debug` prints the ancestor chain: `span.deva < div.titles < header#topbar` — the
+**top bar's title block**, sitting straight on the sky with no scrim. A crop of the
+render showed gold Devanagari on pale grey, barely readable at noon. My "the panel
+is fine" check had been of a *different* element.
+
+Fixed: the title block carries a 62 % scrim with a blur, the subtitle line goes from
+72 % to 95 % opacity, and the Devanagari lightens a step. Qutb Minar went from 2
+below AA to **0**, and India Gate's last node (the orbit hint at 4.50) went with a
+scrim of its own.
+
+**The lesson, which is the fourth time this week:** the tool was right and I was
+wrong. "I looked at it and it seemed fine" is not a measurement. Two genuine fixes came out of the chase anyway — the
 tool now waits for `dataset.boot` (it had been measuring the *loading screen*, where
 a title over bright sky really does score 1.20) and it has `--debug TAG` to print
 fg, bg and ratio for any element.
@@ -639,6 +650,30 @@ and it is a much smaller one.
 distinct specular highlights rather than a uniform glow; at dusk the leaf takes the
 sky's colour. That is what gold leaf does, and it is the first time this page has
 shown it.
+
+---
+
+### 73. The top bar was the contrast failure, and the tool was right
+
+`contrastcheck.py` reported `.deva` at 1.20 on Qutb Minar. I dismissed it as a tool
+artefact because I had looked at the *panel* header and it was legible. `--debug`
+printed the ancestor chain and showed the element was in `header#topbar`, not the
+panel: the title block sits straight on the sky, with no scrim, and gold Devanagari
+on pale grey at noon is barely readable. A crop of the render confirmed it.
+
+| Element | Was | Now |
+|---|---|---|
+| title block | no background | 62 % scrim with a blur |
+| subtitle line | 72 % opacity | 95 % |
+| Devanagari | `--accent-2` | a step lighter |
+| the orbit hint | 62 % white, no background | 88 % on a 45 % scrim |
+
+Qutb Minar: 2 below AA → **0**. India Gate: 1 → **0**. Index 395 nodes and credits
+318 nodes remain at 0.
+
+**A UI element that floats over a live scene cannot rely on the scene.** It needs its
+own scrim, exactly as a caption over a photograph does — the same fix as
+`.card-num` on the gallery cards, three commits earlier.
 
 ---
 
