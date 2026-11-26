@@ -4,6 +4,47 @@ Paste this whole file into a new session to continue.
 
 ---
 
+## Read this first: the seven ways this work went wrong
+
+Every one of these happened in a single week, and every one produced a commit that
+said something untrue. They share a cause, and the cause is the useful part.
+
+| # | The mistake | What it cost |
+|---|---|---|
+| 1 | **A green tick on a job that never ran.** `site.yml`'s browser job was `pull_request`-only; this repo pushes to main. It reported success in 17 s having done only the static checks | a week of "CI is green" that meant nothing; the accessibility gate, render check and keyboard checks had never executed |
+| 2 | **A claim without a mechanism.** "The engine reflects the sky" — `refreshEnv()` threw a `ReferenceError` into an empty `catch` and had never run | two commits asserting a feature that did not exist; the studio map was doing the work |
+| 3 | **A measurement of the wrong quantity.** `measure.py` reported `max.y − min.y`, which includes anything below the ground plane | a whole research session explaining CSMT's "missing 8.5 m", which did not exist |
+| 4 | **Trusting a stale number in my own table.** Konark carried ASI's rounded 30 m where the surveys say 38.4; Jantar Mantar carried the popular 27 m where the measured summit is 19.12 | nearly "fixed" two correct models to match wrong figures |
+| 5 | **Dismissing a correct tool reading.** The contrast tool flagged a `.deva` at 1.20; I looked at the *panel* header, found it legible, and called the tool wrong. The element was in `header#topbar`, sitting on bare sky | the real failure survived another commit, and I wrote a "known limit" into the tool blaming it |
+| 6 | **Not generalising a fix already made.** A scrim over photographs (`.card-num`) was fixed; the same need over the canvas (the top bar) was not | the identical bug shipped twice |
+| 7 | **Editing what was already correct.** Tried to make CI's audit strict; it already was, and the edit produced `--strict --strict` | noise, and a reminder that I had not read the line before changing it |
+
+**The single cause: I accepted a passing signal as evidence.** A green tick, a render
+that looked fine, a number from a tool, a table I had written myself — each was
+treated as proof when it was only a signal. Every one of the seven was caught by
+doing the boring thing instead: reading the run's steps, printing the intermediate
+value, sampling the actual pixel, opening the file.
+
+**Rules that follow, in the order they would have helped:**
+
+1. **Before trusting a check, make it fail.** Break something deliberately and watch
+   the gate go red. A check that has never failed has never been tested.
+2. **A number is not a measurement until you know what it measures.** Print the
+   quantity, its units and its bounds before comparing it with anything.
+3. **When a check disagrees with your eyes, find out which element it looked at.**
+   Print the selector. Do not conclude "the tool is wrong" from a look at a
+   different thing.
+4. **When you fix a class of bug, search for the class.** Scrims over images, empty
+   catch blocks, hard-coded paths, copies of a number — each appeared twice.
+5. **An empty `catch` is a lie waiting to be told.** Every one here is now a
+   `console.warn` or a rethrow.
+6. **Read the line before editing it.** Three edits this week duplicated something
+   already present.
+7. **Say "unverified" out loud.** Several of these were only fixed because a note in
+   this file said "I could not confirm this", and the next pass picked it up.
+
+---
+
 ## The project
 
 A static site of **24 Indian monuments modelled procedurally in three.js**, one

@@ -5,6 +5,28 @@ built by one person from published dimensions and photographs, not surveyed. If
 you improve one, **your name and a link go on the credits page and inside the
 model itself** — that is the deal, and there is nothing else to sign.
 
+## Before you trust a check
+
+Seven bugs in one week of this repository shared one cause: a passing signal was
+taken for evidence. A few of them are worth knowing about before you add a model,
+because they are easy to repeat:
+
+- **Make the check fail before you trust it.** Break something deliberately and
+  watch the gate go red. A check that has never failed has not been tested — this
+  repository had a CI job that reported success without ever running.
+- **A number is not a measurement until you know what it measures.** `measure.py`
+  once reported a height that included a slab 9 m below ground, and a whole
+  afternoon went into explaining a discrepancy that did not exist.
+- **When a check disagrees with your eye, print the selector** rather than
+  concluding the check is wrong. It usually is not.
+- **When you fix a class of bug, search for the class.** A missing scrim behind
+  text over a photograph was fixed; the same need over the 3D canvas was not, and
+  the identical bug shipped twice.
+- **An empty `catch` is a lie waiting to be told.** Two of the seven were hidden
+  that way.
+- **Say "unverified" out loud.** Half of these were only found because a note said
+  so and the next pass picked it up.
+
 ## What the levels mean
 
 | Level | Means |
