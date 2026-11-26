@@ -11,6 +11,11 @@ everything that is not sky, ground or weather.
     python3 tools/measure.py taj-mahal --unit 3.353     # the Taj is unit-scaled
     python3 tools/measure.py --all
 
+**`top` is the figure to compare with a published height**, because every module is
+authored with the ground at y = 0. `box` is max.y − min.y, and a base slab, a water
+body or a plinth that dips below zero inflates it — which is how CSMT's box read
+62.3 m when its highest stone is at 53.3 m and the building is 53.8 m.
+
 The engine's pages are authored in metres, so their figures need no scale. The Taj
 is a unit-scale scene where 1 unit = 3.353 m (57 m tomb side / 17 units), which is
 exactly the conversion recorded in DIMENSIONS.md.
@@ -48,7 +53,8 @@ PROBE = """(far) => {
   });
   // the tallest single object is the thing a visitor reads as "the monument"
   per.sort((a, c) => c.size[1] - a.size[1]);
-  return { acc, tallest: per.slice(0, 3), meshes: acc.n };
+  return { acc, tallest: per.slice(0, 3), meshes: acc.n,
+           top: acc.max[1], base: acc.min[1] };
 }"""
 
 
@@ -78,7 +84,7 @@ async def measure(ids, unit):
                 h = (r['acc']['max'][1] - r['acc']['min'][1]) * u
                 d = (r['acc']['max'][2] - r['acc']['min'][2]) * u
                 tall = r['tallest'][0]['size'][1] * u if r['tallest'] else 0
-                out.append((mid, r['meshes'], w, h, d, tall))
+                out.append((mid, r['meshes'], w, h, d, tall, r['top'] * u, r['base'] * u))
             else:
                 out.append((mid, 0, 0, 0, 0, 0))
             await pg.close()
@@ -100,9 +106,10 @@ def main():
     if 'taj-mahal' in ids and unit == 1.0:
         print('note: the Taj is unit-scaled; pass --unit 3.353 for metres\\n')
     rows = asyncio.run(measure(ids, unit))
-    print('%-22s %7s %8s %8s %8s %9s' % ('monument', 'meshes', 'width', 'height', 'depth', 'tallest'))
-    for mid, n, w, h, d, tall in rows:
-        print('%-22s %7d %7.1f %8.1f %8.1f %9.1f' % (mid, n, w, h, d, tall))
+    print('%-22s %7s %8s %8s %8s %9s %8s %8s' % (
+        'monument', 'meshes', 'width', 'box', 'depth', 'tallest', 'top', 'base'))
+    for mid, n, w, h, d, tall, top, base in rows:
+        print('%-22s %7d %7.1f %8.1f %8.1f %9.1f %8.1f %8.1f' % (mid, n, w, h, d, tall, top, base))
     print('\\nall figures in metres%s' % ('' if unit == 1.0 else ' (unit %.3f)' % unit))
 
 

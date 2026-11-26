@@ -470,6 +470,35 @@ third copy is ever needed, it should be read from the first.
 
 ---
 
+### 67. The measurement was wrong, not CSMT — and the table is rebuilt
+
+Chasing CSMT's missing 8.5 m found the bug in my own tool. `measure.py` reported the
+**box**: max.y minus min.y. Every module is authored with the ground at y = 0, and
+CSMT has a base slab at **−9.1 m**, so its box read 62.3 m against a real 53.8 m.
+
+Measured as **top above ground**, CSMT is **53.3 m** — 0.5 m from 48.8 m of dome
+plus the 16 ft 6 in Statue of Progress. The model was right all along.
+
+The tool now reports `top`, `base` and `box`, and all 24 were re-measured:
+
+| | Before (box) | After (top) |
+|---|---|---|
+| within 12 per cent | 14 of 24 | **16 of 24** |
+| CSMT | +28% | **−1%** |
+| statue | +4% | **0%** |
+| Kandariya | +6% | **0%** |
+
+The five that remain outside 12 per cent are a rock, a hill, a railing, a belfry and
+a flag mast — each named in the table. **One real shortfall survives: Jantar
+Mantar's gnomon reaches 23.7 m where the Samrat Yantra is 27 m**, and it is
+recorded as a job rather than quietly fixed.
+
+**The lesson, which is the same one twice in two days:** a number from a tool is not
+a measurement until you know what the tool is measuring. `box` and `top` differ by
+whatever dips below the ground, and I published a table on the wrong one.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

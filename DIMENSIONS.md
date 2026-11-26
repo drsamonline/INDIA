@@ -396,6 +396,76 @@ for Konark, Peña et al. for the Qutb Minar section). Dimensions marked
 
 ## Measured, all twenty-four
 
+`tools/measure.py` loads each page, walks the scene and reports the **top of the
+geometry above the ground plane** — every module is authored with the ground at
+y = 0, so that figure is directly comparable with a published height. Run over all
+24 on 2026-11-26.
+
+| Monument | Real | Model top | Δ | What the difference is |
+|---|---|---|---|---|
+| [Qutub Minar](monuments/qutub-minar.html) | 72.5 | **73.9** | +2% | — |
+| [Hawa Mahal](monuments/hawa-mahal.html) | 15.0 | **16.5** | +10% | — |
+| [Charminar](monuments/charminar.html) | 56.0 | **56.0** | +0% | — |
+| [Gateway Of India](monuments/gateway-of-india.html) | 26.0 | **26.2** | +1% | — |
+| [Taj Mahal](monuments/taj-mahal.html) | 73.0 | **70.1** | -4% | — |
+| [India Gate](monuments/india-gate.html) | 42.4 | **42.1** | -1% | — |
+| [Mysore Palace](monuments/mysore-palace.html) | 44.8 | **43.2** | -4% | — |
+| [Golden Temple](monuments/golden-temple.html) | 16.5 | **21.0** | +27% | the nishan sahib, the flag mast |
+| [Konark Sun Temple](monuments/konark-sun-temple.html) | 38.4 | **42.7** | +11% | — |
+| [Sanchi Stupa](monuments/sanchi-stupa.html) | 16.5 | **22.1** | +34% | the railing and toranas stand 5.6 m above the dome |
+| [Victoria Memorial](monuments/victoria-memorial.html) | 56.0 | **60.2** | +8% | — |
+| [Meenakshi Temple](monuments/meenakshi-temple.html) | 51.9 | **55.6** | +7% | — |
+| [Lotus Temple](monuments/lotus-temple.html) | 34.0 | **35.0** | +3% | — |
+| [Shore Temple](monuments/shore-temple.html) | 18.0 | **18.4** | +2% | — |
+| [Rani Ki Vav](monuments/rani-ki-vav.html) | 27.0 | **22.4** | -17% | measured from the terrace down; the well floor is 30.6 m below ground |
+| [Amber Fort](monuments/amber-fort.html) | 52.0 | **76.6** | +47% | the hill |
+| [Csmt Mumbai](monuments/csmt-mumbai.html) | 53.8 | **53.3** | -1% | — |
+| [Mahabodhi Temple](monuments/mahabodhi-temple.html) | 52.0 | **54.8** | +5% | — |
+| [Statue Of Unity](monuments/statue-of-unity.html) | 240.0 | **239.9** | -0% | — |
+| [Kandariya Mahadeva](monuments/kandariya-mahadeva.html) | 31.0 | **31.0** | +0% | — |
+| [Basilica Bom Jesus](monuments/basilica-bom-jesus.html) | 25.0 | **32.8** | +31% | the belfry at the rear, which the façade figures exclude |
+| [Mehrangarh Fort](monuments/mehrangarh-fort.html) | 36.0 | **131.3** | +265% | the rock, ~95 m of it |
+| [Jantar Mantar](monuments/jantar-mantar.html) | 27.0 | **23.7** | -12% | **3.3 m short** — the Samrat Yantra gnomon is 27 m and the model reaches 23.7 |
+| [Somnath Temple](monuments/somnath-temple.html) | 50.0 | **61.3** | +23% | the flag mast |
+
+**Sixteen of twenty-four are within 12 per cent, and CSMT is the reason this table
+was rebuilt.** Its first version compared the *box* — max.y minus min.y — and the
+box includes whatever dips below the ground plane. CSMT has a base slab at −9.1 m,
+so its box read 62.3 m against a real 53.8 m and looked 8.5 m too tall. Its highest
+stone is at **53.3 m**, which is 0.5 m from the dome's apex plus the Statue of
+Progress. The model was right; the measurement was wrong.
+
+The five that remain outside 12 per cent are each a thing that is not the building:
+a rock, a hill, a railing, a belfry, a flag mast. **One is a real shortfall:
+Jantar Mantar's gnomon reaches 23.7 m where the Samrat Yantra is 27 m.** It is
+recorded rather than quietly corrected, and it is a small job for whoever takes the
+next pass at that page.
+## Disputed figures
+
+These are the dimensions where the sources genuinely disagree and the model
+had to choose. If you have a survey drawing, these are the ones to revisit.
+
+| Monument | Figure | Readings | Chosen |
+|---|---|---|---|
+| Hawa Mahal | façade width | 15 m vs 30 m | 21 m, scaled from the photograph |
+| Charminar | arch height | 20 m published vs ~14 m in the photograph | 17 m apex, 20.2 m with cresting |
+| Mahabodhi | base width | 15 m in the literature vs ~28–30 m in the photograph | 30 m, photograph |
+| Kandariya | height datum | 31 m ground-to-kalasha vs above the plinth | 31 m including the jagati |
+| Lotus | height | 34.27 m from the podium vs 40.80 m from the entrance | 34.27 m |
+| Victoria Memorial | height | 184 ft (Wikipedia) vs 200 ft (the Hall) | 56.08 m to the Angel's base, 60.96 m to its head |
+| Konark | height | "30 m" headline vs 112 ft 5 in in the 1910 survey | the survey |
+| Sanchi | 16.46 m datum | dome alone vs drum + dome | drum + dome, so the stack reaches 21.64 m |
+
+---
+
+*Figures as researched for the 2026 rebuild. Sources named per row: ASI,
+UNESCO nomination dossiers and ICOMOS evaluations, the relevant Wikipedia
+articles, and the survey literature (Kaye 1918 for Jantar Mantar, Swarup 1910
+for Konark, Peña et al. for the Qutb Minar section). Dimensions marked
+*(photo)* were scaled from the reference photograph in `assets/img/`.*
+
+## Measured, all twenty-four
+
 `tools/measure.py` loads each page, walks the scene and reports the world-space
 extent of everything that is not sky, ground or weather. Run over all 24 on
 2026-11-26, comparing the **bounding-box height** with the published figure in the
