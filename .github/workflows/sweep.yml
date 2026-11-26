@@ -1,0 +1,89 @@
+# The weekly sweep: everything the per-push gate is too slow to do.
+#
+# `site.yml` runs on every push, so it samples two monument pages and the three
+# root pages. That is the right shape for a push — it finishes in minutes — but it
+# leaves twenty-one pages unvisited, and this repository has already had a week
+# where the gate looked green because the browser job was skipped by a condition.
+#
+# This job visits all of them, at a desktop and a phone viewport, once a week, and
+# keeps the logs as artifacts. It does not block anything: it reports.
+
+name: weekly sweep
+
+on:
+  schedule:
+    - cron: '0 3 * * 1'        # Mondays, 03:00 UTC — 08:30 IST
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sweep:
+    name: every page, two viewports
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Playwright and Chromium
+        run: |
+          pip install --quiet playwright pillow
+          python -m playwright install --with-deps chromium
+      - name: Resolve the Chromium path
+        run: |
+          python - <<'EOF'
+          from playwright.sync_api import sync_playwright
+          with sync_playwright() as p:
+              open('chrome_path.txt', 'w').write(p.chromium.executable_path)
+          EOF
+          echo "CHROME_PATH=$(cat chrome_path.txt)" >> "$GITHUB_ENV"
+
+      # the static checks first: they take seconds, and a stale page makes the
+      # rest meaningless
+      - name: Regenerate and prove the pages are current
+        run: |
+          python3 tools/build_site.py
+          python3 tools/build_taj.py
+          python3 tools/build_extras.py
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Generated pages differ from the committed ones."
+            git --no-pager diff --stat
+            exit 1
+          fi
+      - name: Links, data, tints, framing
+        run: |
+          python3 tools/linkcheck.py
+          python3 tools/audit_data.py --strict
+          python3 tools/tintcheck.py --ci
+          python3 tools/framecheck.py
+
+      # the slow part: every page, at a desktop and a phone viewport.
+      # --restart because the logs are committed: a resuming run would skip every
+      # page and report success without having looked at one.
+      - name: Accessibility, every page, 380 wide
+        run: python3 tools/check_a11y_all.py --size 380x430 --budget 4000 --restart
+      - name: Accessibility, every page, 390x844
+        run: python3 tools/check_a11y_all.py --size 390x844 --budget 4000 --restart
+      - name: Root pages
+        run: |
+          python3 tools/check_a11y.py --root
+          python3 tools/check_a11y.py --root --width 390 --height 844
+
+      - name: Measure the built geometry
+        run: |
+          python3 tools/measure.py --all --unit 1
+          python3 tools/measure.py taj-mahal --unit 3.353
+
+      - name: Keep the logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sweep-logs
+          path: |
+            shots/a11y-all-*.log
+            shots/sheet.png
+          if-no-files-found: warn
+          retention-days: 30

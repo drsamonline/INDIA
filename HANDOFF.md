@@ -506,6 +506,31 @@ whatever dips below the ground, and I published a table on the wrong one.
 
 ---
 
+### 68. A weekly sweep, because the push gate can only sample
+
+`site.yml` runs on every push and finishes in minutes, which means it checks two
+monument pages and the three root pages. Twenty-one pages are never visited by CI.
+That is the right trade for a push, but it is not coverage.
+
+`.github/workflows/sweep.yml` runs on Mondays at 03:00 UTC and on demand:
+
+| Step | What it covers |
+|---|---|
+| regenerate + staleness | every page, generated from data |
+| links, data, tints, framing | 26 pages, 24 monuments |
+| accessibility at 380 × 430 | **all 24 pages** |
+| accessibility at 390 × 844 | **all 24 pages** |
+| root pages, both viewports | index, credits, 404 |
+| measure | every monument's built height |
+
+It reports rather than blocks, and keeps `shots/a11y-all-*.log` as an artifact.
+
+**One trap it had to avoid:** `check_a11y_all.py` resumes from its log, and those
+logs are committed — so a fresh CI run would have read "all 24 pages already in …"
+and passed without looking at one. The sweep passes `--restart`.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
