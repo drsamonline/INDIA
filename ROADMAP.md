@@ -94,7 +94,7 @@ from the code.
 
 | Monument | Polish |
 |---|---|
-| ~~**Golden Temple**~~ | **done** — the gold carried a small emissive standing in for the sky it would reflect. **The engine now has a real sky environment** (§47), so the emissive can be dialled back whenever the gold is next touched |
+| ~~**Golden Temple**~~ | **done, twice** — the gold first carried a small emissive standing in for the sky it would reflect. The engine got a real sky environment (§47), and the emissive is now dialled back to a token: metalness 0.88, emissive 0.20, so the leaf reads as metal at noon rather than as a uniform glow (§72) |
 | ~~**Sanchi**~~ | **done** — the vedika had posts and three rails and nothing over them, so it read as a fence of sticks. A continuous coping course now runs the top of both railings, with a lotus boss on every third post |
 | ~~**Shore Temple**~~ | **done** (the porch) — the shala roof over the east porch was a bare half-cylinder. It now carries a row of seven kudu dormer faces down its front slope, a pilaster band at each end and three stupis along the ridge. The second shrine's tier count stays disputed — recorded in `DIMENSIONS.md`, not guessed |
 | ~~**Victoria Memorial**~~ | **done** — the Angel was a cone, three cylinders and four flat slabs. It is now a lofted robe with folds, a torso, a head, one arm raised holding a gold wreath, and five overlapping feathers a side on a swept leading edge. The four allegorical groups are seated figures with their attributes — palette, set square and column, sword and scales, a child |

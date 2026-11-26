@@ -1,4 +1,4 @@
-/* FIDELITY: approximate — The gold carries a small emissive standing in for an environment map (HANDOFF §46); the interior is not modelled.
+/* FIDELITY: approximate — The gold is metal reflecting the engine's sky, and the shrine, causeway and tank are modelled; the interior and the surrounding bazaar are not.
    Improved by: (nobody yet). If you improve this model, add your name and
    a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Golden Temple (Harmandir Sahib) — Amritsar · procedural miniature
@@ -102,8 +102,12 @@ export default {
       }
       return c;
     };
-    const GD = gilt('gold', 0xe0b04e, 0.70, 0.30, 0x2e1f08, 0.55);   // the trims
-    const GDL = gilt('goldLeaf', 0xf7cd6b, 0.62, 0.34, 0x4a3208, 0.75);  // dome and leaf
+    /* The emissive was a stand-in for an environment that did not exist. The
+       engine reflects a real sky now (§47), so the gold can go back to being
+       metal: metalness up, emissive down to a token that keeps the shaded side
+       from going to soot. */
+    const GD = gilt('gold', 0xdfae4a, 0.88, 0.26, 0x1a1204, 0.20);   // the trims
+    const GDL = gilt('goldLeaf', 0xf7cd6b, 0.82, 0.30, 0x2a1c06, 0.28);  // dome and leaf
     const PI = Math.PI;
 
     /* ---------- measured plan ------------------------------------------- */

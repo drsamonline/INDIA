@@ -595,7 +595,7 @@
   "year": 1577,
   "fidelity": {
    "level": "approximate",
-   "note": "The gold carries a small emissive standing in for an environment map (HANDOFF §46); the interior is not modelled."
+   "note": "The gold is metal reflecting the engine's sky, and the shrine, causeway and tank are modelled; the interior and the surrounding bazaar are not."
   },
   "contributors": []
  },

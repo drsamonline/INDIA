@@ -619,6 +619,29 @@ and the credits row say so too.
 
 ---
 
+### 72. The gold stopped cheating
+
+§46 gave the Golden Temple an emissive because a metal with nothing to reflect
+renders matte. §47 gave the engine a sky environment — and then turned out never to
+have run until §58. Both are settled now, so the cheat has been dialled back to a
+token:
+
+| | §46 (cheat) | §72 (metal) |
+|---|---|---|
+| trims | metalness 0.70, emissive 0.55 | **0.88**, emissive 0.20 |
+| dome and leaf | metalness 0.62, emissive 0.75 | **0.82**, emissive 0.28 |
+
+A small emissive stays, at about a quarter of what it was, because the shaded side
+of a real metal under this sky still goes to soot without it. That is a compromise,
+and it is a much smaller one.
+
+**Rendered at noon and at 17:48.** At noon the dome and the four finials now carry
+distinct specular highlights rather than a uniform glow; at dusk the leaf takes the
+sky's colour. That is what gold leaf does, and it is the first time this page has
+shown it.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
