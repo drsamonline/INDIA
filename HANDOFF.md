@@ -591,6 +591,25 @@ a piece of software and needs the same scepticism as the thing it checks.
 
 ---
 
+### 71. Amber Fort's ramparts were a fence of stones
+
+The last open polish item in the roadmap. The wall runs were a line of separate
+4.3 m blocks with a 1.2 m cube on every second one, which reads as a fence of stones
+rather than a fortification — the same fault the Sanchi vedika had before it got a
+coping (§40).
+
+Each run is now: **one continuous wall**, a **parapet walk** along the crest set
+back a little, a **crenellated row of merlons** (1 m wide, 2 m apart) on the outer
+edge, and bastions spaced along the length instead of every eighth block. +420
+triangles in total — 88,374 to 88,794 — because the blocks were merged anyway.
+
+**What was not done, and is in the roadmap as such:** the extent. The real wall
+network is 12 km and this is 490 m of representative runs, and the hill and the lake
+are still compressed. The note in `data/monuments.json` says so, so the gallery card
+and the credits row say so too.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

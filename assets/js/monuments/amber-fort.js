@@ -1,4 +1,4 @@
-/* FIDELITY: approximate — The 12 km wall network is 490 m of representative runs, and the palace is compressed.
+/* FIDELITY: approximate — The ramparts read as continuous crenellated walls with a parapet walk, but the 12 km wall network is 490 m of representative runs and the hill and lake are compressed.
    Improved by: (nobody yet). If you improve this model, add your name and
    a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Amber Fort — Amer, Rajasthan · procedural miniature
@@ -331,18 +331,29 @@ export default {
     }
 
     /* ---- the outer fortification and the ramparts ----------------------- */
+    /* A rampart is a continuous wall with a walk along the top and a row of
+       merlons on its outer edge. It used to be a line of separate 4.3 m blocks
+       with a cube every other one, which read as a fence of stones rather than a
+       fortification — the same fault the Sanchi vedika had before it got a
+       coping (§40). */
     function rampart(x0, z0, x1, z1, y) {
       const dx = x1 - x0, dz = z1 - z0;
       const len = Math.hypot(dx, dz), ry = Math.atan2(dz, dx);
-      const n = Math.max(2, Math.round(len / 4.2));
-      for (let i = 0; i < n; i++) {
-        const t = i / (n - 1);
-        const x = x0 + dx * t, z = z0 + dz * t;
-        add(stone, box(4.3, 6.2, 1.9), x, y + 3.1, z, { ry });
-        if (i % 2 === 0) add(stone, box(1.2, 1.2, 2.0), x, y + 6.8, z, { ry });
+      const cx = (x0 + x1) / 2, cz = (z0 + z1) / 2;
+      // the wall: one run
+      add(stone, box(len, 6.2, 1.9), cx, y + 3.1, cz, { ry });
+      // the parapet walk along the crest, set back a little
+      add(stone, box(len, 1.5, 1.45), cx, y + 6.95, cz, { ry });
+      // merlons: a crenellated row, 1.0 m wide with a gap the same size
+      const step = 2.0, nm = Math.max(2, Math.floor(len / step));
+      for (let i = 0; i < nm; i++) {
+        const t = (i + 0.5) / nm;
+        add(stone, box(1.0, 1.1, 1.5), x0 + dx * t, y + 8.25, z0 + dz * t, { ry });
       }
-      for (let i = 3; i < n; i += 8) {
-        const t = i / (n - 1);
+      // bastions, spaced along the run
+      const nb = Math.max(1, Math.round(len / 34));
+      for (let i = 1; i <= nb; i++) {
+        const t = i / (nb + 1);
         const x = x0 + dx * t, z = z0 + dz * t;
         add(stone, cyl(2.6, 3.0, 9.4, 8), x, y + 4.7, z);
         add(trim, cyl(3.1, 3.1, 0.3, 8), x, y + 9.5, z);
