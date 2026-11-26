@@ -449,6 +449,27 @@ own. A calliper that reports a number is not the same as a check.
 
 ---
 
+### 66. The three unexplained heights: two were the figure, not the model
+
+Researched the three the measurement flagged (Konark +48, CSMT +28, Basilica +31).
+
+| Monument | What the sources say | Verdict |
+|---|---|---|
+| **Konark** | the jagamohana is **38.4 m above ground** (Swarup 1910: 112 ft 5 in from the platform, 125 ft 8 in above ground; Ganguly's theodolite 129 ft 8 in; the 1627 Madalapanji agrees). ASI's own page says "30 m square and 30 m high" | **the height table was wrong.** It had ASI's round 30 m, while this file's Konark section has carried 38.4 m since the first session. Fixed in `framecheck.py` |
+| **Basilica** | 61 ft (18.6 m) is the façade; the model's box reaches the belfry at the rear, which façade figures exclude | the box measures a different part of the building |
+| **CSMT** | 48.8 m is to the dome's apex, plus the 16 ft 6 in Statue of Progress = **53.8 m** | **8.5 m still unexplained.** The only real question left |
+
+**The lesson is the one the file already had and I had to learn again:** a
+discrepancy is not automatically a model error. Had I "fixed" Konark to match the
+30 m figure, I would have made a correct model wrong, and deleted the one thing the
+surveys agree on.
+
+**Also worth noting:** `framecheck.py`'s height table is a second copy of numbers
+that `DIMENSIONS.md` already holds, and the two had drifted. They agree now. If a
+third copy is ever needed, it should be read from the first.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

@@ -124,6 +124,14 @@ The 40 m / 67 m figures sometimes quoted are **feet**, not metres.
 | Horses | 7 — three to one hand, four to the other | same | ASI |
 | Deul | ruined; originally over 61 m | stump to ~29 m | — |
 
+**The disputed figure:** the ASI's own Konark page gives the jagamohana as "30 m
+square and 30 m high", and that round number was in `tools/framecheck.py`'s height
+table until 2026-11-26 — which is why Konark read 48 per cent too tall when the
+model was measured. The surveys are unambiguous: Swarup measured 112 ft 5 in from
+the platform, 125 ft 8 in above ground, Ganguly's theodolite gave 129 ft 8 in, and
+the 1627 Madalapanji reading agrees. The table above has used 38.4 m all along;
+the height table now does too.
+
 ## Sanchi Stupa
 
 | Element | Real | Model | Source |
@@ -404,7 +412,7 @@ building is assembled from separate pieces.
 | [India Gate](monuments/india-gate.html) | 42.4 | **42.1** | -1% | 42.1 | — |
 | [Mysore Palace](monuments/mysore-palace.html) | 44.8 | **43.3** | -3% | 33.4 | — |
 | [Golden Temple](monuments/golden-temple.html) | 16.5 | **28.9** | +75% | 27.9 | the shrine is 16.5 m; the box includes the surrounding buildings and the gate |
-| [Konark Sun Temple](monuments/konark-sun-temple.html) | 30.0 | **44.4** | +48% | 42.7 | **unexplained** — the deul is 30 m; 44.4 needs a look |
+| [Konark Sun Temple](monuments/konark-sun-temple.html) | 38.4 | **44.4** | +16% | 42.7 | the 4.1 m terrace under the hall; the table's own figure, and the ASI's 30 m is the outlier |
 | [Sanchi Stupa](monuments/sanchi-stupa.html) | 16.5 | **22.7** | +38% | 22.1 | the railing and toranas stand above the dome |
 | [Victoria Memorial](monuments/victoria-memorial.html) | 56.0 | **62.4** | +11% | 59.1 | the plinth and the Angel above the dome |
 | [Meenakshi Temple](monuments/meenakshi-temple.html) | 51.9 | **55.7** | +7% | 54.8 | the plinth and the gopuram finials |
@@ -412,11 +420,11 @@ building is assembled from separate pieces.
 | [Shore Temple](monuments/shore-temple.html) | 18.0 | **19.7** | +9% | 18.8 | the plinth |
 | [Rani Ki Vav](monuments/rani-ki-vav.html) | 27.0 | **52.9** | +96% | 36.3 | a stepwell: the box spans the top terrace to the well floor |
 | [Amber Fort](monuments/amber-fort.html) | 52.0 | **79.8** | +53% | 75.2 | the hill the palace stands on |
-| [Csmt Mumbai](monuments/csmt-mumbai.html) | 48.8 | **62.3** | +28% | 56.7 | **unexplained** — 48.8 is to the dome; the box is 62.3 |
+| [Csmt Mumbai](monuments/csmt-mumbai.html) | 53.8 | **62.3** | +16% | 56.7 | 48.8 m is to the dome's apex, plus the 5 m Statue of Progress = 53.8; **8.5 m still unexplained** |
 | [Mahabodhi Temple](monuments/mahabodhi-temple.html) | 52.0 | **57.2** | +10% | 52.5 | the plinth and the tower's finial |
 | [Statue Of Unity](monuments/statue-of-unity.html) | 240.0 | **249.9** | +4% | 180.8 | statue 182 m on a 58 m plinth; the box spans both |
 | [Kandariya Mahadeva](monuments/kandariya-mahadeva.html) | 31.0 | **33.0** | +6% | 31.9 | the plinth |
-| [Basilica Bom Jesus](monuments/basilica-bom-jesus.html) | 25.0 | **32.8** | +31% | 32.8 | **unexplained** — 25 m is the facade; the box is 32.8 |
+| [Basilica Bom Jesus](monuments/basilica-bom-jesus.html) | 24.0 | **32.8** | +37% | 32.8 | the belfry at the rear, which the façade figures exclude |
 | [Mehrangarh Fort](monuments/mehrangarh-fort.html) | 36.0 | **135.3** | +276% | 129.6 | the rock the fort stands on, ~100 m |
 | [Jantar Mantar](monuments/jantar-mantar.html) | 27.0 | **27.4** | +1% | 27.1 | — |
 | [Somnath Temple](monuments/somnath-temple.html) | 50.0 | **61.3** | +23% | 60.9 | the flag mast |
@@ -427,9 +435,26 @@ below grade, a flag mast or a plinth all read as height. Where the note names th
 extra object, the model is not wrong — the measurement is measuring more than the
 published figure.
 
-**Three are unexplained and worth a look:** Konark at +48 per cent, CSMT at +28,
-and the Basilica at +31. Each is a building on flat ground with no mast, rock or
-well to account for the difference, so either the model is too tall or the
-published figure measures something else. They are marked rather than adjusted,
-because adjusting a model to satisfy a measurement whose scope is not settled is
-how the second shrine's tier count got averaged in the first place.
+**The three that were flagged have been researched, and two of them were the
+figure, not the model:**
+
+- **Konark.** The figure in the height table was 30 m, which is the ASI's own
+  wording ("jagamohana, 30 m square and 30 m high"). The surveys say otherwise:
+  Swarup measured the porch at 112 ft 5 in from the platform, 125 ft 8 in above
+  ground, and Ganguly's theodolite gave 129 ft 8 in — **about 39 m**, which is also
+  what Wikipedia, the Odisha histories and the 1627 Madalapanji reading agree on.
+  Add the 4.1 m terrace the hall stands on and the building is 42.5 m against the
+  model's 44.4 m. The model was right and the height table was wrong; it now says
+  38.4 m, which is the figure this file's own Konark section has carried since the
+  first session.
+- **The Basilica.** 61 ft (18.6 m) is the façade; the model's box reaches the
+  belfry at the rear, which the façade figures exclude. Not a discrepancy in the
+  building, but the box is measuring a different part of it.
+- **CSMT.** 48.8 m is to the dome's apex; the Statue of Progress on top is 16 ft
+  6 in, so 53.8 m to the top of the figure. The model's box is 62.3 m — **8.5 m
+  above that, and still unexplained.** It is the one real question left in this
+  table.
+
+Two of the three were the published figure measuring something narrower than the
+model draws. That is the argument for recording a discrepancy instead of adjusting
+a model to satisfy it: the adjustment would have made Konark *wrong*.

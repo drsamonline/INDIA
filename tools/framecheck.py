@@ -21,12 +21,16 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 H = {
     'taj-mahal': 73, 'qutub-minar': 72.5, 'hawa-mahal': 15, 'charminar': 56,
     'gateway-of-india': 26, 'india-gate': 42.35, 'mysore-palace': 44.8,
-    'golden-temple': 16.5, 'konark-sun-temple': 30, 'sanchi-stupa': 16.5,
+    'golden-temple': 16.5,
+    'konark-sun-temple': 38.4,    # jagamohana above ground, Swarup 1910; ASI's page says 30 m and is the outlier
+    'sanchi-stupa': 16.5,
     'victoria-memorial': 56, 'meenakshi-temple': 51.9, 'lotus-temple': 34,
     'shore-temple': 18, 'rani-ki-vav': 27, 'amber-fort': 52,
-    'csmt-mumbai': 48.8, 'mahabodhi-temple': 52, 'statue-of-unity': 240,
+    'csmt-mumbai': 53.8,          # 48.8 m to the dome's apex + the 5 m Statue of Progress
+    'mahabodhi-temple': 52, 'statue-of-unity': 240,
     'kandariya-mahadeva': 31, 'basilica-bom-jesus': 25, 'mehrangarh-fort': 36,
     'jantar-mantar': 27, 'somnath-temple': 50,
+    # the basilica's façade is 61 ft (18.6 m); 24 m is the other published reading
 }
 
 POS = re.compile(r"pos:\s*\[\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*\]\s*,\s*target:\s*\[\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*\]")
