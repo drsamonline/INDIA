@@ -564,11 +564,25 @@ were worth fixing:
 
 `index.html` now reports **0 of 224 below AA**.
 
-**What the tool cannot do yet.** The monument pages layer a translucent panel over
-a canvas, and the tool scores gold-on-dark panel headings at 1.34:1 — which is not
-what anyone sees. So the landing and credits results are trustworthy and the
-monument pages are **unverified**, not passing. Modelling that layering is the next
-job for this tool, not a fix to the pages.
+**The CSS-walk version was wrong, so the tool now samples pixels.** It photographs
+the page with every glyph made transparent and takes the median colour under each
+text node's box — the real backdrop, whatever produced it. That version measured
+the whole page (index 395 nodes, credits 318) and found four more real failures,
+all fixed:
+
+| Was | Ratio | Now |
+|---|---|---|
+| the credits table's level pills | **1.71** | darkened to match the card chips |
+| `.card-num`, white on a 50 % scrim over a photograph | 4.40 | scrim deepened to 72 % |
+| `.cards-note` — a link inside `opacity:.72` | 3.10 | `--muted` colour, no opacity |
+
+**Both pages now report 0 below AA** across the whole document.
+
+**What is still unverified: the monument pages.** The pixel method reports two
+nodes on Qutb Minar — a `.panel-deva` label at 1.20 and a `.panel-sub` line at 2.03
+— and I could not confirm either by eye before running out of budget. The panel is a
+96 % opaque dark gradient, so gold-on-dark should be about 7:1 and those numbers
+look like the tool again, but **I have not verified it, so they stay unverified.**
 
 **Two of the four bugs were in the tool, not the site:** it scored text over the
 canvas against a white guess (1.38 for white-on-dark), and it read a `.rv` element

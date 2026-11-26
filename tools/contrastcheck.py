@@ -1,64 +1,43 @@
-"""Contrast audit: every text node's colour against the background behind it.
+"""Contrast audit: is the text readable against what is actually behind it?
 
 The accessibility gate checks structure — skip link, landmarks, alt text, focus
-trap. It has never checked whether the text can actually be read, which is the
-failure most people actually experience.
+trap. It never checked whether text can be **read**, which is the failure people
+actually experience.
 
-    python3 tools/contrastcheck.py                    # index, credits, two monuments
+**Why this samples pixels instead of walking the CSS.** The first version of this
+tool composited background colours up the tree. It scored white text over the 3D
+canvas against a white guess, read a reveal animation still at opacity 0 as
+invisible, and reported gold-on-dark panel headings at 1.34:1. Every one of those
+was the tool's fault, because a page's real backdrop is what the renderer painted,
+not what the cascade says.
+
+So: photograph the page with every glyph made transparent, then sample the median
+colour under each text node's box. That is the backdrop, whatever produced it —
+canvas, photograph, gradient, translucent panel.
+
+    python3 tools/contrastcheck.py                     # the four default pages
     python3 tools/contrastcheck.py --only index.html
+    python3 tools/contrastcheck.py --width 390 --height 844
 
-Reports WCAG 2.1 AA (4.5:1 normal text, 3:1 large text at 24 px or 18.66 px bold).
+Reports WCAG 2.1 AA: 4.5:1 for normal text, 3:1 for large (24 px, or 18.66 px bold).
 
-**What it trusts and what it does not.** The landing page is a flat cream background
-and its numbers are trustworthy — that is where it found three real failures. The
-monument pages layer a translucent panel over a canvas, and the tool reports
-gold-on-dark panel headings at 1.34:1, which is not true of the rendered page. So
-**read the landing and credits results, and treat the monument pages as unverified**
-until the layering is modelled properly. Text over the canvas, over a photograph or
-over a gradient is skipped rather than guessed at.
-
-Requires: pip install playwright, and a Chromium (CHROME_PATH env var).
+Requires: pip install playwright pillow, and a Chromium (CHROME_PATH env var).
 """
-import argparse, asyncio, os, sys
+import argparse, asyncio, io as _io, os, statistics, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CHROME = os.environ.get('CHROME_PATH', '/usr/local/bin/chromium')
+# the Taj is left out by default: it takes minutes to load and its loader covers
+# the page until then. Pass --only monuments/taj-mahal.html to include it.
+PAGES = ['index.html', 'credits.html', 'monuments/qutub-minar.html',
+         'monuments/meenakshi-temple.html']
 
-PROBE = """() => {
+# collect the text nodes: colour, box, size, weight
+COLLECT = """() => {
   const parse = (c) => {
     const m = c.match(/rgba?\\(([^)]+)\\)/); if (!m) return null;
     const p = m[1].split(',').map(Number);
     return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
-  };
-  const lum = (c) => {
-    const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
-    return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b);
-  };
-  const over = (fg, bg) => ({ r: fg.r * fg.a + bg.r * (1 - fg.a),
-                              g: fg.g * fg.a + bg.g * (1 - fg.a),
-                              b: fg.b * fg.a + bg.b * (1 - fg.a), a: 1 });
-  const bgOf = (el) => {
-    let n = el, acc = null;
-    while (n) {
-      const cs = getComputedStyle(n);
-      // a background-image may be a gradient (which can change the colour a lot)
-      // or a repeating noise texture over a flat colour (which does not). Take the
-      // flat colour when there is one and keep going; only give up if there is none.
-      if (cs.backgroundImage && cs.backgroundImage !== 'none' &&
-          !(parse(cs.backgroundColor) || { a: 0 }).a) { n = n.parentElement; continue; }
-      const c = parse(cs.backgroundColor);
-      // composite every layer, however opaque it claims to be: a panel at
-      // rgba(18,20,29,.92) over a cream body is not (18,20,29)
-      if (c && c.a > 0) {
-        acc = acc ? over(acc, c) : c;
-        if (c.a >= 0.999) return acc;
-      }
-      n = n.parentElement;
-    }
-    return null;      // nothing opaque behind it: the canvas, a photograph or a
-                      // gradient. Guessing white here scored the hint over the
-                      // canvas at 1.38 and the card numbers over their photographs
-                      // at 1.97, both false.
   };
   const out = [];
   document.querySelectorAll('body *').forEach((el) => {
@@ -66,65 +45,94 @@ PROBE = """() => {
     if (!text) return;
     const cs = getComputedStyle(el);
     if (cs.visibility === 'hidden' || cs.display === 'none') return;
-    // a screen-reader-only node is clipped to a pixel on purpose: it is not
-    // read by eye and must not be scored as if it were
     if (el.closest('.sr-only') || el.classList.contains('sr-only')) return;
-    // anything drawn over the 3D canvas is scored against whatever the scene
-    // happens to be showing, which this tool cannot know
-    if (el.closest('#app')) return;
-    // or if a canvas is what is actually behind it: hit-test the element's centre
-    const rr = el.getBoundingClientRect();
-    const hit = document.elementFromPoint(rr.left + rr.width / 2, rr.top + rr.height / 2);
-    if (hit && (hit.tagName === 'CANVAS' || hit.tagName === 'IMG' ||
-                (hit.closest && (hit.closest('#app') || hit.closest('picture'))))) return;
-    const r = el.getBoundingClientRect(); if (!r.width || !r.height) return;
-    if (r.width <= 2 || r.height <= 2) return;
-    const fg0 = parse(cs.color); const bg = bgOf(el);
-    if (!fg0 || !bg) return;
+    const r = el.getBoundingClientRect();
+    if (r.width < 3 || r.height < 3) return;
+    if (r.bottom < 0 || r.top > innerHeight) return;         // off-screen: no pixels
     let op = 1, n = el;
-    while (n && n !== document.documentElement) { op *= +getComputedStyle(n).opacity; n = n.parentElement; }
-    if (op < 0.05) return;                     // not rendered
-    const fg = op < 1 ? over({ ...fg0, a: fg0.a * op }, bg) : over(fg0, bg);
-    const L1 = lum(fg), L2 = lum(bg);
-    const ratio = (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
-    const size = parseFloat(cs.fontSize), weight = +cs.fontWeight || 400;
-    const large = size >= 24 || (size >= 18.66 && weight >= 700);
-    out.push({ text: text.slice(0, 40), ratio: +ratio.toFixed(2), size, weight, large,
-               fg: cs.color, tag: el.tagName.toLowerCase() + (el.className ? '.' + String(el.className).split(' ')[0] : '') });
+    while (n) { op *= +getComputedStyle(n).opacity; n = n.parentElement; }
+    if (op < 0.05) return;
+    const c = parse(cs.color); if (!c) return;
+    out.push({ text: text.slice(0, 38), r: [r.left, r.top, r.width, r.height],
+               color: [c.r, c.g, c.b], alpha: c.a * op,
+               size: parseFloat(cs.fontSize), weight: +cs.fontWeight || 400,
+               tag: el.tagName.toLowerCase() + (el.className ? '.' + String(el.className).split(' ')[0] : '') });
   });
   return out;
 }"""
 
-PAGES = ['index.html', 'credits.html', 'monuments/qutub-minar.html', 'monuments/taj-mahal.html']
+HIDE_TEXT = """* { color: transparent !important; text-shadow: none !important;
+      -webkit-text-fill-color: transparent !important; }"""
 
 
-async def main(pages, width, height):
+def lum(c):
+    def f(v):
+        v /= 255.0
+        return v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4
+    return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2])
+
+
+def ratio(fg, bg):
+    l1, l2 = lum(fg), lum(bg)
+    return (max(l1, l2) + 0.05) / (min(l1, l2) + 0.05)
+
+
+def over(fg, a, bg):
+    return [fg[i] * a + bg[i] * (1 - a) for i in range(3)]
+
+
+async def main(pages, width, height, verbose):
     from playwright.async_api import async_playwright
+    from PIL import Image
     bad = 0
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path=CHROME, args=[
             '--no-sandbox', '--disable-dev-shm-usage', '--use-angle=swiftshader',
             '--enable-unsafe-swiftshader', '--allow-file-access-from-files'])
-        for page_name in pages:
-            path = os.path.join(ROOT, page_name)
+        for name in pages:
+            path = os.path.join(ROOT, name)
             if not os.path.exists(path):
-                print('%-28s skip  not found' % page_name)
+                print('%-30s skip  not found' % name)
                 continue
             pg = await b.new_page(viewport={'width': width, 'height': height})
             await pg.goto('file://' + path, wait_until='load', timeout=60000)
-            # The pages reveal on scroll: a `.rv` element sits at opacity 0 until it
-            # is scrolled into view, and an ancestor at opacity 0 makes every ratio
-            # compute as 1.00 — which is how the first run "failed" 88 nodes.
+            # reveals: a `.rv` at opacity 0 is not rendered yet, and a page mid-fade
+            # is not what anyone reads
             await pg.add_style_tag(content='*{animation:none!important;transition:none!important}'
                                            '.rv{opacity:1!important;transform:none!important}')
-            await pg.wait_for_timeout(1200)
-            rows = await pg.evaluate(PROBE)
-            fails = [r for r in rows if r['ratio'] < (3.0 if r['large'] else 4.5)]
-            fails.sort(key=lambda r: r['ratio'])
-            print('%-28s %3d text nodes, %d below AA' % (page_name, len(rows), len(fails)))
-            for r in fails[:8]:
-                print('    %5.2f  %-26s %5.1fpx w%s  %s' % (
-                    r['ratio'], r['tag'][:26], r['size'], r['weight'], r['text'][:36]))
+            await pg.wait_for_timeout(1500)
+            # measure the whole page, not just the first viewport: grow the window to
+            # the document height (capped) so nothing below the fold goes unchecked
+            doc_h = await pg.evaluate("Math.min(document.documentElement.scrollHeight, 7000)")
+            if doc_h and doc_h > height:
+                await pg.set_viewport_size({'width': width, 'height': int(doc_h)})
+                await pg.wait_for_timeout(900)
+            nodes = await pg.evaluate(COLLECT)
+            # the plate: the same page with every glyph invisible
+            await pg.add_style_tag(content=HIDE_TEXT)
+            await pg.wait_for_timeout(250)
+            shot = await pg.screenshot(timeout=120000)
+            img = Image.open(_io.BytesIO(shot)).convert('RGB')
+            fails = []
+            for n in nodes:
+                x, y, w, h = n['r']
+                x0, y0 = int(max(0, x)), int(max(0, y))
+                x1, y1 = int(min(img.width, x + w)), int(min(img.height, y + h))
+                if x1 - x0 < 2 or y1 - y0 < 2:
+                    continue
+                crop = img.crop((x0, y0, x1, y1))
+                raw = crop.convert("RGB").tobytes(); px = [tuple(raw[i:i+3]) for i in range(0, len(raw), 3)]
+                bg = [statistics.median([p[i] for p in px]) for i in range(3)]
+                fg = over(n['color'], n['alpha'], bg) if n['alpha'] < 1 else n['color']
+                rt = ratio(fg, bg)
+                need = 3.0 if (n['size'] >= 24 or (n['size'] >= 18.66 and n['weight'] >= 700)) else 4.5
+                if rt < need:
+                    fails.append((rt, need, n))
+            fails.sort(key=lambda t: t[0])
+            print('%-30s %3d text nodes, %d below AA' % (name, len(nodes), len(fails)))
+            for rt, need, n in (fails if verbose else fails[:8]):
+                print('    %5.2f (needs %.1f)  %-22s %5.1fpx w%s  %s' % (
+                    rt, need, n['tag'][:22], n['size'], n['weight'], n['text']))
             bad += len(fails)
             await pg.close()
         await b.close()
@@ -137,5 +145,6 @@ if __name__ == '__main__':
     ap.add_argument('--only', nargs='*', default=None)
     ap.add_argument('--width', type=int, default=1200)
     ap.add_argument('--height', type=int, default=900)
+    ap.add_argument('--all', action='store_true', help='print every failure, not the worst 8')
     a = ap.parse_args()
-    sys.exit(asyncio.run(main(a.only or PAGES, a.width, a.height)))
+    sys.exit(asyncio.run(main(a.only or PAGES, a.width, a.height, a.all)))
