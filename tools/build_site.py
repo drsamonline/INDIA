@@ -90,6 +90,10 @@ def build_index(monuments):
         if m.get('unesco') and m['unesco'] != '—':
             label = 'UNESCO' if 'World Heritage Site' in m['unesco'] else 'UNESCO tentative'
             tag = f'<span class="card-tag">{label}</span>'
+        # the fidelity level, on the card itself: the atlas says how good each
+        # model is where someone browses, not only after they click through
+        lvl = (m.get('fidelity') or {}).get('level', 'approximate')
+        fid_chip = f' <span class="fid-mini fid-{esc(lvl)}" title="{esc((m.get("fidelity") or {}).get("note", ""))}">{esc(lvl)}</span>'
         cards.append(f"""
       <a class="card" href="monuments/{m['id']}.html" data-region="{esc(m['region'])}" data-id="{m['id']}">
         <div class="card-media">
@@ -102,7 +106,7 @@ def build_index(monuments):
         <div class="card-body">
           <p class="card-kicker">{esc(m['place'])} · {esc(m['state'])}</p>
           <h3 class="card-title">{esc(m['name'])} <span class="deva">{esc(m['deva'])}</span></h3>
-          <p class="card-meta">{esc(m['era'])}</p>
+          <p class="card-meta">{esc(m['era'])}{fid_chip}</p>
           <p class="card-blurb">{esc(m['blurb'])}</p>
           <span class="card-go">Enter the miniature <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </div>

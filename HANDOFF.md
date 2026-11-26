@@ -531,6 +531,22 @@ and passed without looking at one. The sweep passes `--restart`.
 
 ---
 
+### 69. The level is on the card now
+
+The fidelity work said how good each model is, but only on the credits page and in
+a monument's About drawer — nowhere near the moment someone browses. Each gallery
+card now carries its level beside the era, in the same colours as the credits
+table: **measured** green, **approximate** amber, **study** grey, with the reason as
+a `title` on the chip.
+
+Above the grid, one line says what the chips mean and links to the invitation.
+
+**It costs nothing to keep true:** the chip is generated from `data/monuments.json`
+in `build_site.py`, so a contributor who improves a model and changes its level
+changes the card, the credits row and the About drawer in the same commit.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

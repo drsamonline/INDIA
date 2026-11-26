@@ -294,3 +294,15 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:34px 0 44px;back
   font-size:11px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
 .skip-link:focus{left:0}
 main:focus{outline:none}
+
+/* the fidelity level on each card, so the atlas is honest where people browse */
+.fid-mini{display:inline-block;margin-left:8px;font:600 8px/1 var(--mono,monospace);letter-spacing:.10em;
+  text-transform:uppercase;padding:3px 5px;border-radius:3px;border:1px solid currentColor;vertical-align:1px}
+.fid-mini.fid-measured{color:#3f7a52}
+.fid-mini.fid-approximate{color:#a9702a}
+.fid-mini.fid-study{color:#8a8478}
+.card:hover .fid-mini{opacity:.9}
+
+.cards-note{max-width:64ch;margin:0 0 22px;font-size:13px;line-height:1.7;color:var(--ink);opacity:.72}
+.cards-note b{font-weight:600;opacity:1}
+.cards-note a{color:var(--terracotta)}
