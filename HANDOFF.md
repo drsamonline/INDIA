@@ -578,11 +578,20 @@ all fixed:
 
 **Both pages now report 0 below AA** across the whole document.
 
-**What is still unverified: the monument pages.** The pixel method reports two
-nodes on Qutb Minar — a `.panel-deva` label at 1.20 and a `.panel-sub` line at 2.03
-— and I could not confirm either by eye before running out of budget. The panel is a
-96 % opaque dark gradient, so gold-on-dark should be about 7:1 and those numbers
-look like the tool again, but **I have not verified it, so they stay unverified.**
+**What is still open: two readings on the monument pages.** The tool reports a
+`.panel-deva` at 1.20 and a `.panel-sub` at 2.03 on Qutb Minar.
+
+I checked by eye and by direct sampling: the panel header is **gold on #212c, about
+6.2:1**, and a crop of the rendered header shows it plainly. The tool's own debug
+output prints *two* `.panel-deva` nodes — one at 0.85 opacity over the dark panel
+(6.23:1) and one at full opacity over `[156,170,175]`, which is sky. The second is
+most likely the tour card's Devanagari title, measured while it sits over the canvas.
+
+**So: the page is fine, the tool has a second-element problem, and it is recorded
+rather than papered over.** Two genuine fixes came out of the chase anyway — the
+tool now waits for `dataset.boot` (it had been measuring the *loading screen*, where
+a title over bright sky really does score 1.20) and it has `--debug TAG` to print
+fg, bg and ratio for any element.
 
 **Two of the four bugs were in the tool, not the site:** it scored text over the
 canvas against a white guess (1.38 for white-on-dark), and it read a `.rv` element

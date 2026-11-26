@@ -21,6 +21,13 @@ canvas, photograph, gradient, translucent panel.
 
 Reports WCAG 2.1 AA: 4.5:1 for normal text, 3:1 for large (24 px, or 18.66 px bold).
 
+**Known limit.** On the monument pages the tool reports a `.deva` and a `.panel-sub`
+at 1.20 and 2.03 on Qutb Minar. Both are wrong for what a reader sees: the panel
+header is gold on #212c, about 6.2:1, and a crop of the rendered header confirms it.
+The tool is picking up a second element of the same class — most likely the tour
+card's Devanagari title — while it sits over the canvas. Until that is pinned down,
+**trust the landing and credits results and treat the two monument readings as open.**
+
 Requires: pip install playwright pillow, and a Chromium (CHROME_PATH env var).
 """
 import argparse, asyncio, io as _io, os, statistics, sys
@@ -65,6 +72,9 @@ HIDE_TEXT = """* { color: transparent !important; text-shadow: none !important;
       -webkit-text-fill-color: transparent !important; }"""
 
 
+DEBUG = ''
+
+
 def lum(c):
     def f(v):
         v /= 255.0
@@ -100,7 +110,14 @@ async def main(pages, width, height, verbose):
             # is not what anyone reads
             await pg.add_style_tag(content='*{animation:none!important;transition:none!important}'
                                            '.rv{opacity:1!important;transform:none!important}')
-            await pg.wait_for_timeout(1500)
+            # wait for the scene to finish booting. Without this the tool measures
+            # the loading screen, where a Devanagari title sits over bright sky and
+            # scored 1.20 — a real reading of a page nobody is meant to read.
+            try:
+                await pg.wait_for_function("document.documentElement.dataset.boot==='ok'", timeout=150000)
+            except Exception:
+                pass                      # the Taj never sets it
+            await pg.wait_for_timeout(1200)
             # measure the whole page, not just the first viewport: grow the window to
             # the document height (capped) so nothing below the fold goes unchecked
             doc_h = await pg.evaluate("Math.min(document.documentElement.scrollHeight, 7000)")
@@ -126,6 +143,9 @@ async def main(pages, width, height, verbose):
                 fg = over(n['color'], n['alpha'], bg) if n['alpha'] < 1 else n['color']
                 rt = ratio(fg, bg)
                 need = 3.0 if (n['size'] >= 24 or (n['size'] >= 18.66 and n['weight'] >= 700)) else 4.5
+                if verbose and n['tag'].startswith(DEBUG):
+                    print('      debug %-16s fg=%s a=%.2f bg=%s ratio=%.2f' % (
+                        n['tag'], n['color'], n['alpha'], [round(v) for v in bg], rt))
                 if rt < need:
                     fails.append((rt, need, n))
             fails.sort(key=lambda t: t[0])
@@ -146,5 +166,8 @@ if __name__ == '__main__':
     ap.add_argument('--width', type=int, default=1200)
     ap.add_argument('--height', type=int, default=900)
     ap.add_argument('--all', action='store_true', help='print every failure, not the worst 8')
+    ap.add_argument('--debug', default='', help='print fg/bg/ratio for tags starting with this')
     a = ap.parse_args()
-    sys.exit(asyncio.run(main(a.only or PAGES, a.width, a.height, a.all)))
+    DEBUG = a.debug
+    globals()['DEBUG'] = a.debug
+    sys.exit(asyncio.run(main(a.only or PAGES, a.width, a.height, a.all or bool(a.debug))))
