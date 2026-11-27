@@ -1,19 +1,42 @@
 #!/usr/bin/env python3
 """Generate robots.txt, sitemap.xml and 404.html from data/monuments.json."""
-import json, os, datetime
+import json, os, subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = 'https://drsamonline.github.io/INDIA'
 data = json.load(open(os.path.join(ROOT, 'data', 'monuments.json'), encoding='utf-8'))
-today = datetime.date.today().isoformat()
+
+
+def content_date():
+    """The date of the last commit that touched the data file.
+
+    This used to be `date.today()`, which made the generator non-idempotent: every
+    run rewrote all 26 <lastmod> values, so the committed sitemap was always one
+    day stale and any staleness check that included this script would fail daily.
+    A content date changes only when the content does."""
+    try:
+        out = subprocess.run(
+            ['git', 'log', '-1', '--format=%ad', '--date=short', '--', 'data/monuments.json'],
+            cwd=ROOT, capture_output=True, text=True, timeout=10)
+        stamp = out.stdout.strip()
+        if out.returncode == 0 and len(stamp) == 10:
+            return stamp
+    except Exception:
+        pass
+    return None
+
+
+today = content_date()
 
 open(os.path.join(ROOT, 'robots.txt'), 'w').write(
     "User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n" % BASE)
 
 urls = ['', 'credits.html'] + ['monuments/%s.html' % m['id'] for m in data]
 body = "\n".join(
-    "  <url><loc>%s/%s</loc><lastmod>%s</lastmod><changefreq>monthly</changefreq>"
-    "<priority>%s</priority></url>" % (BASE, u, today, '1.0' if u == '' else '0.8')
+    "  <url><loc>%s/%s</loc>%s<changefreq>monthly</changefreq>"
+    "<priority>%s</priority></url>" % (
+        BASE, u, '<lastmod>%s</lastmod>' % today if today else '',
+        '1.0' if u == '' else '0.8')
     for u in urls)
 open(os.path.join(ROOT, 'sitemap.xml'), 'w').write(
     '<?xml version="1.0" encoding="UTF-8"?>\n'

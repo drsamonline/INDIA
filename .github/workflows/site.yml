@@ -23,6 +23,8 @@ jobs:
         run: python3 tools/build_site.py
       - name: Regenerate the Taj Mahal page
         run: python3 tools/build_taj.py
+      - name: Regenerate robots, sitemap and 404
+        run: python3 tools/build_extras.py
       - name: Fail if the generated pages are stale
         run: |
           if [ -n "$(git status --porcelain)" ]; then
