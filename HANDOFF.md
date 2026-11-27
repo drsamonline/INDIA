@@ -809,6 +809,22 @@ verified by reading the rendered `href` rather than the source.
 
 ---
 
+### 78. The report link needed a label, and the Taj needed a readout
+
+**The label.** The Report it link opens `issues/new?labels=model`, and the repository
+had no `model` label — GitHub silently drops a label that does not exist, so every
+report would have arrived unlabelled. The label now exists (`d9a441`, "A problem with
+a 3D model"). A prefilled URL is only as good as the things it points at.
+
+**The Taj's readout.** `?perf` was an engine feature; the Taj has its own renderer, so
+the heaviest page on the site — the one whose real-hardware cost matters most — had no
+way to report it. `build_taj.py` now injects the same readout at the point the loader
+clears: `ready 68,710 ms / frame 15,097 ms` in this sandbox, which is software
+rendering and headless rAF throttling, not a phone. On a real device the two numbers
+are what settle the question the last two weeks kept guessing at.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

@@ -2964,6 +2964,22 @@ function main() {
     overlay.classList.add('done');
     setTimeout(function () { overlay.style.display = 'none'; }, 900);
     window.__tajReady = true;
+    if (new URLSearchParams(location.search).has('perf')) {
+      var tti = Math.round(performance.now());
+      var el = document.createElement('div');
+      el.id = 'perf-hud';
+      el.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:9999;padding:6px 9px;' +
+        'background:rgba(10,12,18,.86);color:#ffd75e;border-radius:6px;' +
+        'font:600 11px/1.5 ui-monospace,monospace;pointer-events:none;white-space:pre';
+      document.body.appendChild(el);
+      var last = performance.now(), acc = [];
+      (function tick(now) {
+        if (now) { acc.push(now - last); last = now; if (acc.length > 40) acc.shift(); }
+        var med = acc.length ? acc.slice().sort(function (a, b) { return a - b; })[acc.length >> 1] : 0;
+        el.textContent = 'ready ' + tti + ' ms\nframe ' + Math.round(med) + ' ms';
+        requestAnimationFrame(tick);
+      })(0);
+    }
     toast('Taj Mahal · by ' + AUTHOR + ' · ' + LICENSE + ' · press T for the guided tour', 'success');
   }
   build().catch(function (err) {

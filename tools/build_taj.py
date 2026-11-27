@@ -78,6 +78,28 @@ src = src.replace('</style>', """.skip-link{position:absolute;left:-9999px;top:0
   clip:rect(0 0 0 0);white-space:nowrap;border:0}
 </style>""", 1)
 
+# ?perf, the same readout the engine pages have: this is the heaviest page on the
+# site and the only one whose real-hardware cost could not be measured from a
+# sandbox running software rendering.
+assert src.count("window.__tajReady = true;") == 1
+src = src.replace("window.__tajReady = true;", """window.__tajReady = true;
+    if (new URLSearchParams(location.search).has('perf')) {
+      var tti = Math.round(performance.now());
+      var el = document.createElement('div');
+      el.id = 'perf-hud';
+      el.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:9999;padding:6px 9px;' +
+        'background:rgba(10,12,18,.86);color:#ffd75e;border-radius:6px;' +
+        'font:600 11px/1.5 ui-monospace,monospace;pointer-events:none;white-space:pre';
+      document.body.appendChild(el);
+      var last = performance.now(), acc = [];
+      (function tick(now) {
+        if (now) { acc.push(now - last); last = now; if (acc.length > 40) acc.shift(); }
+        var med = acc.length ? acc.slice().sort(function (a, b) { return a - b; })[acc.length >> 1] : 0;
+        el.textContent = 'ready ' + tti + ' ms\\nframe ' + Math.round(med) + ' ms';
+        requestAnimationFrame(tick);
+      })(0);
+    }""")
+
 # the charbagh was 300 randomly scattered flowers — confetti. A parterre is
 # ordered beds, each edged with its own hedge, planted in rows of one colour.
 OLD_FLOWERS = 'const fGeo = new THREE.SphereGeometry(0.09, 6, 5);\n    flowerMesh = new THREE.InstancedMesh(fGeo, MAT.flower, 300);\n    const fm = new THREE.Matrix4();\n    const fPalette = [new THREE.Color(0xff4f9a), new THREE.Color(0xffb03a), new THREE.Color(0xf4ecdd), new THREE.Color(0xe8442e), new THREE.Color(0xd96f9e)];\n    for (let i = 0; i < 300; i++) {\n      const q = quads[i % 4];\n      const x = q[0] + (Math.random() - 0.5) * (q[2] - 1.2);\n      const z = q[1] + (Math.random() - 0.5) * (q[3] - 1.2);\n      fm.makeTranslation(x, 0.22, z);\n      flowerMesh.setMatrixAt(i, fm);\n      flowerMesh.setColorAt(i, fPalette[Math.floor(Math.random() * fPalette.length)]);\n    }\n    flowerMesh.instanceMatrix.needsUpdate = true;\n    if (flowerMesh.instanceColor) flowerMesh.instanceColor.needsUpdate = true;\n    scene.add(flowerMesh);'
