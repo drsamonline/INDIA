@@ -13,7 +13,11 @@ jobs:
     name: rebuild pages and check links
     runs-on: ubuntu-latest
     steps:
+      # full history: build_extras dates the sitemap from the last commit that
+      # touched data/monuments.json, and a shallow clone reports HEAD instead
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
