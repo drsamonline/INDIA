@@ -1,4 +1,4 @@
-/* FIDELITY: approximate — The quadrants lie in the plane of the equator; the massing is approximate and the graduated scale is a thin band (HANDOFF §45).
+/* FIDELITY: approximate — The quadrants lie in the plane of the equator; the massing is approximate and the graduated scale on the arc is a thin band.
    Improved by: (nobody yet). If you improve this model, add your name and
    a link here and it will appear on the site: see CONTRIBUTING.md. */
 /* Jantar Mantar — Jaipur · procedural miniature

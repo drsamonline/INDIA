@@ -70,7 +70,7 @@
   "year": 1632,
   "fidelity": {
    "level": "approximate",
-   "note": "Geometry and sky are the original scene's; the plinth is 26 per cent small against the tomb (DIMENSIONS.md)."
+   "note": "Geometry and sky are the original scene's; the plinth is about a quarter small against the tomb."
   },
   "contributors": []
  },
@@ -1412,7 +1412,7 @@
   "accent2": "#d8d2c4",
   "fidelity": {
    "level": "study",
-   "note": "The figure is procedural and is not a portrait of Sardar Patel; the head is as far as this pipeline goes (HANDOFF §49)."
+   "note": "The figure is procedural and is not a portrait of Sardar Patel. The head is as far as this approach goes."
   },
   "contributors": []
  },
@@ -1712,7 +1712,7 @@
   "accent2": "#f0e4c8",
   "fidelity": {
    "level": "approximate",
-   "note": "The quadrants lie in the plane of the equator; the massing is approximate and the graduated scale is a thin band (HANDOFF §45)."
+   "note": "The quadrants lie in the plane of the equator; the massing is approximate and the graduated scale on the arc is a thin band."
   },
   "contributors": []
  },

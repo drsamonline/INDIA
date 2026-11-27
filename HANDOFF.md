@@ -746,6 +746,25 @@ Two things came out of trying:
 
 ---
 
+### 75. The caveat now comes first, and speaks to a visitor
+
+Two small corrections to the honesty block, both found by reading the rendered
+drawer rather than the code:
+
+- **It sat below the history.** On the Statue of Unity a reader met three paragraphs
+  about Patel before the sentence saying the figure is not him. The fidelity block
+  now leads the About drawer on every page: what the model is, then the building's
+  story.
+- **It cited internal documents.** Three notes pointed at `HANDOFF §49`,
+  `§45` and `DIMENSIONS.md` — useful in this repository, meaningless on the site.
+  They now say the same thing in plain words ("about a quarter small against the
+  tomb"), and the module headers were kept in step.
+
+The lesson is a small one but it recurs: **a string that is correct in one context
+can be wrong in another.** These notes were written for me and published to everyone.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

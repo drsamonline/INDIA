@@ -1805,7 +1805,11 @@ export function boot(mon) {
     const nextUp = i >= 0 && INDEX.length > 1
       ? `<div class="nextup"><span>Next in the atlas</span><a href="${esc(INDEX[(i + 1) % INDEX.length].id)}.html">${esc(INDEX[(i + 1) % INDEX.length].name)} <span class="deva">${esc(INDEX[(i + 1) % INDEX.length].deva || '')}</span> →</a></div>`
       : '';
-    el.innerHTML = `${paras}${facts ? `<dl class="facts">${facts}</dl>` : ''}${fidBlock}<div class="links">${links}</div>${nextUp}${credit}`;
+    /* the fidelity block leads: a reader should know what the model is before
+       reading the history of the building it depicts — on the Statue of Unity the
+       three paragraphs otherwise arrive before the sentence saying it is not a
+       portrait */
+    el.innerHTML = `${fidBlock}${paras}${facts ? `<dl class="facts">${facts}</dl>` : ''}<div class="links">${links}</div>${nextUp}${credit}`;
   }
 
   function makeCtx(b, mon, scene, T, M) {
