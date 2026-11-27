@@ -290,6 +290,30 @@ a.cluster-btn{text-decoration:none;color:#e9e0cd;box-sizing:border-box}
 }
 """
 
+# The Taj is the one page whose About drawer is its own markup, so it never carried
+# the fidelity block or the report link the other 23 get from the engine. It is also
+# the page with the biggest known discrepancy — the plinth — so it is the last place
+# to leave silent.
+_fid = data.get('fidelity') or {}
+_lvl = _fid.get('level', 'approximate')
+_title = html.escape('Model: Taj Mahal')
+_body = html.escape('What is wrong with the model of Taj Mahal?\n\n'
+                    'Page: https://drsamonline.github.io/INDIA/monuments/taj-mahal.html\n'
+                    'Level shown: ' + _lvl + '\n\n'
+                    'What you see, and what it should be (a source helps):\n')
+fidelity_html = (
+    '<div style="border:1px solid rgba(217,164,65,.35);border-radius:8px;'
+    'padding:10px 12px;margin:0 0 14px;background:rgba(255,255,255,.03)">'
+    '<span style="display:inline-block;font:600 9px/1 ui-monospace,monospace;letter-spacing:.10em;'
+    'text-transform:uppercase;color:#0f1116;background:#d9a441;border-radius:4px;padding:4px 7px">'
+    + html.escape(_lvl) + '</span>'
+    '<p style="margin:8px 0 0;font-size:12px;line-height:1.6;color:#e9e0cd">'
+    + html.escape(_fid.get('note', '')) + '</p>'
+    '<p style="margin:8px 0 0;font-size:11px;line-height:1.6;color:#a8a293">'
+    'Spotted something wrong? <a style="color:#f0a868" target="_blank" rel="noopener" href="'
+    'https://github.com/drsamonline/INDIA/issues/new?labels=model&title=' + _title +
+    '&body=' + _body + '">Report it</a> — a sentence and a source is enough.</p></div>')
+
 extra_html = """
 <a id="taj-home" href="../index.html"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg> All monuments</a>
 <div id="taj-about" role="dialog" aria-modal="true" aria-label="About the Taj Mahal">
@@ -298,6 +322,7 @@ extra_html = """
     <p class="tj-kicker">__KICKER__</p>
     <h2>Taj Mahal</h2>
     <p class="tj-deva">ताज महल</p>
+    __FIDELITY__
     __PARAS__
     <dl class="tj-facts">__FACTS__</dl>
     <div class="tj-links">__LINKS__</div>
@@ -325,7 +350,8 @@ extra_html = """
 })();
 </script>
 """
-extra_html = (extra_html.replace('__KICKER__', esc('%s · %s' % (data['place'], data['era'])))
+extra_html = (extra_html.replace('__FIDELITY__', fidelity_html)
+              .replace('__KICKER__', esc('%s · %s' % (data['place'], data['era'])))
               .replace('__PARAS__', paras).replace('__FACTS__', facts)
               .replace('__LINKS__', links).replace('__LICENCE__', licence_line)
               .replace('__CREDIT__', credit))

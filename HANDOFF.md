@@ -825,6 +825,24 @@ are what settle the question the last two weeks kept guessing at.
 
 ---
 
+### 79. The Taj was the one page with no fidelity block and no report link
+
+Its About drawer is its own markup — `#taj-about .tj-card`, built by `build_taj.py` —
+so it never received the block the other 23 get from the engine. It is also the page
+with the biggest known discrepancy (the plinth, 26 per cent small), which makes it the
+last place to leave silent.
+
+It now carries both: the level pill, the note, and a **Report it** link with the same
+prefilled issue. Verified by opening the drawer and reading the rendered card.
+
+**How it was found:** a small script that opens every page's About drawer and asserts
+the block and the link exist. Ten engine pages passed, the Taj threw
+`Cannot read properties of null` — because the drawer it was looking for does not
+exist on that page. **A check that assumes one shape finds only the pages that have
+it**, which is why the assertion failed loudly instead of quietly passing.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
