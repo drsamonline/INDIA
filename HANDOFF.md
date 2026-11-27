@@ -18,6 +18,7 @@ said something untrue. They share a cause, and the cause is the useful part.
 | 5 | **Dismissing a correct tool reading.** The contrast tool flagged a `.deva` at 1.20; I looked at the *panel* header, found it legible, and called the tool wrong. The element was in `header#topbar`, sitting on bare sky | the real failure survived another commit, and I wrote a "known limit" into the tool blaming it |
 | 6 | **Not generalising a fix already made.** A scrim over photographs (`.card-num`) was fixed; the same need over the canvas (the top bar) was not | the identical bug shipped twice |
 | 7 | **Editing what was already correct.** Tried to make CI's audit strict; it already was, and the edit produced `--strict --strict` | noise, and a reminder that I had not read the line before changing it |
+| 9 | **A build-time value that cannot be computed at build time.** Made the sitemap's `lastmod` the date of the last commit touching the data file — which is the commit that *contains* the sitemap, so the value is unknowable when the file is written. Two red runs | `lastmod` is gone; a sitemap without it is valid, and a missing field beats a wrong one |
 | 8 | **Changed CI without running the CI path.** Made `build_extras` idempotent and added it to the staleness check — the local run passed, the runner failed, because `actions/checkout` is shallow and `git log` there returns HEAD's date, not the content date | one red run, and the fix was a one-line `fetch-depth: 0` I could have written first |
 
 **The single cause: I accepted a passing signal as evidence.** A green tick, a render
@@ -762,6 +763,27 @@ drawer rather than the code:
 
 The lesson is a small one but it recurs: **a string that is correct in one context
 can be wrong in another.** These notes were written for me and published to everyone.
+
+---
+
+### 76. The sitemap's date, and a value that cannot exist when it is written
+
+Two attempts, both wrong, both mine:
+
+1. `date.today()` — non-idempotent. Every run rewrote all 26 `<lastmod>` values, so
+   the committed sitemap was permanently a day stale, and that is *why* this
+   generator was the one CI never ran.
+2. The date of the last commit touching `data/monuments.json` — which is the commit
+   that **contains** the sitemap. The value cannot be known when the file is
+   generated, so it was wrong on the runner every time.
+
+Fixed by removing `lastmod`. A sitemap without it is valid, and a missing field
+beats a wrong one.
+
+**The general shape, which is mistake 9 in the list at the top of this file:** before
+computing a value, ask whether it *can* be computed at the point you compute it.
+Both versions were plausible, both were tested locally, and both were structurally
+impossible to get right.
 
 ---
 
