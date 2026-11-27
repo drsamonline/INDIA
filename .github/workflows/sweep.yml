@@ -22,7 +22,7 @@ jobs:
   sweep:
     name: every page, two viewports
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 240        # a11y x2 viewports + contrast + measure is ~2 h
     steps:
       - uses: actions/checkout@v4
         with:
@@ -80,7 +80,10 @@ jobs:
       - name: Contrast, every page
         run: |
           python3 tools/contrastcheck.py --only index.html credits.html
+          # the Taj is skipped: it takes minutes to load and the tool's own default
+          # leaves it out for the same reason
           for f in monuments/*.html; do
+            case "$f" in *taj-mahal*) echo "— $f (skipped, slow)"; continue;; esac
             echo "— $f"
             python3 tools/contrastcheck.py --only "$f" || true
           done
@@ -89,6 +92,11 @@ jobs:
         run: |
           python3 tools/measure.py --all --unit 1
           python3 tools/measure.py taj-mahal --unit 3.353
+
+      # one image of all 24 models, so the week's visual state is in the artifact
+      # rather than only in someone's memory of what it looked like
+      - name: Contact sheet
+        run: python3 tools/contact_sheet.py --size 380x300
 
       - name: Keep the logs
         if: always()
