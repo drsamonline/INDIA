@@ -18,6 +18,7 @@ said something untrue. They share a cause, and the cause is the useful part.
 | 5 | **Dismissing a correct tool reading.** The contrast tool flagged a `.deva` at 1.20; I looked at the *panel* header, found it legible, and called the tool wrong. The element was in `header#topbar`, sitting on bare sky | the real failure survived another commit, and I wrote a "known limit" into the tool blaming it |
 | 6 | **Not generalising a fix already made.** A scrim over photographs (`.card-num`) was fixed; the same need over the canvas (the top bar) was not | the identical bug shipped twice |
 | 7 | **Editing what was already correct.** Tried to make CI's audit strict; it already was, and the edit produced `--strict --strict` | noise, and a reminder that I had not read the line before changing it |
+| 8 | **Changed CI without running the CI path.** Made `build_extras` idempotent and added it to the staleness check — the local run passed, the runner failed, because `actions/checkout` is shallow and `git log` there returns HEAD's date, not the content date | one red run, and the fix was a one-line `fetch-depth: 0` I could have written first |
 
 **The single cause: I accepted a passing signal as evidence.** A green tick, a render
 that looked fine, a number from a tool, a table I had written myself — each was
