@@ -731,9 +731,15 @@ Ran `contrastcheck.py` over the pages one at a time. **Eleven checked, every one
 | credits | 318 |
 | qutub-minar, hawa-mahal, charminar, gateway-of-india, india-gate, mysore-palace, golden-temple, lotus-temple, victoria-memorial | 46–47 each |
 
-**Thirteen are unrun**, and the reason is throughput, not doubt: each page costs about
-four minutes because the engine boots a WebGL scene under software rendering before
-the tool will photograph it. Meenakshi timed out even at 285 s.
+**Twelve are checked now** (Konark added), and **twelve are unrun**. The reason is
+throughput, not doubt: each page costs three to five minutes because the engine boots
+a WebGL scene under software rendering before the tool will photograph it, and a
+2,200 px screenshot of that scene is slow. Sanchi did not finish inside 150 s.
+
+The tool now caps the boot wait at 60 s and hides the loader if the page has not
+booted, which roughly halves the cost — but it does not make this sandbox the right
+place to sweep 24 WebGL pages, and pretending otherwise would be the fourth time
+this week that I mistook a plausible plan for a working one.
 
 Two things came out of trying:
 

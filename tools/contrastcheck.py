@@ -120,10 +120,16 @@ async def main(pages, width, height, verbose):
             # wait for the scene to finish booting. Without this the tool measures
             # the loading screen, where a Devanagari title sits over bright sky and
             # scored 1.20 — a real reading of a page nobody is meant to read.
+            booted = True
             try:
-                await pg.wait_for_function("document.documentElement.dataset.boot==='ok'", timeout=150000)
+                await pg.wait_for_function("document.documentElement.dataset.boot==='ok'", timeout=60000)
             except Exception:
-                pass                      # the Taj never sets it
+                # Not booted in a minute: hide the loader and measure the chrome that
+                # is already there. The panel and top bar are built before the scene,
+                # and the loader was the one element that made this reading wrong
+                # before (§70) — so it goes rather than staying in the sample.
+                booted = False
+                await pg.evaluate("document.querySelectorAll('.boot,#boot,.loader,#loader,.load').forEach(e=>e.style.display='none')")
             await pg.wait_for_timeout(1200)
             # measure the whole page, not just the first viewport: grow the window to
             # the document height (capped) so nothing below the fold goes unchecked
@@ -158,7 +164,8 @@ async def main(pages, width, height, verbose):
                 if rt < need:
                     fails.append((rt, need, n))
             fails.sort(key=lambda t: t[0])
-            print('%-30s %3d text nodes, %d below AA' % (name, len(nodes), len(fails)))
+            print('%-30s %3d text nodes, %d below AA%s' % (
+                name, len(nodes), len(fails), '' if booted else '   (measured before boot)'))
             for rt, need, n in (fails if verbose else fails[:8]):
                 print('    %5.2f (needs %.1f)  %-22s %5.1fpx w%s  %s' % (
                     rt, need, n['tag'][:22], n['size'], n['weight'], n['text']))
