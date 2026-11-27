@@ -793,6 +793,22 @@ impossible to get right.
 
 ---
 
+### 77. A report path that needs no backend
+
+The site asked for help but gave no way to say *"this dome is wrong"*. Every monument
+page now carries a **Report it** link under the fidelity block that opens a GitHub
+issue with the page, its level and the URL pre-filled — `issues/new?labels=model&
+title=…&body=…`. The credits page carries the same link, and `CONTRIBUTING.md` says
+that reporting needs no fix.
+
+**A bug I caught before it shipped:** the first version of that link was written as a
+template literal containing `' +` concatenation — valid JavaScript, and it would have
+rendered the literal characters `' +` into the drawer. The render check for
+`has literal quote-plus: False` is what caught it, and it is the reason the link is
+verified by reading the rendered `href` rather than the source.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

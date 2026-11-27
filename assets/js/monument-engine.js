@@ -1792,6 +1792,17 @@ export function boot(mon) {
        named there is linked. */
     const fid = meta.fidelity || {};
     const people = (meta.contributors || []).filter((c) => c && c.name);
+    /* a report path that needs no backend: a GitHub issue with the page already
+       named, so "this dome is wrong" arrives with the context attached */
+    const issueTitle = encodeURIComponent('Model: ' + (meta.name || mon.id));
+    const issueBody = encodeURIComponent(
+      'What is wrong with the model of ' + (meta.name || mon.id) + '?\n\n' +
+      'Page: https://drsamonline.github.io/INDIA/monuments/' + mon.id + '.html\n' +
+      'Level shown: ' + (fid.level || 'unknown') + '\n\n' +
+      'What you see, and what it should be (a source helps):\n');
+    const issueLink = `<div class="fid-people" style="margin-top:8px">Spotted something wrong? ` +
+      `<a href="https://github.com/drsamonline/INDIA/issues/new?labels=model&title=${issueTitle}&body=${issueBody}" ` +
+      `target="_blank" rel="noopener">Report it</a> — a sentence and a source is enough.</div>`;
     const fidBlock = fid.level ? `<div class="fidelity">
         <span class="fid-level">${esc(fid.level)}</span>
         <span class="fid-note">${esc(fid.note || '')}</span>
@@ -1799,6 +1810,7 @@ export function boot(mon) {
           ? `<div class="fid-people">Improved by ${people.map((c) =>
               c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.name)}</a>` : esc(c.name)).join(', ')}.</div>`
           : `<div class="fid-people">Nobody has improved this model yet. If you do, your name and a link go here — see <a href="credits.html#improve">credits</a>.</div>`}
+        ${issueLink}
       </div>` : '';
     const INDEX = window.INDIA_INDEX || [];
     const i = INDEX.findIndex((x) => x.id === mon.id);

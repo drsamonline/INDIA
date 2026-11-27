@@ -40,6 +40,13 @@ Every monument's level and its reason are in `data/monuments.json` under
 [the credits page](credits.html#improve). `DIMENSIONS.md` has the
 measured-versus-model table for all 24, with the sources.
 
+## Reporting is welcome too
+
+Every monument page carries a **Report it** link that opens a GitHub issue with the
+page, its fidelity level and the URL already filled in. You do not need to fix
+anything to use it: a sentence about what looks wrong and a source is enough, and it
+is how most of the entries in `HANDOFF.md` started.
+
 ## How to improve one
 
 1. **Pick one monument.** One model per pull request, so the credit is unambiguous.
