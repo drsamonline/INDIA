@@ -127,7 +127,9 @@ async def main(pages, width, height, verbose):
             await pg.wait_for_timeout(1200)
             # measure the whole page, not just the first viewport: grow the window to
             # the document height (capped) so nothing below the fold goes unchecked
-            doc_h = await pg.evaluate("Math.min(document.documentElement.scrollHeight, 7000)")
+            # cap the growth: a 7000 px WebGL page takes a minute to photograph, and
+            # the monument pages are app-like anyway — their document is one screen
+            doc_h = await pg.evaluate("Math.min(document.documentElement.scrollHeight, 2200)")
             if doc_h and doc_h > height:
                 await pg.set_viewport_size({'width': width, 'height': int(doc_h)})
                 await pg.wait_for_timeout(900)

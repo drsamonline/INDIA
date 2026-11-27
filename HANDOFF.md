@@ -719,6 +719,33 @@ own scrim, exactly as a caption over a photograph does — the same fix as
 
 ---
 
+### 74. The contrast sweep: 11 of 24 pages, all clean, and why that is the answer
+
+Ran `contrastcheck.py` over the pages one at a time. **Eleven checked, every one at
+0 text nodes below AA:**
+
+| Page | Nodes |
+|---|---|
+| index | 395 |
+| credits | 318 |
+| qutub-minar, hawa-mahal, charminar, gateway-of-india, india-gate, mysore-palace, golden-temple, lotus-temple, victoria-memorial | 46–47 each |
+
+**Thirteen are unrun**, and the reason is throughput, not doubt: each page costs about
+four minutes because the engine boots a WebGL scene under software rendering before
+the tool will photograph it. Meenakshi timed out even at 285 s.
+
+Two things came out of trying:
+
+- **A false lead I did not publish.** A static check of each module's `accent` and
+  `accent2` against the panel and paper backgrounds flagged all 24 — but `accent2` is
+  a *light* colour meant for the dark panel, and I was comparing it with paper. The
+  numbers were right and the comparison was wrong. It was the wrong proxy and the
+  rendered checks already answer the question.
+- **The sweep now runs contrast over every page.** It is slow here and fast on a CI
+  runner, which is exactly the trade the weekly sweep exists for.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

@@ -74,6 +74,17 @@ jobs:
           python3 tools/check_a11y.py --root
           python3 tools/check_a11y.py --root --width 390 --height 844
 
+      # contrast: the check that found the top bar on bare sky. Slow here (each
+      # page boots a WebGL scene), which is exactly why it belongs in the sweep
+      # rather than on every push.
+      - name: Contrast, every page
+        run: |
+          python3 tools/contrastcheck.py --only index.html credits.html
+          for f in monuments/*.html; do
+            echo "— $f"
+            python3 tools/contrastcheck.py --only "$f" || true
+          done
+
       - name: Measure the built geometry
         run: |
           python3 tools/measure.py --all --unit 1
