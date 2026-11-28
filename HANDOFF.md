@@ -1295,6 +1295,9 @@ Also fetched, on the same pass:
 | `/this-page-does-not-exist` | **404**, our own page: title, `noindex`, the description, skip link and the "Back to the atlas" button |
 | `/assets/img/og/qutub-minar.jpg` | **200**, `image/jpeg`, and the image is the crop — "a tall tower… clear sky with a bird" |
 
+A URL map of the deployed site returns **all 24 monument pages plus `credits.html`** —
+every page in the sitemap is reachable, not just the ones this pass opened.
+
 **How to check the live site from this sandbox:** `curl` gets a 502 from the proxy for
 `drsamonline.github.io`; Firecrawl's scrape reaches it. Use that rather than concluding
 the site is down.
