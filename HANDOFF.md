@@ -1242,6 +1242,27 @@ code is the last command's.**
 
 ---
 
+### 97. The share-card crops were a one-off; now they are a recipe
+
+§94 produced thirteen 1200x630 crops from an ad-hoc script in `/scratch/work`. The files
+were committed; **the instructions were not.** If a photograph changed, the crop could
+only be guessed at again — and a future session would have had thirteen JPEGs and no way
+to know which band each came from.
+
+`tools/build_og.py` now carries the spec: for each page, the source file and where the
+crop starts as a fraction of its height, with the reason in a comment ("the shaft's
+balconies", "the head has to be whole").
+
+**It reproduces the committed files byte for byte** — `diff -rq` between the old directory
+and the regenerated one reports no differences, which is the only proof that a
+transcription of someone's earlier work is faithful.
+
+CI regenerates them with the other generators, so a photograph that changes without its
+crop being refreshed fails the push rather than shipping a card that crops through the
+subject.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

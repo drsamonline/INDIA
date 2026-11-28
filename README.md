@@ -105,6 +105,7 @@ tools/framecheck.py         named views and tour stops frame their subject
 tools/tintcheck.py          flags material tints taken from textured bases (--ci: new ones only)
 tools/build_gallery.py      rebuilds docs/gallery.jpg from shots/audit
 tools/build_extras.py       robots.txt, sitemap.xml, 404.html
+tools/build_og.py           the 1200x630 share-card crops, band chosen per photograph
 tools/MONUMENT-CONTRACT.md  how to write a new monument module
 tools/check_a11y_all.py     the a11y gate over every page, resumably, per viewport
 tools/contact_sheet.py      four pages to one image, for checking a global change

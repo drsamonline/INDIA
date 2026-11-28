@@ -29,6 +29,8 @@ jobs:
         run: python3 tools/build_taj.py
       - name: Regenerate robots, sitemap and 404
         run: python3 tools/build_extras.py
+      - name: Regenerate the share-card crops
+        run: python3 tools/build_og.py
       - name: Fail if the generated pages are stale
         run: |
           if [ -n "$(git status --porcelain)" ]; then
