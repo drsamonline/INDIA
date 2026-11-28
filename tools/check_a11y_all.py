@@ -22,7 +22,7 @@ a11y = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(a11y)
 
 
-async def run(pending, budget, size):
+async def run(pending, budget, size, boot_wait=100):
     from playwright.async_api import async_playwright
     t0 = time.time()
     async with async_playwright() as p:
@@ -42,10 +42,15 @@ async def run(pending, budget, size):
                 booted = True
                 try:
                     await page.wait_for_function(
-                        "document.documentElement.dataset.boot==='ok'", timeout=100000)
+                        "document.documentElement.dataset.boot==='ok'", timeout=boot_wait * 1000)
                 except Exception:
                     booted = False
-                    await page.wait_for_function("document.readyState==='complete'", timeout=30000)
+                    # a slow asset should not fail the page: the drawer contract is
+                    # DOM and is usually ready before `load` fires
+                    try:
+                        await page.wait_for_function("document.readyState==='complete'", timeout=45000)
+                    except Exception:
+                        pass
                 f = await a11y.check(page, mid)
                 bad = [k for k, v in a11y.EXPECT.items() if f.get(k) != v]
                 if f.get('desc_len', 0) < 40:
@@ -70,6 +75,8 @@ def main():
     ap.add_argument('--budget', type=int, default=250, help='seconds of work this run')
     ap.add_argument('--restart', action='store_true')
     ap.add_argument('--size', default='380x430', help='viewport, e.g. 390x844')
+    ap.add_argument('--boot-wait', type=int, default=100,
+                    help='seconds to wait for the scene; the drawer checks need only the DOM')
     args = ap.parse_args()
     size = tuple(int(v) for v in args.size.lower().split('x'))
     LOG = os.path.join(ROOT, 'shots', 'a11y-all-%dx%d.log' % size)
@@ -87,7 +94,7 @@ def main():
     if not pending:
         print('all %d pages already in %s' % (len(ids), LOG))
         return 0
-    asyncio.run(run(pending, args.budget, size))
+    asyncio.run(run(pending, args.budget, size, args.boot_wait))
     left = [i for i in ids if i not in set(l.split()[0] for l in open(LOG) if l.strip())]
     print('\n%d done, %d to go%s' % (len(ids) - len(left), len(left),
                                      '' if not left else ' - run again to continue'))

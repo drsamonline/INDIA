@@ -76,7 +76,15 @@ async def check(pg, mid):
             "document.activeElement && document.activeElement.id === 'btn-about-taj'")
         # the trap needs the drawer open again
         await pg.evaluate("document.getElementById('btn-about-taj').click()")
-        await pg.wait_for_timeout(700)   # the drawer focuses its close button on a timer
+        # the drawer focuses its close button on a 120 ms timer, and under software
+        # rendering that timer can be seconds late because the main thread is busy
+        # building the scene — so poll for the focus rather than guessing a delay
+        for _ in range(40):
+            if await pg.evaluate(
+                    "(()=>{const a=document.getElementById('taj-about');"
+                    "return !!a && a.contains(document.activeElement);})()"):
+                break
+            await pg.wait_for_timeout(200)
         for _ in range(6):
             await pg.keyboard.press('Tab')
         f['trap'] = await pg.evaluate(

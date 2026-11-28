@@ -1,24 +1,24 @@
-qutub-minar              ok    53.0s -
-hawa-mahal               ok    62.6s -
-charminar                ok    57.1s -
-gateway-of-india         ok    67.5s -
-india-gate               ok    58.0s -
-mysore-palace            ok   107.0s -
-golden-temple            ok    90.9s -
-konark-sun-temple        ok    74.8s -
-sanchi-stupa             ok    80.3s -
-victoria-memorial        ok    62.4s -
-meenakshi-temple         ok   122.0s -
-lotus-temple             ok    86.3s -
-shore-temple             ok    69.2s -
-rani-ki-vav              ok    94.4s -
-amber-fort               ok    65.6s -
-csmt-mumbai              ok    54.9s -
-mahabodhi-temple         ok    55.0s -
-statue-of-unity          ok    54.9s -
-kandariya-mahadeva       ok    60.1s -
-basilica-bom-jesus       ok    65.4s -
-mehrangarh-fort          ok    49.7s -
-jantar-mantar            ok    48.5s -
-somnath-temple           ok    67.8s -
-taj-mahal                FAIL 270.3s dialog_open focus_inside trap focus_returned  (no boot flag)
+qutub-minar              ok    32.5s -  (no boot flag)
+hawa-mahal               ok    45.3s -  (no boot flag)
+charminar                ok    33.7s -  (no boot flag)
+gateway-of-india         ok    33.9s -  (no boot flag)
+india-gate               ok    20.7s -  (no boot flag)
+mysore-palace            ok    33.5s -  (no boot flag)
+golden-temple            ok    26.2s -  (no boot flag)
+konark-sun-temple        ok    27.2s -  (no boot flag)
+sanchi-stupa             ok    26.2s -  (no boot flag)
+victoria-memorial        ok    24.5s -  (no boot flag)
+meenakshi-temple         ok    49.1s -  (no boot flag)
+lotus-temple             ok    30.8s -  (no boot flag)
+shore-temple             ok    25.0s -  (no boot flag)
+rani-ki-vav              ok    31.2s -  (no boot flag)
+amber-fort               ok    28.7s -  (no boot flag)
+csmt-mumbai              ok    20.8s -  (no boot flag)
+mahabodhi-temple         ok    19.0s -  (no boot flag)
+statue-of-unity          ok    21.7s -  (no boot flag)
+kandariya-mahadeva       ok    24.0s -  (no boot flag)
+basilica-bom-jesus       ok    28.0s -  (no boot flag)
+mehrangarh-fort          ok    23.5s -  (no boot flag)
+jantar-mantar            ok    19.7s -  (no boot flag)
+somnath-temple           ok    23.2s -  (no boot flag)
+taj-mahal                ok    20.8s -  (no boot flag)

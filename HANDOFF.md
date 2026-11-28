@@ -1074,6 +1074,26 @@ Result: **`taj-mahal ok`**, and Qutb Minar still ok, so the engine idiom did not
 
 ---
 
+### 90. All 24 pages pass the accessibility contract, at both viewports
+
+For the first time: **24 of 24 at 390x844 and 24 of 24 at 380x430**, zero failures. The
+logs are in `shots/a11y-all-*.log`.
+
+Getting there needed three things, and two of them were the checker's fault:
+
+| Problem | Fix |
+|---|---|
+| The Taj was scored against the engine's `#about`, which it does not have | the runner detects which idiom a page uses (§89) |
+| `--boot-wait 5` — waiting 100 s for a scene the drawer checks do not need made this sweep take hours | a flag, so the same 24 pages run in about ten minutes |
+| A slow `load` failed the page outright (`wait_for_function: Timeout 30000ms`) | the fallback is caught, and the DOM checks run anyway |
+| The Taj's `trap` was flaky at 380x430 | the checker now **polls for focus** instead of waiting a fixed 700 ms — the drawer's 120 ms focus timer can be seconds late when the main thread is building a 200-second scene |
+
+**The lesson, and it is the one this week keeps giving:** three of those four were the
+instrument, not the subject. A check that fails for its own reasons is worse than no
+check, because it teaches you to skim the report.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
