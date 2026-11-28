@@ -1021,6 +1021,12 @@ monument's palette, so it is recorded here rather than done in a hurry.
 | Below AA | 0, after the Jantar Mantar fix |
 | Not checked | **Meenakshi** and the **Taj** — both exceed the sandbox's 300 s per call; the weekly sweep runs them on a runner |
 
+**A near-miss worth recording.** Meenakshi ran inside the budget at a 700x500 viewport
+and reported "2 text nodes, 0 below AA". That is not a pass: at that width the panel is
+not laid out, so the tool saw two nodes and found nothing wrong with them. It is logged
+as **not measured**, because "0 below AA" from a two-node sample is exactly the green
+tick on a skipped job that this file keeps warning about.
+
 `shots/contrast-all.log` carries the per-page results.
 
 ---
