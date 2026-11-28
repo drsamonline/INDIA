@@ -982,6 +982,22 @@ on exact strings and assert the count of each before writing.
 
 ---
 
+### 86. Two scenarios that turned out clean (recorded so nobody re-does them)
+
+After §82 (no WebGL) and §84 (reduced motion, print) both turned up real faults, I ran
+two more untested scenarios. Both passed — and a pass is worth writing down once, so the
+next session does not spend an hour re-checking it.
+
+| Scenario | Method | Result |
+|---|---|---|
+| **200 % zoom** (WCAG 1.4.4) | 640 px layout viewport on a monument page | `scrollWidth - clientWidth = 0`; the panel is 260 px wide, right edge at 632, not clipped |
+| **Forced colours** (Windows high contrast) | `forced_colors: 'active'` on the landing page | `h1` computes to `rgb(0,0,0)` on `rgb(255,255,255)` — the browser recolours as it should, and nothing in `assets/css` sets `forced-color-adjust: none` to prevent it |
+
+Not tested, and not claimed: touch gestures, screen-reader output with a real AT, and
+Safari or Firefox — this sandbox has Chromium only.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
