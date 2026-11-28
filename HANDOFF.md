@@ -1213,6 +1213,35 @@ leaving a confident lie in the first file anyone reads. Made to fail by renaming
 
 ---
 
+### 96. Every step of the weekly sweep has now been run by hand
+
+The sweep (`sweep.yml`) has never executed — `gh workflow run` returns 403 because the App
+token lacks `actions: write`, and its first scheduled run is Monday. So each step was run
+locally instead, in the order the workflow runs them, and the output read:
+
+| Step | Result |
+|---|---|
+| `build_site.py` · `build_taj.py` · `build_extras.py` | all three write, and a second run changes nothing |
+| `linkcheck.py` | 26 pages resolve; the README's 53 paths exist |
+| `audit_data.py --strict` | 0 errors, 0 warnings |
+| `tintcheck.py --ci` | 13 clone tints, 5 known, 0 new |
+| `framecheck.py` | 0 home cameras short |
+| `check_a11y_all.py` at 390x844 and 380x430 | **24 of 24 ok, both viewports** |
+| `check_drawer.py` | 24 of 24 carry a level and a report link |
+| `contrastcheck.py` | index, credits and 22 of 24 monuments at 0 below AA |
+| `measure.py` | batch path works; `--all` needs more than one 300 s call here, which is a sandbox limit, not a fault |
+| `contact_sheet.py` | writes a labelled sheet; verified by looking at it |
+
+**What that does not prove:** the runner's environment, the artifact upload, and whether
+the whole thing fits in 240 minutes. Those are Monday's to answer.
+
+**One trap worth naming:** `timeout 285 python3 tools/measure.py --all | tail -6` returns
+exit 0 while printing nothing, because the exit status belongs to `tail`, not to the
+killed process. I read that as "measure --all is silent" for a minute. **A pipeline's exit
+code is the last command's.**
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
