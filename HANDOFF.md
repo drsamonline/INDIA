@@ -1050,6 +1050,30 @@ first duplicate id breaks a drawer.
 
 ---
 
+### 89. The Taj's four a11y failures were the checker's, not the page's
+
+`check_a11y` reported `dialog_open`, `focus_inside`, `trap` and `focus_returned` failing
+on the Taj for weeks. The page was not at fault: the runner only knew the engine's idiom
+(`#about` + `body.about-open`) and the Taj has its own (`#taj-about` + `.open`).
+
+**A false failure is as misleading as a false pass** — it trains you to ignore the
+report. The runner now detects which idiom the page uses and checks the same contract
+against it: opens on the button, focus lands inside, Tab stays inside, Escape closes,
+focus returns to the opener.
+
+Two details it needed:
+
+- the drawer focuses its close button **on a 120 ms timer**, so the trap check waits
+  700 ms before tabbing; at 400 ms the first Tab started from the body and the trap
+  looked broken
+- `--boot-timeout 5` makes the Taj checkable in this sandbox at all — the drawer is DOM
+  and needs no scene, and waiting 200 s for a renderer that is not being tested is what
+  made this page "unverifiable" before
+
+Result: **`taj-mahal ok`**, and Qutb Minar still ok, so the engine idiom did not regress.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

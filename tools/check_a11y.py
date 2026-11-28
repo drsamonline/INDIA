@@ -55,7 +55,36 @@ async def check(pg, mid):
           return false; })()""")
     except Exception:
         pass
-    # drawer behaviour
+    # drawer behaviour. Two idioms: the engine's (#about + body.about-open) and the
+    # Taj's own (#taj-about + .open). The Taj used to fail four checks here purely
+    # because the runner only knew the first one — a false failure is as misleading
+    # as a false pass, so both are handled.
+    taj = await pg.evaluate("!!document.getElementById('taj-about')")
+    if taj:
+        f['drawer_idiom'] = 'taj'
+        await pg.evaluate("const b=document.getElementById('btn-about-taj'); if(b){b.focus(); b.click();}")
+        await pg.wait_for_timeout(500)
+        f['dialog_open'] = await pg.evaluate(
+            "document.getElementById('taj-about').classList.contains('open')")
+        f['focus_inside'] = await pg.evaluate(
+            "(()=>{const a=document.getElementById('taj-about');return !!a && a.contains(document.activeElement);})()")
+        await pg.keyboard.press('Escape')
+        await pg.wait_for_timeout(300)
+        f['esc_closes'] = await pg.evaluate(
+            "!document.getElementById('taj-about').classList.contains('open')")
+        f['focus_returned'] = await pg.evaluate(
+            "document.activeElement && document.activeElement.id === 'btn-about-taj'")
+        # the trap needs the drawer open again
+        await pg.evaluate("document.getElementById('btn-about-taj').click()")
+        await pg.wait_for_timeout(700)   # the drawer focuses its close button on a timer
+        for _ in range(6):
+            await pg.keyboard.press('Tab')
+        f['trap'] = await pg.evaluate(
+            "(()=>{const a=document.getElementById('taj-about');return !!a && a.contains(document.activeElement);})()")
+        await pg.keyboard.press('Escape')
+        return f
+
+    f['drawer_idiom'] = 'engine'
     await pg.evaluate("const b=document.getElementById('btn-about'); if(b){b.focus(); b.click();}")
     await pg.wait_for_timeout(500)
     f['dialog_open'] = await pg.evaluate("document.body.classList.contains('about-open')")
