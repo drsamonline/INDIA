@@ -1263,6 +1263,37 @@ subject.
 
 ---
 
+### 98. The deployed site was checked for the first time, not just the build
+
+Every verification this week read files on disk. The thing a visitor loads had never been
+inspected. Fetched `https://drsamonline.github.io/INDIA/monuments/qutub-minar.html` and
+`sitemap.xml` as a browser would, and checked the things this week changed:
+
+| Live page, Qutb Minar | |
+|---|---|
+| `color-scheme` | `light` — deployed |
+| `description` | 121 characters — under the truncation point |
+| `og:image` | `…/assets/img/og/qutub-minar.jpg` — the new crop, not the portrait photograph |
+| `og:title`, `twitter:card` | present; `summary_large_image` |
+| fidelity block | `measured`, its note, and the report link with `labels=model` |
+| `lang="hi"` on the Devanagari | present |
+| `data-boot` | `ok` — the scene boots on the live host, not just on `file://` |
+
+| Live `sitemap.xml` | |
+|---|---|
+| `<lastmod>` | **absent** — the fix is deployed, not just committed |
+| URLs | 26: index, credits and all 24 monuments |
+
+**Why this was worth doing:** every one of those could have been true in the repository and
+false on the site — a Pages build that silently failed, a cached asset, a generator whose
+output was never committed. Local checks cannot tell you which.
+
+**One thing that looked like a bug and was not:** the live HTML carries a canvas of
+`height="100000"`. The engine sizes the canvas to `window.innerHeight`, so that is the
+scraper's viewport, not a defect. Worth knowing before someone "fixes" it.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
