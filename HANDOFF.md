@@ -891,6 +891,33 @@ milliseconds.
 
 ---
 
+### 82. Without WebGL the site had no text at all
+
+Tested a scenario nobody had: a browser with WebGL disabled — older phones, some
+corporate and school machines, anything with hardware acceleration off.
+
+What a visitor got: **"STARTUP FAILED — the 3D scene could not start"**, and an About
+panel that opened *empty*. The history, the sources, the fidelity block and the report
+link were all built inside the boot sequence, after the renderer — so when the renderer
+threw, none of them were ever rendered. The written content of the site was unreachable
+on any device without WebGL.
+
+Now, when the scene cannot start:
+
+- `renderAbout()` runs anyway, so the text exists
+- the About panel opens itself, with a note at the top saying why there is no scene and
+  that everything below does not need one
+- the full-screen startup panel clears after 2.6 s, so the text is not hidden behind it
+
+Verified by disabling WebGL at the browser level: the drawer opens with 1,949 characters
+of history, the MEASURED pill, the note and the report link, over a blurred page.
+
+**The general lesson, which is the one this week keeps teaching:** I had tested the
+success path dozens of times and the failure path never. `fail()` existed, printed a
+message, and looked handled — but "handled" meant "shows an error", not "still works".
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

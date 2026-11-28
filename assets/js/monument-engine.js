@@ -936,6 +936,36 @@ export function boot(mon) {
       '. Try a modern browser with WebGL enabled, then reload.';
     $('boot-retry').onclick = () => location.reload();
     bootStatus.textContent = 'Startup failed';
+    /* The written history, the sources and the report link do not need WebGL, but
+       they were built inside the boot sequence — so a device without it got a page
+       whose About panel was empty, which is the whole text of the monument. Fill it
+       in, and open the panel, when the scene cannot start. */
+    try {
+      renderAbout();
+      const about = $('about');
+      const btn = $('btn-about');
+      if (about && btn) {
+        btn.onclick = () => {
+          const open = document.body.classList.toggle('about-open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          about.setAttribute('aria-hidden', open ? 'false' : 'true');
+          if (open) { const f = about.querySelector('a[href],button'); if (f) f.focus(); }
+        };
+        if (!ready) btn.click();          // a reader with no scene gets the text
+        // say why the scene is missing, at the top of the text, then get the
+        // full-screen startup panel out of the way so the history is readable
+        const body = $('about-body');
+        if (body) {
+          const note = document.createElement('p');
+          note.style.cssText = 'margin:0 0 14px;padding:10px 12px;border-radius:8px;' +
+            'background:rgba(240,168,104,.12);border:1px solid rgba(240,168,104,.4);font-size:11px;line-height:1.6';
+          note.textContent = 'The 3D scene could not start on this device — it needs WebGL. ' +
+            'The history, the sources and the report link below do not.';
+          body.insertBefore(note, body.firstChild);
+        }
+        setTimeout(() => { if (bootEl) bootEl.style.display = 'none'; }, 2600);
+      }
+    } catch (e) { /* the error message matters more than this */ }
   }
   window.addEventListener('error', (e) => { if (!ready) fail(e.error || e.message); });
   window.addEventListener('unhandledrejection', (e) => { if (!ready) fail(e.reason); });
