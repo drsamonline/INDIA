@@ -34,6 +34,32 @@ SITE = 'https://drsamonline.github.io/INDIA/'
 def esc(s):
     return html.escape(str(s), quote=True)
 
+def meta_description(blurb, name, place, limit=155):
+    """A description that fits a search result.
+
+    The old one was the whole blurb plus a fixed tail, which came to 189-234
+    characters on every monument page — past the ~155 where Google truncates, so
+    every result on the site ended mid-sentence with an ellipsis.
+
+    The blurb is cut to whatever the tail leaves, at a sentence end where one is
+    available and at a word boundary otherwise.
+    """
+    text = re.sub(r'\s+', ' ', blurb or '').strip()
+    tail = ' A procedural three.js miniature, with history and sources.'
+    room = limit - len(tail)
+    if len(text) > room:
+        cut = text[:room]
+        end = max(cut.rfind('. '), cut.rfind('; '))
+        if end < 60:
+            end = cut.rfind(', ')
+        if end < 60:
+            end = cut.rfind(' ')
+        text = cut[:end].rstrip(' ,;')
+        if not text.endswith('.'):
+            text += '.'
+    return (text + tail).strip()
+
+
 def page_data(m):
     keys = ('name', 'deva', 'place', 'state', 'era', 'period', 'style', 'unesco',
             'wikipedia', 'history', 'facts', 'links', 'image',
@@ -60,6 +86,7 @@ def build_pages(monuments, only=None):
             '__PLACE__': esc(m['place']), '__STATE__': esc(m['state']),
             '__THEME__': m.get('accent', '#e8c39a'), '__WIKI__': esc(m['wikipedia']),
             '__ID__': m['id'], '__OGIMAGE__': m['image']['src'], '__DATA__': page_data(m),
+            '__META_DESC__': esc(meta_description(m.get('blurb'), m['name'], m['place'])),
         }
         for k, v in repl.items():
             out = out.replace(k, v)

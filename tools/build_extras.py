@@ -34,6 +34,7 @@ open(os.path.join(ROOT, '404.html'), 'w', encoding='utf-8').write("""<!DOCTYPE h
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Not found — INDIA</title>
 <meta name="robots" content="noindex">
+<meta name="description" content="That page is not here. The atlas of 24 Indian monuments, rebuilt in code, is one link away.">
 <link rel="icon" href="/INDIA/assets/img/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/INDIA/assets/css/fonts.css">
 <link rel="stylesheet" href="/INDIA/assets/css/site.css">

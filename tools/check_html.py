@@ -48,6 +48,14 @@ def check(rel):
     if not re.search(r'<html[^>]*\blang=', s):
         problems.append('<html> without lang')
 
+    # a description longer than ~160 is truncated in a search result, which is how
+    # most people will first read this site
+    d = re.search(r'<meta name="description" content="([^"]*)"', s)
+    if not d:
+        problems.append('no meta description')
+    elif not (60 <= len(d.group(1)) <= 160):
+        problems.append('description is %d chars (want 60-160)' % len(d.group(1)))
+
     for a in re.findall(r'<a\b[^>]*target="_blank"[^>]*>', s):
         if 'rel=' not in a or 'noopener' not in a:
             problems.append('target=_blank without rel=noopener: %s' % a[:60])

@@ -1122,6 +1122,31 @@ instead of a research session.
 
 ---
 
+### 92. Every search result on the site ended mid-sentence
+
+Checked the `<title>` and `<meta name="description">` of all 27 pages — something no
+previous pass had looked at.
+
+| Finding | Count |
+|---|---|
+| Missing title | 0 |
+| Duplicate titles or descriptions | 0 |
+| **Descriptions over 160 characters** | **25 of 26** — 189 to 234 |
+| Missing description | 404.html |
+
+The monument description was the whole blurb plus a fixed tail. Google truncates around
+155–160, so **every monument result in a search ended mid-sentence with an ellipsis** —
+which is how most people first read this site.
+
+Fixed by computing it: the blurb is cut to whatever the tail leaves, at a sentence end
+where one is available and at a word boundary otherwise. All 27 pages are now 121–158
+characters. The Taj and the 404 have their own builders and needed their own edits.
+
+`tools/check_html.py` now checks the range too — and was made to fail on a 191-character
+description before being trusted.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
