@@ -1147,6 +1147,28 @@ description before being trusted.
 
 ---
 
+### 93. No page declared `color-scheme`, and eight share cards crop badly
+
+Two things found by auditing what the site looks like *outside* the site.
+
+**`color-scheme`.** None of the 27 pages declared it. The site is deliberately light, and
+Android Chrome's auto dark mode will invert a page that does not say so — which on this
+palette means gold-on-cream turning into something nobody designed. One meta tag per
+template; `check_html.py` now enforces it, and was made to fail by removing it.
+
+**Open Graph images.** All 26 `og:image` files exist — no broken cards. But eight are
+portrait or square (Qutb 926x1400, Sanchi 929x1400, Charminar 991x1400, Statue 933x1400,
+Mahabodhi 1050x1400, India Gate 1283x1400, Gateway 1400x1400, Amber 1400x1270), and a
+social card crops to roughly 1.9:1. Those eight will be cut through the middle of the
+monument.
+
+**Not fixed:** generating landscape crops for those eight is a build step and a change to
+which file each page points at. Recorded rather than done, because it is cosmetic and
+because the fix should crop each photograph at a chosen point, not centre — a subject
+like the Qutb's shaft needs to stay in frame.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

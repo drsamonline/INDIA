@@ -48,6 +48,10 @@ def check(rel):
     if not re.search(r'<html[^>]*\blang=', s):
         problems.append('<html> without lang')
 
+    # without this, Android Chrome's auto dark mode may invert a deliberately light page
+    if 'name="color-scheme"' not in s:
+        problems.append('no color-scheme meta')
+
     # a description longer than ~160 is truncated in a search result, which is how
     # most people will first read this site
     d = re.search(r'<meta name="description" content="([^"]*)"', s)
