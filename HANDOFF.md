@@ -918,82 +918,32 @@ message, and looked handled — but "handled" meant "shows an error", not "still
 
 ---
 
-### 83. 320 px: two pages scroll sideways, and I could not find why
+### 83. 320 px: two pages scrolled sideways, and the cause was not where I looked
 
-Tested the narrowest viewport still in use — 320 px, the last iPhone SE — for
-horizontal overflow (`scrollWidth > clientWidth`, the thing that makes a page shift
-under a thumb).
+Tested the narrowest viewport still in use — 320 px — for horizontal overflow
+(`scrollWidth > clientWidth`, the thing that shifts a page under a thumb).
 
 | Width | index.html | credits.html |
 |---|---|---|
 | 320 | **+9 px** | **+15 px** |
-| 360 | ok | ok |
-| 390 | ok | ok |
-| 414 | ok | ok |
+| 360 and up | ok | ok |
 
-Monument pages and 404 are clean at every width.
+**My first diagnosis was wrong twice.** I blamed the footer's flex children and added
+`min-width:0` — no change. I blamed the credits *fidelity* table and wrapped it — that
+helped (44 → 15) but was not the whole 15.
 
-**What I fixed:** the credits fidelity table is now in its own scroll box, which took
-that page from +44 px to +15 px — a real 29 px.
+**What actually found it was hiding things.** Walk the DOM, hide one element at a time,
+and re-read `documentElement.scrollWidth`: the element whose removal fixes the number is
+the cause. That named:
 
-**What I did not fix:** the remaining 9 and 15 px. The probe names the footer's flex
-children on the landing page and the table on credits, but neither `min-width:0` on
-the flex children nor a max-width on the table changed the number, so those were not
-the cause. **I reverted both rules rather than leave code whose comment claims a fix it
-does not make.**
+- **`.foot-links`** — four links in a `display:flex` row with no wrap, 313 px inside a
+  288 px wrap. `flex-wrap: wrap` fixed the landing page outright.
+- **the *photographs* table on credits** — not the fidelity table. Wrapped in the same
+  scroll box as its neighbour.
 
-It is recorded here as an open, small, measured issue — not closed, and not hidden
-behind `overflow-x: hidden` on the body, which would have made the symptom disappear
-while leaving the layout wrong.
+All three root pages are now clean at 320 and 360, and the monument pages always were.
 
-**The lesson:** a 9 px overflow is exactly the size of bug that a "looks fine on my
-phone" check misses, and exactly the size that a scrollWidth comparison finds in one
-line.
+**The lesson is narrower than the last few and more useful:** when a layout overflows,
+do not reason about which element looks too wide — hide elements and measure. It took
+four attempts and two wrong guesses; the hide-and-measure pass took one.
 
----
-
-## Traps worth knowing
-
-These cost real time last session. All are true.
-
-1. **Modules do not get the Builder.** They get a curated `ctx` object with
-   explicit bindings. A new helper is invisible until it is added to that list
-   in `monument-engine.js` (~line 1709). This has bitten twice.
-2. **A heavy build fails as a timeout, not an error.** The page never reaches
-   `dataset.boot='ok'`, so there is no console message. If a page "doesn't
-   load" silently, suspect geometry cost, not a syntax error.
-3. **`add()` transforms geometry in place.** Cache and clone anything reused
-   (see `jali()`).
-4. **The per-frame sky update overwrites `hemi.intensity`.** Any per-monument
-   ambient scale must be applied inside that update.
-5. **HTML slider `value` attributes beat `DEFAULTS`.** Both must be changed.
-6. **`qa.py` normalises the URL** and strips query strings — use a raw
-   Playwright script when a `?shot=` or `?look=` matters.
-7. **The engine's ambient is deliberately low.** Shadowed white surfaces go
-   grey. That is the house style, not a bug.
-8. **`block()` takes a BASE y; `add(box(...))` takes a CENTRE.** The engine
-   does `add(key, box(w,h,d), x, y + h/2, z)`. `tools/volumes.py` had this
-   backwards *and* ignored `add(box(...))` meshes entirely — which is how a
-   paving slab became a "roof" over the wrong court, and why five cameras at
-   Amber ended up inside walls. Both are fixed; trust it now.
-9. **Always render and look before committing.** Several changes in this
-   session looked correct in code and wrong on screen, and vice versa.
-10. **`?view=` and `?look=` do nothing without `?shot=`.** Both are parsed
-    inside `if (params.has('shot'))`, so `?view=3` on its own opens the home
-    view and comes out identical to `?view=1`. Pass `?shot=11&view=3`. Two
-    `?look=` shots with az 0 and az 40 also came out identical in this session
-    and the cause was not chased — render a view and look at it before trusting
-    the parameter.
-
----
-
-## Working method that produced results
-
-- **Research before geometry.** Every rebuild started with dimensions and a
-  photograph, not with code.
-- **Instrument before guessing.** Three defects were solved by dumping the
-  scene — materials, lights, bounding boxes — after several failed visual
-  fixes. When a change does not move the render, the answer is a value you
-  have not read.
-- **Say what is unverified.** Several commits state plainly that a change was
-  not seen by eye. Keep doing that.

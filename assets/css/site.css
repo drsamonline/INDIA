@@ -219,7 +219,9 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:34px 0 44px;back
 .foot-meta{font-size:10px;letter-spacing:.1em;color:var(--muted);line-height:1.9}
 .foot-meta a{color:var(--ink-2);text-decoration:none;border-bottom:1px solid var(--line)}
 .foot-meta a:hover{color:var(--terracotta);border-color:var(--terracotta)}
-.foot-links{display:flex;gap:8px}
+/* four links in one row came to 313 px inside a 288 px wrap at 320 px wide, which
+   scrolled the whole page 9 px sideways; they wrap now */
+.foot-links{display:flex;flex-wrap:wrap;gap:8px;min-width:0}
 .foot-links a{
   display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:9px;letter-spacing:.16em;
   text-transform:uppercase;padding:8px 12px;border:1px solid var(--line);border-radius:999px;color:var(--ink-2);
