@@ -28,6 +28,11 @@
   .back svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.7}
   @media (max-width:720px){.doc table{font-size:11px}.doc th,.doc td{padding:9px 6px}}
   /* the fidelity level of each model, and who improved it */
+  /* on a 320 px screen the four columns overflowed the page by 44 px; the table
+     scrolls inside its own box instead */
+  .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:18px 0 8px;max-width:100%}
+  .table-scroll table{width:auto;min-width:100%}
+  .table-scroll table{margin:0}
   .fid-table td:nth-child(2){white-space:nowrap}
   .fid-pill{display:inline-block;font:600 9px/1 'JetBrains Mono',monospace;letter-spacing:.09em;
     text-transform:uppercase;padding:4px 7px;border-radius:4px;border:1px solid currentColor}
@@ -70,6 +75,7 @@
   </ul>
   <p><b>Spotted something wrong?</b> Every monument page has a <b>Report it</b> link that opens a GitHub issue with the page and its level already filled in — a sentence and a source is enough. <a href="https://github.com/drsamonline/INDIA/issues/new?labels=model" target="_blank" rel="noopener">Open an issue</a>.</p>
   <p><b>If you improve a model, your name and a link go on this page and in the model itself.</b> That is the deal, and it is the whole deal: open a pull request that changes one monument, say what you changed and where you got the dimensions, and your name is added to that monument's row here, to its entry in <code>data/monuments.json</code>, and to the header comment of its module file — so the credit travels with the code and shows on the page. There is no copyright assignment, no contributor licence agreement, and nothing to sign. <a href="https://github.com/drsamonline/INDIA/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">CONTRIBUTING.md</a> has the details.</p>
+  <div class="table-scroll">
   <table class="fid-table">
     <thead><tr><th>Monument</th><th>Level</th><th>What it is, and what it lacks</th><th>Improved by</th></tr></thead>
     <tbody>
@@ -219,6 +225,7 @@
       </tr>
     </tbody>
   </table>
+  </div>
 
   <h2>3 · Photographs</h2>
   <p>Each monument page uses one photograph, the lead image of its Wikipedia article, served from Wikimedia Commons. The table below gives the photographer, the licence and a link to the original file, where the full licence text and the machine-readable attribution live.</p>

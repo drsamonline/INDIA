@@ -918,6 +918,40 @@ message, and looked handled — but "handled" meant "shows an error", not "still
 
 ---
 
+### 83. 320 px: two pages scroll sideways, and I could not find why
+
+Tested the narrowest viewport still in use — 320 px, the last iPhone SE — for
+horizontal overflow (`scrollWidth > clientWidth`, the thing that makes a page shift
+under a thumb).
+
+| Width | index.html | credits.html |
+|---|---|---|
+| 320 | **+9 px** | **+15 px** |
+| 360 | ok | ok |
+| 390 | ok | ok |
+| 414 | ok | ok |
+
+Monument pages and 404 are clean at every width.
+
+**What I fixed:** the credits fidelity table is now in its own scroll box, which took
+that page from +44 px to +15 px — a real 29 px.
+
+**What I did not fix:** the remaining 9 and 15 px. The probe names the footer's flex
+children on the landing page and the table on credits, but neither `min-width:0` on
+the flex children nor a max-width on the table changed the number, so those were not
+the cause. **I reverted both rules rather than leave code whose comment claims a fix it
+does not make.**
+
+It is recorded here as an open, small, measured issue — not closed, and not hidden
+behind `overflow-x: hidden` on the body, which would have made the symptom disappear
+while leaving the layout wrong.
+
+**The lesson:** a 9 px overflow is exactly the size of bug that a "looks fine on my
+phone" check misses, and exactly the size that a scrollWidth comparison finds in one
+line.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
