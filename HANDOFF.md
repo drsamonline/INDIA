@@ -1031,6 +1031,25 @@ tick on a skipped job that this file keeps warning about.
 
 ---
 
+### 88. A structural check that needs no browser
+
+`tools/check_html.py` reads the 27 built pages and looks for the faults a render does
+not show and a reader cannot see: **duplicate ids** (which break `getElementById` and
+every `aria-labelledby`), **unbalanced `<div>` counts**, **`<img>` without `alt`**,
+**`<html>` without `lang`**, and **`target="_blank"` without `rel="noopener"`**.
+
+It runs in about a second, so it is in the static CI job on every push rather than in
+the weekly sweep.
+
+**It was made to fail before it was trusted** — the first rule at the top of this file.
+The 404 was deliberately broken with a missing `lang` and an `<img>` without `alt`; the
+check named both and exited 1. Restored, it reports 0 of 27.
+
+All 27 pages are clean today. That is the point of adding it now rather than after the
+first duplicate id breaks a drawer.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
