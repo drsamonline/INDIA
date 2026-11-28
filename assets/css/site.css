@@ -270,7 +270,9 @@ footer{border-top:1px solid var(--line);margin-top:20px;padding:34px 0 44px;back
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .strip-track{animation:none}
-  .rv{opacity:1;transform:none;transition:none}
+  /* .js .rv is more specific than .rv, so the plain rule lost and content stayed
+     hidden under reduced motion — the preference was read and then ignored */
+  .js .rv{opacity:1 !important;transform:none !important;transition:none}
   *{animation-duration:.001ms !important;transition-duration:.001ms !important}
 }
 
@@ -308,3 +310,9 @@ main:focus{outline:none}
 .cards-note{max-width:64ch;margin:0 0 22px;font-size:13px;line-height:1.7;color:var(--muted)}
 .cards-note b{font-weight:600;color:var(--ink)}
 .cards-note a{color:var(--terracotta)}
+
+@media print{
+  .js .rv{opacity:1 !important;transform:none !important}
+  .strip-track{animation:none}
+  #help .btn,.cards-note a{text-decoration:none}
+}
