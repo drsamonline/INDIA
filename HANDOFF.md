@@ -868,6 +868,29 @@ DOM but each page still loads its assets) **and over all 24 in the weekly sweep.
 
 ---
 
+### 81. The Taj's modal had no focus trap
+
+Its About drawer had `role="dialog"`, `aria-modal`, Escape and click-outside — but no
+focus trap and no focus return, so a keyboard user could Tab straight out of the modal
+into the page behind it, and closing it left focus nowhere.
+
+Now: focus moves to the close button on open, Tab and Shift-Tab cycle inside, and
+closing returns focus to the button that opened it. Verified by pressing Enter on the
+opener, tabbing twelve times, and checking `document.activeElement` — it stays inside
+— then Escape, which returns focus to `btn-about-taj`.
+
+**Why `check_a11y` still reports four failures on this page:** the runner looks for the
+engine's `#about` and `body.about-open`. The Taj has neither, by design — it is a
+different drawer with the same *behaviour* now. The check is engine-shaped, and that is
+recorded rather than papered over.
+
+**A sandbox artefact worth knowing:** the focus-in timer is delayed here because the
+main thread is building a 200-second scene, so the first probe read `activeElement` as
+body and the second, a moment later, as the close button. On a device the delay is
+milliseconds.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

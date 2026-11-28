@@ -333,11 +333,34 @@ extra_html = """
 <script>
 (function(){
   var d=document.getElementById('taj-about');
-  function open(){d.classList.add('open');}
-  function close(){d.classList.remove('open');}
+  var opener=null;
+  /* A modal that does not hold the keyboard is a modal for mouse users only. This
+     one had Escape and click-outside but no focus trap and no focus return, so Tab
+     walked straight out of it into the page behind. */
+  function focusables(){
+    return [].slice.call(d.querySelectorAll('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])'))
+             .filter(function(el){return el.offsetWidth>0||el.offsetHeight>0;});
+  }
+  function open(){
+    opener=document.activeElement;
+    d.classList.add('open');
+    var f=focusables();
+    setTimeout(function(){ (f[0]||d).focus(); },120);
+  }
+  function close(){
+    d.classList.remove('open');
+    if(opener&&opener.focus)opener.focus();
+  }
   document.getElementById('tj-close').onclick=close;
   d.addEventListener('click',function(e){if(e.target===d)close();});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){close();return;}
+    if(e.key!=='Tab'||!d.classList.contains('open'))return;
+    var f=focusables(); if(!f.length)return;
+    var first=f[0], last=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+  });
   var b=document.getElementById('btn-about-taj');
   if(b)b.onclick=open;
   window.__tajAbout=open;
