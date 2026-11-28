@@ -947,3 +947,83 @@ All three root pages are now clean at 320 and 360, and the monument pages always
 do not reason about which element looks too wide — hide elements and measure. It took
 four attempts and two wrong guesses; the hide-and-measure pass took one.
 
+---
+
+### 84. Reduced motion and printing got blank sections
+
+The landing page reveals its sections on scroll: `.js .rv{opacity:0}` until an
+IntersectionObserver adds `.in`. There was a `prefers-reduced-motion` block meant to
+show everything immediately — but it wrote `.rv{opacity:1}`, and `.js .rv` is more
+specific, so **the rule lost**. The preference was read and then ignored.
+
+Measured with `reduced_motion='reduce'`: **8 of 8 `.rv` sections at opacity 0.** Same
+under `emulate_media(media='print')` — a printed copy of the landing page came out with
+blank sections where the gallery, the method and the invitation should be.
+
+Fixed by matching the specificity (`.js .rv` inside the media query) and adding a print
+block. Both now measure 0 of 8 hidden.
+
+**Why it survived a week of accessibility work:** the check tested what a mouse user on
+a desktop sees. Nothing tested a preference the visitor had already told the browser
+about, and nothing printed the page.
+
+### 85. I deleted two sections of this file while editing it
+
+The §83 rewrite computed the section's end with a regex and sliced `s[:start] + NEW +
+s[end:]`. `end` landed at the wrong place, so everything after §83 — **"Traps worth
+knowing" and "Working method that produced results"** — was cut out and committed.
+
+Caught minutes later by an assertion that could not find the "Traps" heading. Restored
+verbatim from `git show 9b939ab:HANDOFF.md`.
+
+**The rule, which applies to every script in this repository:** never compute a
+replacement's end from a regex over a document you are also rewriting. Anchor both ends
+on exact strings and assert the count of each before writing.
+
+---
+
+## Traps worth knowing
+
+These cost real time last session. All are true.
+
+1. **Modules do not get the Builder.** They get a curated `ctx` object with
+   explicit bindings. A new helper is invisible until it is added to that list
+   in `monument-engine.js` (~line 1709). This has bitten twice.
+2. **A heavy build fails as a timeout, not an error.** The page never reaches
+   `dataset.boot='ok'`, so there is no console message. If a page "doesn't
+   load" silently, suspect geometry cost, not a syntax error.
+3. **`add()` transforms geometry in place.** Cache and clone anything reused
+   (see `jali()`).
+4. **The per-frame sky update overwrites `hemi.intensity`.** Any per-monument
+   ambient scale must be applied inside that update.
+5. **HTML slider `value` attributes beat `DEFAULTS`.** Both must be changed.
+6. **`qa.py` normalises the URL** and strips query strings — use a raw
+   Playwright script when a `?shot=` or `?look=` matters.
+7. **The engine's ambient is deliberately low.** Shadowed white surfaces go
+   grey. That is the house style, not a bug.
+8. **`block()` takes a BASE y; `add(box(...))` takes a CENTRE.** The engine
+   does `add(key, box(w,h,d), x, y + h/2, z)`. `tools/volumes.py` had this
+   backwards *and* ignored `add(box(...))` meshes entirely — which is how a
+   paving slab became a "roof" over the wrong court, and why five cameras at
+   Amber ended up inside walls. Both are fixed; trust it now.
+9. **Always render and look before committing.** Several changes in this
+   session looked correct in code and wrong on screen, and vice versa.
+10. **`?view=` and `?look=` do nothing without `?shot=`.** Both are parsed
+    inside `if (params.has('shot'))`, so `?view=3` on its own opens the home
+    view and comes out identical to `?view=1`. Pass `?shot=11&view=3`. Two
+    `?look=` shots with az 0 and az 40 also came out identical in this session
+    and the cause was not chased — render a view and look at it before trusting
+    the parameter.
+
+---
+
+## Working method that produced results
+
+- **Research before geometry.** Every rebuild started with dimensions and a
+  photograph, not with code.
+- **Instrument before guessing.** Three defects were solved by dumping the
+  scene — materials, lights, bounding boxes — after several failed visual
+  fixes. When a change does not move the render, the answer is a value you
+  have not read.
+- **Say what is unverified.** Several commits state plainly that a change was
+  not seen by eye. Keep doing that.
