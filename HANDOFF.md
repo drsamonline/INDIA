@@ -998,6 +998,33 @@ Safari or Firefox — this sandbox has Chromium only.
 
 ---
 
+### 87. The contrast sweep is done: 22 of 24 pages, and one real failure
+
+Ran the remaining pages at a 900x700 viewport, which halves the screenshot cost.
+
+**Jantar Mantar failed at 2.64:1** — its `.panel-deva`, the Devanagari name in the panel
+header. The cause is worth knowing: `.panel-deva` used `var(--accent-2)`, and a page's
+`--accent-2` is a **dark** terracotta on some monuments (`#b8503a` here), sitting on a
+dark panel. Qutb Minar passed only because its page leaves `--accent-2` at the stylesheet
+default. The name is a label, not an accent, so it now has a colour of its own
+(`#f3cfa0`) and measures clean everywhere.
+
+**A whitelist gap found while chasing it, not fixed:** `page_data()` in
+`build_site.py` does not pass `accent` or `accent2` to the page, so
+`window.__mon.accent2` is absent and the engine's `if (mon.accent2)` never fires — the
+colours come from the page template instead. Adding those two keys would change every
+monument's palette, so it is recorded here rather than done in a hurry.
+
+| | |
+|---|---|
+| Checked | 22 of 24 monument pages, plus index (395 nodes) and credits (318) |
+| Below AA | 0, after the Jantar Mantar fix |
+| Not checked | **Meenakshi** and the **Taj** — both exceed the sandbox's 300 s per call; the weekly sweep runs them on a runner |
+
+`shots/contrast-all.log` carries the per-page results.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
