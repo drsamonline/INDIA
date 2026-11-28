@@ -112,9 +112,11 @@ tools/measure.py            measures the built geometry in metres, to check DIME
 tools/check_html.py         duplicate ids, alt text, lang, noopener — no browser needed
 tools/check_drawer.py       every page's drawer carries its level and a report link
 tools/contrastcheck.py      WCAG AA contrast, sampled from rendered pixels
+tools/volumes.py            finds the open volume a module is working inside
 CONTRIBUTING.md             how to improve a model, and how the credit works
 HANDOFF.md                  the brief: state of play, traps, working method
 docs/WORKLOG.md             the history: one numbered section per piece of work
+docs/statue-mesh-options.md what a real Statue of Unity mesh would cost, and what it would change
 ROADMAP.md, DIMENSIONS.md   what is left, and measured-vs-model for each monument
 ```
 

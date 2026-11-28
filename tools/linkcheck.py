@@ -6,7 +6,7 @@
 Exits non-zero and lists the offenders if anything is missing. Run it after
 tools/build_site.py; the CI workflow does both.
 """
-import glob, os, re, sys, urllib.parse
+import glob, io, os, re, sys, urllib.parse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -47,6 +47,18 @@ def main():
         for page, url in bad[:40]:
             print(f'  {page}  ->  {url}')
         return 1
+    # the README describes this repository, so every path it names must exist —
+    # it drifted once already (a tool and a document were missing from the list)
+    md = os.path.join(ROOT, 'README.md')
+    if os.path.exists(md):
+        text = io.open(md, encoding='utf-8').read()
+        named = set(re.findall(r'\b(?:tools|assets|docs|monuments|data)/[A-Za-z0-9._/-]+', text))
+        missing = sorted(p for p in named
+                         if not os.path.exists(os.path.join(ROOT, p.rstrip('.,)'))))
+        if missing:
+            print('README names paths that do not exist:', missing)
+            return 1
+
     print(f'ok: {len(pages)} pages, all internal references resolve')
     return 0
 

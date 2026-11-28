@@ -1197,6 +1197,22 @@ Both fixed in its own head.
 
 ---
 
+### 95. The README is true, and now stays true
+
+Audited it against the repository rather than reading it: 53 paths named, all 53 exist;
+the 24-row monument table matches `data/monuments.json` name for name and id for id; no
+claim about app builds survives from before they were removed.
+
+Two things were simply missing from the lists — `tools/volumes.py` and
+`docs/statue-mesh-options.md` — both added.
+
+**And it can no longer drift silently:** `tools/linkcheck.py` now checks that every path
+the README names exists, so a renamed tool or a deleted document fails the push instead of
+leaving a confident lie in the first file anyone reads. Made to fail by renaming
+`measure.py` in the README.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
