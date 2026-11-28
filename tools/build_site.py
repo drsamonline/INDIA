@@ -85,7 +85,9 @@ def build_pages(monuments, only=None):
             '__NAME__': esc(m['name']), '__BLURB__': esc(m['blurb']),
             '__PLACE__': esc(m['place']), '__STATE__': esc(m['state']),
             '__THEME__': m.get('accent', '#e8c39a'), '__WIKI__': esc(m['wikipedia']),
-            '__ID__': m['id'], '__OGIMAGE__': m['image']['src'], '__DATA__': page_data(m),
+            '__ID__': m['id'],
+            # a share card is ~1.9:1, so a portrait photograph needs its own crop
+            '__OGIMAGE__': m.get('ogImage') or m['image']['src'], '__DATA__': page_data(m),
             '__META_DESC__': esc(meta_description(m.get('blurb'), m['name'], m['place'])),
         }
         for k, v in repl.items():

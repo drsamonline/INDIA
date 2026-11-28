@@ -1169,6 +1169,34 @@ like the Qutb's shaft needs to stay in frame.
 
 ---
 
+### 94. The share cards: thirteen pages now have a crop chosen for the card
+
+§93 recorded that eight `og:image` files were portrait and would be cut through the
+subject. Doing it properly meant **looking at each photograph and choosing the band**,
+not centring the crop — a card is about 1.9:1 and these sources are 0.66 to 1.1.
+
+| Page | Source | Crop starts at |
+|---|---|---|
+| Qutb Minar | 926x1400 | 0.34 — the shaft's balconies, not the empty sky above |
+| Statue of Unity | 933x1400 | 0.04 — the head has to be whole |
+| Charminar | 991x1400 | 0.16 — the two minarets and the arcade |
+| Sanchi | 929x1400 | 0.20 — the torana with the dome behind |
+| Mahabodhi | 1050x1400 | 0.10 — the shikhara's body |
+| India Gate | 1283x1400 | 0.08 — the inscription and the arch |
+| Gateway of India | 1400x1400 | 0.06 — the arch, without the crowd |
+| Amber Fort | 1400x1270 | 0.12 — the palace and the lake below |
+| Mysore, Lotus, Somnath, Hawa Mahal, Kandariya | 960-1400 wide | chosen per photograph, also because Mysore and Lotus were under 1200 px wide |
+
+All 24 monument pages now have an `og:image` at least 1200 wide and at least 1.4:1. The
+Taj had **none at all** — no share card image, and a `<title>` that read
+"three.js webgl — procedural — taj mahal", which is a build note rather than a title.
+Both fixed in its own head.
+
+`tools/check_html.py` now enforces all of it — present, exists, wide enough, not portrait
+— and was made to fail by pointing Qutb Minar back at its 926x1400 photograph.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

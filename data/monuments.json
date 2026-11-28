@@ -147,7 +147,8 @@
    "level": "measured",
    "note": "Dimensions from the ASI survey; the inscription bands are carved in a naskh rhythm, not transcribed."
   },
-  "contributors": []
+  "contributors": [],
+  "ogImage": "assets/img/og/qutub-minar.jpg"
  },
  {
   "id": "hawa-mahal",
@@ -222,7 +223,8 @@
    "level": "approximate",
    "note": "Bays at 19/16/12/8 and a 0.95 m module; the jali cells are 3 by 5, a suggestion of the real screens."
   },
-  "contributors": []
+  "contributors": [],
+  "ogImage": "assets/img/og/hawa-mahal.jpg"
  },
  {
   "id": "charminar",
@@ -297,7 +299,8 @@
    "level": "approximate",
    "note": "Stucco fringes and spandrel rows are modelled; the interior is not."
   },
-  "contributors": []
+  "contributors": [],
+  "ogImage": "assets/img/og/charminar.jpg"
  },
  {
   "id": "gateway-of-india",
@@ -372,7 +375,8 @@
    "level": "approximate",
    "note": "Massing and the great arch; the sculpture groups on the facade are absent."
   },
-  "contributors": []
+  "contributors": [],
+  "ogImage": "assets/img/og/gateway-of-india.jpg"
  },
  {
   "id": "india-gate",
@@ -447,7 +451,8 @@
    "level": "measured",
    "note": "42 m, checked off the built mesh; the names are lettering strokes, not legible text."
   },
-  "contributors": []
+  "contributors": [],
+  "ogImage": "assets/img/og/india-gate.jpg"
  },
  {
   "id": "mysore-palace",
@@ -522,7 +527,8 @@
    "level": "approximate",
    "note": "Cusped arches generated locally; the durbar hall and the interior are not modelled."
   },
-  "contributors": []
+  "contributors": [],
+  "ogImage": "assets/img/og/mysore-palace.jpg"
  },
  {
   "id": "golden-temple",
@@ -747,7 +753,8 @@
    "level": "approximate",
    "note": "The vedika carries a continuous coping; the toranas are simplified."
   },
-  "contributors": []
+  "contributors": [],
+  "ogImage": "assets/img/og/sanchi-stupa.jpg"
  },
  {
   "id": "victoria-memorial",
@@ -968,7 +975,8 @@
    "level": "study",
    "note": "The petals are doubly-curved shells; the hall and the interior are deliberately simplified."
   },
-  "contributors": []
+  "contributors": [],
+  "ogImage": "assets/img/og/lotus-temple.jpg"
  },
  {
   "id": "shore-temple",
@@ -1193,7 +1201,8 @@
    "level": "approximate",
    "note": "The ramparts read as continuous crenellated walls with a parapet walk, but the 12 km wall network is 490 m of representative runs and the hill and lake are compressed."
   },
-  "contributors": []
+  "contributors": [],
+  "ogImage": "assets/img/og/amber-fort.jpg"
  },
  {
   "id": "csmt-mumbai",
@@ -1343,7 +1352,8 @@
    "level": "approximate",
    "note": "A seated Buddha in every niche, one geometry per row of three; the bodhi tree is simplified."
   },
-  "contributors": []
+  "contributors": [],
+  "ogImage": "assets/img/og/mahabodhi-temple.jpg"
  },
  {
   "id": "statue-of-unity",
@@ -1414,7 +1424,8 @@
    "level": "study",
    "note": "The figure is procedural and is not a portrait of Sardar Patel. The head is as far as this approach goes."
   },
-  "contributors": []
+  "contributors": [],
+  "ogImage": "assets/img/og/statue-of-unity.jpg"
  },
  {
   "id": "kandariya-mahadeva",
@@ -1489,7 +1500,8 @@
    "level": "approximate",
    "note": "Urushringas are miniatures on the tower's own profile; the 870 sculptures are suggested."
   },
-  "contributors": []
+  "contributors": [],
+  "ogImage": "assets/img/og/kandariya-mahadeva.jpg"
  },
  {
   "id": "basilica-bom-jesus",
@@ -1789,6 +1801,7 @@
    "level": "approximate",
    "note": "Massing and the shikhara; the carving is not modelled."
   },
-  "contributors": []
+  "contributors": [],
+  "ogImage": "assets/img/og/somnath-temple.jpg"
  }
 ]

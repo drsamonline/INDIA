@@ -60,6 +60,26 @@ def check(rel):
     elif not (60 <= len(d.group(1)) <= 160):
         problems.append('description is %d chars (want 60-160)' % len(d.group(1)))
 
+    # a share card crops to about 1.9:1, so a portrait or narrow og:image is cut
+    # through the subject; 1200 wide is the minimum the platforms recommend
+    og = re.search(r'property="og:image" content="([^"]+)"', s)
+    if rel.startswith('monuments/'):
+        if not og:
+            problems.append('no og:image')
+        else:
+            f = og.group(1).replace('https://drsamonline.github.io/INDIA/', '')
+            full = os.path.join(ROOT, f)
+            if not os.path.exists(full):
+                problems.append('og:image missing: ' + f)
+            else:
+                try:
+                    from PIL import Image
+                    w, h = Image.open(full).size
+                    if w < 1200 or w / h < 1.4:
+                        problems.append('og:image %dx%d crops badly' % (w, h))
+                except Exception:
+                    problems.append('og:image unreadable: ' + f)
+
     for a in re.findall(r'<a\b[^>]*target="_blank"[^>]*>', s):
         if 'rel=' not in a or 'noopener' not in a:
             problems.append('target=_blank without rel=noopener: %s' % a[:60])
