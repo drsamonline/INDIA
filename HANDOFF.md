@@ -1288,6 +1288,17 @@ inspected. Fetched `https://drsamonline.github.io/INDIA/monuments/qutub-minar.ht
 false on the site — a Pages build that silently failed, a cached asset, a generator whose
 output was never committed. Local checks cannot tell you which.
 
+Also fetched, on the same pass:
+
+| URL | Result |
+|---|---|
+| `/this-page-does-not-exist` | **404**, our own page: title, `noindex`, the description, skip link and the "Back to the atlas" button |
+| `/assets/img/og/qutub-minar.jpg` | **200**, `image/jpeg`, and the image is the crop — "a tall tower… clear sky with a bird" |
+
+**How to check the live site from this sandbox:** `curl` gets a 502 from the proxy for
+`drsamonline.github.io`; Firecrawl's scrape reaches it. Use that rather than concluding
+the site is down.
+
 **One thing that looked like a bug and was not:** the live HTML carries a canvas of
 `height="100000"`. The engine sizes the canvas to `window.innerHeight`, so that is the
 scraper's viewport, not a defect. Worth knowing before someone "fixes" it.
