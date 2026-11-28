@@ -306,7 +306,7 @@ fidelity_html = (
     'padding:10px 12px;margin:0 0 14px;background:rgba(255,255,255,.03)">'
     '<span style="display:inline-block;font:600 9px/1 ui-monospace,monospace;letter-spacing:.10em;'
     'text-transform:uppercase;color:#0f1116;background:#d9a441;border-radius:4px;padding:4px 7px">'
-    + html.escape(_lvl) + '</span>'
+    + html.escape(_lvl) + '</span>\n    '
     '<p style="margin:8px 0 0;font-size:12px;line-height:1.6;color:#e9e0cd">'
     + html.escape(_fid.get('note', '')) + '</p>'
     '<p style="margin:8px 0 0;font-size:11px;line-height:1.6;color:#a8a293">'

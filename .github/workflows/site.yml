@@ -76,5 +76,8 @@ jobs:
         run: python3 tools/check_a11y.py --only qutub-minar
       - name: Check the landing, credits and 404 pages
         run: python3 tools/check_a11y.py --root
+      # a sample on every push (~40 s a page); the weekly sweep runs all 24
+      - name: Drawers carry their level and report link
+        run: python3 tools/check_drawer.py qutub-minar taj-mahal lotus-temple
       - name: Exercise the documented keyboard shortcuts
         run: python3 tools/check_ui.py --only qutub-minar

@@ -843,6 +843,31 @@ it**, which is why the assertion failed loudly instead of quietly passing.
 
 ---
 
+### 80. The drawer check is a tool now, and all 24 pages pass
+
+The script that found the Taj gap is `tools/check_drawer.py`. It opens each page's
+About drawer — either shape, engine or Taj — and asserts the fidelity level matches
+`data/monuments.json`, the Report it link points at `issues/new?labels=model`, and no
+literal `' +` leaked into the markup.
+
+**All 24 pages pass.** Verified page by page; the first eleven found the Taj's gap,
+the remaining thirteen were clean.
+
+Two bugs in the checker itself, both worth remembering:
+
+- **A word boundary the markup cannot promise.** The Taj's level pill sat directly
+  against the next paragraph, so `textContent` read `approximateGeometry` and
+  `/\bapproximate\b/` never matched. Fixed on both sides: a newline after the pill
+  (which also matters for a screen reader — text nodes should not run together), and
+  a checker that does not depend on a boundary it cannot control.
+- **Double-escaped regex in a quoted heredoc.** `\\b` in a `<<'EOF'` block reaches the
+  file as two characters, so the pattern was looking for a literal backslash.
+
+**It runs in CI as a three-page sample on every push** (~40 s a page — the drawer is
+DOM but each page still loads its assets) **and over all 24 in the weekly sweep.**
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.

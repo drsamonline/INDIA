@@ -69,6 +69,9 @@ jobs:
         run: python3 tools/check_a11y_all.py --size 380x430 --budget 4000 --restart
       - name: Accessibility, every page, 390x844
         run: python3 tools/check_a11y_all.py --size 390x844 --budget 4000 --restart
+      - name: Every drawer carries its level and report link
+        run: python3 tools/check_drawer.py
+
       - name: Root pages
         run: |
           python3 tools/check_a11y.py --root

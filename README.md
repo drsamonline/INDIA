@@ -109,6 +109,8 @@ tools/MONUMENT-CONTRACT.md  how to write a new monument module
 tools/check_a11y_all.py     the a11y gate over every page, resumably, per viewport
 tools/contact_sheet.py      four pages to one image, for checking a global change
 tools/measure.py            measures the built geometry in metres, to check DIMENSIONS
+tools/check_drawer.py       every page's drawer carries its level and a report link
+tools/contrastcheck.py      WCAG AA contrast, sampled from rendered pixels
 CONTRIBUTING.md             how to improve a model, and how the credit works
 HANDOFF.md                  the brief: state of play, traps, working method
 docs/WORKLOG.md             the history: one numbered section per piece of work
