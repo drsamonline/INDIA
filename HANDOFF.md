@@ -1100,6 +1100,28 @@ check, because it teaches you to skim the report.
 
 ---
 
+### 91. The statue decision now has a document instead of a question
+
+`docs/statue-mesh-options.md` sets out what a real mesh would cost and — more usefully —
+what it would change. Two constraints decide most of it:
+
+- **The repository is public.** Most marketplace "Royalty Free" licences let you use an
+  asset in a project but forbid redistributing the asset, which is what committing it
+  does. So the $5–$51 CGTrader models cannot live here, whatever they cost.
+- **The triangle budget is about 40–60k** after decimation, against 250k–1M for the
+  models on offer.
+
+That leaves one route that fits a public repo — the free Sketchfab model, *if* its licence
+is CC BY or CC0 — and one that costs nothing and tells no lie: leave it as a study. The
+document recommends the first only if the licence checks out, and says plainly that the
+prices and licences were read from listing pages on the day and not verified against the
+licence text.
+
+**The owner still decides.** The document exists so that deciding takes two minutes
+instead of a research session.
+
+---
+
 ## Traps worth knowing
 
 These cost real time last session. All are true.
