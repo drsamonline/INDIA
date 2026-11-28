@@ -1009,11 +1009,17 @@ dark panel. Qutb Minar passed only because its page leaves `--accent-2` at the s
 default. The name is a label, not an accent, so it now has a colour of its own
 (`#f3cfa0`) and measures clean everywhere.
 
-**A whitelist gap found while chasing it, not fixed:** `page_data()` in
-`build_site.py` does not pass `accent` or `accent2` to the page, so
-`window.__mon.accent2` is absent and the engine's `if (mon.accent2)` never fires — the
-colours come from the page template instead. Adding those two keys would change every
-monument's palette, so it is recorded here rather than done in a hurry.
+**A note I wrote here and then had to correct.** I recorded that `page_data()` in
+`build_site.py` omits `accent`/`accent2`, so the engine's override "never fires". That is
+wrong. `boot(mon)` receives `mon` from the **monument module**, not from
+`window.MONUMENT_DATA` — every module exports its own `accent` and `accent2`
+(`assets/js/monuments/jantar-mantar.js` lines 21–22), and those are what set the CSS
+variables. `page_data()`'s whitelist has nothing to do with colour, and there is no
+palette gap to fix.
+
+The real lesson: the engine reads `mon.accent2` at line 692, so I assumed `mon` came
+from the page's embedded JSON. One `grep` for where `mon` is passed would have settled
+it before I wrote the note.
 
 | | |
 |---|---|
